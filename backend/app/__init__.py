@@ -1,0 +1,1 @@
+"""QuizRoyale Backend Application."""
