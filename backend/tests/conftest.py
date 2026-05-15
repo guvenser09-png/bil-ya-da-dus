@@ -113,6 +113,9 @@ class MockRedis:
     async def zrange(self, key, start, stop, withscores=False):
         return []
 
+    async def zrevrange(self, key, start, stop, withscores=False):
+        return []
+
     def pipeline(self):
         return MockRedisPipeline()
 
