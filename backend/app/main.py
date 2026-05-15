@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
 from app.database import engine
+from app.middleware.rate_limit import RateLimitMiddleware
 from app.redis_client import close_redis, get_redis
 from app.api.router import api_router
 from app.ws.lobby import router as ws_router
@@ -64,6 +65,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Rate limiting (Redis-based sliding window)
+app.add_middleware(RateLimitMiddleware)
 
 # Include API routes
 app.include_router(api_router, prefix="/api")

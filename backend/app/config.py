@@ -15,7 +15,12 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str = "dev-secret-key-change-in-production"
     JWT_ALGORITHM: str = "HS256"
-    JWT_EXPIRATION_MINUTES: int = 1440  # 24 hours
+    JWT_ACCESS_EXPIRATION_MINUTES: int = 30  # 30 minutes
+    JWT_REFRESH_EXPIRATION_DAYS: int = 30  # 30 days
+
+    # Rate Limiting
+    RATE_LIMIT_PER_MINUTE: int = 60  # general API
+    RATE_LIMIT_AUTH_PER_MINUTE: int = 10  # auth endpoints (login/register)
 
     # Anthropic AI
     ANTHROPIC_API_KEY: str = ""
@@ -28,13 +33,14 @@ class Settings(BaseSettings):
 
     # App Info
     APP_NAME: str = "QuizRoyale"
-    APP_VERSION: str = "0.1.0"
+    APP_VERSION: str = "0.2.0"
     DEBUG: bool = True
 
     model_config = {
         "env_file": ".env",
         "env_file_encoding": "utf-8",
         "case_sensitive": True,
+        "extra": "ignore",
     }
 
 

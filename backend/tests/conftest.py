@@ -1,7 +1,9 @@
 """Pytest configuration and shared fixtures."""
 
 import asyncio
+import os
 from collections.abc import AsyncGenerator
+from unittest.mock import AsyncMock, patch
 
 import pytest
 import pytest_asyncio
@@ -9,6 +11,12 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.database import Base, get_db
+
+# Disable rate limiting in tests
+os.environ["TESTING"] = "1"
+os.environ["RATE_LIMIT_PER_MINUTE"] = "10000"
+os.environ["RATE_LIMIT_AUTH_PER_MINUTE"] = "10000"
+
 from app.main import app
 
 
@@ -52,6 +60,104 @@ async def override_get_db() -> AsyncGenerator[AsyncSession, None]:
 
 # Override the database dependency
 app.dependency_overrides[get_db] = override_get_db
+
+
+# Mock Redis for tests (auth uses Redis for token management)
+_mock_redis_store: dict = {}
+
+
+class MockRedis:
+    """In-memory Redis mock for testing."""
+
+    async def ping(self):
+        return True
+
+    async def get(self, key):
+        return _mock_redis_store.get(key)
+
+    async def set(self, key, value, ex=None):
+        _mock_redis_store[key] = value
+
+    async def delete(self, *keys):
+        for key in keys:
+            _mock_redis_store.pop(key, None)
+
+    async def exists(self, key):
+        return 1 if key in _mock_redis_store else 0
+
+    async def sadd(self, key, *values):
+        if key not in _mock_redis_store:
+            _mock_redis_store[key] = set()
+        _mock_redis_store[key].update(values)
+
+    async def srem(self, key, *values):
+        if key in _mock_redis_store and isinstance(_mock_redis_store[key], set):
+            _mock_redis_store[key] -= set(values)
+
+    async def smembers(self, key):
+        val = _mock_redis_store.get(key, set())
+        return val if isinstance(val, set) else set()
+
+    async def expire(self, key, seconds):
+        pass
+
+    async def zremrangebyscore(self, key, min_score, max_score):
+        pass
+
+    async def zcard(self, key):
+        return 0
+
+    async def zadd(self, key, mapping):
+        pass
+
+    async def zrange(self, key, start, stop, withscores=False):
+        return []
+
+    def pipeline(self):
+        return MockRedisPipeline()
+
+
+class MockRedisPipeline:
+    """Mock Redis pipeline."""
+    _ops = []
+
+    def zremrangebyscore(self, key, min_val, max_val):
+        self._ops.append(None)
+        return self
+
+    def zcard(self, key):
+        self._ops.append(0)
+        return self
+
+    def zadd(self, key, mapping):
+        self._ops.append(None)
+        return self
+
+    def expire(self, key, seconds):
+        self._ops.append(None)
+        return self
+
+    def delete(self, key):
+        _mock_redis_store.pop(key, None)
+        self._ops.append(None)
+        return self
+
+    async def execute(self):
+        results = [None, 0, None, None]  # zremrangebyscore, zcard=0, zadd, expire
+        self._ops = []
+        return results
+
+
+_mock_redis = MockRedis()
+
+
+@pytest_asyncio.fixture(autouse=True)
+async def mock_redis():
+    """Mock Redis for all tests."""
+    _mock_redis_store.clear()
+    with patch("app.redis_client.get_redis", return_value=_mock_redis):
+        with patch("app.utils.security.get_redis", return_value=_mock_redis):
+            yield _mock_redis
 
 
 @pytest_asyncio.fixture
