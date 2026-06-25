@@ -5,10 +5,18 @@ import redis.asyncio as redis
 from app.config import settings
 
 # Redis connection pool
+# socket_connect_timeout/socket_timeout ZORUNLU: uzak ortamda (Railway) Redis'e
+# ulaşılamazsa, zaman aşımı OLMADAN `ping()` SONSUZA KADAR DONAR → uygulama
+# lifespan'de takılır, hiç "ready" olmaz, sağlık kontrolü "service unavailable"
+# verir. Kısa timeout ile bağlantı HIZLI başarısız olur; lifespan hatayı yutar,
+# uygulama Redis olmadan da (degraded) ayağa kalkar ve sağlık kontrolü geçer.
 redis_pool = redis.ConnectionPool.from_url(
     settings.REDIS_URL,
     decode_responses=True,
     max_connections=50,
+    socket_connect_timeout=5,
+    socket_timeout=5,
+    retry_on_timeout=False,
 )
 
 
