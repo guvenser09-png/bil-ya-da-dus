@@ -5,10 +5,10 @@ from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import pool
-from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlalchemy.ext.asyncio import create_async_engine
 
 from app.config import settings
-from app.database import Base
+from app.database import DB_CONNECT_ARGS, Base
 
 # Import all models so they are registered with Base.metadata
 import app.models  # noqa: F401
@@ -51,10 +51,10 @@ def do_run_migrations(connection) -> None:
 
 async def run_async_migrations() -> None:
     """Run migrations in async mode."""
-    connectable = async_engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
+    connectable = create_async_engine(
+        settings.DATABASE_URL,
         poolclass=pool.NullPool,
+        connect_args=DB_CONNECT_ARGS,
     )
 
     async with connectable.connect() as connection:
