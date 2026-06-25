@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bil ya da Düş - Sıralama</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Quicksand', sans-serif; background: linear-gradient(180deg, #2b1b20 0%, #1d0f14 100%); overscroll-behavior: none; }
+        .chunky-button-base { position: relative; transition: all 0.1s ease; }
+        .chunky-button-base:active { transform: translateY(4px); }
+        .chunky-button-base::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 8px; background: inherit; filter: brightness(0.6); border-bottom-left-radius: inherit; border-bottom-right-radius: inherit; z-index: -1; }
+        .chunky-button-base:active::after { height: 0px; bottom: 0; }
+        .glass-card { background: rgba(65, 48, 53, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .podium-crown { filter: drop-shadow(0 0 8px rgba(255, 210, 63, 0.8)); }
+        .user-highlight { box-shadow: 0 0 20px rgba(255, 71, 156, 0.4); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#b80068", "surface-bright": "#46343a", "on-surface-variant": "#e1bdc7",
+                        "surface": "#1d0f14", "tertiary-fixed-dim": "#1ddfbe", "surface-variant": "#413035",
+                        "surface-tint": "#ffb0cb", "primary": "#ffb0cb", "on-secondary-fixed-variant": "#5900c6",
+                        "on-secondary-container": "#d2bbff", "tertiary-fixed": "#51fcda", "background": "#1d0f14",
+                        "on-primary": "#640036", "on-background": "#f7dce3", "error-container": "#93000a",
+                        "on-primary-container": "#58002f", "tertiary": "#1ddfbe", "surface-container-low": "#26171c",
+                        "on-tertiary-fixed-variant": "#005143", "primary-fixed-dim": "#ffb0cb", "on-error": "#690005",
+                        "secondary-fixed-dim": "#d2bbff", "on-error-container": "#ffdad6", "outline-variant": "#594048",
+                        "inverse-surface": "#f7dce3", "surface-container-high": "#36252b", "on-tertiary-container": "#003027",
+                        "secondary-container": "#6800e4", "on-surface": "#f7dce3", "on-tertiary-fixed": "#00201a",
+                        "primary-container": "#ff479c", "surface-dim": "#1d0f14", "inverse-on-surface": "#3d2c31",
+                        "on-tertiary": "#00382e", "secondary": "#d2bbff", "surface-container-highest": "#413035",
+                        "error": "#ffb4ab", "on-secondary-fixed": "#25005a", "tertiary-container": "#00a38a",
+                        "surface-container-lowest": "#180a0f", "on-primary-fixed": "#3e001f", "on-secondary": "#3e008e",
+                        "outline": "#a88892", "primary-fixed": "#ffd9e3", "on-primary-fixed-variant": "#8d004f",
+                        "secondary-fixed": "#eaddff", "surface-container": "#2b1b20"
+                    },
+                    "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                    "spacing": { "base": "8px", "container-padding": "20px", "element-gap": "12px", "section-margin": "32px" },
+                    "fontFamily": {
+                        "body-md": ["Quicksand"], "headline-lg": ["Quicksand"], "display-xl": ["Quicksand"],
+                        "title-md": ["Quicksand"], "label-sm": ["Quicksand"], "headline-lg-mobile": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "22px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "display-xl": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-md": ["20px", {"lineHeight": "24px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style> body { min-height: max(884px, 100dvh); } </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-container-padding h-16 bg-surface-container/80 backdrop-blur-md shadow-xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden">
+<img alt="Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtOVty1p4Ywu7GCY6jJlGBSa7-8rP1x6NhrQZSwJ_VRHqX9OfA5sYjLLSYKFEuksoCp8o7zDZvrB4IX1pQ5gNtZ9v1aasm9mldEYs7S2pmrafu3nmlpYw9XyQCF3kFxZ2wmOG5vwaRwED4pOJ3GXuCujAaT572-SkdQs2vOUGUNASYq_-gic-ALyx2tegD0y2H9goXLUE_acFZEuNWiLI5NF00mEjjRsOeN69U1Xwh_4zBpPsQE4wKnHe8_IV-J-TgjuPzbQeGkQ"/>
+</div>
+<h1 class="font-display-xl text-primary drop-shadow-[0_4px_0_rgba(100,0,54,1)] text-[24px]">Bil ya da Düş</h1>
+</div>
+<div class="bg-surface-container-highest px-3 py-1 rounded-full flex items-center gap-1.5 border border-primary/20">
+<span class="font-label-sm text-label-sm text-primary">1,240 🪙</span>
+</div>
+</header>
+<main class="pt-20 px-container-padding">
+<div class="flex gap-2 p-1.5 glass-card rounded-lg mb-8">
+<button class="flex-1 py-2 text-on-surface font-label-sm text-label-sm rounded-md bg-primary text-on-primary shadow-lg transition-all">GÜNLÜK</button>
+<button class="flex-1 py-2 text-on-surface-variant font-label-sm text-label-sm rounded-md hover:bg-surface-variant transition-all">HAFTALIK</button>
+<button class="flex-1 py-2 text-on-surface-variant font-label-sm text-label-sm rounded-md hover:bg-surface-variant transition-all">TÜM ZAMANLAR</button>
+</div>
+<div class="flex items-end justify-center gap-4 mb-10 h-64">
+<div class="flex flex-col items-center flex-1">
+<div class="relative mb-3">
+<span class="material-symbols-outlined absolute -top-6 left-1/2 -translate-x-1/2 text-[#C0C0C0] text-3xl podium-crown">workspace_premium</span>
+<div class="w-16 h-16 rounded-full border-4 border-[#C0C0C0] p-1 bg-surface-container shadow-xl">
+<img alt="Rank 2" class="w-full h-full rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMM6FPU5U5wmz4XtaalR0C_w1rGTlp6IoI3JPMKk8VcGT8XSHkLuGCuGK0UwfqbDPSnGeBvFdN7XRXJAOC-wG6eFz0YIsxY20sTX_NqljdLjmxmwhNu_pQVb90OvjhrX-WRGHC81SH7q4zEAebJIQO4bv3d6vtz8YknwhXcdMIxY7xg_SJQlQuzzIrf-JNyGmSlIDI70HbPmT5SMEuC3iVr_11Cc25PVLhC1PS1L-PNUOQpIuG4fvADWBZvxjjmaJL6L6bVK-k4Q"/>
+</div></div>
+<div class="w-full bg-[#C0C0C0]/20 h-24 rounded-t-xl glass-card flex flex-col items-center justify-center pt-2 relative">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#C0C0C0] text-on-primary w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs">2</div>
+<span class="font-label-sm text-label-sm text-on-surface truncate px-2">Esra_X</span>
+<span class="font-title-md text-title-md text-[#C0C0C0]">9.850</span>
+</div></div>
+<div class="flex flex-col items-center flex-[1.2]">
+<div class="relative mb-4 scale-110">
+<span class="material-symbols-outlined absolute -top-8 left-1/2 -translate-x-1/2 text-[#FFD700] text-4xl podium-crown">workspace_premium</span>
+<div class="w-20 h-20 rounded-full border-4 border-[#FFD700] p-1 bg-surface-container shadow-2xl">
+<img alt="Rank 1" class="w-full h-full rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0XN0OcylX19LDYFh3ofed2L1J6To4pW9sh_SkmeZc_MwCcd9KmKSFO_D2C9hvsfSwfKHWGW6HECPh9jrY03oaz6E6rhtA1EB_G807vx8pAjd3I0ulIPNWaaZvzlcg6zEwb_NvKhiFHr9nisZD8VfAnx7Dl_I7IX7oEeOO-dqJ1GpoeksyvlqE3s8S8Cf2qEV0vDzLEy7pnMa8U_jLFyi5rb1DvV1N7-eQmdOGL0qGWdmjmJWlsqAETqevyBOF_SmN7v6DfMQzoQ"/>
+</div></div>
+<div class="w-full bg-[#FFD700]/20 h-32 rounded-t-xl glass-card flex flex-col items-center justify-center pt-4 relative border-t-2 border-[#FFD700]/50">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#FFD700] text-on-primary w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-[0_4px_10px_rgba(255,215,0,0.5)]">1</div>
+<span class="font-label-sm text-label-sm text-on-surface font-bold truncate px-2">Kral_Z</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-[#FFD700]">12.450</span>
+</div></div>
+<div class="flex flex-col items-center flex-1">
+<div class="relative mb-2">
+<span class="material-symbols-outlined absolute -top-5 left-1/2 -translate-x-1/2 text-[#CD7F32] text-2xl podium-crown">workspace_premium</span>
+<div class="w-14 h-14 rounded-full border-4 border-[#CD7F32] p-1 bg-surface-container shadow-lg">
+<img alt="Rank 3" class="w-full h-full rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtsYx4j7DMevexR9QNJdsbCdPXJYAh_ICiYaxGOEkCkuzjnDQKrQoTkx3Oyly4GScurzy4tSzAuAbw5aWSQBZtg0AQ_1VDaCgFmMdjQqrbrCMyj6i9QbCo575GQQ3GrEY_44nPL-gFVNNZyEJlh8WyiMh0NdiUbVr0ReBda3yESmmDB0qJ0u-BKqpopienNGMYSOg3PemNQjpsGKzCh5oSGr7semcA5Ffynpw4cyoAfjNUkJKFvgkuSJ6DKQ8doYDRsB3_oy-jAw"/>
+</div></div>
+<div class="w-full bg-[#CD7F32]/20 h-20 rounded-t-xl glass-card flex flex-col items-center justify-center pt-2 relative">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#CD7F32] text-on-primary w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs">3</div>
+<span class="font-label-sm text-label-sm text-on-surface truncate px-2">Buse_Y</span>
+<span class="font-title-md text-title-md text-[#CD7F32]">9.100</span>
+</div></div>
+</div>
+<div class="space-y-3 pb-8">
+<div class="flex items-center gap-4 p-4 rounded-lg bg-primary-container border-2 border-primary user-highlight transition-all active:scale-95">
+<span class="font-title-md text-title-md text-on-primary-container w-6 text-center">4.</span>
+<div class="w-12 h-12 rounded-full border-2 border-on-primary-container overflow-hidden bg-surface-container">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkB8hXITd_X4y5cwdi4YafoGSYuuGW_DGQGh0XV792eEMyaUTAEkjnPHa7rKp5uaM-I0niFB-krXqXs1rOl0l6GEODML3Mno3w6piS0FI6gwgGJ3jVRFyfiDAbuYjEPMUlbfyyz6_dRutCqZtAbeQ-Banep_3QAeSfawP8HDHd87XRloQG6VrtvFazKOKZ9qCXG9tZVzrRInPeQiWx6kC5PixE33h5HOHh5MPfgoTAwhdaQdXY_M0Zg-BrVQBVCf0y1oRq4gZpLg"/>
+</div>
+<div class="flex-1">
+<h3 class="font-title-md text-title-md text-on-primary-container">Serdar_G</h3>
+<p class="font-label-sm text-label-sm text-on-primary-container opacity-80 text-xs">Senin Sıralaman</p>
+</div>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary-container">8.420</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-lg glass-card transition-all active:scale-95">
+<span class="font-title-md text-title-md text-on-surface-variant w-6 text-center">5.</span>
+<div class="w-12 h-12 rounded-full border-2 border-surface-variant overflow-hidden bg-surface-container">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBphWXPKQen7Gi0r86fktJXK9SPt16vnkk2d3XSrBKS65dO59HySNrd2lAtJqjPex6iPnuUh_CcfKCpm8poCGSjRfCuk4leL4cQJSzIWU4LHQwcADyKvP0oKfr1EFJbF8XpkfIoG5v7tq7gOaakGIPEsLUSNCTRSMThgUrayp2zIhhBVQMz9Rvwr7DFmgl9GzI6hujqOFZ9X8nm9zhCP87HXIxJh-ZHRi0DXJSzMeamnVPxtEaMvb2XvoA7g33JgIaKFcQjUNcV3A"/>
+</div>
+<div class="flex-1">
+<h3 class="font-title-md text-title-md text-on-surface">Mert_K</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant text-xs">Lig: Gümüş</p>
+</div>
+<span class="font-title-md text-title-md text-primary">7.990</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-lg glass-card transition-all active:scale-95">
+<span class="font-title-md text-title-md text-on-surface-variant w-6 text-center">6.</span>
+<div class="w-12 h-12 rounded-full border-2 border-surface-variant overflow-hidden bg-surface-container">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_uF6T2ZJLll8OHLTMVYqIgIu_o4UTd0i6oxLMS0pTElGwTJZKQsZlqUT2uf0720sd2yj80k20B3gQBZOxrwlLxV9SWbg3Oo6MDx8PjQfsfxEJFkUlAFHgZtnBVO2UaHxaAiMx7GFFATeQxnEGLhsAlRv-oo8lqtAuYeNC6X8ORjqZT1Z-7Vc_FnagOMWtgkbW9A6G_qlsUZfa0ZvwzalptL-js13ZwS1OgaMeUkPZYKNVFXM5Hzg8xfDFlNpzGxUCOU0upCV72w"/>
+</div>
+<div class="flex-1">
+<h3 class="font-title-md text-title-md text-on-surface">Cem_L</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant text-xs">Lig: Gümüş</p>
+</div>
+<span class="font-title-md text-title-md text-primary">7.650</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-lg glass-card transition-all active:scale-95">
+<span class="font-title-md text-title-md text-on-surface-variant w-6 text-center">7.</span>
+<div class="w-12 h-12 rounded-full border-2 border-surface-variant overflow-hidden bg-surface-container">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYa5fpsF4erD4yqpXtdBE2eyFNY6E9DyLiqDKB_Yx3cZpGs7iJ8fynYZ6WH5uNiahGbwopjILRxymCM9RZxZWfLXx59l7B7qH1Z_FP2D1HdbjrXTkOfdqEesH8SDg9cnwkrJB12VBQ78XcGfSiVVrlHEy4TOTa0GFxoQ1M0Q7C6t6zYy-UaL82d-Y0Q5LUcT80uqhsHtvutRalV6sUkeHuywz4NqEWz2PvBURvhRZ4tbU786oQEv6Cmy0uOsn4E8WDHAIW53iPBw"/>
+</div>
+<div class="flex-1">
+<h3 class="font-title-md text-title-md text-on-surface">Ayşe_N</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant text-xs">Lig: Bronz</p>
+</div>
+<span class="font-title-md text-title-md text-primary">7.120</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-lg glass-card transition-all active:scale-95">
+<span class="font-title-md text-title-md text-on-surface-variant w-6 text-center">8.</span>
+<div class="w-12 h-12 rounded-full border-2 border-surface-variant overflow-hidden bg-surface-container">
+<img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn2AokC7KW5B1fVQPA4Xnqk_LgYiHp_gk3UPujC438Fjm_NjR6MMFL0TxOsxT7dAoFB4-5gGzWo1oon8gHDLLozZSlCRNBOKp36lcN-I1XBsPw409EQIsg1lWK_8n_LIPAieCnhCeV_KcSkr3nBW1oxMj5caQ1Szl3U9oJOoSYYhWMkQYMtVTTj5hztVGmWeLqoJVsp9dJ460W6D6L6QNZ-acUi7atX4FySfTrrUKmXwDApy7XaFxTkCk1UOAtOHEqVhafL-C_xA"/>
+</div>
+<div class="flex-1">
+<h3 class="font-title-md text-title-md text-on-surface">Emir_O</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant text-xs">Lig: Bronz</p>
+</div>
+<span class="font-title-md text-title-md text-primary">6.880</span>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high/90 backdrop-blur-xl shadow-lg shadow-primary/20 rounded-t-lg">
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all">
+<span class="material-symbols-outlined">home</span><span class="font-label-sm text-label-sm">Ana Sayfa</span></div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 shadow-[0_4px_0_rgba(88,0,47,1)] active:scale-95 translate-y-0.5 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">leaderboard</span><span class="font-label-sm text-label-sm">Sıralama</span></div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all">
+<span class="material-symbols-outlined">shopping_bag</span><span class="font-label-sm text-label-sm">Mağaza</span></div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all">
+<span class="material-symbols-outlined">person</span><span class="font-label-sm text-label-sm">Profil</span></div>
+</nav>
+<script>
+        document.querySelectorAll('.glass-card, .user-highlight').forEach(card => {
+            card.addEventListener('touchstart', function() { this.style.transform = 'scale(0.98)'; });
+            card.addEventListener('touchend', function() { this.style.transform = 'scale(1)'; });
+        });
+        const tabs = document.querySelectorAll('.glass-card button');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => { t.classList.remove('bg-primary', 'text-on-primary', 'shadow-lg'); t.classList.add('text-on-surface-variant'); });
+                this.classList.add('bg-primary', 'text-on-primary', 'shadow-lg');
+                this.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

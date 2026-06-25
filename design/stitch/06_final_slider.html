@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bil ya da Düş - Final Turu (Slider)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48; }
+        .chunky-button-base { position: relative; transition: all 0.1s ease; }
+        .chunky-button-base:active { transform: translateY(4px); }
+        .chunky-button-shadow { box-shadow: 0 6px 0 0 rgba(88, 0, 47, 1); }
+        .chunky-button-base:active .chunky-button-shadow { box-shadow: 0 0px 0 0 rgba(88, 0, 47, 1); }
+        .glass-card { background: rgba(43, 27, 32, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1); }
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 24px; cursor: pointer; background: #413035; border-radius: 12px; border: 2px solid #594048; }
+        input[type=range]::-webkit-slider-thumb { height: 48px; width: 48px; border-radius: 14px; background: #ffb0cb; cursor: pointer; -webkit-appearance: none; margin-top: -14px; box-shadow: 0 6px 0 #8d004f, 0 10px 15px rgba(0,0,0,0.3); border: 2px solid #ffffff33; }
+        input[type=range]:active::-webkit-slider-thumb { transform: scale(0.95); box-shadow: 0 2px 0 #8d004f; }
+        @keyframes pulse-gold { 0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255, 210, 63, 0.5)); } 50% { transform: scale(1.05); filter: drop-shadow(0 0 15px rgba(255, 210, 63, 0.8)); } 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(255, 210, 63, 0.5)); } }
+        .animate-gold { animation: pulse-gold 2s infinite ease-in-out; }
+        .bg-epic-gradient { background: radial-gradient(circle at top, #640036 0%, #1d0f14 100%); }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#b80068", "surface-bright": "#46343a", "on-surface-variant": "#e1bdc7",
+                        "surface": "#1d0f14", "tertiary-fixed-dim": "#1ddfbe", "surface-variant": "#413035",
+                        "surface-tint": "#ffb0cb", "primary": "#ffb0cb", "on-secondary-fixed-variant": "#5900c6",
+                        "on-secondary-container": "#d2bbff", "tertiary-fixed": "#51fcda", "background": "#1d0f14",
+                        "on-primary": "#640036", "on-background": "#f7dce3", "error-container": "#93000a",
+                        "on-primary-container": "#58002f", "tertiary": "#1ddfbe", "surface-container-low": "#26171c",
+                        "on-tertiary-fixed-variant": "#005143", "primary-fixed-dim": "#ffb0cb", "on-error": "#690005",
+                        "secondary-fixed-dim": "#d2bbff", "on-error-container": "#ffdad6", "outline-variant": "#594048",
+                        "inverse-surface": "#f7dce3", "surface-container-high": "#36252b", "on-tertiary-container": "#003027",
+                        "secondary-container": "#6800e4", "on-surface": "#f7dce3", "on-tertiary-fixed": "#00201a",
+                        "primary-container": "#ff479c", "surface-dim": "#1d0f14", "inverse-on-surface": "#3d2c31",
+                        "on-tertiary": "#00382e", "secondary": "#d2bbff", "surface-container-highest": "#413035",
+                        "error": "#ffb4ab", "on-secondary-fixed": "#25005a", "tertiary-container": "#00a38a",
+                        "surface-container-lowest": "#180a0f", "on-primary-fixed": "#3e001f", "on-secondary": "#3e008e",
+                        "outline": "#a88892", "primary-fixed": "#ffd9e3", "on-primary-fixed-variant": "#8d004f",
+                        "secondary-fixed": "#eaddff", "surface-container": "#2b1b20"
+                    },
+                    "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                    "spacing": { "base": "8px", "container-padding": "20px", "element-gap": "12px", "section-margin": "32px" },
+                    "fontFamily": {
+                        "body-md": ["Quicksand"], "headline-lg": ["Quicksand"], "display-xl": ["Quicksand"],
+                        "title-md": ["Quicksand"], "label-sm": ["Quicksand"], "headline-lg-mobile": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "22px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "display-xl": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-md": ["20px", {"lineHeight": "24px", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style> body { min-height: max(884px, 100dvh); } </style>
+  </head>
+<body class="bg-background text-on-background font-body-md overflow-hidden bg-epic-gradient min-h-screen flex flex-col">
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-container-padding h-16 bg-surface-container/80 backdrop-blur-md shadow-xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden shadow-lg">
+<img alt="Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-ZTNQqq1uOYDCk9nat1d_hxDCktB6VJ3Kkszpp6Ww2iwmoOJFp4jcNxM5vBSIYJV7ReEnV4dh0YRZIVmvlwyFWIeyU2mD_LYENKEfqj1rsCrA0va3WcMK6PmVI--7OfhLWVccptNgrKGx9J8jeYEJAgINNYUAqSpxIHsIt0MlHQGIyuvpPyb5fyEhQK1fITbRGGFOrJCPVJwo_QkLJCxlKHCnGVX6A0oDEg97wOYajY5d9f9ip1N3ejb6Ws7kHakyCuaV42-6Uw"/>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Serdar_G</span>
+</div>
+<div class="font-display-xl text-primary drop-shadow-[0_4px_0_rgba(100,0,54,1)] text-[24px]">Bil ya da Düş</div>
+<div class="bg-surface-container-highest px-3 py-1 rounded-full border border-outline-variant text-primary font-bold shadow-inner">1,240 🪙</div>
+</header>
+<main class="flex-grow pt-24 pb-32 px-container-padding flex flex-col items-center gap-section-margin relative">
+<div class="w-full flex justify-center">
+<div class="bg-primary-container text-on-primary-container px-8 py-3 rounded-lg shadow-[0_8px_0_rgba(88,0,47,1)] animate-gold">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-center">FİNAL TURU</h1>
+</div>
+</div>
+<div class="w-full flex justify-center items-end gap-4 mt-4">
+<div class="flex flex-col items-center gap-1 group">
+<div class="relative">
+<div class="w-16 h-16 rounded-full border-4 border-tertiary p-1 bg-surface-variant overflow-hidden shadow-lg transition-transform group-hover:scale-110">
+<img class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_2wmd1NeVy5-9PQYOvkdGi9M3YpEcxtuXfwsUnjQIHNk9qUXGa_dn1OxiaG84YlwYcfWduY4LnKWccIV-hK4YkwS9agE4xteifd31rEx9xDLB6DVz6DQqWBgYIvva10tvVZ0HWVZeRZQFbCjs_a2xEAnCHuwaVbioHXv9IV3cKFxWSrR2qhQuBNs-4uNy8K4XtMx7jYSO82XMuSLxYVvfEOKPs5__yygbC_jWZTEg6u3qgQPCcB_fC_Gt2a9byoLicE5bDxqiqw"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-tertiary text-on-tertiary-container text-[10px] font-bold px-1.5 rounded-full border-2 border-background">#1</div>
+</div>
+<span class="text-label-sm font-label-sm opacity-80">Elif.x</span>
+</div>
+<div class="flex flex-col items-center gap-1 group">
+<div class="relative">
+<div class="w-20 h-20 rounded-full border-4 border-primary p-1 bg-surface-variant overflow-hidden shadow-2xl transition-transform group-hover:scale-110">
+<img class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDK051O13uiZBVcZwaSqebZTypu2qH0k_Cd714aRfFj_81A1JFnHrmSNu6DfXlizAEDCNixuhlY1NOcOSWgWPEUSiVX5nmmTTy4IuQWJzh7m7Pa1h2Qr0xz_jQDMDW3GgCqJfRR9KPT70Xhx9v6IYqgb5pTjKoMVsrUmiyY8EDbUyeer_vjIrIr-i-7g-mBRuCsFZ7FRuLY_MQqZhpaCeGRshmO6S7MiTYLmWELYTpwvPk47itdkWqLEm2SkAwU5iRoCZH8Bk_J9A"/>
+</div>
+<div class="absolute -top-2 left-1/2 -translate-x-1/2 bg-yellow-400 text-black text-[10px] font-black px-2 py-0.5 rounded-full shadow-md whitespace-nowrap">SIRA SENDE</div>
+</div>
+<span class="text-body-md font-body-md text-primary font-bold">Sen</span>
+</div>
+<div class="flex flex-col items-center gap-1 group">
+<div class="relative">
+<div class="w-16 h-16 rounded-full border-4 border-secondary p-1 bg-surface-variant overflow-hidden shadow-lg transition-transform group-hover:scale-110">
+<img class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkTC7Y1x6tR6Iw8BnURK2xCCcehUmGqBvCMFv-CRgwB-LdOSoxBgnjGoOLidQQqMzl2gwrKXTHJ-wmB7xCFaC4usAIA8oKR1KiC5jDMwzWj3cRs2dRbiW88ZFcP1y9nzfvacAP_PVIfmLquZmtE95LTIQjqRvMx5KCz2foobzpF3gQ-nXDl-CaMXjIgbGzP2DkCTe1_uRB8dhNkQJbCrlyQKr69wcZmlVJERTCjIYCgyTC2vFWNbroEZhqo6gEcIFt08xpOsq_ZQ"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-secondary text-on-secondary-container text-[10px] font-bold px-1.5 rounded-full border-2 border-background">#3</div>
+</div>
+<span class="text-label-sm font-label-sm opacity-80">Mert_42</span>
+</div>
+</div>
+<div class="relative w-24 h-24 flex items-center justify-center">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-variant" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-error transition-all duration-1000" cx="48" cy="48" fill="transparent" id="timer-circle" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="62.8" stroke-width="8"></circle>
+</svg>
+<div class="absolute font-display-xl text-display-xl text-error" id="timer-text">08</div>
+</div>
+<div class="glass-card w-full max-w-sm p-8 rounded-lg flex flex-col items-center gap-6 animate-pulse-slow">
+<div class="bg-tertiary-container/20 px-4 py-1 rounded-full border border-tertiary text-tertiary font-label-sm text-label-sm">COĞRAFYA</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-center leading-tight">Türkiye'de kaç il var?</h2>
+<div class="w-full mt-8 relative">
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-6 py-2 rounded-xl font-display-xl text-[32px] shadow-[0_4px_0_#8d004f] transition-all" id="slider-badge">63</div>
+<input class="w-full" id="answer-slider" max="150" min="0" step="1" type="range" value="63"/>
+<div class="flex justify-between mt-4 px-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-3 py-1 rounded-full border border-outline-variant shadow-inner">0</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-3 py-1 rounded-full border border-outline-variant shadow-inner">150</span>
+</div>
+</div>
+<button class="w-full mt-4 chunky-button-base group">
+<div class="chunky-button-shadow absolute inset-0 bg-primary rounded-lg"></div>
+<div class="relative bg-primary-container text-on-primary-container font-headline-lg-mobile py-4 rounded-lg flex items-center justify-center gap-2 group-active:translate-y-1">
+                    CEVABI GÖNDER
+                    <span class="material-symbols-outlined">send</span>
+</div>
+</button>
+</div>
+<div class="absolute top-1/4 left-5 opacity-20 pointer-events-none"><span class="material-symbols-outlined text-[64px] text-tertiary">celebration</span></div>
+<div class="absolute bottom-1/4 right-5 opacity-20 pointer-events-none"><span class="material-symbols-outlined text-[64px] text-primary">emoji_events</span></div>
+</main>
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-t-lg">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 shadow-[0_4px_0_rgba(88,0,47,1)] active:scale-95 translate-y-0.5 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span><span class="font-label-sm text-label-sm">Ana Sayfa</span></a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined">leaderboard</span><span class="font-label-sm text-label-sm">Sıralama</span></a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined">shopping_bag</span><span class="font-label-sm text-label-sm">Mağaza</span></a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined">person</span><span class="font-label-sm text-label-sm">Profil</span></a>
+</nav>
+<script>
+        const slider = document.getElementById('answer-slider');
+        const badge = document.getElementById('slider-badge');
+        function updateSlider() {
+            const val = slider.value;
+            badge.innerText = val;
+            const min = slider.min ? slider.min : 0;
+            const max = slider.max ? slider.max : 100;
+            const newVal = Number(((val - min) * 100) / (max - min));
+            badge.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
+        }
+        slider.addEventListener('input', updateSlider);
+        updateSlider();
+        let timeLeft = 8;
+        const timerText = document.getElementById('timer-text');
+        const timerCircle = document.getElementById('timer-circle');
+        const fullOffset = 251.2;
+        const timerInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) { clearInterval(timerInterval); timeLeft = 0; timerText.classList.add('animate-ping'); }
+            timerText.innerText = timeLeft.toString().padStart(2, '0');
+            const offset = fullOffset - (timeLeft / 8) * fullOffset;
+            timerCircle.style.strokeDashoffset = offset;
+            if (timeLeft <= 3) {
+                timerCircle.classList.remove('text-primary');
+                timerCircle.classList.add('text-error');
+                timerText.classList.add('text-error');
+            }
+        }, 1000);
+        slider.addEventListener('mousedown', () => badge.classList.add('scale-110'));
+        slider.addEventListener('mouseup', () => badge.classList.remove('scale-110'));
+    </script>
+</body></html>

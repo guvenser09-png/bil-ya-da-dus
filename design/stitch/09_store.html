@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bil ya da Düş - İkon Mağazası</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#26171c", "on-tertiary": "#00382e", "on-primary-container": "#58002f",
+                    "error": "#ffb4ab", "inverse-on-surface": "#3d2c31", "primary-fixed-dim": "#ffb0cb",
+                    "on-tertiary-fixed": "#00201a", "on-primary": "#640036", "on-primary-fixed-variant": "#8d004f",
+                    "error-container": "#93000a", "on-secondary-container": "#d2bbff", "on-error-container": "#ffdad6",
+                    "outline": "#a88892", "surface-container-high": "#36252b", "tertiary-fixed": "#51fcda",
+                    "secondary": "#d2bbff", "background": "#1d0f14", "on-tertiary-container": "#003027",
+                    "surface-container-lowest": "#180a0f", "on-tertiary-fixed-variant": "#005143", "inverse-primary": "#b80068",
+                    "on-primary-fixed": "#3e001f", "primary-container": "#ff479c", "tertiary-fixed-dim": "#1ddfbe",
+                    "tertiary": "#1ddfbe", "secondary-fixed-dim": "#d2bbff", "on-surface": "#f7dce3",
+                    "on-secondary-fixed-variant": "#5900c6", "primary-fixed": "#ffd9e3", "tertiary-container": "#00a38a",
+                    "secondary-container": "#6800e4", "on-secondary-fixed": "#25005a", "surface-variant": "#413035",
+                    "surface-container": "#2b1b20", "surface-tint": "#ffb0cb", "surface-dim": "#1d0f14",
+                    "secondary-fixed": "#eaddff", "surface": "#1d0f14", "outline-variant": "#594048",
+                    "inverse-surface": "#f7dce3", "primary": "#ffb0cb", "on-surface-variant": "#e1bdc7",
+                    "on-error": "#690005", "on-background": "#f7dce3", "surface-container-highest": "#413035",
+                    "on-secondary": "#3e008e", "surface-bright": "#46343a"
+            },
+            "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+            "spacing": { "element-gap": "12px", "base": "8px", "section-margin": "32px", "container-padding": "20px" },
+            "fontFamily": {
+                    "title-md": ["Quicksand"], "label-sm": ["Quicksand"], "headline-lg": ["Quicksand"],
+                    "display-xl": ["Quicksand"], "headline-lg-mobile": ["Quicksand"], "body-md": ["Quicksand"]
+            },
+            "fontSize": {
+                    "title-md": ["20px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "display-xl": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "22px", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #1d0f14; color: #f7dce3; font-family: 'Quicksand', sans-serif; overflow-x: hidden; }
+        .jelly-card { background: rgba(43, 27, 32, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(0, 0, 0, 0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .jelly-card:active { transform: scale(0.96); }
+        .chunky-button { position: relative; transition: all 0.1s ease; filter: drop-shadow(0 4px 0 rgba(88, 0, 47, 1)); }
+        .chunky-button:active { transform: translateY(4px); filter: drop-shadow(0 0px 0 rgba(88, 0, 47, 1)); }
+        .gold-glow { box-shadow: 0 0 20px rgba(255, 210, 63, 0.3); }
+        .glass-strip { background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%); }
+        .floating { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav-bg { background: #ff479c; box-shadow: 0 4px 0 rgba(88, 0, 47, 1); }
+    </style>
+<style> body { min-height: max(884px, 100dvh); } </style>
+  </head>
+<body class="bg-background select-none">
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-container-padding h-16 bg-surface-container/80 backdrop-blur-md shadow-xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden shadow-lg">
+<img alt="Serdar_G" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5zEcSqAKowFohCu0L0qjhpvGq2viqk_LxQ4IzQ9AR4JGipjskE0jtkpx276a5bIg4f6TaxdrOI_dBtnv8hxA5W2iTinD5dqyxE578TVU6hkA6C2roJ0jd-DDvh2SQZknhxUkhK71ys3oFuvB7NByhyX7QSGVWba-iQW43KDhf70br8NLNaA2YcQbOGS1TZ-GmX745gSh-qE30OEhbcLKY5Tsn3nKyxBuPlWzDj-bWfMm9ov9oGNTabK4jYh_WNK_XeBR29NJIgw"/>
+</div>
+<span class="font-display-xl text-primary drop-shadow-[0_4px_0_rgba(100,0,54,1)] text-[24px]">Bil ya da Düş</span>
+</div>
+<div class="bg-surface-container-highest px-3 py-1.5 rounded-full flex items-center gap-2 border border-outline-variant shadow-inner">
+<span class="text-primary font-bold">1,240</span>
+<span class="material-symbols-outlined text-[#FFD23F]" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+</div>
+</header>
+<main class="pt-24 pb-32 px-container-padding max-w-md mx-auto">
+<section class="mb-section-margin">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">GÜNLÜK TEKLİFLER</h2>
+<div class="bg-tertiary-container/20 text-tertiary px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="text-label-sm font-label-sm">14:22:05</span>
+</div>
+</div>
+<div class="jelly-card rounded-lg p-1 relative overflow-hidden group h-64 flex flex-col justify-end">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCivLPxwdhZwFYhun1mP-MeYC_abtFNpo8eCO3A4q3M9qVc5y3z9c-ccdE0d_l0I_65-OaUp0v4XVQ5_s2kkUfit4uRRhHj4tv2os8SuJ9rCsRo6Pi67gEOLpqqcGWAdhPTuMW-dhRizUKlJAmgXmESXejagx-LekMYsgE-vnhA8rvsJQWboqQ8c1XZokCGu_Y3hDUEl5BfbrFKeF9KYUyg8yahMROTG_A6v70u_UNWYD6fyJyC91tu5clc3Ob2PpaBeriVnegXzw"/>
+<div class="relative z-20 p-5 w-full">
+<div class="flex justify-between items-end">
+<div>
+<span class="bg-primary text-on-primary text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 inline-block uppercase tracking-wider">PREMIUM</span>
+<h3 class="font-title-md text-title-md text-white drop-shadow-md">Sibernetik Efsaneler</h3>
+<p class="text-on-surface-variant text-sm opacity-90">Sınırlı süreli özel paket!</p>
+</div>
+<button class="chunky-button bg-primary-container text-on-primary-container px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg">
+                            2,500 <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-4">KARAKTER PAKETLERİ</h2>
+<div class="grid grid-cols-1 gap-4">
+<div class="jelly-card rounded-lg p-5 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-md text-title-md text-primary">Hayvanlar</h3>
+<p class="text-on-surface-variant text-sm">8 Sevimli Karakter</p>
+</div>
+<div class="flex -space-x-3">
+<div class="w-12 h-12 rounded-xl bg-surface-variant border-2 border-background flex items-center justify-center shadow-lg transform -rotate-6"><span class="material-symbols-outlined text-3xl text-secondary">pets</span></div>
+<div class="w-12 h-12 rounded-xl bg-surface-variant border-2 border-background flex items-center justify-center shadow-lg z-10"><span class="material-symbols-outlined text-3xl text-tertiary">cruelty_free</span></div>
+<div class="w-12 h-12 rounded-xl bg-surface-variant border-2 border-background flex items-center justify-center shadow-lg transform rotate-6"><span class="material-symbols-outlined text-3xl text-primary">sound_detection_dog_barking</span></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-outline-variant/30">
+<span class="text-on-surface-variant font-medium text-sm">Popüler</span>
+<button class="chunky-button bg-secondary-container text-on-secondary-container px-5 py-2 rounded-xl font-bold flex items-center gap-2">
+                            500 <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+</button>
+</div>
+</div>
+<div class="jelly-card rounded-lg p-5 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-md text-title-md text-tertiary">Uzaylılar</h3>
+<p class="text-on-surface-variant text-sm">12 Galaktik Dost</p>
+</div>
+<div class="flex -space-x-3">
+<div class="w-12 h-12 rounded-xl bg-surface-variant border-2 border-background flex items-center justify-center shadow-lg transform -rotate-12"><span class="material-symbols-outlined text-3xl text-primary">rocket</span></div>
+<div class="w-12 h-12 rounded-xl bg-surface-variant border-2 border-background flex items-center justify-center shadow-lg z-10 scale-110"><span class="material-symbols-outlined text-3xl text-secondary">smart_toy</span></div>
+<div class="w-12 h-12 rounded-xl bg-surface-variant border-2 border-background flex items-center justify-center shadow-lg transform rotate-12"><span class="material-symbols-outlined text-3xl text-tertiary">public</span></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-outline-variant/30">
+<span class="text-on-surface-variant font-medium text-sm">Yeni</span>
+<button class="chunky-button bg-primary-container text-on-primary-container px-5 py-2 rounded-xl font-bold flex items-center gap-2">
+                            800 <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+</button>
+</div>
+</div>
+<div class="jelly-card rounded-lg p-5 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-md text-title-md text-secondary">Ninja</h3>
+<p class="text-on-surface-variant text-sm">6 Efsanevi Savaşçı</p>
+</div>
+<div class="flex -space-x-3">
+<div class="w-12 h-12 rounded-xl bg-surface-variant border-2 border-background flex items-center justify-center shadow-lg transform -rotate-6"><span class="material-symbols-outlined text-3xl text-tertiary">swords</span></div>
+<div class="w-12 h-12 rounded-xl bg-surface-variant border-2 border-background flex items-center justify-center shadow-lg z-10"><span class="material-symbols-outlined text-3xl text-primary">visibility_off</span></div>
+<div class="w-12 h-12 rounded-xl bg-surface-variant border-2 border-background flex items-center justify-center shadow-lg transform rotate-6"><span class="material-symbols-outlined text-3xl text-secondary">bolt</span></div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-outline-variant/30">
+<span class="text-on-surface-variant font-medium text-sm">Efsanevi</span>
+<button class="chunky-button bg-primary-container text-on-primary-container px-5 py-2 rounded-xl font-bold flex items-center gap-2">
+                            1200 <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-t-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">home</span><span class="font-label-sm text-label-sm">Ana Sayfa</span></a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">leaderboard</span><span class="font-label-sm text-label-sm">Sıralama</span></a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 shadow-[0_4px_0_rgba(88,0,47,1)] active:scale-95 translate-y-0.5 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_bag</span><span class="font-label-sm text-label-sm">Mağaza</span></a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">person</span><span class="font-label-sm text-label-sm">Profil</span></a>
+</nav>
+<script>
+        document.querySelectorAll('.chunky-button, .jelly-card').forEach(el => {
+            el.addEventListener('touchstart', () => { window.navigator.vibrate && window.navigator.vibrate(5); });
+        });
+        document.querySelectorAll('.jelly-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

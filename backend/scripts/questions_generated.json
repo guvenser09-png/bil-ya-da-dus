@@ -1,0 +1,2077 @@
+[
+  {
+    "type": "dogru_yanlis",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Nil Nehri Afrika kitasinda bulunur.",
+    "explanation": "Nil Nehri, Afrika'nin kuzeydogusunda akan ve Akdeniz'e dokulen bir nehirdir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Insan vucudundaki en buyuk organ deridir.",
+    "explanation": "Deri, yuzey alani ve agirligi bakimindan vucudun en buyuk organidir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Avustralya hem bir ulke hem de bir kitadir.",
+    "explanation": "Avustralya, tek basina bir kita olusturan ve ayni zamanda bir ulke olan tek topraktir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Istanbul, 1453 yilinda Fatih Sultan Mehmet tarafindan fethedilmistir.",
+    "explanation": "Istanbul'un fethi 29 Mayis 1453'te II. Mehmet (Fatih) tarafindan gerceklestirilmistir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Isik, sesten daha hizli yol alir.",
+    "explanation": "Isigin hizi yaklasik 300.000 km/s iken, sesin hizi havada yaklasik 340 m/s'dir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Dunyanin en buyuk okyanusu Atlas Okyanusudur.",
+    "explanation": "Dunyanin en buyuk okyanusu Buyuk Okyanus (Pasifik) Okyanusu'dur, Atlas degil.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Elmas, dogal olarak bilinen en sert maddedir.",
+    "explanation": "Elmas, Mohs sertlik olceginde 10 ile bilinen en sert dogal mineraldir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Genel Kultur",
+    "difficulty": 1,
+    "content": "Bir haftada 7 gun vardir.",
+    "explanation": "Bir hafta pazartesiden pazara 7 gunden olusur.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Yarasalar memeli hayvanlardir.",
+    "explanation": "Yarasalar yavrularini emziren ve sicakkanli olan tek ucabilen memeli hayvanlardir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Turkiye'nin baskenti Istanbul'dur.",
+    "explanation": "Turkiye'nin baskenti Ankara'dir; Istanbul en kalabalik sehridir ama baskent degildir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "Mona Lisa tablosu Leonardo da Vinci tarafindan yapilmistir.",
+    "explanation": "Mona Lisa, Leonardo da Vinci tarafindan 16. yuzyilda yapilmistir ve Louvre Muzesi'nde sergilenir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Sicak hava soguk havadan daha hafif oldugu icin yukselir.",
+    "explanation": "Sicak hava genlesip yogunlugu azaldigindan daha hafiftir ve yukari dogru hareket eder.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Bir futbol takiminda sahada ayni anda 11 oyuncu bulunur.",
+    "explanation": "Futbolda her takim kaleci dahil 11 oyuncuyla sahaya cikar.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Ay'in kendi isigi yoktur, Gunes'in isigini yansitir.",
+    "explanation": "Ay isik uretmez; goruldugu parlaklik Gunes isiginin yuzeyinden yansimasiyla olusur.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Turkiye Cumhuriyeti 29 Ekim 1923 tarihinde ilan edilmistir.",
+    "explanation": "Cumhuriyet, 29 Ekim 1923'te Mustafa Kemal Ataturk onderliginde ilan edilmistir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Aritmetikte bir sayinin sifira bolunmesi tanimsizdir.",
+    "explanation": "Matematikte sifira bolme islemi tanimsizdir cunku gecerli bir sonuc vermez.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Sahra Colu Asya kitasinda yer alir.",
+    "explanation": "Sahra Colu Kuzey Afrika'da bulunur, Asya'da degil.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Insanin kalbi vucudun sol tarafina dogru yerlesmistir.",
+    "explanation": "Kalp gogus kafesinin ortasinda, hafifce sol tarafa dogru kaymis konumdadir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Genel Kultur",
+    "difficulty": 2,
+    "content": "Bal, dogal olarak bozulmadan cok uzun sure saklanabilen bir gidadir.",
+    "explanation": "Dusuk su orani ve asidik yapisi sayesinde bal uygun kosullarda yillarca bozulmadan kalabilir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Orumcekler boceklerle ayni gruba aittir ve 6 bacaklidir.",
+    "explanation": "Orumcekler bocek degil, araknid sinifindadir ve 8 bacaklidir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Vatikan, dunyanin yuzolcumu bakimindan en kucuk ulkesidir.",
+    "explanation": "Vatikan, yaklasik 0,44 km2 yuzolcumuyle dunyanin en kucuk bagimsiz ulkesidir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Su, deniz seviyesinde 100 derece Celsius'ta kaynar.",
+    "explanation": "Normal atmosfer basincinda (deniz seviyesi) saf su 100 derece Celsius'ta kaynar.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "Beethoven, isitme kaybi yasamasina ragmen besteler yapmaya devam etmistir.",
+    "explanation": "Beethoven yasamının ilerleyen donemlerinde sagirligina ragmen onemli eserler bestelemistir.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Ekvator, Dunya'yi kuzey ve guney yarim kurelere ayirir.",
+    "explanation": "Ekvator, 0 derece enlem cizgisidir ve Dunya'yi kuzey ile guney yarim kureye boler.",
+    "options": [
+      "Dogru",
+      "Yanlis"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 1,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Beyaz zemin uzerinde kirmizi daire (yukselen gunes) Japonya bayragidir.",
+    "options": [
+      "Japonya",
+      "Guney Kore",
+      "Cin",
+      "Vietnam"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/jp.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 1,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Yesil zemin, sari baklava ve mavi kure Brezilya bayragidir.",
+    "options": [
+      "Brezilya",
+      "Portekiz",
+      "Arjantin",
+      "Meksika"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/br.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 1,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Ortada kirmizi akcaagac yapragi bulunan beyaz-kirmizi bayrak Kanada'ya aittir.",
+    "options": [
+      "Kanada",
+      "ABD",
+      "Avustralya",
+      "Yeni Zelanda"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/ca.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Yatay siyah-kirmizi-sari seritler Almanya bayragidir.",
+    "options": [
+      "Almanya",
+      "Belcika",
+      "Hollanda",
+      "Avusturya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/de.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 1,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi zemin uzerinde ay-yildiz Turkiye bayragidir; hilal tam ortada degil sola yakindir.",
+    "options": [
+      "Turkiye",
+      "Tunus",
+      "Pakistan",
+      "Cezayir"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/tr.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Mavi-beyaz yatay seritler ve sol ust kosedeki hac Yunanistan bayragidir.",
+    "options": [
+      "Yunanistan",
+      "Israil",
+      "Finlandiya",
+      "Uruguay"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/gr.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Mavi zemin uzerinde sari Iskandinav hac Isvec bayragidir.",
+    "options": [
+      "Isvec",
+      "Norvec",
+      "Danimarka",
+      "Finlandiya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/se.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Dikey yesil-beyaz-kirmizi seritler Italya bayragidir.",
+    "options": [
+      "Italya",
+      "Irlanda",
+      "Macaristan",
+      "Meksika"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/it.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Dikey mavi-beyaz-kirmizi seritler Fransa bayragidir.",
+    "options": [
+      "Fransa",
+      "Hollanda",
+      "Rusya",
+      "Lüksemburg"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/fr.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi-sari-kirmizi yatay seritler ve sol taraftaki arma Ispanya bayragidir.",
+    "options": [
+      "Ispanya",
+      "Portekiz",
+      "Italya",
+      "Kolombiya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/es.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi, beyaz ve mavi haclarin birlesimi olan Union Jack Birlesik Krallik bayragidir.",
+    "options": [
+      "Yunanistan",
+      "Birlesik Krallik",
+      "ABD",
+      "Avustralya"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/gb.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 1,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "50 yildizli mavi alan ve 13 kirmizi-beyaz serit ABD bayragidir.",
+    "options": [
+      "ABD",
+      "Liberya",
+      "Malezya",
+      "Sili"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/us.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi zemin uzerinde bir buyuk ve dort kucuk sari yildiz Cin bayragidir.",
+    "options": [
+      "Cin",
+      "Vietnam",
+      "Kuzey Kore",
+      "Tayvan"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/cn.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Ortada kirmizi-mavi yin-yang ve dort siyah trigram Guney Kore bayragidir.",
+    "options": [
+      "Guney Kore",
+      "Japonya",
+      "Mogolistan",
+      "Tayland"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/kr.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Turuncu-beyaz-yesil seritler ve ortadaki mavi carki (Ashoka Chakra) Hindistan bayragidir.",
+    "options": [
+      "Hindistan",
+      "Nijer",
+      "Irlanda",
+      "Fildisi Sahili"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/in.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Y bicimli yesil seritle ayrilan cok renkli tasarim Guney Afrika bayragidir.",
+    "options": [
+      "Guney Afrika",
+      "Gana",
+      "Etiyopya",
+      "Kenya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/za.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi-beyaz-siyah seritler ve ortadaki altin Selahaddin kartali Misir bayragidir.",
+    "options": [
+      "Misir",
+      "Suriye",
+      "Irak",
+      "Yemen"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/eg.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Acik mavi-beyaz-acik mavi seritler ve ortadaki Mayis Gunesi Arjantin bayragidir.",
+    "options": [
+      "Arjantin",
+      "Uruguay",
+      "Guatemala",
+      "El Salvador"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/ar.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Dikey yesil-beyaz-kirmizi seritler ve ortadaki kartal-yilan armasi Meksika bayragidir.",
+    "options": [
+      "Meksika",
+      "Italya",
+      "Iran",
+      "Macaristan"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/mx.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Yesil-kirmizi zemin ve ortadaki kuresel arma Portekiz bayragidir.",
+    "options": [
+      "Portekiz",
+      "Ispanya",
+      "Italya",
+      "Brezilya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/pt.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Ustte beyaz altta kirmizi iki yatay serit Polonya bayragidir.",
+    "options": [
+      "Polonya",
+      "Endonezya",
+      "Monako",
+      "Avusturya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/pl.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kare kirmizi zemin uzerinde beyaz hac Isvicre bayragidir.",
+    "options": [
+      "Isvicre",
+      "Danimarka",
+      "Tonga",
+      "Gurcistan"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/ch.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi-beyaz-mavi yatay seritler Hollanda bayragidir.",
+    "options": [
+      "Hollanda",
+      "Lüksemburg",
+      "Rusya",
+      "Hirvatistan"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/nl.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Dikey siyah-sari-kirmizi seritler Belcika bayragidir.",
+    "options": [
+      "Belcika",
+      "Almanya",
+      "Romanya",
+      "Cad"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/be.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi zemin uzerinde beyaz cerceveli mavi Iskandinav hac Norvec bayragidir.",
+    "options": [
+      "Norvec",
+      "Izlanda",
+      "Danimarka",
+      "Faroe Adalari"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/no.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Beyaz zemin uzerinde mavi Iskandinav hac Finlandiya bayragidir.",
+    "options": [
+      "Finlandiya",
+      "Isvec",
+      "Yunanistan",
+      "Estonya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/fi.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi zemin uzerinde beyaz Iskandinav hac (Dannebrog) Danimarka bayragidir.",
+    "options": [
+      "Danimarka",
+      "Isvicre",
+      "Avusturya",
+      "Letonya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/dk.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Mavi zemin, Union Jack ve dort kirmizi-beyaz yildiz (Guney Hac) Yeni Zelanda bayragidir.",
+    "options": [
+      "Yeni Zelanda",
+      "Avustralya",
+      "Fiji",
+      "Tuvalu"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/nz.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Mavi zemin, Union Jack, buyuk Commonwealth yildizi ve Guney Hac yildizlari Avustralya bayragidir.",
+    "options": [
+      "Avustralya",
+      "Yeni Zelanda",
+      "Birlesik Krallik",
+      "Fiji"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/au.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi-beyaz-mavi-beyaz-kirmizi yatay seritler Tayland bayragidir; ortadaki genis serit mavidir.",
+    "options": [
+      "Guney Kore",
+      "Tayland",
+      "Kosta Rika",
+      "Hollanda"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/th.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi zemin uzerinde tek buyuk sari yildiz Vietnam bayragidir.",
+    "options": [
+      "Vietnam",
+      "Cin",
+      "Fas",
+      "Tunus"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/vn.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Yesil zemin uzerinde Arapca kelime-i sehadet ve kilic Suudi Arabistan bayragidir.",
+    "options": [
+      "Suudi Arabistan",
+      "Pakistan",
+      "Cezayir",
+      "Iran"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/sa.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi-beyaz-kirmizi seritler ve ortadaki yesil sedir agaci Lubnan bayragidir.",
+    "options": [
+      "Kanada",
+      "Lubnan",
+      "Peru",
+      "Bahreyn"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/lb.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Beyaz zemin, iki mavi serit ve ortadaki mavi Davud Yildizi Israil bayragidir.",
+    "options": [
+      "Israil",
+      "Yunanistan",
+      "Finlandiya",
+      "Arjantin"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/il.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Siyah-kirmizi-yesil seritler ve ortadaki Masai kalkani ile mizraklar Kenya bayragidir.",
+    "options": [
+      "Kenya",
+      "Malawi",
+      "Sudan",
+      "Tanzanya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/ke.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Sari capraz hac ile ayrilan yesil ve siyah ucgenler Jamaika bayragidir.",
+    "options": [
+      "Brezilya",
+      "Jamaika",
+      "Guyana",
+      "Surinam"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/jm.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Beyaz-kirmizi seritler ve sol ust kosedeki mavi kareli beyaz yildiz Sili bayragidir.",
+    "options": [
+      "Sili",
+      "Texas",
+      "Kuba",
+      "Puerto Riko"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/cl.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Acik mavi zemin uzerinde altin gunes, kartal ve sol kenardaki desen Kazakistan bayragidir.",
+    "options": [
+      "Guney Kore",
+      "Mogolistan",
+      "Kazakistan",
+      "Kirgizistan"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/kz.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi-beyaz-yesil yatay seritler Macaristan bayragidir.",
+    "options": [
+      "Portekiz",
+      "Hindistan",
+      "Macaristan",
+      "Iran"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/hu.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi-beyaz-kirmizi yatay seritler Avusturya bayragidir.",
+    "options": [
+      "Avusturya",
+      "Letonya",
+      "Polonya",
+      "Danimarka"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/at.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Beyaz-kirmizi seritler ve soldaki mavi ucgen Cek Cumhuriyeti bayragidir.",
+    "options": [
+      "Yunanistan",
+      "Cek Cumhuriyeti",
+      "Filipinler",
+      "Slovenya"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/cz.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Dikey yesil-beyaz-turuncu seritler Irlanda bayragidir; yesil direk tarafindadir.",
+    "options": [
+      "Irlanda",
+      "Fildisi Sahili",
+      "Italya",
+      "Hindistan"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/ie.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Yesil-sari-kirmizi seritler ve ortadaki mavi daire icindeki yildiz Etiyopya bayragidir.",
+    "options": [
+      "Brezilya",
+      "Etiyopya",
+      "Bolivya",
+      "Gana"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/et.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Dikey kirmizi-beyaz-kirmizi seritler Peru bayragidir.",
+    "options": [
+      "Peru",
+      "Kanada",
+      "Avusturya",
+      "Singapur"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/pe.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bu hangi ulkenin bayragidir?",
+    "explanation": "Kirmizi-beyaz seritler ve sol ust kosedeki hilal ile bes yildiz Singapur bayragidir.",
+    "options": [
+      "Singapur",
+      "Endonezya",
+      "Monako",
+      "Polonya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/sg.png"
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 1,
+    "content": "Hangi ulkenin yuzolcumu daha buyuktur?",
+    "explanation": "Cin yaklasik 9,6 milyon km2, Hindistan yaklasik 3,29 milyon km2 yuzolcumune sahiptir.",
+    "options": [
+      "Cin",
+      "Hindistan"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 1,
+    "content": "Hangi nehir daha uzundur?",
+    "explanation": "Nil yaklasik 6.650 km ile dunyanin en uzun nehirlerinden biriyken, Tuna yaklasik 2.850 km uzunlugundadir.",
+    "options": [
+      "Nil",
+      "Tuna"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Hangi sehrin nufusu daha fazladir?",
+    "explanation": "Istanbul yaklasik 15-16 milyon nufusuyla Turkiye'nin en kalabalik sehri olup Ankara'dan (yaklasik 5,7 milyon) cok daha kalabaliktir.",
+    "options": [
+      "Istanbul",
+      "Ankara"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Hangi gezegen daha buyuktur?",
+    "explanation": "Jupiter Gunes Sistemi'nin en buyuk gezegenidir; capi Dunya'nin yaklasik 11 katidir.",
+    "options": [
+      "Jupiter",
+      "Dunya"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 1,
+    "content": "Hangi okyanus daha buyuktur?",
+    "explanation": "Pasifik Okyanusu yaklasik 165 milyon km2 ile dunyanin en buyuk okyanusudur; Atlas Okyanusu yaklasik 106 milyon km2'dir.",
+    "options": [
+      "Pasifik Okyanusu",
+      "Atlas Okyanusu"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Hangi hayvan daha hizlidir?",
+    "explanation": "Cita saatte 100-120 km hiza ulasabilen kara hayvanidir; aslan ise yaklasik 80 km hiza erisir.",
+    "options": [
+      "Cita",
+      "Aslan"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Hangi dag daha yuksektir?",
+    "explanation": "Everest 8.849 metre ile dunyanin en yuksek dagiyken, Agri Dagi yaklasik 5.137 metredir.",
+    "options": [
+      "Everest",
+      "Agri Dagi"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 1,
+    "content": "Hangisi daha buyuktur?",
+    "explanation": "Gunes'in capi yaklasik 1,39 milyon km olup Dunya'nin (yaklasik 12.742 km) yuzlerce kat buyugudur.",
+    "options": [
+      "Gunes",
+      "Dunya"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Hangi ulkenin nufusu daha fazladir?",
+    "explanation": "Endonezya yaklasik 275 milyon nufusuyla Japonya'dan (yaklasik 125 milyon) cok daha kalabaliktir.",
+    "options": [
+      "Endonezya",
+      "Japonya"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Hangi element daha hafiftir?",
+    "explanation": "Hidrojen atom numarasi 1 ile periyodik tablonun en hafif elementidir; helyum atom numarasi 2'dir.",
+    "options": [
+      "Hidrojen",
+      "Helyum"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Hangisi daha once gerceklesti?",
+    "explanation": "Birinci Dunya Savasi 1914-1918, Ikinci Dunya Savasi 1939-1945 yillari arasinda olmustur.",
+    "options": [
+      "Birinci Dunya Savasi",
+      "Ikinci Dunya Savasi"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Hangi gol daha buyuktur?",
+    "explanation": "Hazar Denizi yaklasik 371.000 km2 ile dunyanin en buyuk gol/ic denizidir; Van Golu yaklasik 3.700 km2'dir.",
+    "options": [
+      "Hazar Denizi",
+      "Van Golu"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Hangi gezegen Gunes'e daha yakindir?",
+    "explanation": "Merkur, Gunes'e en yakin gezegendir; Venus ikinci siradadir.",
+    "options": [
+      "Merkur",
+      "Venus"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Bir futbol macinda bir devre mi yoksa NBA basketbolunda bir ceyrek mi daha uzundur?",
+    "explanation": "Futbolda bir devre 45 dakika, NBA basketbolunda bir ceyrek 12 dakikadir; futbol devresi daha uzundur.",
+    "options": [
+      "Futbol devresi (45 dakika)",
+      "Basketbol ceyregi (12 dakika)"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Hangi kita daha buyuktur?",
+    "explanation": "Asya yaklasik 44,5 milyon km2 ile dunyanin en buyuk kitasidir; Afrika yaklasik 30,3 milyon km2'dir.",
+    "options": [
+      "Asya",
+      "Afrika"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Hangisinin kaynama noktasi daha yuksektir?",
+    "explanation": "Suyun kaynama noktasi 100 C iken etil alkolun kaynama noktasi yaklasik 78 C'dir.",
+    "options": [
+      "Su",
+      "Etil alkol"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "Hangi eser daha eskidir?",
+    "explanation": "Mona Lisa Leonardo da Vinci tarafindan 1500'lerin basinda yapildi; Guernica ise Picasso tarafindan 1937'de yapildi.",
+    "options": [
+      "Mona Lisa",
+      "Guernica"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Hangi ulke daha kuzeyde yer alir?",
+    "explanation": "Norvec Iskandinavya'da, Italya'dan cok daha kuzeyde konumlanmistir.",
+    "options": [
+      "Norvec",
+      "Italya"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Hangi hayvan daha buyuktur?",
+    "explanation": "Mavi balina dunyanin yasamis en buyuk hayvanidir; 30 metreye ve 150 tona ulasabilir, file kiyasla cok daha buyuktur.",
+    "options": [
+      "Mavi balina",
+      "Fil"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Hangisi daha once kuruldu?",
+    "explanation": "Roma Imparatorlugu MO 27'de kuruldu; Osmanli Imparatorlugu ise 1299'da kuruldu.",
+    "options": [
+      "Roma Imparatorlugu",
+      "Osmanli Imparatorlugu"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Hangi col daha buyuktur?",
+    "explanation": "Sahra Colu yaklasik 9,2 milyon km2 ile en buyuk sicak coldur; Gobi Colu yaklasik 1,3 milyon km2'dir.",
+    "options": [
+      "Sahra Colu",
+      "Gobi Colu"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Hangisi sesten daha hizlidir?",
+    "explanation": "Isik saniyede yaklasik 300.000 km hizla yayilirken, ses havada saniyede yaklasik 343 metre yol alir.",
+    "options": [
+      "Isik",
+      "Ses"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Genel Kultur",
+    "difficulty": 2,
+    "content": "Hangisinde daha fazla harf vardir?",
+    "explanation": "Turk alfabesinde 29 harf, Ingiliz alfabesinde 26 harf bulunur.",
+    "options": [
+      "Turk alfabesi",
+      "Ingiliz alfabesi"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 4,
+    "content": "Hangi ulkenin yuzolcumu daha buyuktur?",
+    "explanation": "Brezilya yaklasik 8,51 milyon km2, Avustralya yaklasik 7,69 milyon km2 yuzolcumune sahiptir.",
+    "options": [
+      "Brezilya",
+      "Avustralya"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Insan vucudunda hangi kemik daha uzundur?",
+    "explanation": "Uyluk kemigi (femur) insan vucudundaki en uzun kemiktir; pazu kemiginden daha uzundur.",
+    "options": [
+      "Uyluk kemigi (femur)",
+      "Pazu kemigi (humerus)"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Turkiye Cumhuriyeti'nin ilani mi yoksa Harf Devrimi mi daha once gerceklesti?",
+    "explanation": "Cumhuriyet 29 Ekim 1923'te ilan edildi; Harf Devrimi ise 1928'de gerceklesti.",
+    "options": [
+      "Cumhuriyet'in ilani (1923)",
+      "Harf Devrimi (1928)"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Hangi sehir daha kuzeyde yer alir?",
+    "explanation": "Moskova yaklasik 55 kuzey enleminde; Atina yaklasik 38 kuzey enleminde yer alir, dolayisiyla Moskova daha kuzeydedir.",
+    "options": [
+      "Moskova",
+      "Atina"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Hangisinin pH degeri daha dusuktur (daha asidik)?",
+    "explanation": "Limon suyunun pH degeri yaklasik 2 olup asidiktir; saf su notr olup pH 7'dir.",
+    "options": [
+      "Limon suyu",
+      "Saf su"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Hangi kosu daha uzundur?",
+    "explanation": "Bir maraton 42,195 km uzunlugundadir; 10 km kosusundan cok daha uzundur.",
+    "options": [
+      "Maraton (yaklasik 42 km)",
+      "10 kilometre kosusu"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 4,
+    "content": "Hangi ulkenin yuzolcumu daha buyuktur?",
+    "explanation": "Cezayir yaklasik 2,38 milyon km2 ile Afrika'nin en buyuk ulkesidir; Misir yaklasik 1 milyon km2'dir.",
+    "options": [
+      "Cezayir",
+      "Misir"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Hangisi daha sicaktir?",
+    "explanation": "Kaynayan su 100 C, eriyen buz 0 C civarindadir; kaynayan su cok daha sicaktir.",
+    "options": [
+      "Kaynayan su",
+      "Eriyen buz"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Genel Kultur",
+    "difficulty": 2,
+    "content": "Bir yilda hangisi daha fazladir?",
+    "explanation": "Bir yilda yaklasik 52 hafta ve 12 ay vardir; hafta sayisi daha fazladir.",
+    "options": [
+      "Hafta sayisi (52)",
+      "Ay sayisi (12)"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Hangi ulke daha fazla zaman dilimine sahiptir?",
+    "explanation": "Rusya 11 zaman dilimine yayilir; Turkiye tek bir zaman dilimi kullanir.",
+    "options": [
+      "Rusya",
+      "Turkiye"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Ay mi Dunya mi daha buyuktur?",
+    "explanation": "Dunya'nin capi yaklasik 12.742 km, Ay'in capi yaklasik 3.474 km'dir; Dunya cok daha buyuktur.",
+    "options": [
+      "Dunya",
+      "Ay"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Hangisi daha once icat edildi?",
+    "explanation": "Gutenberg matbaasi 15. yuzyilda (yaklasik 1440) icat edildi; internet 20. yuzyilin sonlarinda gelistirildi.",
+    "options": [
+      "Matbaa",
+      "Internet"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Hangi sehir Turkiye'nin daha dogusunda yer alir?",
+    "explanation": "Van, Turkiye'nin dogusunda; Izmir ise batisinda yer alir.",
+    "options": [
+      "Van",
+      "Izmir"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Hangisinde daha fazla bacak vardir?",
+    "explanation": "Orumceklerin 8 bacagi vardir; bocekler ise 6 bacaklidir.",
+    "options": [
+      "Orumcek",
+      "Bocek"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Genel Kultur",
+    "difficulty": 1,
+    "content": "Hangisi daha buyuk bir sayidir?",
+    "explanation": "Bir milyon 1.000.000, bin ise 1.000'dir; milyon binin bin katidir.",
+    "options": [
+      "Bir milyon",
+      "Bin"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Cografya",
+    "difficulty": 4,
+    "content": "Hangisi Asya ile Avrupa kitalarini birbirinden ayirir?",
+    "explanation": "Istanbul Bogazi Asya ile Avrupa kitalarini ayirir; Cebelitarik Bogazi ise Avrupa ile Afrika arasindadir.",
+    "options": [
+      "Istanbul Bogazi",
+      "Cebelitarik Bogazi"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Hangi metal oda sicakliginda sividir?",
+    "explanation": "Civa oda sicakliginda sivi halde bulunan tek metaldir; demir oda sicakliginda katidir.",
+    "options": [
+      "Civa",
+      "Demir"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Cografya",
+    "difficulty": 1,
+    "content": "Turkiye'nin baskenti hangi sehirdir?",
+    "explanation": "Ankara, 1923'ten beri Turkiye Cumhuriyeti'nin baskentidir.",
+    "options": [
+      "Istanbul",
+      "Ankara",
+      "Izmir",
+      "Bursa"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Suyun kimyasal formulu nedir?",
+    "explanation": "Su, iki hidrojen ve bir oksijen atomundan olusur: H2O.",
+    "options": [
+      "CO2",
+      "H2O",
+      "O2",
+      "NaCl"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Dunyanin en buyuk okyanusu hangisidir?",
+    "explanation": "Pasifik (Buyuk Okyanus) yuzolcumu bakimindan dunyanin en buyuk okyanusudur.",
+    "options": [
+      "Atlas Okyanusu",
+      "Hint Okyanusu",
+      "Buyuk Okyanus (Pasifik)",
+      "Arktik Okyanusu"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Turkiye Cumhuriyeti hangi yil ilan edilmistir?",
+    "explanation": "Turkiye Cumhuriyeti 29 Ekim 1923'te ilan edilmistir.",
+    "options": [
+      "1919",
+      "1920",
+      "1923",
+      "1938"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "'Mona Lisa' tablosunu kim yapmistir?",
+    "explanation": "Mona Lisa, Leonardo da Vinci tarafindan 16. yuzyilda yapilmistir.",
+    "options": [
+      "Michelangelo",
+      "Leonardo da Vinci",
+      "Raphael",
+      "Vincent van Gogh"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Insan vucudundaki en buyuk organ hangisidir?",
+    "explanation": "Deri, yuzey alani ve agirligi bakimindan vucudun en buyuk organidir.",
+    "options": [
+      "Karaciger",
+      "Beyin",
+      "Deri",
+      "Akciger"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Nil Nehri hangi kitada bulunur?",
+    "explanation": "Nil Nehri, Afrika kitasinda yer alir ve Akdeniz'e dokulur.",
+    "options": [
+      "Asya",
+      "Afrika",
+      "Guney Amerika",
+      "Avustralya"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Isigin bosluktaki hizi yaklasik kacdir saniyede?",
+    "explanation": "Isik bosulukta saniyede yaklasik 300.000 km (299.792 km) yol alir.",
+    "options": [
+      "3.000 km/s",
+      "30.000 km/s",
+      "300.000 km/s",
+      "3.000.000 km/s"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kultur",
+    "difficulty": 1,
+    "content": "Bir yilda kac ay vardir?",
+    "explanation": "Takvim yili 12 aydan olusur.",
+    "options": [
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Bir futbol takiminda sahada kac oyuncu bulunur?",
+    "explanation": "Bir futbol takiminda kaleci dahil sahada 11 oyuncu bulunur.",
+    "options": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Japonya'nin baskenti hangi sehirdir?",
+    "explanation": "Tokyo, Japonya'nin baskenti ve en kalabalik sehridir.",
+    "options": [
+      "Osaka",
+      "Kyoto",
+      "Tokyo",
+      "Nagoya"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Gunes sisteminde Gunes'e en yakin gezegen hangisidir?",
+    "explanation": "Merkur, Gunes'e en yakin konumdaki gezegendir.",
+    "options": [
+      "Venus",
+      "Merkur",
+      "Dunya",
+      "Mars"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 4,
+    "content": "'Sefiller' (Les Miserables) romaninin yazari kimdir?",
+    "explanation": "Sefiller, Fransiz yazar Victor Hugo tarafindan 1862'de yayimlanmistir.",
+    "options": [
+      "Victor Hugo",
+      "Charles Dickens",
+      "Alexandre Dumas",
+      "Emile Zola"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Bitkilerde fotosentez sirasinda atmosfere verilen gaz hangisidir?",
+    "explanation": "Fotosentezde bitkiler karbondioksiti kullanip oksijen aciga cikarir.",
+    "options": [
+      "Karbondioksit",
+      "Azot",
+      "Oksijen",
+      "Hidrojen"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kultur",
+    "difficulty": 2,
+    "content": "Bir saatte kac dakika vardir?",
+    "explanation": "Bir saat 60 dakikadan olusur.",
+    "options": [
+      "50",
+      "60",
+      "90",
+      "100"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Istanbul (Konstantinopolis) hangi yil fethedilmistir?",
+    "explanation": "Istanbul, Fatih Sultan Mehmet tarafindan 1453'te fethedilmistir.",
+    "options": [
+      "1071",
+      "1299",
+      "1453",
+      "1492"
+    ],
+    "correct_answer": 2
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Muzik",
+    "difficulty": 3,
+    "content": "Standart bir akustik piyanoda kac tus bulunur?",
+    "explanation": "Standart bir akustik piyanoda 88 tus (52 beyaz, 36 siyah) bulunur.",
+    "options": [
+      "76",
+      "88",
+      "61",
+      "100"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Periyodik tabloda 'O' simgesi hangi elementi gosterir?",
+    "explanation": "O simgesi, atom numarasi 8 olan oksijeni gosterir.",
+    "options": [
+      "Altin",
+      "Oksijen",
+      "Osmiyum",
+      "Karbon"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Cografya",
+    "difficulty": 4,
+    "content": "Dunyanin en yuksek dagi hangisidir?",
+    "explanation": "Everest, deniz seviyesinden 8.849 metre yuksekligiyle dunyanin en yuksek dagidir.",
+    "options": [
+      "K2",
+      "Everest",
+      "Kilimanjaro",
+      "Mont Blanc"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Matematik",
+    "difficulty": 2,
+    "content": "Bir ucgenin ic acilari toplami kac derecedir?",
+    "explanation": "Bir ucgenin ic acilarinin toplami her zaman 180 derecedir.",
+    "options": [
+      "90",
+      "180",
+      "270",
+      "360"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "tahmin",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Everest Dagi yaklasik kac metre yuksekligindedir?",
+    "explanation": "Everest 8.849 m ile dunyanin en yuksek dagidir.",
+    "min_value": 7000,
+    "max_value": 10000,
+    "real_answer": 8849,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Insan vucudunda normal kac kemik bulunur?",
+    "explanation": "Yetiskin bir insanda 206 kemik bulunur.",
+    "min_value": 150,
+    "max_value": 280,
+    "real_answer": 206,
+    "unit": "adet"
+  },
+  {
+    "type": "tahmin",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Akdeniz'in en derin noktasi yaklasik kac metredir?",
+    "explanation": "Akdeniz'in en derin noktasi Calypso Cukuru, yaklasik 5.267 metredir.",
+    "min_value": 3000,
+    "max_value": 7000,
+    "real_answer": 5267,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Istanbul'un fethi hangi yilda gerceklesmistir?",
+    "explanation": "Istanbul 1453 yilinda Fatih Sultan Mehmet tarafindan fethedildi.",
+    "min_value": 1400,
+    "max_value": 1500,
+    "real_answer": 1453,
+    "unit": "yil"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Suyun deniz seviyesinde kaynama sicakligi kac derecedir?",
+    "explanation": "Su deniz seviyesinde 100 derece Celsius'ta kaynar.",
+    "min_value": 50,
+    "max_value": 150,
+    "real_answer": 100,
+    "unit": "derece"
+  },
+  {
+    "type": "tahmin",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Nil Nehri yaklasik kac kilometre uzunlugundadir?",
+    "explanation": "Nil Nehri yaklasik 6.650 km ile dunyanin en uzun nehirlerindendir.",
+    "min_value": 4000,
+    "max_value": 8000,
+    "real_answer": 6650,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kultur",
+    "difficulty": 2,
+    "content": "Bir futbol macinin normal suresi (uzatmalar haric) kac dakikadir?",
+    "explanation": "Standart bir futbol maci 2x45 dakika, toplam 90 dakikadir.",
+    "min_value": 60,
+    "max_value": 120,
+    "real_answer": 90,
+    "unit": "dakika"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Isik bosluk icinde saniyede yaklasik kac kilometre yol alir?",
+    "explanation": "Isik hizi boslukta yaklasik 299.792 km/saniyedir.",
+    "min_value": 100000,
+    "max_value": 500000,
+    "real_answer": 299792,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Cografya",
+    "difficulty": 4,
+    "content": "Turkiye yaklasik kac kilometrekare yuzolcumune sahiptir?",
+    "explanation": "Turkiye'nin yuzolcumu yaklasik 783.562 km2'dir.",
+    "min_value": 500000,
+    "max_value": 1200000,
+    "real_answer": 783562,
+    "unit": "km2"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Turkiye Cumhuriyeti hangi yilda ilan edilmistir?",
+    "explanation": "Cumhuriyet 29 Ekim 1923'te ilan edildi.",
+    "min_value": 1900,
+    "max_value": 1950,
+    "real_answer": 1923,
+    "unit": "yil"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Insan vucut sicakligi normalde yaklasik kac derecedir?",
+    "explanation": "Saglikli insanin normal vucut sicakligi yaklasik 37 derecedir.",
+    "min_value": 30,
+    "max_value": 42,
+    "real_answer": 37,
+    "unit": "derece"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 3,
+    "content": "Ay ile Dunya arasindaki ortalama mesafe yaklasik kac kilometredir?",
+    "explanation": "Ay ile Dunya arasi ortalama mesafe yaklasik 384.400 km'dir.",
+    "min_value": 200000,
+    "max_value": 600000,
+    "real_answer": 384400,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Turkiye'nin en yuksek dagi Agri Dagi yaklasik kac metredir?",
+    "explanation": "Agri Dagi 5.137 m ile Turkiye'nin en yuksek dagidir.",
+    "min_value": 3000,
+    "max_value": 7000,
+    "real_answer": 5137,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Yetiskin insan vucudunun yaklasik yuzde kaci sudur?",
+    "explanation": "Yetiskin insan vucudunun yaklasik yuzde 60'i sudur.",
+    "min_value": 40,
+    "max_value": 90,
+    "real_answer": 60,
+    "unit": "yuzde"
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kultur",
+    "difficulty": 2,
+    "content": "Bir satranc tahtasinda toplam kac kare bulunur?",
+    "explanation": "Satranc tahtasi 8x8, yani 64 kareden olusur.",
+    "min_value": 30,
+    "max_value": 120,
+    "real_answer": 64,
+    "unit": "adet"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Bir insan kalbi dinlenme halinde dakikada yaklasik kac kez atar?",
+    "explanation": "Saglikli yetiskinde dinlenme kalp atisi yaklasik dakikada 72'dir.",
+    "min_value": 40,
+    "max_value": 120,
+    "real_answer": 72,
+    "unit": "atim"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Gunes Sistemi'nde Gunes'in capi yaklasik kac kilometredir?",
+    "explanation": "Gunes'in capi yaklasik 1.392.000 km'dir.",
+    "min_value": 500000,
+    "max_value": 2500000,
+    "real_answer": 1392000,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Cografya",
+    "difficulty": 4,
+    "content": "Pasifik Okyanusu'nun en derin noktasi Mariana Cukuru yaklasik kac metredir?",
+    "explanation": "Mariana Cukuru yaklasik 10.994 m ile okyanuslarin en derin noktasidir.",
+    "min_value": 7000,
+    "max_value": 13000,
+    "real_answer": 10994,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Birinci Dunya Savasi hangi yilda baslamistir?",
+    "explanation": "Birinci Dunya Savasi 1914 yilinda baslamistir.",
+    "min_value": 1880,
+    "max_value": 1940,
+    "real_answer": 1914,
+    "unit": "yil"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Bir gunde toplam kac saat vardir?",
+    "explanation": "Bir gun 24 saatten olusur.",
+    "min_value": 12,
+    "max_value": 36,
+    "real_answer": 24,
+    "unit": "saat"
+  },
+  {
+    "type": "tahmin",
+    "category": "Sanat",
+    "difficulty": 4,
+    "content": "Leonardo da Vinci'nin unlu tablosu Mona Lisa yaklasik kac yilinda tamamlanmistir?",
+    "explanation": "Mona Lisa yaklasik 1503-1506 yillarinda yapilmistir.",
+    "min_value": 1450,
+    "max_value": 1600,
+    "real_answer": 1506,
+    "unit": "yil"
+  },
+  {
+    "type": "tahmin",
+    "category": "Cografya",
+    "difficulty": 3,
+    "content": "Dunya uzerinde toplam kac kita bulunur?",
+    "explanation": "Dunya uzerinde yaygin kabule gore 7 kita bulunur.",
+    "min_value": 3,
+    "max_value": 10,
+    "real_answer": 7,
+    "unit": "adet"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Saf altinin erime sicakligi yaklasik kac derecedir?",
+    "explanation": "Altin yaklasik 1.064 derecede erir.",
+    "min_value": 500,
+    "max_value": 1500,
+    "real_answer": 1064,
+    "unit": "derece"
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Bir basketbol takiminda sahada ayni anda kac oyuncu bulunur?",
+    "explanation": "Basketbolda her takim sahada 5 oyuncu ile yer alir.",
+    "min_value": 3,
+    "max_value": 9,
+    "real_answer": 5,
+    "unit": "oyuncu"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 2,
+    "content": "Gunes Sistemi'nde toplam kac gezegen bulunur?",
+    "explanation": "Gunes Sistemi'nde 8 gezegen vardir (Pluto 2006'da cuce gezegen oldu).",
+    "min_value": 4,
+    "max_value": 14,
+    "real_answer": 8,
+    "unit": "adet"
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kultur",
+    "difficulty": 2,
+    "content": "Bir piyanoda toplam kac tus bulunur?",
+    "explanation": "Standart bir piyanoda 88 tus bulunur.",
+    "min_value": 40,
+    "max_value": 120,
+    "real_answer": 88,
+    "unit": "tus"
+  },
+  {
+    "type": "tahmin",
+    "category": "Cografya",
+    "difficulty": 4,
+    "content": "Turkiye'nin kac komsu ulkesi vardir?",
+    "explanation": "Turkiye'nin 8 komsu ulkesi vardir.",
+    "min_value": 3,
+    "max_value": 15,
+    "real_answer": 8,
+    "unit": "ulke"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Suyun donma sicakligi deniz seviyesinde kac derecedir?",
+    "explanation": "Su deniz seviyesinde 0 derece Celsius'ta donar.",
+    "min_value": -30,
+    "max_value": 30,
+    "real_answer": 0,
+    "unit": "derece"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Buyuk Taarruz ve Basbugkomutanlik Meydan Muharebesi hangi yilda yapilmistir?",
+    "explanation": "Buyuk Taarruz 1922 yilinda gerceklesmistir.",
+    "min_value": 1900,
+    "max_value": 1940,
+    "real_answer": 1922,
+    "unit": "yil"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Bir yetiskin insanin DNA'sinda yaklasik kac kromozom bulunur?",
+    "explanation": "Insan hucresinde 46 kromozom (23 cift) bulunur.",
+    "min_value": 20,
+    "max_value": 80,
+    "real_answer": 46,
+    "unit": "adet"
+  },
+  {
+    "type": "tahmin",
+    "category": "Cografya",
+    "difficulty": 2,
+    "content": "Bir yilda toplam kac ay vardir?",
+    "explanation": "Bir yil 12 aydan olusur.",
+    "min_value": 6,
+    "max_value": 18,
+    "real_answer": 12,
+    "unit": "ay"
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Bir Olimpiyat yuzme havuzu standart olarak kac metre uzunlugundadir?",
+    "explanation": "Olimpik yuzme havuzu 50 metre uzunlugundadir.",
+    "min_value": 25,
+    "max_value": 100,
+    "real_answer": 50,
+    "unit": "metre"
+  }
+]

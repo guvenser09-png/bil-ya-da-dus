@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bil ya da Düş - Satın Alma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#26171c", "on-tertiary": "#00382e", "on-primary-container": "#58002f",
+                    "error": "#ffb4ab", "inverse-on-surface": "#3d2c31", "primary-fixed-dim": "#ffb0cb",
+                    "on-tertiary-fixed": "#00201a", "on-primary": "#640036", "on-primary-fixed-variant": "#8d004f",
+                    "error-container": "#93000a", "on-secondary-container": "#d2bbff", "on-error-container": "#ffdad6",
+                    "outline": "#a88892", "surface-container-high": "#36252b", "tertiary-fixed": "#51fcda",
+                    "secondary": "#d2bbff", "background": "#1d0f14", "on-tertiary-container": "#003027",
+                    "surface-container-lowest": "#180a0f", "on-tertiary-fixed-variant": "#005143", "inverse-primary": "#b80068",
+                    "on-primary-fixed": "#3e001f", "primary-container": "#ff479c", "tertiary-fixed-dim": "#1ddfbe",
+                    "tertiary": "#1ddfbe", "secondary-fixed-dim": "#d2bbff", "on-surface": "#f7dce3",
+                    "on-secondary-fixed-variant": "#5900c6", "primary-fixed": "#ffd9e3", "tertiary-container": "#00a38a",
+                    "secondary-container": "#6800e4", "on-secondary-fixed": "#25005a", "surface-variant": "#413035",
+                    "surface-container": "#2b1b20", "surface-tint": "#ffb0cb", "surface-dim": "#1d0f14",
+                    "secondary-fixed": "#eaddff", "surface": "#1d0f14", "outline-variant": "#594048",
+                    "inverse-surface": "#f7dce3", "primary": "#ffb0cb", "on-surface-variant": "#e1bdc7",
+                    "on-error": "#690005", "on-background": "#f7dce3", "surface-container-highest": "#413035",
+                    "on-secondary": "#3e008e", "surface-bright": "#46343a"
+            },
+            "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+            "spacing": { "element-gap": "12px", "base": "8px", "section-margin": "32px", "container-padding": "20px" },
+            "fontFamily": {
+                    "title-md": ["Quicksand"], "label-sm": ["Quicksand"], "headline-lg": ["Quicksand"],
+                    "display-xl": ["Quicksand"], "headline-lg-mobile": ["Quicksand"], "body-md": ["Quicksand"]
+            },
+            "fontSize": {
+                    "title-md": ["20px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "display-xl": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "22px", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .chunky-button-base { position: relative; transition: all 0.1s ease; }
+        .chunky-button-base:active { transform: translateY(4px); }
+        .chunky-button-base:active .chunky-shadow { height: 0px; }
+        .confetti-layer { background-image: radial-gradient(#ffd23f 1px, transparent 0), radial-gradient(#2ee6c5 1px, transparent 0); background-size: 40px 40px; background-position: 0 0, 20px 20px; opacity: 0.1; }
+        .glass-panel { background: rgba(43, 27, 32, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .hero-glow { box-shadow: 0 0 40px rgba(255, 71, 156, 0.3); }
+    </style>
+<style> body { min-height: max(884px, 100dvh); } </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-hidden select-none">
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-container-padding h-16 bg-surface-container/80 backdrop-blur-md shadow-xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden shadow-lg">
+<img alt="Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhLk4Uhn1Dd54Wo5wCFqQuKk0ZQTQ3_F9Zt5FpIvaJ3sUWtlp7Nft4t0LQk8_f3ER8zBRHhmvJdsyEoeAH1WWN7PCQoApvAnuU3xfbG3Pd7yOcSSl9TYWyAGu7vCeFMtV5Ov-c-NmFxsua-ZiyP7fWu2DDlvg19x5begBhQxHpqyoWw6FbZeLcd9XlxckFRHoD1VWH-6Fnm1SYH7bjYb16djQY91XyPM8MUFrBCNaSYXPesqoWXg_5MA3bL9UAO35-nARMjCEYZw"/>
+</div>
+<span class="font-display-xl text-primary drop-shadow-[0_4px_0_rgba(100,0,54,1)] text-[24px]">Bil ya da Düş</span>
+</div>
+<div class="bg-surface-container-highest px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
+<span class="text-primary font-bold">1,240</span>
+<span class="text-xl">🪙</span>
+</div>
+</header>
+<main class="pt-20 pb-24 px-container-padding h-screen overflow-y-auto opacity-30 grayscale-[0.5]">
+<section class="grid grid-cols-2 gap-4">
+<div class="h-40 bg-surface-container-high rounded-lg p-4 flex flex-col justify-end">
+<div class="text-on-surface-variant font-label-sm">Klasik Paket</div>
+<div class="text-primary font-title-md">500 🪙</div>
+</div>
+<div class="h-40 bg-surface-container-high rounded-lg p-4 border-2 border-primary flex flex-col justify-end">
+<div class="text-on-surface-variant font-label-sm">Kahramanlar</div>
+<div class="text-primary font-title-md">1.200 🪙</div>
+</div>
+</section>
+</main>
+<div class="fixed inset-0 z-[60] flex items-end md:items-center justify-center p-0 md:p-10 pointer-events-none">
+<div class="absolute inset-0 bg-background/80 backdrop-blur-sm pointer-events-auto"></div>
+<div class="relative w-full max-w-lg bg-surface-container-low rounded-t-lg md:rounded-lg shadow-2xl pointer-events-auto overflow-hidden flex flex-col animate-[slide-up_0.3s_ease-out]">
+<div class="confetti-layer absolute inset-0 z-0"></div>
+<button class="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-highest hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface">close</span>
+</button>
+<div class="relative pt-12 pb-8 px-container-padding flex flex-col items-center">
+<div class="relative group">
+<div class="absolute -inset-4 bg-primary/20 blur-3xl rounded-full animate-pulse"></div>
+<div class="grid grid-cols-3 gap-3 relative z-10">
+<div class="w-16 h-16 glass-panel rounded-xl flex items-center justify-center shadow-lg transform -rotate-6 hover:rotate-0 transition-transform"><span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">shield</span></div>
+<div class="w-16 h-16 glass-panel rounded-xl flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition-transform"><span class="material-symbols-outlined text-tertiary text-4xl" style="font-variation-settings: 'FILL' 1;">bolt</span></div>
+<div class="w-16 h-16 glass-panel rounded-xl flex items-center justify-center shadow-lg transform rotate-12 hover:rotate-0 transition-transform"><span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span></div>
+<div class="w-16 h-16 glass-panel rounded-xl flex items-center justify-center shadow-lg transform -rotate-12 hover:rotate-0 transition-transform"><span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">swords</span></div>
+<div class="w-16 h-16 glass-panel rounded-xl flex items-center justify-center shadow-lg transform -rotate-3 hover:rotate-0 transition-transform"><span class="material-symbols-outlined text-tertiary text-4xl" style="font-variation-settings: 'FILL' 1;">ad_center</span></div>
+<div class="w-16 h-16 glass-panel rounded-xl flex items-center justify-center shadow-lg transform rotate-6 hover:rotate-0 transition-transform"><span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings: 'FILL' 1;">auto_fix_high</span></div>
+</div>
+</div>
+<div class="mt-8 text-center">
+<span class="bg-tertiary text-on-tertiary font-label-sm px-3 py-1 rounded-full shadow-[0_3px_0_#005143] uppercase tracking-wider">Efsanevi Paket</span>
+<h2 class="mt-4 font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Süper Kahramanlar Paketi</h2>
+<p class="mt-2 text-on-surface-variant font-body-md max-w-xs mx-auto">6 Özel Kahraman İkonu ve Özel Sohbet Çerçevesi</p>
+</div>
+</div>
+<div class="px-container-padding pb-10 pt-4 bg-surface-container-high/50 backdrop-blur-md">
+<div class="flex items-center justify-between mb-6">
+<span class="text-on-surface-variant font-title-md">Toplam</span>
+<div class="flex items-center gap-2">
+<span class="text-primary font-display-xl text-[32px]">1.200</span>
+<span class="text-3xl">🪙</span>
+</div>
+</div>
+<button class="chunky-button-base w-full group">
+<div class="absolute inset-0 bg-on-primary-container rounded-lg translate-y-1 chunky-shadow"></div>
+<div class="relative bg-primary-container text-on-primary-container font-headline-lg-mobile py-4 rounded-lg flex items-center justify-center gap-2 shadow-lg group-active:translate-y-1 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
+<span>SATIN AL</span>
+</div>
+</button>
+<p class="text-center mt-4 text-on-tertiary-fixed-variant font-label-sm">Geri dönülemez işlem. Hemen hesabına tanımlanır.</p>
+</div>
+</div>
+</div>
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-t-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined text-[28px]">home</span><span class="font-label-sm text-label-sm">Ana Sayfa</span></a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined text-[28px]">leaderboard</span><span class="font-label-sm text-label-sm">Sıralama</span></a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 shadow-[0_4px_0_rgba(88,0,47,1)] scale-95 translate-y-0.5 transition-all" href="#">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">shopping_bag</span><span class="font-label-sm text-label-sm">Mağaza</span></a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-all" href="#">
+<span class="material-symbols-outlined text-[28px]">person</span><span class="font-label-sm text-label-sm">Profil</span></a>
+</nav>
+</body></html>

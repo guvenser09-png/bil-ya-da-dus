@@ -1,6 +1,7 @@
-"""Authentication endpoints — register, login, refresh, logout, password reset."""
+"""Authentication endpoints — register, login, refresh, logout, password reset, e-posta doğrulama."""
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -17,9 +18,38 @@ from app.schemas.user import (
     UserRegisterRequest,
 )
 from app.services.auth_service import AuthService
+from app.services.user_service import UserService
 from app.utils.security import decode_token, get_current_user_id
 
 router = APIRouter()
+
+
+# --- Yeni hesap/güvenlik akışları için inline şemalar ---
+# (schemas/user.py koordinatör/diğer ajan kontrolünde olduğundan burada tanımlandı)
+
+class ForgotPasswordRequest(BaseModel):
+    """Şifre sıfırlama isteği (e-posta)."""
+    email: str = Field(..., max_length=255)
+
+
+class ForgotPasswordResponse(BaseModel):
+    """Şifre sıfırlama yanıtı. debug_token sadece DEBUG modda dolu döner."""
+    message: str
+    success: bool = True
+    debug_token: str | None = None
+
+
+class ResetPasswordRequest(BaseModel):
+    """Reset token ile yeni şifre belirleme."""
+    token: str
+    new_password: str = Field(..., min_length=6, max_length=128)
+
+
+class SendVerificationResponse(BaseModel):
+    """E-posta doğrulama gönderim yanıtı. debug_token sadece DEBUG modda dolu döner."""
+    message: str
+    success: bool = True
+    debug_token: str | None = None
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
@@ -219,3 +249,95 @@ async def confirm_password_reset(
         )
 
     return MessageResponse(message="Şifre başarıyla sıfırlandı. Lütfen yeniden giriş yapın.")
+
+
+@router.post("/forgot-password", response_model=ForgotPasswordResponse)
+async def forgot_password(
+    request: ForgotPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Şifre sıfırlama isteği başlat.
+
+    Kullanıcı olsa da olmasa da AYNI başarılı yanıt döner (enumeration
+    sızdırmamak için). E-posta varsa 30 dk geçerli bir reset token üretilir,
+    log'a yazılır ve email_stub ile gönderilir. DEBUG modda token yanıtta
+    debug_token olarak da döner; üretimde dönmez.
+    """
+    token = await UserService.request_password_reset(db=db, email=request.email)
+
+    debug_token = token if (settings.DEBUG and token) else None
+    return ForgotPasswordResponse(
+        message=(
+            "Eğer bu e-posta adresine kayıtlı bir hesap varsa, "
+            "şifre sıfırlama bağlantısı gönderildi."
+        ),
+        debug_token=debug_token,
+    )
+
+
+@router.post("/reset-password", response_model=MessageResponse)
+async def reset_password(
+    request: ResetPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Reset token ile yeni şifre belirle.
+
+    Token doğrulanır, şifre güncellenir ve tüm refresh token'lar geçersiz kılınır.
+    """
+    try:
+        await UserService.reset_password(
+            db=db,
+            token=request.token,
+            new_password=request.new_password,
+        )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
+
+    return MessageResponse(
+        message="Şifre başarıyla sıfırlandı. Lütfen yeniden giriş yapın."
+    )
+
+
+@router.post("/send-verification", response_model=SendVerificationResponse)
+async def send_verification(
+    user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db),
+):
+    """Giriş yapmış kullanıcıya e-posta doğrulama bağlantısı gönder.
+
+    24 saat geçerli doğrulama token'ı üretilir ve email_stub ile gönderilir.
+    DEBUG modda token yanıtta debug_token olarak da döner.
+    """
+    try:
+        token = await UserService.send_verification_email(db=db, user_id=user_id)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
+
+    debug_token = token if (settings.DEBUG and token) else None
+    return SendVerificationResponse(
+        message="Doğrulama bağlantısı e-posta adresinize gönderildi.",
+        debug_token=debug_token,
+    )
+
+
+@router.get("/verify-email", response_model=MessageResponse)
+async def verify_email(
+    token: str = Query(..., description="E-posta doğrulama token'ı"),
+    db: AsyncSession = Depends(get_db),
+):
+    """E-posta doğrulama token'ını doğrula ve hesabı doğrulanmış olarak işaretle."""
+    try:
+        await UserService.verify_email(db=db, token=token)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
+
+    return MessageResponse(message="E-posta adresiniz başarıyla doğrulandı.")

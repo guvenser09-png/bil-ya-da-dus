@@ -3,13 +3,47 @@
 Business logic for user profile operations, separated from API endpoints.
 """
 
+import logging
 import uuid as uuid_mod
+from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import func, or_, select
+from jose import jwt
+from sqlalchemy import and_, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config import settings
 from app.models.user import User
+from app.utils.email_stub import send_email
 from app.utils.profanity import contains_profanity
+from app.utils.security import (
+    decode_token,
+    hash_password,
+    revoke_all_refresh_tokens,
+)
+
+logger = logging.getLogger("app.user_service")
+
+# Kısa ömürlü token tipleri (decode_token bunları expected_type ile doğrular)
+RESET_TOKEN_TYPE = "reset"
+VERIFY_TOKEN_TYPE = "verify"
+RESET_TOKEN_EXPIRE_MINUTES = 30
+VERIFY_TOKEN_EXPIRE_HOURS = 24
+
+
+def _create_typed_token(user_id: str, token_type: str, expire: datetime) -> str:
+    """Mevcut güvenlik desenine uygun, tipli kısa ömürlü JWT üret.
+
+    security.py'deki create_*_token fonksiyonlarıyla aynı imza/alan yapısını
+    kullanır; sadece 'type' alanı farklıdır (reset/verify).
+    """
+    payload = {
+        "sub": user_id,
+        "type": token_type,
+        "exp": expire,
+        "iat": datetime.now(timezone.utc),
+        "jti": str(uuid_mod.uuid4()),
+    }
+    return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
 
 
 def _to_uuid(user_id: str) -> uuid_mod.UUID:
@@ -52,10 +86,18 @@ class UserService:
                 raise ValueError("Görünen isim uygunsuz içerik barındırıyor.")
             user.display_name = display_name
 
-        # Validate avatar_id
+        # Validate avatar_id — tek karakter kaynağı CharacterService kataloğudur.
+        # Karakter ücretsiz veya kullanıcı ona sahipse kuşanılabilir; pahalı bir
+        # karakteri sahip olmadan kuşanmak (prestij hilesi) engellenir.
         if avatar_id is not None:
-            if avatar_id not in VALID_AVATARS:
-                raise ValueError(f"Geçersiz avatar ID: {avatar_id}")
+            # Yerel import: character_service, user_service'i import ettiği için
+            # döngüsel importu önlemek üzere fonksiyon içinde yükleriz.
+            from app.services.character_service import CharacterService
+
+            if not CharacterService.exists(avatar_id):
+                raise ValueError(f"Geçersiz karakter: {avatar_id}")
+            if not await CharacterService.can_equip(db, user_id, avatar_id):
+                raise ValueError("Bu karaktere sahip değilsin.")
             user.avatar_id = avatar_id
 
         # Validate bio
@@ -118,6 +160,36 @@ class UserService:
                 user.total_correct_answers / user.total_questions_answered * 100, 1
             )
 
+        # HATA 6: best_rank = kullanıcının all-time sıralamadaki MEVCUT sırası.
+        # leaderboard'daki composite ölçütle (total_score, games_won, id) birebir
+        # aynı hesaplanır ki profildeki "#-" yerine doğru sıra gösterilsin.
+        # Hiç oynamamışsa (games_played=0) sıralamaya dahil değildir → None.
+        best_rank = None
+        if user.games_played > 0:
+            higher_stmt = (
+                select(func.count())
+                .select_from(User)
+                .where(
+                    User.is_active == True,  # noqa: E712
+                    User.games_played > 0,
+                    User.deleted_at.is_(None),
+                    or_(
+                        User.total_score > user.total_score,
+                        and_(
+                            User.total_score == user.total_score,
+                            User.games_won > user.games_won,
+                        ),
+                        and_(
+                            User.total_score == user.total_score,
+                            User.games_won == user.games_won,
+                            User.id < user.id,
+                        ),
+                    ),
+                )
+            )
+            higher = (await db.scalar(higher_stmt)) or 0
+            best_rank = int(higher) + 1
+
         return {
             "games_played": user.games_played,
             "games_won": user.games_won,
@@ -130,6 +202,7 @@ class UserService:
             "favorite_category": user.favorite_category,
             "level": user.level,
             "xp": user.xp,
+            "best_rank": best_rank,
         }
 
     @staticmethod
@@ -187,6 +260,177 @@ class UserService:
 
         await db.flush()
         return user
+
+
+    # --- Şifre sıfırlama (e-posta ile) ---
+
+    @staticmethod
+    async def request_password_reset(db: AsyncSession, email: str) -> str | None:
+        """Verilen e-postaya kayıtlı kullanıcı varsa reset token üret.
+
+        Enumeration sızdırmamak için çağıran katman, kullanıcı olsa da olmasa
+        da AYNI yanıtı dönmelidir. Burada kullanıcı yoksa None döneriz.
+        Token DEV görünürlüğü için log'a da yazılır.
+        """
+        result = await db.execute(
+            select(User).where(
+                User.email == email,
+                User.deleted_at.is_(None),
+            )
+        )
+        user = result.scalar_one_or_none()
+        if not user:
+            return None
+
+        expire = datetime.now(timezone.utc) + timedelta(
+            minutes=RESET_TOKEN_EXPIRE_MINUTES
+        )
+        token = _create_typed_token(str(user.id), RESET_TOKEN_TYPE, expire)
+
+        logger.info("[PASSWORD RESET] user_id=%s için reset token üretildi.", user.id)
+
+        await send_email(
+            to=email,
+            subject="Bil ya da Düş — Şifre Sıfırlama",
+            body=(
+                "Şifreni sıfırlamak için aşağıdaki kodu/bağlantıyı kullan "
+                f"(30 dk geçerli):\n\n{token}\n\n"
+                "Bu isteği sen yapmadıysan bu e-postayı yok sayabilirsin."
+            ),
+        )
+        return token
+
+    @staticmethod
+    async def reset_password(db: AsyncSession, token: str, new_password: str) -> None:
+        """Reset token'ı doğrula ve şifreyi güncelle.
+
+        Tüm refresh token'lar geçersiz kılınır (güvenlik).
+
+        Raises:
+            ValueError: Token geçersiz/süresi dolmuş ya da kullanıcı yoksa.
+        """
+        payload = decode_token(token, expected_type=RESET_TOKEN_TYPE)
+        user_id = payload.get("sub")
+        if not user_id:
+            raise ValueError("Geçersiz sıfırlama tokeni.")
+
+        user = await UserService.get_user_by_id(db, user_id)
+        if not user or user.deleted_at is not None:
+            raise ValueError("Kullanıcı bulunamadı.")
+
+        user.password_hash = hash_password(new_password)
+        await db.flush()
+
+        # Tüm refresh token'ları geçersiz kıl (Redis)
+        await revoke_all_refresh_tokens(user_id)
+
+    # --- E-posta doğrulama ---
+
+    @staticmethod
+    async def send_verification_email(db: AsyncSession, user_id: str) -> str | None:
+        """Giriş yapmış kullanıcı için doğrulama token'ı üret ve gönder.
+
+        Returns:
+            Üretilen token (DEV görünürlüğü için), kullanıcı yoksa None.
+
+        Raises:
+            ValueError: E-posta zaten doğrulanmışsa ya da e-posta yoksa.
+        """
+        user = await UserService.get_user_by_id(db, user_id)
+        if not user or user.deleted_at is not None:
+            return None
+
+        if not user.email:
+            raise ValueError("Hesabınızda doğrulanacak bir e-posta adresi yok.")
+
+        if user.is_verified:
+            raise ValueError("E-posta adresiniz zaten doğrulanmış.")
+
+        expire = datetime.now(timezone.utc) + timedelta(
+            hours=VERIFY_TOKEN_EXPIRE_HOURS
+        )
+        token = _create_typed_token(str(user.id), VERIFY_TOKEN_TYPE, expire)
+
+        logger.info("[EMAIL VERIFY] user_id=%s için doğrulama token'ı üretildi.", user.id)
+
+        await send_email(
+            to=user.email,
+            subject="Bil ya da Düş — E-posta Doğrulama",
+            body=(
+                "E-posta adresini doğrulamak için aşağıdaki kodu/bağlantıyı kullan "
+                f"(24 saat geçerli):\n\n{token}"
+            ),
+        )
+        return token
+
+    @staticmethod
+    async def verify_email(db: AsyncSession, token: str) -> User:
+        """Doğrulama token'ını doğrula ve kullanıcıyı verified yap.
+
+        Raises:
+            ValueError: Token geçersiz/süresi dolmuş ya da kullanıcı yoksa.
+        """
+        payload = decode_token(token, expected_type=VERIFY_TOKEN_TYPE)
+        user_id = payload.get("sub")
+        if not user_id:
+            raise ValueError("Geçersiz doğrulama tokeni.")
+
+        user = await UserService.get_user_by_id(db, user_id)
+        if not user or user.deleted_at is not None:
+            raise ValueError("Kullanıcı bulunamadı.")
+
+        user.is_verified = True
+        user.email_verified_at = datetime.now(timezone.utc)
+        await db.flush()
+        await db.refresh(user)
+        return user
+
+    # --- Hesap silme (KVKK/GDPR — soft-delete + anonimleştirme) ---
+
+    @staticmethod
+    async def delete_account(db: AsyncSession, user_id: str) -> None:
+        """Hesabı KVKK/GDPR uyumlu şekilde sil (soft-delete + anonimleştirme).
+
+        Kişisel veriler (e-posta, telefon, şifre, görünen isim, bio, avatar,
+        ilgi alanları) temizlenir/anonimleştirilir; kayıt korunur ama hesap
+        pasifleştirilir. Böylece oyun geçmişi/istatistik bütünlüğü bozulmaz
+        ama kişisel veri saklanmaz. Silinen hesap login olamaz.
+
+        Raises:
+            ValueError: Kullanıcı yoksa ya da zaten silinmişse.
+        """
+        user = await UserService.get_user_by_id(db, user_id)
+        if not user or user.deleted_at is not None:
+            raise ValueError("Kullanıcı bulunamadı.")
+
+        # username kolonu String(30); benzersiz ve 30 karaktere SIĞAN bir anonim
+        # değer üret (uuid hex 32 hane → "del_" + ilk 26 hane = 30). Eski
+        # "deleted_user_<uuid>" 49 karakterdi ve 500 (truncation) veriyordu.
+        user.username = ("del_" + user.id.hex)[:30]
+        user.email = None
+        user.phone = None
+        user.password_hash = None
+        user.display_name = "Silinmiş Kullanıcı"
+        user.bio = None
+        user.avatar_id = "robot"
+        user.interest_tags = None
+        user.auth_provider = None
+        user.auth_provider_id = None
+
+        # Doğrulama / premium durumunu sıfırla
+        user.is_verified = False
+        user.email_verified_at = None
+        user.is_premium = False
+        user.premium_until = None
+
+        # Hesabı pasifleştir + silme damgası
+        user.is_active = False
+        user.deleted_at = datetime.now(timezone.utc)
+
+        await db.flush()
+
+        # Tüm oturumları (refresh token) geçersiz kıl
+        await revoke_all_refresh_tokens(user_id)
 
 
 # --- Valid avatar IDs ---

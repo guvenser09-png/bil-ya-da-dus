@@ -1,10 +1,15 @@
-"""Question management endpoints — generate, list, approve, stats."""
+"""Question management endpoints — generate, list, approve, stats, vote, report."""
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.services.question_quality_service import (
+    get_quality_stats,
+    record_vote,
+    report_question,
+)
 from app.services.question_service import CATEGORIES, QuestionService
 from app.utils.security import get_current_user_id
 
@@ -48,6 +53,28 @@ class QuestionStatsResponse(BaseModel):
     pending: int
     rejected: int
     by_type: dict[str, int]
+
+
+class VoteRequest(BaseModel):
+    vote: int = Field(..., description="Thumbs-up (+1) or thumbs-down (-1)", ge=-1, le=1)
+
+    @classmethod
+    def __get_validators__(cls):  # type: ignore[override]
+        yield cls.validate_vote
+
+    @staticmethod
+    def validate_vote(v: "VoteRequest") -> "VoteRequest":
+        if v.vote == 0:
+            raise ValueError("vote must be +1 or -1, not 0")
+        return v
+
+
+class QualityStatsResponse(BaseModel):
+    total: int
+    approved: int
+    pending: int
+    suspended: int
+    avg_correct_rate: float | None
 
 
 # --- Endpoints ---
@@ -168,3 +195,67 @@ async def seed_questions(
 async def get_categories():
     """Get available question categories."""
     return {"categories": CATEGORIES}
+
+
+# --- Quality & social endpoints ---
+
+@router.get("/quality-stats", response_model=QualityStatsResponse)
+async def question_quality_stats(
+    db: AsyncSession = Depends(get_db),
+):
+    """Return aggregate quality statistics for the question bank.
+
+    No authentication required — intended as a public health endpoint.
+    """
+    stats = await get_quality_stats(db)
+    return stats
+
+
+@router.post("/{question_id}/vote", status_code=200)
+async def vote_on_question(
+    question_id: str,
+    request: VoteRequest,
+    user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db),
+):
+    """Submit a thumbs-up (+1) or thumbs-down (-1) vote for a question.
+
+    Requires authentication. If the question's average rating drops below
+    3.0/5.0 it will be flagged for admin review.
+    """
+    if request.vote not in (1, -1):
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="vote must be +1 or -1.",
+        )
+    try:
+        await record_vote(question_id=question_id, vote=request.vote, db=db)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    return {"voted": True, "question_id": question_id, "vote": request.vote}
+
+
+@router.post("/{question_id}/report", status_code=200)
+async def report_question_endpoint(
+    question_id: str,
+    user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db),
+):
+    """Report a question as incorrect, offensive, or low-quality.
+
+    Requires authentication. The question is automatically suspended once
+    it accumulates 20 reports.
+    """
+    try:
+        result = await report_question(
+            question_id=question_id, user_id=user_id, db=db
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    return {
+        "reported": result["reported"],
+        "suspended": result["suspended"],
+        "question_id": question_id,
+    }

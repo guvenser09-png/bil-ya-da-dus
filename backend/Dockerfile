@@ -14,8 +14,11 @@ RUN uv sync --frozen --no-dev 2>/dev/null || uv sync --no-dev
 # Copy application code
 COPY . .
 
-# Expose port
+# Başlangıç scriptini çalıştırılabilir yap
+RUN chmod +x start.sh
+
+# Expose (yerel/dev için; production'da $PORT kullanılır)
 EXPOSE 8000
 
-# Run with uvicorn
-CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Production: migration uygula + uvicorn'u $PORT üzerinde başlat
+CMD ["./start.sh"]

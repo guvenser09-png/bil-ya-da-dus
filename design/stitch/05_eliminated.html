@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bil ya da Düş - Elendin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @keyframes fall { 0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; } 100% { transform: translateY(800px) rotate(45deg) scale(0.5); opacity: 0; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes bounce-slow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes drift { 0% { transform: translate(0, 0); } 50% { transform: translate(20px, -20px); } 100% { transform: translate(0, 0); } }
+        .falling-animation { animation: fall 1.5s cubic-bezier(0.55, 0.055, 0.675, 0.19) forwards; }
+        .shake-animation { animation: shake 0.2s ease-in-out infinite; }
+        .cheer-animation { animation: bounce-slow 1s ease-in-out infinite; }
+        .motion-blur { filter: blur(2px); }
+        .glass-panel { background: rgba(43, 27, 32, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .three-d-shadow { box-shadow: 0 6px 0 0 rgba(88, 0, 47, 1); }
+        .three-d-shadow-secondary { box-shadow: 0 6px 0 0 rgba(89, 0, 198, 1); }
+        .three-d-press:active { transform: translateY(4px); box-shadow: 0 2px 0 0 rgba(88, 0, 47, 1); }
+        .three-d-press-secondary:active { transform: translateY(4px); box-shadow: 0 2px 0 0 rgba(89, 0, 198, 1); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#b80068", "surface-bright": "#46343a", "on-surface-variant": "#e1bdc7",
+                    "surface": "#1d0f14", "tertiary-fixed-dim": "#1ddfbe", "surface-variant": "#413035",
+                    "surface-tint": "#ffb0cb", "primary": "#ffb0cb", "on-secondary-fixed-variant": "#5900c6",
+                    "on-secondary-container": "#d2bbff", "tertiary-fixed": "#51fcda", "background": "#1d0f14",
+                    "on-primary": "#640036", "on-background": "#f7dce3", "error-container": "#93000a",
+                    "on-primary-container": "#58002f", "tertiary": "#1ddfbe", "surface-container-low": "#26171c",
+                    "on-tertiary-fixed-variant": "#005143", "primary-fixed-dim": "#ffb0cb", "on-error": "#690005",
+                    "secondary-fixed-dim": "#d2bbff", "on-error-container": "#ffdad6", "outline-variant": "#594048",
+                    "inverse-surface": "#f7dce3", "surface-container-high": "#36252b", "on-tertiary-container": "#003027",
+                    "secondary-container": "#6800e4", "on-surface": "#f7dce3", "on-tertiary-fixed": "#00201a",
+                    "primary-container": "#ff479c", "surface-dim": "#1d0f14", "inverse-on-surface": "#3d2c31",
+                    "on-tertiary": "#00382e", "secondary": "#d2bbff", "surface-container-highest": "#413035",
+                    "error": "#ffb4ab", "on-secondary-fixed": "#25005a", "tertiary-container": "#00a38a",
+                    "surface-container-lowest": "#180a0f", "on-primary-fixed": "#3e001f", "on-secondary": "#3e008e",
+                    "outline": "#a88892", "primary-fixed": "#ffd9e3", "on-primary-fixed-variant": "#8d004f",
+                    "secondary-fixed": "#eaddff", "surface-container": "#2b1b20"
+            },
+            "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+            "spacing": { "base": "8px", "container-padding": "20px", "element-gap": "12px", "section-margin": "32px" },
+            "fontFamily": {
+                    "body-md": ["Quicksand"], "headline-lg": ["Quicksand"], "display-xl": ["Quicksand"],
+                    "title-md": ["Quicksand"], "label-sm": ["Quicksand"], "headline-lg-mobile": ["Quicksand"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "22px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "display-xl": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-md": ["20px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style> body { min-height: max(884px, 100dvh); } </style>
+  </head>
+<body class="bg-surface font-body-md text-on-surface overflow-hidden h-screen w-full relative">
+<div class="absolute inset-0 z-0 pointer-events-none opacity-40 overflow-hidden">
+<div class="absolute top-1/4 left-1/4 w-4 h-4 bg-tertiary rounded-full blur-sm" style="animation: drift 5s infinite"></div>
+<div class="absolute top-1/2 right-1/3 w-6 h-6 bg-primary rounded-full blur-md" style="animation: drift 7s infinite"></div>
+<div class="absolute bottom-1/4 right-1/4 w-3 h-3 bg-secondary rounded-full blur-sm" style="animation: drift 4s infinite"></div>
+</div>
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-container-padding h-16 bg-surface-container/80 backdrop-blur-md shadow-xl">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center border-2 border-primary overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiHMZ0pTPPVatoseD2GUGoyZ-gz9ZNZcwf_-InLTNHJDJIU9XLi_J-nSXIEPFtYnTeo5_0gjRR_BdFQA6Xa3lfmpl_Cctzlcjmv7JxeexH-FzO2jpr1CTfl0Z9gf3HMcAfVEHdtBtDfnmp6OzbiovgLk-wVmm84sOtX8hpfs30yOwvHsZ7wr1JlhEEgPzcz17HBqS-8PQSvlxSCo-iNB2eAmAgT3BM61FNQWc2qFi_PKktdrtiZ5ndIBYnvpJ-843sMMqN673bxA"/>
+</div>
+<span class="font-display-xl text-primary drop-shadow-[0_4px_0_rgba(100,0,54,1)] text-[24px]">Serdar_G</span>
+</div>
+<button class="bg-surface-container-highest px-4 py-1.5 rounded-full border-2 border-primary/20 text-primary font-bold transition-transform hover:scale-105 active:translate-y-1">1,240 🪙</button>
+</header>
+<main class="relative h-full flex flex-col items-center justify-center px-container-padding pt-16 pb-24">
+<div class="absolute top-24 left-0 w-full flex justify-center gap-4 z-20">
+<div class="cheer-animation flex flex-col items-center gap-1" style="animation-delay: 0.1s">
+<div class="w-14 h-14 rounded-full border-4 border-tertiary bg-surface-container overflow-hidden shadow-lg">
+<img alt="Winner 1" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqqUTHcj8A3_cbt1yD3RuocTOzjiCdlpIaBr9WyCQFtd3m6ivtW2lfkHc6dEonhCAhAsNa1LOAIbjbGexZRdngu5WykUdjyK7cCmRvllCze7Bc_SyOTIehLskhOjNldYVD4jvVXbBE7b01imzQ6gUKM1AS9eKDVlt9hzRy39hvn0YJzNwov_pWdBKpJmQ0tra4TehE-7aK42gszIIMtpiM6xq_z-vQDr1VT8HhyG0d8Kj4oonE1euGLfcLXfVz32OeD6EKNDFHLg"/>
+</div>
+<span class="bg-tertiary text-on-tertiary text-[10px] font-bold px-2 rounded-full uppercase">LUCKY</span>
+</div>
+<div class="cheer-animation flex flex-col items-center gap-1" style="animation-delay: 0.3s">
+<div class="w-16 h-16 rounded-full border-4 border-tertiary bg-surface-container overflow-hidden shadow-xl ring-4 ring-tertiary/20">
+<img alt="Winner 2" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxKKV1jw9MKsuYwRYERmlgCj3QemRSsdY1kN3guazUlr3U3BdZUVfxkDSHocg8-RFUrQXUGk1YFHkQh0afhCSKWwKhyJds6mizYkRWSikqSUnDV0bWUMXhfmyjEOp4_tiIafWkv7ckkxQgMntFl0jdFZILvoIRXxtY_3iNpChSQ59wp7ZiGeCKQnV2mCEiaLSX3mW1aX6QPJAKSJgAVCcJS0yRzDF25GHg8nCJKznK3gu4usIS8LCg4jCPqopceTw5obvgEFgIXg"/>
+</div>
+<span class="bg-tertiary text-on-tertiary text-[10px] font-bold px-2 rounded-full uppercase">PRO</span>
+</div>
+<div class="cheer-animation flex flex-col items-center gap-1" style="animation-delay: 0.2s">
+<div class="w-14 h-14 rounded-full border-4 border-tertiary bg-surface-container overflow-hidden shadow-lg">
+<img alt="Winner 3" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW-hoMcImfpo4N4N857R940NQibmE3qI0SAcGlxj6CQ60HY5WwCfVAevJg6GG6T6VuMtmScHId8ghjGDmdatu01TOzrYV4VXZM9dRjAoVRvgD5IWOJd2jsmxnM0zDOHvycKWWXXJtQjVbMVEv2e5TyKnVNqzh2yFMRGcjL8fE9ecM8cmZA3_iiJFse2thabiOhh6r7M-Fftbu6sat0fXwV7AQ1xJjKP2fqGRu39n9lSxhDoDivSuqdCDrBJNYFADBz0RzMCChIgg"/>
+</div>
+<span class="bg-tertiary text-on-tertiary text-[10px] font-bold px-2 rounded-full uppercase">QUEEN</span>
+</div>
+</div>
+<div class="relative w-full aspect-square max-w-[400px] flex items-center justify-center overflow-visible">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-12 z-10">
+<div class="absolute left-0 top-0 w-1/2 h-full bg-surface-container-highest border-b-4 border-surface-container-low rounded-l-lg origin-left transition-transform duration-500 ease-in" id="door-l" style="transform: rotateZ(75deg)"></div>
+<div class="absolute right-0 top-0 w-1/2 h-full bg-surface-container-highest border-b-4 border-surface-container-low rounded-r-lg origin-right transition-transform duration-500 ease-in" id="door-r" style="transform: rotateZ(-75deg)"></div>
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 text-primary/30 material-symbols-outlined text-4xl select-none">flash_on</div>
+</div>
+<div class="falling-animation motion-blur z-20 flex flex-col items-center gap-2">
+<div class="w-32 h-32 rounded-full border-4 border-primary-container bg-surface-container-high shadow-2xl relative overflow-hidden shake-animation">
+<img alt="User Avatar Falling" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW8i_vVW38FKbMighfySx4ETqrk65d74T0worvxI4aigWy1RQ3CNOgF09_ellEQku1RYKcOphTHuTi-XOVHAoOaPvsRny7AIMpq68vPm3N8f2fSiMZzkWQqzlcgPpdX5PecHHZTk3CWIb5PXjgufKrV8GKg9saAUqFlFik11DBH3YN9CQmRDuFRFiZ3fvdPvkyO9aesxOs2UczgtG1IKIWgn85RT3lPB1cuPCemnw-0ChergnhWXnhQ9z5myu3Bhcit7xtw-FVgQ"/>
+<div class="absolute inset-0 bg-white/10 pointer-events-none" style="clip-path: polygon(10% 10%, 90% 20%, 80% 80%, 20% 70%);"></div>
+</div>
+<div class="bg-primary-container text-on-primary-container px-4 py-1 rounded-xl font-bold shadow-lg">SERDAR_G</div>
+</div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none">
+<h1 class="font-display-xl text-primary-container text-[72px] uppercase drop-shadow-[0_8px_0_rgba(88,0,47,1)] italic tracking-tighter scale-125 rotate-[-5deg]">ELENDİN!</h1>
+</div>
+</div>
+<div class="mt-section-margin w-full max-w-[320px] flex flex-col gap-4 z-40">
+<button class="three-d-shadow three-d-press bg-primary-container text-on-primary-container h-16 rounded-lg font-headline-lg-mobile text-headline-lg-mobile flex items-center justify-center gap-3 transition-all hover:brightness-110">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">replay</span>TEKRAR OYNA</button>
+<button class="three-d-shadow-secondary three-d-press-secondary bg-secondary-container text-on-secondary-container h-14 rounded-lg font-title-md text-title-md flex items-center justify-center gap-3 transition-all hover:brightness-110">
+<span class="material-symbols-outlined">visibility</span>İZLEYİCİ OL</button>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-t-lg">
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">home</span><span class="font-label-sm text-label-sm">Ana Sayfa</span></div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">leaderboard</span><span class="font-label-sm text-label-sm">Sıralama</span></div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">shopping_bag</span><span class="font-label-sm text-label-sm">Mağaza</span></div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 shadow-[0_4px_0_rgba(88,0,47,1)] scale-95 translate-y-0.5 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span><span class="font-label-sm text-label-sm">Profil</span></div>
+</nav>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const avatar = document.querySelector('.falling-animation');
+            const doors = [document.getElementById('door-l'), document.getElementById('door-r')];
+            setInterval(() => {
+                avatar.style.display = 'none';
+                doors.forEach(d => d.style.transform = 'rotateZ(0deg)');
+                setTimeout(() => {
+                    avatar.style.display = 'flex';
+                    doors[0].style.transform = 'rotateZ(75deg)';
+                    doors[1].style.transform = 'rotateZ(-75deg)';
+                }, 500);
+            }, 5000);
+        });
+    </script>
+</body></html>

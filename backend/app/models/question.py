@@ -66,6 +66,13 @@ class Question(Base):
     correct_rate: Mapped[float | None] = mapped_column(Float, nullable=True)
     report_count: Mapped[int] = mapped_column(Integer, default=0)
 
+    # User rating fields (thumbs-up / thumbs-down voting)
+    user_rating_sum: Mapped[int] = mapped_column(Integer, default=0)
+    user_rating_count: Mapped[int] = mapped_column(Integer, default=0)
+
+    # Daily challenge tagging
+    is_daily_challenge: Mapped[bool] = mapped_column(Boolean, default=False)
+
     # Estimation (tahmin) question fields
     min_value: Mapped[float | None] = mapped_column(Float, nullable=True)
     max_value: Mapped[float | None] = mapped_column(Float, nullable=True)

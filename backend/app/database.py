@@ -10,7 +10,7 @@ from app.config import settings
 # Async engine
 engine = create_async_engine(
     settings.DATABASE_URL,
-    echo=settings.DEBUG,
+    echo=False,  # SQL echo KAPALI — açıkken her sorgu loglanıp diski dolduruyordu
     pool_size=20,
     max_overflow=10,
     pool_pre_ping=True,

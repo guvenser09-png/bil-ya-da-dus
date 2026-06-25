@@ -105,10 +105,33 @@ class MockRedis:
         pass
 
     async def zcard(self, key):
-        return 0
+        z = _mock_redis_store.get(key)
+        return len(z) if isinstance(z, dict) else 0
 
     async def zadd(self, key, mapping):
-        pass
+        z = _mock_redis_store.get(key)
+        if not isinstance(z, dict):
+            z = {}
+            _mock_redis_store[key] = z
+        z.update(mapping)
+
+    async def zrem(self, key, *members):
+        z = _mock_redis_store.get(key)
+        if isinstance(z, dict):
+            for m in members:
+                z.pop(m, None)
+
+    async def zrangebyscore(self, key, min_score, max_score, start=0, num=None):
+        z = _mock_redis_store.get(key)
+        if not isinstance(z, dict):
+            return []
+        items = sorted(
+            (m for m, s in z.items() if min_score <= s <= max_score),
+            key=lambda m: z[m],
+        )
+        if num is not None:
+            items = items[start:start + num]
+        return items
 
     async def zrange(self, key, start, stop, withscores=False):
         return []

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Bil ya da Düş - Çoktan Seçmeli</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 20px rgba(255, 176, 203, 0.4); } 50% { box-shadow: 0 0 40px rgba(255, 176, 203, 0.7); } }
+        .active-glow { animation: pulse-glow 2s infinite ease-in-out; }
+        .chunky-button { position: relative; transition: all 0.1s active; }
+        .chunky-button:active { transform: translateY(4px); }
+        .chunky-button:active .button-lip { height: 0px; }
+        .glass-card { background: rgba(43, 27, 32, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .progress-ring-circle { transition: stroke-dashoffset 0.1s linear, stroke 0.5s ease; transform: rotate(-90deg); transform-origin: 50% 50%; }
+        .cracked-overlay { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M10 10L90 90M20 80L80 20M50 0L50 100' stroke='rgba(255,255,255,0.2)' stroke-width='2'/%3E%3C/svg%3E"); }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#b80068", "surface-bright": "#46343a", "on-surface-variant": "#e1bdc7",
+                    "surface": "#1d0f14", "tertiary-fixed-dim": "#1ddfbe", "surface-variant": "#413035",
+                    "surface-tint": "#ffb0cb", "primary": "#ffb0cb", "on-secondary-fixed-variant": "#5900c6",
+                    "on-secondary-container": "#d2bbff", "tertiary-fixed": "#51fcda", "background": "#1d0f14",
+                    "on-primary": "#640036", "on-background": "#f7dce3", "error-container": "#93000a",
+                    "on-primary-container": "#58002f", "tertiary": "#1ddfbe", "surface-container-low": "#26171c",
+                    "on-tertiary-fixed-variant": "#005143", "primary-fixed-dim": "#ffb0cb", "on-error": "#690005",
+                    "secondary-fixed-dim": "#d2bbff", "on-error-container": "#ffdad6", "outline-variant": "#594048",
+                    "inverse-surface": "#f7dce3", "surface-container-high": "#36252b", "on-tertiary-container": "#003027",
+                    "secondary-container": "#6800e4", "on-surface": "#f7dce3", "on-tertiary-fixed": "#00201a",
+                    "primary-container": "#ff479c", "surface-dim": "#1d0f14", "inverse-on-surface": "#3d2c31",
+                    "on-tertiary": "#00382e", "secondary": "#d2bbff", "surface-container-highest": "#413035",
+                    "error": "#ffb4ab", "on-secondary-fixed": "#25005a", "tertiary-container": "#00a38a",
+                    "surface-container-lowest": "#180a0f", "on-primary-fixed": "#3e001f", "on-secondary": "#3e008e",
+                    "outline": "#a88892", "primary-fixed": "#ffd9e3", "on-primary-fixed-variant": "#8d004f",
+                    "secondary-fixed": "#eaddff", "surface-container": "#2b1b20"
+            },
+            "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+            "spacing": { "base": "8px", "container-padding": "20px", "element-gap": "12px", "section-margin": "32px" },
+            "fontFamily": {
+                    "body-md": ["Quicksand"], "headline-lg": ["Quicksand"], "display-xl": ["Quicksand"],
+                    "title-md": ["Quicksand"], "label-sm": ["Quicksand"], "headline-lg-mobile": ["Quicksand"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "22px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "display-xl": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-md": ["20px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style> body { min-height: max(884px, 100dvh); } </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col overflow-hidden select-none">
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-container-padding h-16 bg-surface-container/80 backdrop-blur-md shadow-xl">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden shadow-lg">
+<img alt="Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd34jIQGusxm9Fi36XYkINp8xJe3T3dcFeaBm57pOfUUbOMawbFQhoWcQYA6NRO6mtYAbFYeQfoYjzJizrT5eiDSUkd3loDwIZoluFwx7KWnS1KB_wdAksGta2aWblx0a25TEuPe2UwC7D2ckgj1CX-2LAjlFPWLTJaJj29urzYvYC1jUFkMvD_ECiXp76est7W9ixqpBjTgHr4C53abdVpAB3U63a4ZvZxcGiyaYyB3JMNj6iVt2GDn2ISCo6uiVTS0veZF94nA"/>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface">Serdar_G</span>
+</div>
+<div class="font-display-xl text-primary drop-shadow-[0_4px_0_rgba(100,0,54,1)] scale-50 md:scale-100">Bil ya da Düş</div>
+<div class="bg-surface-variant px-4 py-1.5 rounded-full shadow-inner flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface">1,240</span>
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">generating_tokens</span>
+</div>
+</header>
+<main class="flex-1 mt-16 pb-32 flex flex-col items-center justify-center px-container-padding relative">
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+<div class="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent"></div>
+</div>
+<div class="w-full flex justify-between items-end mb-element-gap z-10">
+<div class="flex flex-col">
+<span class="bg-tertiary text-on-tertiary px-3 py-1 rounded-full font-label-sm text-label-sm mb-1 shadow-lg">TUR 4/5</span>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">group</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">Kalan oyuncu: 6</span>
+</div>
+</div>
+<div class="relative w-20 h-20 flex items-center justify-center">
+<svg class="w-full h-full">
+<circle class="text-surface-variant" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-width="8"></circle>
+<circle class="progress-ring-circle" cx="40" cy="40" fill="transparent" id="timer-circle" r="34" stroke="#2EE6C5" stroke-dasharray="213.6" stroke-dashoffset="0" stroke-width="8"></circle>
+</svg>
+<span class="absolute font-headline-lg-mobile text-headline-lg-mobile text-tertiary" id="timer-text">8</span>
+</div>
+</div>
+<div class="w-full glass-card rounded-lg p-8 mb-section-margin z-10 text-center relative overflow-hidden shadow-2xl scale-105 active-glow">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-50"></div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface leading-tight">Hangisi bir Netflix dizisi değildir?</h2>
+</div>
+<div class="grid grid-cols-2 gap-4 w-full z-10 mb-section-margin">
+<button class="chunky-button relative group active-glow rounded-lg overflow-hidden">
+<div class="bg-primary h-full w-full p-6 flex flex-col items-center justify-center rounded-lg border-2 border-primary-fixed shadow-[0_6px_0_#8d004f]">
+<span class="font-display-xl text-on-primary-container absolute -top-2 -left-2 opacity-10">A</span>
+<span class="font-title-md text-title-md text-on-primary-container">Stranger Things</span>
+</div></button>
+<button class="chunky-button relative group rounded-lg overflow-hidden">
+<div class="bg-secondary h-full w-full p-6 flex flex-col items-center justify-center rounded-lg border-2 border-secondary-fixed shadow-[0_6px_0_#5900c6]">
+<span class="font-display-xl text-on-secondary-container absolute -top-2 -left-2 opacity-10">B</span>
+<span class="font-title-md text-title-md text-on-secondary-container">Dark</span>
+</div></button>
+<button class="chunky-button relative group rounded-lg overflow-hidden">
+<div class="bg-tertiary-container h-full w-full p-6 flex flex-col items-center justify-center rounded-lg border-2 border-tertiary-fixed shadow-[0_6px_0_#005143]">
+<span class="font-display-xl text-on-tertiary-container absolute -top-2 -left-2 opacity-10">C</span>
+<span class="font-title-md text-title-md text-on-tertiary-container">Breaking Bad</span>
+</div></button>
+<button class="chunky-button relative group rounded-lg overflow-hidden">
+<div class="bg-surface-variant h-full w-full p-6 flex flex-col items-center justify-center rounded-lg border-2 border-outline shadow-[0_6px_0_#2b1b20]">
+<span class="font-display-xl text-on-surface-variant absolute -top-2 -left-2 opacity-10">D</span>
+<span class="font-title-md text-title-md text-on-surface-variant">The Crown</span>
+</div></button>
+</div>
+<div class="w-full flex justify-around items-end gap-2 z-10">
+<div class="flex flex-col items-center">
+<div class="relative w-12 h-12 rounded-full border-2 border-tertiary overflow-hidden shadow-lg mb-2">
+<img alt="Player 1" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1wRkJvgyuolN4joBV0v6NIxL29N7fHUT73nUMnzy51rQWUAnCcFYHVDlWbzt_9bMPl5U0KKlqZ2RXka6QBj0nDj90qEnqvYGZhbRaH9wYVeT4gbGnEZCbqSBfoEF_fnZAbOO1NCdQuviPQQVCMeEQLUIr_hxOfQHi1nm24owYVeEDYt8aEbk5l4sE3KfUGvWE8hXygPw-kqXbUxJPUscVZbRoYV7zQnuYawvPUSAozst3Z1JbstlBVT5b_ix5R_auJy_N_1Y8iw"/>
+</div>
+<div class="w-14 h-4 bg-surface-container-highest rounded-t-full shadow-lg"></div>
+</div>
+<div class="flex flex-col items-center">
+<div class="relative w-12 h-12 rounded-full border-2 border-tertiary overflow-hidden shadow-lg mb-2">
+<img alt="Player 2" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc2_xVgsMtB0YaBXS7lCBeML0YTrazP6VQ020cJ6w9OCCyNG_T0dhECvgLymqpDBNIXQTolk9pw7uYbkLHdMCgIWZglkkTa8S9yFd_8VEUcn8VlfiX91Lbf2Fu49BCfLk8b6JulmrRWezG2-pdwaDkTK4zNmzfOtaq3hR6sCjpe_IkOkLT_9MJVnBCAf2U5IiO-Hu4i-go9AcgvkwMnYsCCvRZv-76ksqQ2jw7RPpSUiT9YXfBYrOb1icgXWu2yvuWG5-lO6UyaA"/>
+</div>
+<div class="w-14 h-4 bg-surface-container-highest rounded-t-full shadow-lg"></div>
+</div>
+<div class="flex flex-col items-center opacity-50 grayscale">
+<div class="relative w-12 h-12 rounded-full border-2 border-error overflow-hidden shadow-lg mb-2">
+<img alt="Eliminated Player" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpE__Gi89nHyPEZOJT_bepKiuxq4o48VthlxC8SWURnHJ3oje-3ubg4hRiP9tX-kXOLB1fnwthPZnmyAXDHtbq8_h4ODp75Hi-uZtAWeAq5KkeRXLC638ruVB3qVYWfFbTfBUJqjDl9rWCatGQjyzrXh5BF8zUAITHeMXXKaAADd3GM7jdLw-RziOXo-AHiC6qbi57wyztEU4IQYOGEqL6uFpfuafBh6XWKsKz0HThXzhIAW9WIgjCHhbqKjSgcEw0jB9HSw0zBA"/>
+<div class="absolute inset-0 cracked-overlay"></div>
+</div>
+<div class="w-14 h-2 bg-surface-container-low rounded-t-full"></div>
+</div>
+<div class="flex flex-col items-center">
+<div class="relative w-12 h-12 rounded-full border-2 border-tertiary overflow-hidden shadow-lg mb-2">
+<img alt="Player 4" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6LwzCm3v7PJpL-SQqsP1URI2QwgUV4exTOptaffHcrOSC9MT9GHFosvfG4VeCqjF5JNPZ2ChPzxEtQwfjV88grG4D124azk_UwPtJT1_WkjjVL5HvkPCvVnxA_XoiBl3fI3yi39P9Fi6xV8lOavPNyso3pxJASmeNbtc48c1x2Fm1NrXEEmrPZmIMhwRljtrJYoId6ByECQSyFrDjYbFqg0eXLH_iPNBeH1r9eGnFJhJOzWWGp-THf4X5kYeZcB-Bon_EAMGQlg"/>
+</div>
+<div class="w-14 h-4 bg-surface-container-highest rounded-t-full shadow-lg"></div>
+</div>
+<div class="flex flex-col items-center">
+<div class="relative w-12 h-12 rounded-full border-2 border-tertiary overflow-hidden shadow-lg mb-2">
+<img alt="Player 5" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjh6XFmki1zVUIFGmCd9-JuJkvr53_Sqm0QY_L3grlFGN35eDiAQqgX9RRq4warQ7tgHbkULmJMydUX0hxE4tsUoHS_CR1l304s7WIYGEmW8Os49Us7OT9WVuXDBGK8T7XWAZz8HwWmO_wtfLLw2fJPtJFZJ2hh3Am_LxAzi1SenA3K-6al181SXBlDPjupOQ10WQcMYPwGvOMkwBx0WfMdnnxoZuJkBjBJNAVrl3gCyRSNAiyX1PXChm6h6ZYnLPhQ98sGHLI_A"/>
+</div>
+<div class="w-14 h-4 bg-surface-container-highest rounded-t-full shadow-lg"></div>
+</div>
+<div class="flex flex-col items-center">
+<div class="relative w-12 h-12 rounded-full border-2 border-tertiary overflow-hidden shadow-lg mb-2">
+<img alt="Player 6" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeQztStku4THWPIdOI-e7hqZzB4U2YYgxHw9yGvRofq0Hh7ntfKO_cRENx6xETq-V-WdFjN-rj2d8a2J6nUGN_9x3icO7RW4pN54S-gXzxKViXWIoEENNriOB_G3D6lJwPZL1XHZUq86dhdc4DRBQbtVCJecj-5DO9KC6sIRRqj0twhV4E22SpXczXefvXjXG8GXaFNikHlYe6q2W096A_tN3-syQwbjUaXftBULiHYZatfmU4PdAl_jT9DWNDXmoT2MWy09ceug"/>
+</div>
+<div class="w-14 h-4 bg-surface-container-highest rounded-t-full shadow-lg"></div>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-t-lg">
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1.5 shadow-[0_4px_0_rgba(88,0,47,1)] active:scale-95 translate-y-0.5 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span><span class="font-label-sm text-label-sm">Ana Sayfa</span></button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined">leaderboard</span><span class="font-label-sm text-label-sm">Sıralama</span></button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined">shopping_bag</span><span class="font-label-sm text-label-sm">Mağaza</span></button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-variant/50 transition-colors">
+<span class="material-symbols-outlined">person</span><span class="font-label-sm text-label-sm">Profil</span></button>
+</nav>
+<script>
+        let timeLeft = 8;
+        const totalTime = 8;
+        const timerCircle = document.getElementById('timer-circle');
+        const timerText = document.getElementById('timer-text');
+        const dashArray = 213.6;
+        function updateTimer() {
+            if (timeLeft <= 0) { clearInterval(interval); return; }
+            timeLeft -= 0.1;
+            const offset = dashArray - (timeLeft / totalTime) * dashArray;
+            timerCircle.style.strokeDashoffset = offset;
+            timerText.innerText = Math.ceil(timeLeft);
+            if (timeLeft < 3) {
+                timerCircle.style.stroke = "#ff479c";
+                timerText.classList.remove('text-tertiary');
+                timerText.classList.add('text-primary');
+            }
+        }
+        const interval = setInterval(updateTimer, 100);
+    </script>
+</body></html>

@@ -31,8 +31,9 @@ class TestGetProfile:
         data = response.json()
         assert data["username"] == "profile1"
         assert data["email"] == "profile1@example.com"
-        assert data["coins"] == 0
-        assert data["gems"] == 0
+        # Yeni kullanıcı başlangıç altını (model default 1000).
+        assert data["coins"] == 1000
+        assert "gems" not in data
 
     @pytest.mark.asyncio
     async def test_get_profile_without_auth(self, client: AsyncClient):
@@ -119,15 +120,16 @@ class TestUpdateProfile:
 
     @pytest.mark.asyncio
     async def test_update_avatar(self, client: AsyncClient):
-        """Update avatar to valid ID succeeds."""
+        """Update avatar to a valid FREE character succeeds (ownership gate)."""
         token, _ = await register_and_get_token(client, "avatar1")
+        # 'alien' ücretsiz başlangıç karakteri; sahiplik kapısından geçer.
         response = await client.patch(
             "/api/users/me",
             headers={"Authorization": f"Bearer {token}"},
-            json={"avatar_id": "char_ninja"},
+            json={"avatar_id": "alien"},
         )
         assert response.status_code == 200
-        assert response.json()["avatar_id"] == "char_ninja"
+        assert response.json()["avatar_id"] == "alien"
 
     @pytest.mark.asyncio
     async def test_update_invalid_avatar(self, client: AsyncClient):

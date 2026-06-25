@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bil ya da Düş - Başarılı Satın Alma</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#26171c", "on-tertiary": "#00382e", "on-primary-container": "#58002f",
+                    "error": "#ffb4ab", "inverse-on-surface": "#3d2c31", "primary-fixed-dim": "#ffb0cb",
+                    "on-tertiary-fixed": "#00201a", "on-primary": "#640036", "on-primary-fixed-variant": "#8d004f",
+                    "error-container": "#93000a", "on-secondary-container": "#d2bbff", "on-error-container": "#ffdad6",
+                    "outline": "#a88892", "surface-container-high": "#36252b", "tertiary-fixed": "#51fcda",
+                    "secondary": "#d2bbff", "background": "#1d0f14", "on-tertiary-container": "#003027",
+                    "surface-container-lowest": "#180a0f", "on-tertiary-fixed-variant": "#005143", "inverse-primary": "#b80068",
+                    "on-primary-fixed": "#3e001f", "primary-container": "#ff479c", "tertiary-fixed-dim": "#1ddfbe",
+                    "tertiary": "#1ddfbe", "secondary-fixed-dim": "#d2bbff", "on-surface": "#f7dce3",
+                    "on-secondary-fixed-variant": "#5900c6", "primary-fixed": "#ffd9e3", "tertiary-container": "#00a38a",
+                    "secondary-container": "#6800e4", "on-secondary-fixed": "#25005a", "surface-variant": "#413035",
+                    "surface-container": "#2b1b20", "surface-tint": "#ffb0cb", "surface-dim": "#1d0f14",
+                    "secondary-fixed": "#eaddff", "surface": "#1d0f14", "outline-variant": "#594048",
+                    "inverse-surface": "#f7dce3", "primary": "#ffb0cb", "on-surface-variant": "#e1bdc7",
+                    "on-error": "#690005", "on-background": "#f7dce3", "surface-container-highest": "#413035",
+                    "on-secondary": "#3e008e", "surface-bright": "#46343a"
+            },
+            "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+            "spacing": { "element-gap": "12px", "base": "8px", "section-margin": "32px", "container-padding": "20px" },
+            "fontFamily": {
+                    "title-md": ["Quicksand"], "label-sm": ["Quicksand"], "headline-lg": ["Quicksand"],
+                    "display-xl": ["Quicksand"], "headline-lg-mobile": ["Quicksand"], "body-md": ["Quicksand"]
+            },
+            "fontSize": {
+                    "title-md": ["20px", {"lineHeight": "24px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "display-xl": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "22px", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Quicksand', sans-serif; background-color: #1d0f14; overflow: hidden; margin: 0; padding: 0; }
+        .jelly-bounce { animation: jelly 0.6s ease-in-out infinite alternate; }
+        @keyframes jelly { 0% { transform: scale(1, 1); } 30% { transform: scale(1.1, 0.9); } 60% { transform: scale(0.9, 1.1); } 100% { transform: scale(1.05, 0.95); } }
+        .chunky-button-shadow { box-shadow: 0 4px 0 rgba(88, 0, 47, 1); }
+        .chunky-button-shadow:active { transform: translateY(4px); box-shadow: 0 0px 0 rgba(88, 0, 47, 1); }
+        .confetti { position: absolute; width: 8px; height: 8px; pointer-events: none; z-index: 10; }
+        .glow-aura { filter: blur(40px); background: radial-gradient(circle, rgba(255, 210, 63, 0.6) 0%, rgba(255, 210, 63, 0) 70%); }
+        .glass-card { background: rgba(65, 48, 53, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .ray { position: absolute; top: 50%; left: 50%; width: 200%; height: 40px; background: linear-gradient(90deg, transparent, rgba(255, 210, 63, 0.2), transparent); transform-origin: left center; animation: rotate-rays 10s linear infinite; }
+        @keyframes rotate-rays { from { transform: rotate(0deg) translate(-50%, -50%); } to { transform: rotate(360deg) translate(-50%, -50%); } }
+    </style>
+<style> body { min-height: max(884px, 100dvh); } </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col items-center justify-center p-container-padding relative overflow-hidden">
+<div class="fixed inset-0 z-0"></div>
+<div class="absolute inset-0 pointer-events-none z-20" id="confetti-wrapper"></div>
+<div class="relative z-10 w-full max-w-sm flex flex-col items-center text-center">
+<div class="relative w-64 h-64 mb-10 flex items-center justify-center">
+<div class="absolute inset-0 overflow-visible">
+<div class="ray" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
+<div class="ray" style="transform: rotate(45deg) translate(-50%, -50%);"></div>
+<div class="ray" style="transform: rotate(90deg) translate(-50%, -50%);"></div>
+<div class="ray" style="transform: rotate(135deg) translate(-50%, -50%);"></div>
+<div class="ray" style="transform: rotate(180deg) translate(-50%, -50%);"></div>
+<div class="ray" style="transform: rotate(225deg) translate(-50%, -50%);"></div>
+<div class="ray" style="transform: rotate(270deg) translate(-50%, -50%);"></div>
+<div class="ray" style="transform: rotate(315deg) translate(-50%, -50%);"></div>
+</div>
+<div class="glow-aura absolute inset-0 rounded-full scale-125"></div>
+<div class="relative z-10 glass-card p-6 rounded-lg jelly-bounce shadow-2xl border-2 border-tertiary">
+<img class="w-40 h-40 object-contain rounded-DEFAULT" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVVPLl7MsycMHA6XWAIUzywX1bPs5VdYkeR0k-vWlAtb8Su-2iC_zt1xSsFEslowNFbWqQI30ACQ0QNBbxMFVDsWPoO7j3TzGPr21XijOokt-D50GHQogOSo8eSazeesK_a2hEgUdlXXq0ehbtXx_pL7j0eecfHNNz5xjydhqugpUugXC8hkOi8tn6y9QwZJQNfyskjMdOcKZK7AX14qNGRnRQ00LXjSWrfirV_clSNcguYhn86i9KMjjAGBEWaFuqtSXWdRtwNw"/>
+<div class="absolute -top-4 -right-4 bg-tertiary text-on-tertiary px-3 py-1 rounded-full font-label-sm text-label-sm shadow-lg">YENİ!</div>
+</div>
+</div>
+<h1 class="font-display-xl text-display-xl text-primary mb-2 drop-shadow-[0_4px_0_rgba(100,0,54,1)]">TEBRİKLER!</h1>
+<p class="font-title-md text-title-md text-on-surface-variant mb-12 px-4 leading-tight">Yeni ikonların koleksiyonuna eklendi!</p>
+<div class="w-full flex flex-col gap-element-gap items-center">
+<button class="w-full bg-primary-container text-on-primary-container font-headline-lg-mobile text-headline-lg-mobile py-5 rounded-lg chunky-button-shadow transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>HEMEN KULLAN</button>
+<button class="mt-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest hover:text-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>MAĞAZAYA DÖN</button>
+</div>
+</div>
+<div class="absolute top-20 left-10 w-4 h-4 rounded-full bg-tertiary opacity-30 blur-sm"></div>
+<div class="absolute bottom-40 right-10 w-6 h-6 rounded-full bg-secondary opacity-20 blur-sm"></div>
+<div class="absolute top-1/2 left-5 w-3 h-3 rotate-45 bg-primary opacity-25"></div>
+<script>
+        function createConfetti() {
+            const container = document.getElementById('confetti-wrapper');
+            const colors = ['#ffb0cb', '#d2bbff', '#1ddfbe', '#FFD23F'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                const size = Math.random() * 10 + 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confetti.style.backgroundColor = color;
+                confetti.style.borderRadius = i % 2 === 0 ? '50%' : '2px';
+                confetti.style.left = '50%';
+                confetti.style.top = '50%';
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 15 + 5;
+                const tx = Math.cos(angle) * velocity * 20;
+                const ty = Math.sin(angle) * velocity * 20;
+                container.appendChild(confetti);
+                const animation = confetti.animate([
+                    { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], { duration: 1000 + Math.random() * 2000, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)', fill: 'forwards' });
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+        window.addEventListener('DOMContentLoaded', () => { setTimeout(createConfetti, 300); setInterval(createConfetti, 4000); });
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('touchstart', () => { btn.style.transform = 'scale(0.95)'; });
+            btn.addEventListener('touchend', () => { btn.style.transform = 'scale(1)'; });
+        });
+    </script>
+</body></html>

@@ -243,7 +243,7 @@ class TestPasswordReset:
 
     @pytest.mark.asyncio
     async def test_password_reset_with_existing_email(self, client: AsyncClient):
-        """Password reset for existing email returns token in dev mode."""
+        """Password reset for existing email always returns 200 (email existence not leaked)."""
         await client.post("/api/auth/register", json={
             "username": "resetuser",
             "password": "oldpass123",
@@ -253,6 +253,5 @@ class TestPasswordReset:
             "email": "reset@example.com",
         })
         assert response.status_code == 200
-        # In debug mode, token is returned in message
         data = response.json()
-        assert "DEV TOKEN" in data["message"]
+        assert "message" in data

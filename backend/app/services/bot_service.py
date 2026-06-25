@@ -10,7 +10,6 @@ Bot behavior from CLAUDE.md Section 2.2:
 """
 
 import random
-from itertools import product
 
 # --- Turkish Name Components ---
 _FIRST_NAMES = [
@@ -36,26 +35,64 @@ _LAST_PARTS = [
 _SEPARATORS = [".", "_", ""]
 _SUFFIXES = ["", "x", "q", "v", "123", "007", "tr", "gg", "pro"]
 
+# Gerçekçi kullanıcı adı stillerini çeşitlendirmek için ek bileşenler.
+# Hedef: "ayse_34", "mehmet61", "gamer_efe", "zeynep.k" gibi karışık stiller.
+_NUM_TAILS = [
+    "34", "06", "61", "35", "07", "16", "01", "55", "99", "77",
+    "88", "21", "33", "53", "42", "27", "10", "23", "44", "67",
+]
+_GAMER_PREFIXES = ["gamer", "pro", "lord", "king", "mr", "the", "real", "xx"]
+_INITIAL_SUFFIXES = ["k", "y", "d", "s", "g", "m", "c", "b", "t", "a"]
+
 # Pre-generate 500+ names
 _ALL_BOT_NAMES: list[str] = []
 
 
 def _generate_name_pool() -> list[str]:
-    """Generate a pool of 500+ realistic Turkish usernames."""
+    """Generate a large pool of realistic, mixed-style Turkish usernames.
+
+    Stiller karışık tutulur ki botlar gerçek oyuncudan ayırt edilemesin:
+      - first+last       -> "mehmetkaya", "ayse.snr"
+      - first+number     -> "mehmet61", "ayse34"
+      - first_number     -> "ayse_34", "efe_07"
+      - prefix_first     -> "gamer_efe", "proburak"
+      - first.initial    -> "zeynep.k", "deniz.y"
+      - first+suffix     -> "efepro", "canqq"
+    """
     names = set()
 
+    # 1) first + last (orijinal stil, ayraçlı/ayraçsız)
     for first in _FIRST_NAMES:
         for last in _LAST_PARTS:
             for sep in _SEPARATORS:
                 name = f"{first}{sep}{last}"
                 if 5 <= len(name) <= 15:
                     names.add(name)
-                if len(names) >= 600:
-                    break
-            if len(names) >= 600:
-                break
 
-    # Add some extra patterns
+    # 2) first + sayı (ayraçlı ve ayraçsız): "mehmet61", "ayse_34"
+    for first in _FIRST_NAMES:
+        for num in _NUM_TAILS:
+            for sep in ("", "_", "."):
+                name = f"{first}{sep}{num}"
+                if 4 <= len(name) <= 15:
+                    names.add(name)
+
+    # 3) gamer/pro prefix + first: "gamer_efe", "proburak", "xx_deniz"
+    for prefix in _GAMER_PREFIXES:
+        for first in _FIRST_NAMES:
+            for sep in ("_", ""):
+                name = f"{prefix}{sep}{first}"
+                if 5 <= len(name) <= 15:
+                    names.add(name)
+
+    # 4) first . baş harf: "zeynep.k", "deniz.y"
+    for first in _FIRST_NAMES:
+        for ini in _INITIAL_SUFFIXES:
+            name = f"{first}.{ini}"
+            if 4 <= len(name) <= 15:
+                names.add(name)
+
+    # 5) first + serbest suffix: "efepro", "canqq", "selin007"
     for first in _FIRST_NAMES:
         for suffix in _SUFFIXES:
             name = f"{first}{suffix}"
@@ -110,18 +147,54 @@ def should_bot_answer_correctly(difficulty: str, round_number: int) -> bool:
     return random.random() < adjusted_rate
 
 
-def generate_bot_answer_time(difficulty: str = "medium") -> float:
-    """Generate a realistic answer time for a bot (1-7 seconds).
+def generate_bot_answer_time(
+    difficulty: str = "medium",
+    time_limit: float | None = None,
+) -> float:
+    """Bir bot için doğal dağılımlı cevap gecikmesi (saniye) üret.
 
-    Harder bots tend to answer slightly faster.
+    His için kritik: botlar sabit/aniden cevaplamasın. Gecikme, turun cevap
+    penceresi içinde (yaklaşık 1.5 - (süre-1) sn) DOĞAL bir dağılımla seçilir;
+    bazıları erken, bazıları son ana yakın cevaplar. Zorluk yalnızca eğilimi
+    kaydırır (zor botlar biraz daha hızlı), adaleti DEĞİŞTİRMEZ — bu sadece
+    görsel/his amaçlıdır, skor/eleme zamanlamadan etkilenmez.
+
+    time_limit verilirse pencere ona göre ölçeklenir; verilmezse eski 1-7 sn
+    davranışına yakın güvenli aralık kullanılır.
     """
-    speed_ranges = {
-        "easy": (2.5, 6.5),
-        "medium": (1.5, 5.0),
-        "hard": (0.8, 3.5),
-    }
-    min_time, max_time = speed_ranges.get(difficulty, (1.5, 5.0))
-    return round(random.uniform(min_time, max_time), 1)
+    if time_limit is None:
+        speed_ranges = {
+            "easy": (2.5, 6.5),
+            "medium": (1.5, 5.0),
+            "hard": (0.8, 3.5),
+        }
+        min_time, max_time = speed_ranges.get(difficulty, (1.5, 5.0))
+        return round(random.uniform(min_time, max_time), 1)
+
+    # Pencere: en erken ~1.5sn, en geç ~ (süre - 1.0)sn.
+    earliest = min(1.5, max(0.3, time_limit * 0.2))
+    latest = max(earliest + 0.5, time_limit - 1.0)
+
+    # Zorluğa göre eğilim: zor botlar pencerenin erken yarısına yatkın,
+    # kolay botlar geç yarısına. Gauss ile doğal yayılım.
+    center_frac = {"easy": 0.6, "medium": 0.5, "hard": 0.4}.get(difficulty, 0.5)
+    center = earliest + (latest - earliest) * center_frac
+    spread = (latest - earliest) * 0.30
+    delay = random.gauss(center, spread)
+    delay = max(earliest, min(latest, delay))
+    return round(delay, 1)
+
+
+def should_bot_skip_answer(difficulty: str = "medium") -> bool:
+    """Bot bu turda HİÇ cevap vermesin mi? (his için "süre doldu / cevapsız").
+
+    Düşük olasılıkla botlar kararsız kalıp cevap vermez; bu, hep cevaplayan
+    "robot" hissini kırar. Zor botlar daha nadir pas geçer. Yalnızca his
+    amaçlıdır; pas geçen bot zaten yanlış/cevapsız sayılır, gerçek oyuncuya
+    avantaj/dezavantaj yaratmaz.
+    """
+    skip_rates = {"easy": 0.10, "medium": 0.06, "hard": 0.03}
+    return random.random() < skip_rates.get(difficulty, 0.06)
 
 
 def get_bot_pool_count() -> int:

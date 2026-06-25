@@ -1,0 +1,1367 @@
+[
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 1,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Eyfel Kulesi",
+      "Tokyo Kulesi",
+      "Pisa Kulesi",
+      "Big Ben"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Eiffel_Tower_Drone_4k-Qx_c1X3zfEc-313-251.webm/500px--Eiffel_Tower_Drone_4k-Qx_c1X3zfEc-313-251.webm.jpg",
+    "explanation": "Paris'in simgesi olan demir kafes kule, 1889'da yapildi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 1,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Galata Kulesi",
+      "Pisa Kulesi",
+      "Big Ben",
+      "Eyfel Kulesi"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Italy_-_Pisa_-_Leaning_Tower.jpg/500px-Italy_-_Pisa_-_Leaning_Tower.jpg",
+    "explanation": "Italya'daki egik catedral can kulesi, dunyaca unlu egimiyle taninir."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 1,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Anavatan Cagiriyor",
+      "Ozgurluk Heykeli",
+      "Kurtarici Isa Heykeli",
+      "Buyuk Buda"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Front_view_of_Statue_of_Liberty_%28cropped%29.jpg/500px-Front_view_of_Statue_of_Liberty_%28cropped%29.jpg",
+    "explanation": "New York limanindaki bakir heykel, ozgurlugun sembolu."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 1,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Badshahi Camii",
+      "Kizil Kale",
+      "Humayun Turbesi",
+      "Tac Mahal"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Taj_Mahal_N-UP-A28-a.jpg/500px-Taj_Mahal_N-UP-A28-a.jpg",
+    "explanation": "Hindistan'daki beyaz mermer turbe, ask aniti olarak yapildi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Saat Kulesi (Mekke)",
+      "Big Ben",
+      "Pisa Kulesi",
+      "Eyfel Kulesi"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Big_Ben.jpg",
+    "explanation": "Londra'daki unlu saat kulesi, Westminster Sarayi'nin parcasi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Kolezyum",
+      "Pantheon",
+      "Roma Forumu",
+      "Arena di Verona"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/500px-Colosseo_2020.jpg",
+    "explanation": "Roma'daki antik amfitiyatro, gladyator dovuslerine ev sahipligi yapti."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Hadrian Suru",
+      "Babil Surlari",
+      "Cin Seddi",
+      "Konstantinopolis Surlari"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/500px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg",
+    "explanation": "Cin'i koruyan binlerce kilometrelik antik savunma duvari."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Walt Disney Konser Salonu",
+      "Sidney Opera Binasi",
+      "Guggenheim Bilbao",
+      "Esplanade"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Sydney_Australia._%2821339175489%29.jpg/500px-Sydney_Australia._%2821339175489%29.jpg",
+    "explanation": "Avustralya'daki yelken bicimli catisi ile unlu opera binasi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 1,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Haydarpasa Garı",
+      "Beyazit Kulesi",
+      "Galata Kulesi",
+      "Kiz Kulesi"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Istanbul_K%C4%B1z_Kulesi_%2854511155871%29_%28cropped%29.jpg/500px-Istanbul_K%C4%B1z_Kulesi_%2854511155871%29_%28cropped%29.jpg",
+    "explanation": "Istanbul Bogazi'nda kucuk bir adacik uzerindeki tarihi kule."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 1,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Kiz Kulesi",
+      "Pisa Kulesi",
+      "Beyazit Kulesi",
+      "Galata Kulesi"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Istanbul_asv2020-02_img48_Galata_Tower.jpg/500px-Istanbul_asv2020-02_img48_Galata_Tower.jpg",
+    "explanation": "Istanbul'da Cenevizliler doneminden kalma silindirik tas kule."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 1,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Selimiye Camii",
+      "Ayasofya",
+      "Sultanahmet Camii",
+      "Suleymaniye Camii"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Hagia_Sophia_%28228968325%29.jpeg/500px-Hagia_Sophia_%28228968325%29.jpeg",
+    "explanation": "Istanbul'da Bizans doneminden kalma, devasa kubbeli yapi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Suleymaniye Camii",
+      "Sultanahmet Camii",
+      "Sehzade Camii",
+      "Ayasofya"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Istanbul_%2834223582516%29_%28cropped%29.jpg/500px-Istanbul_%2834223582516%29_%28cropped%29.jpg",
+    "explanation": "Istanbul'daki alti minareli, mavi cinileriyle unlu cami."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 3,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Suleymaniye Camii",
+      "Sultanahmet Camii",
+      "Fatih Camii",
+      "Selimiye Camii"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/S%C3%BCleymaniyeMosqueIstanbul_%28cropped%29.jpg/500px-S%C3%BCleymaniyeMosqueIstanbul_%28cropped%29.jpg",
+    "explanation": "Mimar Sinan'in Istanbul'da yaptigi gorkemli Osmanli camii."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 1,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Kurtarici Isa Heykeli",
+      "Anavatan Cagiriyor",
+      "Ozgurluk Heykeli",
+      "Buyuk Buda"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Christ_the_Redeemer_-_Cristo_Redentor.jpg/500px-Christ_the_Redeemer_-_Cristo_Redentor.jpg",
+    "explanation": "Rio de Janeiro'da dagin tepesindeki kollarini acmis devasa Isa heykeli."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Tikal",
+      "Teotihuacan",
+      "Machu Picchu",
+      "Chichen Itza"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Machu_Picchu%2C_Peru_%282018%29.jpg/500px-Machu_Picchu%2C_Peru_%282018%29.jpg",
+    "explanation": "Peru And Daglari'nda yer alan antik Inka sehri."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Mezopotamya Ziguratlari",
+      "Saqqara Piramidi",
+      "Chichen Itza",
+      "Gize Piramitleri"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Giza-pyramids.JPG/500px-Giza-pyramids.JPG",
+    "explanation": "Misir'da firavunlar icin yapilan antik buyuk piramitler."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Ebu Simbel",
+      "Karnak Tapinagi",
+      "Buyuk Sfenks",
+      "Memnon Heykelleri"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Sphinx_with_the_third_pyramid.jpg/500px-Sphinx_with_the_third_pyramid.jpg",
+    "explanation": "Misir Gize'de aslan govdeli, insan basli devasa heykel."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Baalbek",
+      "Persepolis",
+      "Petra",
+      "Palmira"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Petra_Jordan_BW_21.JPG/500px-Petra_Jordan_BW_21.JPG",
+    "explanation": "Urdun'de kayalara oyulmus antik Nebati sehri ve Hazine tapinagi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 3,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Prambanan",
+      "Borobudur",
+      "Bayon",
+      "Angkor Wat"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Angkor_Wat.jpg/500px-Angkor_Wat.jpg",
+    "explanation": "Kamboccya'daki dunyanin en buyuk dini yapilarindan tapinak kompleksi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Brandenburg Kapisi",
+      "Tito Kapisi",
+      "Hindistan Kapisi",
+      "Zafer Taki (Paris)"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Berlin_-_0266_-_16052015_-_Brandenburger_Tor.jpg/500px-Berlin_-_0266_-_16052015_-_Brandenburger_Tor.jpg",
+    "explanation": "Berlin'in simgesi olan sutunlu neoklasik tören kapisi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Hindistan Kapisi",
+      "Brandenburg Kapisi",
+      "Zafer Taki",
+      "Konstantin Taki"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Arc_de_Triomphe%2C_Paris_21_October_2010.jpg/500px-Arc_de_Triomphe%2C_Paris_21_October_2010.jpg",
+    "explanation": "Paris Champs-Elysees'de yer alan unlu zafer aniti."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Westminster Manastiri",
+      "Notre-Dame Katedrali",
+      "Milano Katedrali",
+      "Köln Katedrali"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Notre-Dame_de_Paris%2C_4_October_2017.jpg/500px-Notre-Dame_de_Paris%2C_4_October_2017.jpg",
+    "explanation": "Paris'te Gotik mimarinin basyapiti olan unlu katedral."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Aya Sofya",
+      "Aziz Pavlus Katedrali",
+      "Milano Katedrali",
+      "Aziz Petrus Bazilikasi"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg/500px-Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg",
+    "explanation": "Vatikan'daki en buyuk Katolik kilisesi ve buyuk kubbesi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Sevilla Katedrali",
+      "Köln Katedrali",
+      "Milano Katedrali",
+      "Sagrada Familia"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/%CE%A3%CE%B1%CE%B3%CF%81%CE%AC%CE%B4%CE%B1_%CE%A6%CE%B1%CE%BC%CE%AF%CE%BB%CE%B9%CE%B1_2941.jpg/500px-%CE%A3%CE%B1%CE%B3%CF%81%CE%AC%CE%B4%CE%B1_%CE%A6%CE%B1%CE%BC%CE%AF%CE%BB%CE%B9%CE%B1_2941.jpg",
+    "explanation": "Barcelona'da Gaudi'nin tasarladigi hala tamamlanmamis bazilika."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 3,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Aziz Vasil Katedrali",
+      "Köln Katedrali",
+      "Hagia Sophia",
+      "Kurtarici Isa Katedrali"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Saint_Basil%27s_Cathedral_in_Moscow.jpg/500px-Saint_Basil%27s_Cathedral_in_Moscow.jpg",
+    "explanation": "Moskova Kizil Meydan'daki renkli sogan kubbeli kilise."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Edinburgh Kalesi",
+      "Kremlin",
+      "Praga Kalesi",
+      "Kizil Kale"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Moscow_Kremlin_and_Bolshoy_Kamenny_Bridge_late_evening_01.JPG/500px-Moscow_Kremlin_and_Bolshoy_Kamenny_Bridge_late_evening_01.JPG",
+    "explanation": "Moskova'da Rus devletinin merkezindeki tarihi kale kompleksi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Schönbrunn Sarayi",
+      "Topkapi Sarayi",
+      "Buckingham Sarayi",
+      "Versay Sarayi"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Buckingham_Palace%2C_London_-_April_2009.jpg/500px-Buckingham_Palace%2C_London_-_April_2009.jpg",
+    "explanation": "Londra'da Birlesik Kralligin hukumdar konutu olan saray."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Versay Sarayi",
+      "Topkapi Sarayi",
+      "Buckingham Sarayi",
+      "Schönbrunn Sarayi"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Vue_a%C3%A9rienne_du_domaine_de_Versailles_par_ToucanWings_-_Creative_Commons_By_Sa_3.0_-_083.jpg/500px-Vue_a%C3%A9rienne_du_domaine_de_Versailles_par_ToucanWings_-_Creative_Commons_By_Sa_3.0_-_083.jpg",
+    "explanation": "Fransa'da Kral 14. Louis'nin gorkemli barok sarayi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Beylerbeyi Sarayi",
+      "Dolmabahce Sarayi",
+      "Versay Sarayi",
+      "Topkapi Sarayi"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Topkap%C4%B1_-_01.jpg/500px-Topkap%C4%B1_-_01.jpg",
+    "explanation": "Istanbul'da yuzyillarca Osmanli padisahlarinin yasadigi saray."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Beylerbeyi Sarayi",
+      "Topkapi Sarayi",
+      "Dolmabahce Sarayi",
+      "Versay Sarayi"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Dolmabahce_Istanbul_Turkey.jpg/500px-Dolmabahce_Istanbul_Turkey.jpg",
+    "explanation": "Istanbul Bogazi kiyisindaki gorkemli Osmanli sarayi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 3,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Hohenzollern Kalesi",
+      "Neuschwanstein Satosu",
+      "Chambord Satosu",
+      "Edinburgh Kalesi"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Schloss_Neuschwanstein_2013.jpg/500px-Schloss_Neuschwanstein_2013.jpg",
+    "explanation": "Almanya Bavyera'da masal satosu gorunumlu unlu sato."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Shanghai Kulesi",
+      "Taipei 101",
+      "Petronas Kuleleri",
+      "Burj Khalifa"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Burj_Khalifa_%28worlds_tallest_building%29_and_the_Dubai_skyline_%2825781049892%29.jpg/500px-Burj_Khalifa_%28worlds_tallest_building%29_and_the_Dubai_skyline_%2825781049892%29.jpg",
+    "explanation": "Dubai'de bulunan dunyanin en yuksek gokdeleni."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Petronas Kuleleri",
+      "Marina Bay Sands",
+      "Burj Khalifa",
+      "Taipei 101"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Petronas_Panorama_II.jpg/500px-Petronas_Panorama_II.jpg",
+    "explanation": "Kuala Lumpur'da koprulu baglantili ikiz gokdelenler."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 3,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Marina Bay Sands",
+      "Taipei 101",
+      "Burj Al Arab",
+      "Petronas Kuleleri"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Marina_Bay_Sands_in_the_evening_-_20101120.jpg/500px-Marina_Bay_Sands_in_the_evening_-_20101120.jpg",
+    "explanation": "Singapur'da uc kule uzerinde gemi bicimli catili otel."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Atlantis The Palm",
+      "Burj Khalifa",
+      "Marina Bay Sands",
+      "Burj Al Arab"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Burj_Al_Arab_and_the_beach_%28Pexels_823696%29.jpg/500px-Burj_Al_Arab_and_the_beach_%28Pexels_823696%29.jpg",
+    "explanation": "Dubai'de yelken bicimli lüks otel."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Brooklyn Koprusu",
+      "15 Temmuz Sehitler Koprusu",
+      "Tower Bridge",
+      "Golden Gate Koprusu"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Golden_Gate_Bridge_as_seen_from_Battery_East.jpg/500px-Golden_Gate_Bridge_as_seen_from_Battery_East.jpg",
+    "explanation": "San Francisco'da kirmizi renkli unlu asma kopru."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Tower Bridge",
+      "Brooklyn Koprusu",
+      "Londra Koprusu",
+      "Golden Gate Koprusu"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Tower_Bridge_at_Dawn.jpg/500px-Tower_Bridge_at_Dawn.jpg",
+    "explanation": "Londra'da Thames Nehri uzerindeki acilir bascule koprusu."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Brooklyn Koprusu",
+      "Golden Gate Koprusu",
+      "Manhattan Koprusu",
+      "Tower Bridge"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Brooklyn_Bridge_Manhattan.jpg/500px-Brooklyn_Bridge_Manhattan.jpg",
+    "explanation": "New York'ta Doğu Nehri uzerindeki tarihi asma kopru."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 3,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Tokyo Kulesi",
+      "Kanton Kulesi",
+      "Tokyo Skytree",
+      "Eyfel Kulesi"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Tokyo_Tower_2023.jpg/500px-Tokyo_Tower_2023.jpg",
+    "explanation": "Tokyo'da Eyfel'e benzeyen kirmizi-beyaz haberlesme kulesi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 3,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Space Needle",
+      "Tokyo Skytree",
+      "Ostankino Kulesi",
+      "CN Kulesi"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Rogers_Center-restitched.jpg/500px-Rogers_Center-restitched.jpg",
+    "explanation": "Toronto'da Kanada'nin simgesi olan yuksek haberlesme kulesi."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 3,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "CN Kulesi",
+      "Stratosphere Kulesi",
+      "Space Needle",
+      "Tokyo Kulesi"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Space_Needle_2011-07-04.jpg/500px-Space_Needle_2011-07-04.jpg",
+    "explanation": "Seattle'da ucan daire bicimli gozetleme platformlu kule."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 3,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Lincoln Aniti",
+      "Tac Mahal",
+      "Anitkabir",
+      "Lenin Mozolesi"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Ataturk%27s_Mausoleum_%286225341313%29.jpg/500px-Ataturk%27s_Mausoleum_%286225341313%29.jpg",
+    "explanation": "Ankara'da Mustafa Kemal Atatürk'un anit mezari."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 3,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Stonehenge",
+      "Carnac Taslari",
+      "Göbeklitepe",
+      "Avebury"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Stonehenge2007_07_30.jpg/500px-Stonehenge2007_07_30.jpg",
+    "explanation": "Ingiltere'de dev tas bloklardan olusan tarih oncesi anit."
+  },
+  {
+    "type": "gorsel",
+    "category": "yapilar_anitlar",
+    "difficulty": 2,
+    "content": "Bu hangi ünlü yapıdır?",
+    "options": [
+      "Chrysler Binasi",
+      "Tek Dünya Ticaret Merkezi",
+      "Willis Kulesi",
+      "Empire State Binasi"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/500px-Empire_State_Building_%28aerial_view%29.jpg",
+    "explanation": "New York'ta art deco tarzindaki unlu gokdelen."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 1,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Son Akşam Yemeği",
+      "Mona Lisa",
+      "İnci Küpeli Kız",
+      "Çığlık"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/500px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+    "explanation": "Leonardo da Vinci'nin gizemli gülümsemesiyle ünlü, dünyanın en tanınmış tablosu. Louvre Müzesi'nde sergileniyor."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 1,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Yıldızlı Gece",
+      "Ayçiçekleri",
+      "Su Zambakları",
+      "Çığlık"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/500px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+    "explanation": "Vincent van Gogh'un girdaplı gökyüzüyle ünlü tablosu. 1889'da yapılmış, New York MoMA'da."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 2,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Yıldızlı Gece",
+      "Öpücük",
+      "Guernica",
+      "Çığlık"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/500px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
+    "explanation": "Edvard Munch'un dehşet ifadesiyle ünlü dışavurumcu tablosu. Modern kaygının simgesi."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 2,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Mona Lisa",
+      "Gece Devriyesi",
+      "İnci Küpeli Kız",
+      "Süt Dökücü"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Girl_with_a_Pearl_Earring.jpg/500px-Girl_with_a_Pearl_Earring.jpg",
+    "explanation": "Johannes Vermeer'in 'Kuzeyin Mona Lisa'sı' diye anılan tablosu. Mavi-sarı sarık ve inci küpeyle ünlü."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 2,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Pietà",
+      "David Heykeli",
+      "Düşünen Adam",
+      "Venüs de Milo"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/%27David%27_by_Michelangelo_Fir_JBU004.jpg/500px-%27David%27_by_Michelangelo_Fir_JBU004.jpg",
+    "explanation": "Michelangelo'nun mermerden yaptığı 5 metrelik İncil kahramanı David heykeli. Floransa'da."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 3,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Mona Lisa",
+      "Son Akşam Yemeği",
+      "Atina Okulu",
+      "Adem'in Yaratılışı"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Leonardo_da_Vinci_%281452-1519%29_-_The_Last_Supper_%281495-1498%29.jpg/500px-Leonardo_da_Vinci_%281452-1519%29_-_The_Last_Supper_%281495-1498%29.jpg",
+    "explanation": "Leonardo da Vinci'nin İsa ve havarilerini gösteren duvar resmi. Milano'da bir manastırda."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 3,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Son Akşam Yemeği",
+      "Atina Okulu",
+      "Son Yargı",
+      "Adem'in Yaratılışı"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg/500px-Michelangelo_-_Creation_of_Adam_%28cropped%29.jpg",
+    "explanation": "Michelangelo'nun Sistine Şapeli tavanındaki, Tanrı ile Adem'in parmaklarının değdiği ünlü fresk."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 2,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "İnci Küpeli Kız",
+      "Su Zambakları",
+      "Öpücük",
+      "Çığlık"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg/500px-The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg",
+    "explanation": "Gustav Klimt'in altın varaklarla bezeli, sarılan çifti gösteren ünlü tablosu."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 3,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "İnci Küpeli Kız",
+      "Son Akşam Yemeği",
+      "Gece Devriyesi",
+      "Anatomi Dersi"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/The_Nightwatch_by_Rembrandt_-_Rijksmuseum.jpg/500px-The_Nightwatch_by_Rembrandt_-_Rijksmuseum.jpg",
+    "explanation": "Rembrandt'ın ışık-gölge ustalığıyla bir milis grubunu resmettiği dev tablosu. Amsterdam'da."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 3,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Bahar (Botticelli)",
+      "Atina Okulu",
+      "Mona Lisa",
+      "Venüs'ün Doğuşu"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/500px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg",
+    "explanation": "Sandro Botticelli'nin deniz kabuğu üzerinde doğan Venüs'ü gösteren Rönesans başyapıtı."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 2,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "David Heykeli",
+      "Semadirek Nikesi",
+      "Venüs de Milo",
+      "Düşünen Adam"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Front_views_of_the_Venus_de_Milo.jpg/500px-Front_views_of_the_Venus_de_Milo.jpg",
+    "explanation": "Kolları kırık antik Yunan mermer heykeli. Aşk tanrıçası Afrodit'i temsil eder, Louvre'da."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 3,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Yıldızlı Gece",
+      "Amerikan Gotiği",
+      "Çığlık",
+      "Whistler'ın Annesi"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Grant_Wood_-_American_Gothic_-_Google_Art_Project.jpg/500px-Grant_Wood_-_American_Gothic_-_Google_Art_Project.jpg",
+    "explanation": "Grant Wood'un dirgen tutan çiftçi ve kızını gösteren ikonik Amerikan tablosu."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 3,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Su Zambakları",
+      "Öpücük",
+      "Yıldızlı Gece",
+      "Ayçiçekleri"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Reflections_of_Clouds_on_the_Water-Lily_Pond.jpg/500px-Reflections_of_Clouds_on_the_Water-Lily_Pond.jpg",
+    "explanation": "Claude Monet'nin Giverny'deki bahçesindeki nilüfer havuzunu konu alan empresyonist seri."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 4,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Venüs'ün Doğuşu",
+      "Adem'in Yaratılışı",
+      "Son Akşam Yemeği",
+      "Atina Okulu"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg/500px-%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg",
+    "explanation": "Raffaello'nun Platon, Aristoteles ve antik filozofları gösteren Vatikan freski."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 4,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Gece Devriyesi",
+      "Las Meninas",
+      "Mona Lisa",
+      "Guernica"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Las_Meninas%2C_by_Diego_Vel%C3%A1zquez%2C_from_Prado_in_Google_Earth.jpg/500px-Las_Meninas%2C_by_Diego_Vel%C3%A1zquez%2C_from_Prado_in_Google_Earth.jpg",
+    "explanation": "Diego Velázquez'in İspanya sarayında prensesi ve ressamı kendisini gösteren başyapıtı."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 4,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Semadirek Nikesi",
+      "David Heykeli",
+      "Venüs de Milo",
+      "Laokoon"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Victoire_de_Samothrace_-_Musee_du_Louvre_-_20190812.jpg/500px-Victoire_de_Samothrace_-_Musee_du_Louvre_-_20190812.jpg",
+    "explanation": "Kanatlı zafer tanrıçası Nike'yi gösteren başsız antik Yunan mermer heykeli. Louvre'da."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 3,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Marilyn Diptych",
+      "Guernica",
+      "Çığlık",
+      "Campbell Çorba Konserveleri"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Campbell%27s_Soup_Cans_by_Andy_Warhol.jpg/500px-Campbell%27s_Soup_Cans_by_Andy_Warhol.jpg",
+    "explanation": "Andy Warhol'un 32 çorba konservesini gösteren pop art başyapıtı."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 4,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Büyük Dalga",
+      "Çığlık",
+      "Yıldızlı Gece",
+      "Nilüferler"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Tsunami_by_hokusai_19th_century.jpg/500px-Tsunami_by_hokusai_19th_century.jpg",
+    "explanation": "Hokusai'nin dev bir dalga ve arka planda Fuji Dağı'nı gösteren ünlü Japon ahşap baskısı."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 4,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Whistler'ın Annesi",
+      "Mona Lisa",
+      "Amerikan Gotiği",
+      "İnci Küpeli Kız"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Whistlers_Mother_high_res.jpg/500px-Whistlers_Mother_high_res.jpg",
+    "explanation": "James Whistler'ın yandan oturan annesini gösteren gri tonlu ünlü portresi."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 5,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Belleğin Azmi",
+      "Avignonlu Kızlar",
+      "Çığlık",
+      "Guernica"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Les_Demoiselles_d%27Avignon.jpg/500px-Les_Demoiselles_d%27Avignon.jpg",
+    "explanation": "Pablo Picasso'nun kübizmin doğuşunu müjdeleyen, keskin açılı kadın figürlü tablosu."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 3,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Çığlık",
+      "Bir Pipo Değildir",
+      "İnsanın Oğlu",
+      "Belleğin Azmi"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/en/b/b9/MagrittePipe.jpg",
+    "explanation": "René Magritte'in 'Ceci n'est pas une pipe' yazılı pipo tablosu. Sürrealizmin simgesi."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 4,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Mona Lisa",
+      "David Heykeli",
+      "Vitruvius Adamı",
+      "Adem'in Yaratılışı"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Da_Vinci_Vitruve_Luc_Viatour.jpg/500px-Da_Vinci_Vitruve_Luc_Viatour.jpg",
+    "explanation": "Leonardo da Vinci'nin daire ve kare içinde insan vücut oranlarını gösteren ünlü çizimi."
+  },
+  {
+    "type": "gorsel",
+    "category": "Sanat Eseri",
+    "difficulty": 5,
+    "content": "Bu hangi sanat eseridir?",
+    "options": [
+      "Medusa'nın Salı",
+      "Guernica",
+      "Gece Devriyesi",
+      "Halka Yol Gösteren Özgürlük"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg/500px-JEAN_LOUIS_TH%C3%89ODORE_G%C3%89RICAULT_-_La_Balsa_de_la_Medusa_%28Museo_del_Louvre%2C_1818-19%29.jpg",
+    "explanation": "Théodore Géricault'nun bir gemi kazasından sağ kalanları gösteren dramatik romantik tablosu."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 1,
+    "content": "Burası neresidir?",
+    "options": [
+      "Salda Gölü",
+      "Antalya Düden Şelalesi",
+      "Pamukkale",
+      "Kapadokya"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Pamukkale_30.jpg/500px-Pamukkale_30.jpg",
+    "explanation": "Denizli'de bembeyaz traverten teraslarıyla tanınan doğa harikası."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 1,
+    "content": "Burası neresidir?",
+    "options": [
+      "Victoria Şelalesi",
+      "Angel Şelalesi",
+      "Niagara Şelalesi",
+      "Iguazu Şelalesi"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/3Falls_Niagara.jpg/500px-3Falls_Niagara.jpg",
+    "explanation": "ABD-Kanada sınırındaki dünyaca ünlü dev şelale."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 2,
+    "content": "Burası neresidir?",
+    "options": [
+      "Zion Kanyonu",
+      "Büyük Kanyon",
+      "Bryce Kanyonu",
+      "Antelope Kanyonu"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Canyon_River_Tree_%28165872763%29.jpeg/500px-Canyon_River_Tree_%28165872763%29.jpeg",
+    "explanation": "ABD Arizona'da Colorado Nehri'nin oyduğu devasa kanyon."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 2,
+    "content": "Burası neresidir?",
+    "options": [
+      "Girit",
+      "Mikonos",
+      "Rodos",
+      "Santorini"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Greece_location_map.svg/500px-Greece_location_map.svg.png",
+    "explanation": "Yunanistan'da beyaz evleri ve mavi kubbeleriyle ünlü ada."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 3,
+    "content": "Burası neresidir?",
+    "options": [
+      "Victoria Şelalesi",
+      "Iguazu Şelalesi",
+      "Angel Şelalesi",
+      "Niagara Şelalesi"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Victoriaf%C3%A4lle.jpg/500px-Victoriaf%C3%A4lle.jpg",
+    "explanation": "Zambiya-Zimbabve sınırındaki dünyanın en büyük şelalelerinden biri."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 2,
+    "content": "Burası neresidir?",
+    "options": [
+      "Mont Blanc",
+      "Eiger",
+      "Matterhorn",
+      "Jungfrau"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Monte_bianco.JPG/500px-Monte_bianco.JPG",
+    "explanation": "Alpler'in ve Batı Avrupa'nın en yüksek dağı."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 2,
+    "content": "Burası neresidir?",
+    "options": [
+      "Kilimanjaro",
+      "K2",
+      "Everest Dağı",
+      "Annapurna"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Everest_kalapatthar_crop.jpg/500px-Everest_kalapatthar_crop.jpg",
+    "explanation": "Dünyanın en yüksek dağı, Himalayalar'da yer alır."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 2,
+    "content": "Burası neresidir?",
+    "options": [
+      "Etna Yanardağı",
+      "Vezüv Yanardağı",
+      "Fuji Dağı",
+      "Kilimanjaro"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Fuji_Kawaguchi_357.JPG/500px-Fuji_Kawaguchi_357.JPG",
+    "explanation": "Japonya'nın simgesi olan karlı zirveli volkanik dağ."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 3,
+    "content": "Burası neresidir?",
+    "options": [
+      "Plitvice Gölleri",
+      "Como Gölü",
+      "Bled Gölü",
+      "Hallstatt Gölü"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/View_in_Plitvice_Lakes_National_Park.jpg/500px-View_in_Plitvice_Lakes_National_Park.jpg",
+    "explanation": "Hırvatistan'da turkuaz göller ve şelalelerle ünlü millî park."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 2,
+    "content": "Burası neresidir?",
+    "options": [
+      "Interlaken",
+      "Zermatt",
+      "Bled",
+      "Hallstatt"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Hallstatt_-_Zentrum_.JPG/500px-Hallstatt_-_Zentrum_.JPG",
+    "explanation": "Avusturya'da göl kenarındaki masalsı dağ kasabası."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 3,
+    "content": "Burası neresidir?",
+    "options": [
+      "Jasper Millî Parkı",
+      "Yellowstone",
+      "Yosemite",
+      "Banff Millî Parkı"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Moraine_Lake_17092005.jpg/500px-Moraine_Lake_17092005.jpg",
+    "explanation": "Kanada Rocky Dağları'nda turkuaz gölleriyle ünlü millî park."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 3,
+    "content": "Burası neresidir?",
+    "options": [
+      "Tuz Gölü",
+      "Atacama Çölü",
+      "Ölü Deniz",
+      "Salar de Uyuni"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Salar_Uyuni_au01.jpg/500px-Salar_Uyuni_au01.jpg",
+    "explanation": "Bolivya'daki dünyanın en büyük tuz düzlüğü, ayna etkisiyle ünlü."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 2,
+    "content": "Burası neresidir?",
+    "options": [
+      "Kızıldeniz resifi",
+      "Maldivler mercanları",
+      "Karayip resifleri",
+      "Büyük Set Resifi"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Blue_Linckia_Starfish.JPG/500px-Blue_Linckia_Starfish.JPG",
+    "explanation": "Avustralya açıklarındaki dünyanın en büyük mercan resifi."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 4,
+    "content": "Burası neresidir?",
+    "options": [
+      "Yangshuo",
+      "Zhangjiajie",
+      "Huangshan Dağı",
+      "Guilin"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/ZhangjiajieNP1.jpg/500px-ZhangjiajieNP1.jpg",
+    "explanation": "Çin'de Avatar filmine ilham veren sütun şeklindeki kayalıklar."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 3,
+    "content": "Burası neresidir?",
+    "options": [
+      "Grand Teton",
+      "Banff",
+      "Yellowstone",
+      "Yosemite"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Grand_Canyon_of_yellowstone.jpg/500px-Grand_Canyon_of_yellowstone.jpg",
+    "explanation": "ABD'de gayzerleri ve renkli sıcak su kaynaklarıyla ünlü ilk millî park."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 3,
+    "content": "Burası neresidir?",
+    "options": [
+      "Kaputaş Plajı",
+      "Ölüdeniz",
+      "Patara Plajı",
+      "Cleopatra Plajı"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Paragliding_view_oludeniz_-_panoramio_%282%29.jpg/500px-Paragliding_view_oludeniz_-_panoramio_%282%29.jpg",
+    "explanation": "Fethiye'de mavi lagünü ve yamaç paraşütüyle ünlü plaj."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 1,
+    "content": "Burası neresidir?",
+    "options": [
+      "İzmir Körfezi",
+      "Boğaziçi",
+      "Haliç",
+      "Çanakkale Boğazı"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Turkey_Istanbul_location_map.svg/500px-Turkey_Istanbul_location_map.svg.png",
+    "explanation": "İstanbul'da Avrupa ile Asya'yı ayıran ünlü su yolu."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 4,
+    "content": "Burası neresidir?",
+    "options": [
+      "Kjeragbolten",
+      "Preikestolen",
+      "Trolltunga",
+      "Geirangerfjord"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Trolltunga_2017.jpg/500px-Trolltunga_2017.jpg",
+    "explanation": "Norveç'te fiyort üzerinde uzanan dil şeklindeki kaya çıkıntısı."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 3,
+    "content": "Burası neresidir?",
+    "options": [
+      "Nærøyfjord",
+      "Sognefjord",
+      "Geirangerfjord",
+      "Lysefjord"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Geirangerfjord_.jpg/500px-Geirangerfjord_.jpg",
+    "explanation": "Norveç'in şelaleli dik yamaçlarıyla ünlü UNESCO fiyordu."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 2,
+    "content": "Burası neresidir?",
+    "options": [
+      "Maldivler",
+      "Bora Bora",
+      "Seyşeller",
+      "Bali"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Flag_of_Maldives.svg/500px-Flag_of_Maldives.svg.png",
+    "explanation": "Hint Okyanusu'nda turkuaz suları ve su üstü bungalovlarıyla ünlü adalar."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 3,
+    "content": "Burası neresidir?",
+    "options": [
+      "Maldivler",
+      "Bora Bora",
+      "Tahiti",
+      "Fiji"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Borapearl.jpg/500px-Borapearl.jpg",
+    "explanation": "Fransız Polinezyası'nda lagünüyle ünlü tropik ada."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 4,
+    "content": "Burası neresidir?",
+    "options": [
+      "Antelope Kanyonu",
+      "Büyük Kanyon",
+      "Zion Kanyonu",
+      "Bryce Kanyonu"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/USA_Antelope-Canyon.jpg/500px-USA_Antelope-Canyon.jpg",
+    "explanation": "ABD Arizona'da dalgalı kumtaşı duvarlarıyla ünlü dar kanyon."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 2,
+    "content": "Burası neresidir?",
+    "options": [
+      "Fuji Dağı",
+      "Everest Dağı",
+      "Mont Blanc",
+      "Kilimanjaro"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Mt._Kilimanjaro_12.2006.jpg/500px-Mt._Kilimanjaro_12.2006.jpg",
+    "explanation": "Tanzanya'da Afrika'nın en yüksek karlı zirvesi."
+  },
+  {
+    "type": "gorsel",
+    "category": "Doğal/Turistik Yer",
+    "difficulty": 3,
+    "content": "Burası neresidir?",
+    "options": [
+      "Beyaz Yarlar (Dover)",
+      "Cliffs of Moher",
+      "Giant's Causeway",
+      "Étretat Yarları"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Cliffs-Of-Moher-OBriens-From-South.JPG/500px-Cliffs-Of-Moher-OBriens-From-South.JPG",
+    "explanation": "İrlanda'da okyanusa bakan dik yamaçlı ünlü deniz uçurumları."
+  }
+]

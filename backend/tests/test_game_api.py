@@ -123,7 +123,8 @@ class TestLeaderboardEndpoints:
         response = await client.get("/api/leaderboard/daily")
         assert response.status_code == 200
         data = response.json()
-        assert data["period"] == "daily"
+        # Günlük Redis seti boşken all-time'a düşülür ("daily_fallback_all_time").
+        assert data["period"].startswith("daily")
 
     @pytest.mark.asyncio
     async def test_weekly_leaderboard(self, client: AsyncClient):
@@ -131,4 +132,5 @@ class TestLeaderboardEndpoints:
         response = await client.get("/api/leaderboard/weekly")
         assert response.status_code == 200
         data = response.json()
-        assert data["period"] == "weekly"
+        # Haftalık Redis seti boşken all-time'a düşülür ("weekly_fallback_all_time").
+        assert data["period"].startswith("weekly")

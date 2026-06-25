@@ -71,6 +71,30 @@ async def update_my_profile(
     return UserMeResponse.model_validate(user)
 
 
+@router.delete("/me", response_model=MessageResponse)
+async def delete_my_account(
+    user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db),
+):
+    """Hesabı kalıcı olarak sil (KVKK/GDPR uyumlu soft-delete + anonimleştirme).
+
+    Apple App Store için ZORUNLU. Kişisel veriler (e-posta, telefon, şifre,
+    görünen isim, bio vb.) temizlenir/anonimleştirilir, hesap pasifleştirilir
+    ve tüm oturumlar sonlandırılır. Silinen hesap tekrar giriş yapamaz.
+    """
+    try:
+        await UserService.delete_account(db=db, user_id=user_id)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        )
+
+    return MessageResponse(
+        message="Hesabınız ve kişisel verileriniz silindi. Bizi tercih ettiğiniz için teşekkürler."
+    )
+
+
 @router.get("/me/stats", response_model=UserStatsResponse)
 async def get_my_stats(
     user_id: str = Depends(get_current_user_id),

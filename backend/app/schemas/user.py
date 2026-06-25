@@ -118,13 +118,22 @@ class UserMeResponse(UserPublicResponse):
     bio: str | None
     xp: int
     coins: int
-    gems: int
     total_correct_answers: int = 0
     total_questions_answered: int = 0
     is_active: bool
     is_verified: bool = False
     last_login_at: datetime | None
     updated_at: datetime | None
+    # Tutundurma + kozmetik
+    daily_streak: int = 0
+    equipped_frame: str | None = None
+    equipped_name_color: str | None = None
+    equipped_effect: str | None = None
+    # Monetizasyon durumu (pay-to-win YOK)
+    is_premium: bool = False
+    premium_until: datetime | None = None
+    has_battle_pass: bool = False
+    starter_pack_purchased: bool = False
 
     model_config = {"from_attributes": True}
 
@@ -142,6 +151,7 @@ class UserStatsResponse(BaseModel):
     favorite_category: str | None
     level: int
     xp: int
+    best_rank: int | None = None
 
     model_config = {"from_attributes": True}
 

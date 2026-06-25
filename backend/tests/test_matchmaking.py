@@ -2,7 +2,11 @@
 
 import pytest
 
-from app.services.matchmaking_service import LobbyState, MatchmakingManager
+from app.services.matchmaking_service import (
+    WARMUP_QUESTIONS,
+    LobbyState,
+    MatchmakingManager,
+)
 
 
 class TestLobbyState:
@@ -106,14 +110,29 @@ class TestMatchmakingManager:
         assert lobby.total_count == 20  # 6 real + 14 bots
 
     def test_resolve_not_enough_players(self):
-        """Lobby with <5 players gets cancelled."""
+        """Lobby with <5 real players but ≥1 now starts (AAS fills bots).
+
+        Under the Adaptive Threshold System a lobby is cancelled only when
+        there are zero real players.  Even 3 real players are valid — the
+        remaining 17 slots are filled with bots and the game starts.
+        """
         mm = MatchmakingManager()
         lobby = mm.create_lobby()
         for i in range(3):
             lobby.add_player(f"u{i}", f"player{i}", f"Player {i}", "default_01")
 
         result = mm.resolve_lobby(lobby.lobby_id)
+        assert result == "start"
+        assert lobby.total_count == 20  # 3 real + 17 bots
+
+    def test_resolve_zero_players_cancels(self):
+        """A lobby with no real players at all is cancelled."""
+        mm = MatchmakingManager()
+        lobby = mm.create_lobby()
+
+        result = mm.resolve_lobby(lobby.lobby_id)
         assert result == "cancel"
+        assert lobby.status == "cancelled"
 
     def test_resolve_full_lobby(self):
         """Full lobby starts immediately."""
@@ -133,3 +152,69 @@ class TestMatchmakingManager:
         lobby2 = mm.join_or_create("u1", "player1", "Player 1", "default_01")
         assert lobby1.lobby_id == lobby2.lobby_id
         assert lobby2.real_player_count == 1
+
+    def test_lobby_never_cancelled_with_one_player(self):
+        """When only 1 real player is present the lobby should start, not cancel.
+
+        AAS guarantees: as long as ≥ 1 real player exists, bots fill the rest
+        and the game begins.
+        """
+        mm = MatchmakingManager()
+        lobby = mm.create_lobby()
+        lobby.add_player("u1", "player1", "Player 1", "default_01")
+
+        result = mm.resolve_lobby(lobby.lobby_id, min_real_players=5)
+
+        assert result == "start"
+        assert lobby.status == "starting"
+        assert lobby.total_count == 20  # 1 real + 19 bots
+
+    def test_bot_join_schedule_spread(self):
+        """Bot join offsets must all fall within [0, 18) seconds."""
+        lobby = LobbyState("sched-test")
+        for i in range(3):
+            lobby.add_player(f"u{i}", f"p{i}", f"Player {i}", "default_01")
+
+        bots_needed = 17  # 20 - 3
+        offsets = lobby.schedule_bot_joins(total_bots=bots_needed, window_seconds=18.0)
+
+        assert len(offsets) == bots_needed
+        # Must be sorted
+        assert offsets == sorted(offsets)
+        # All offsets within window (90 % threshold used internally)
+        assert all(0.0 <= o < 18.0 for o in offsets)
+        # Stored on the lobby object
+        assert lobby.bot_join_schedule == offsets
+
+    def test_warmup_question_returned(self):
+        """get_warmup_question must return a dict with required keys."""
+        lobby = LobbyState("warmup-test")
+
+        question = lobby.get_warmup_question()
+
+        assert question is not None
+        assert isinstance(question, dict)
+        assert "question" in question
+        assert "options" in question
+        assert "correct" in question
+        assert isinstance(question["options"], list)
+        assert len(question["options"]) >= 2
+        assert isinstance(question["correct"], int)
+        # Correct index must be a valid index into options
+        assert 0 <= question["correct"] < len(question["options"])
+
+    def test_min_real_players_respected(self):
+        """When min_real=2 but only 1 real player is present the lobby still
+        starts — bots fill the gap. Cancel only fires at 0 real players."""
+        mm = MatchmakingManager()
+        lobby = mm.create_lobby()
+        lobby.add_player("u1", "solo_player", "Solo Player", "default_01")
+
+        # Simulate AAS resolving a high threshold (min_real=2) for this lobby
+        result = mm.resolve_lobby(lobby.lobby_id, min_real_players=2)
+
+        assert result == "start"
+        # AAS threshold is recorded on the lobby for observability
+        assert lobby.min_real_players == 2
+        # Game can still proceed: bots topped up the rest
+        assert lobby.total_count == 20

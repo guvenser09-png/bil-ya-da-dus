@@ -212,49 +212,137 @@ class QuestionService:
         return saved
 
     @staticmethod
+    async def _pick_one(
+        db: AsyncSession,
+        q_type: "QuestionType | None",
+        min_difficulty: int | None,
+        max_difficulty: int | None,
+        exclude_ids: set[str],
+    ) -> Question | None:
+        """Tek soru çek: tip + [min,max] zorluk aralığı + zaten seçilenleri dışla.
+
+        q_type None ise tipten bağımsız (tip-fallback için). Sonuç bulunamazsa
+        None döner — çağıran sınırı gevşetir. exclude_ids ile aynı soru iki kez
+        seçilmez (tip-fallback'te mükerrer engeli).
+        """
+        conds = [Question.approval_status == ApprovalStatus.APPROVED]
+        if q_type is not None:
+            conds.append(Question.type == q_type)
+        if min_difficulty is not None:
+            conds.append(Question.difficulty >= min_difficulty)
+        if max_difficulty is not None:
+            conds.append(Question.difficulty <= max_difficulty)
+        if exclude_ids:
+            conds.append(Question.id.notin_(exclude_ids))
+        stmt = select(Question).where(and_(*conds)).order_by(func.random()).limit(1)
+        return (await db.execute(stmt)).scalar_one_or_none()
+
+    @staticmethod
     async def get_questions_for_game(
         db: AsyncSession,
         player_ids: list[str] | None = None,
+        min_difficulty: int | None = None,
+        max_difficulty: int | None = None,
     ) -> list[Question]:
         """Get 5 questions (one per round) for a game.
         Ensures 30-day dedup for real players.
+
+        Zorluk havuzu yönlendirmesi (graceful fallback, maç ASLA iptal olmaz):
+        - min_difficulty: alt sınır (turnuva: 4 → gerçekten zor 4-5).
+        - max_difficulty: üst sınır (normal maç: 3 → kolay/orta 1-3).
+        Tur tipi rampası (her tur farklı tip) KORUNUR; sadece zorluk havuzu
+        filtrelenir. Tip başına yeterli soru yoksa sınırlar kademeli gevşer:
+          1) tip + [min,max]   2) tip + min (üst sınırı bırak)
+          3) tip + max (alt sınırı bırak)   4) tip (zorluk filtresiz)
+          5) tip-bağımsız + [min,max]   6) herhangi onaylı soru
+        Böylece mevcut dağılımla her tur için bir soru bulunur.
         """
-        questions = []
+        questions: list[Question] = []
+        used_ids: set[str] = set()
 
         for round_num in range(1, 6):
             q_type = ROUND_TYPE_MAP[round_num]
 
-            stmt = (
-                select(Question)
-                .where(
-                    and_(
-                        Question.type == q_type,
-                        Question.approval_status == ApprovalStatus.APPROVED,
-                    )
-                )
-                .order_by(func.random())
-                .limit(1)
-            )
+            # Kademeli gevşeyen denemeler (sıralama önemli: önce tam istek).
+            attempts: list[tuple[QuestionType | None, int | None, int | None]] = [
+                (q_type, min_difficulty, max_difficulty),
+            ]
+            if max_difficulty is not None:
+                # Üst sınırı gevşet (zor sızsın → tipte yeterli orta soru yoksa).
+                attempts.append((q_type, min_difficulty, None))
+            if min_difficulty is not None:
+                # Alt sınırı gevşet (kolay sızsın → tipte yeterli zor soru yoksa).
+                attempts.append((q_type, None, max_difficulty))
+            if min_difficulty is not None or max_difficulty is not None:
+                attempts.append((q_type, None, None))           # tip, zorluksuz
+                attempts.append((None, min_difficulty, max_difficulty))  # tip-bağımsız, aralık
+            attempts.append((None, None, None))                 # son çare: herhangi onaylı
 
-            result = await db.execute(stmt)
-            question = result.scalar_one_or_none()
-
-            if question:
-                questions.append(question)
-            else:
-                # No approved question of this type, try any approved
-                stmt_any = (
-                    select(Question)
-                    .where(Question.approval_status == ApprovalStatus.APPROVED)
-                    .order_by(func.random())
-                    .limit(1)
-                )
-                result = await db.execute(stmt_any)
-                q = result.scalar_one_or_none()
-                if q:
-                    questions.append(q)
+            q: Question | None = None
+            for qt, lo, hi in attempts:
+                q = await QuestionService._pick_one(db, qt, lo, hi, used_ids)
+                if q is not None:
+                    break
+            if q is not None:
+                questions.append(q)
+                used_ids.add(q.id)
 
         return questions
+
+    @staticmethod
+    def question_to_engine_dict(q: Question) -> dict:
+        """Convert a Question ORM row into the dict shape the game engine wants.
+
+        The game loop (``app.ws.game.run_game``) and ``GameEngine.start_round``
+        read questions as plain dicts with these keys: ``id``, ``type``,
+        ``content`` / ``question``, ``options``, ``correct_answer``,
+        ``time_seconds``, ``image_url`` and (for ``tahmin``) ``real_answer`` /
+        ``min_value`` / ``max_value`` / ``unit``. This mirrors the structure of
+        ``app.ws.game.get_mock_questions`` so seeded DB questions are a
+        drop-in replacement for the mock data.
+        """
+        return {
+            "id": q.id,
+            "type": q.type.value if hasattr(q.type, "value") else q.type,
+            "content": q.content,
+            "question": q.content,
+            "options": q.options,
+            "correct_answer": q.correct_answer,
+            "real_answer": q.real_answer,
+            "min_value": q.min_value,
+            "max_value": q.max_value,
+            "unit": q.unit,
+            "time_seconds": q.time_seconds or 7,
+            "image_url": q.image_url,
+        }
+
+    @staticmethod
+    async def get_game_questions_dicts(
+        db: AsyncSession,
+        player_ids: list[str] | None = None,
+        min_difficulty: int | None = None,
+        max_difficulty: int | None = None,
+    ) -> list[dict] | None:
+        """Return 5 seeded questions (one per round) as engine-ready dicts.
+
+        Convenience wrapper around :meth:`get_questions_for_game` for callers
+        (e.g. the WebSocket game loop) that work with plain dicts rather than
+        ORM objects. Returns ``None`` if fewer than 5 approved questions exist,
+        so the caller can fall back to its built-in mock questions.
+
+        Zorluk havuzu:
+        - min_difficulty: turnuva modunda zorlu havuz (difficulty>=eşik, ör. 4).
+        - max_difficulty: normal maçta üst sınır (difficulty<=eşik, ör. 3).
+        Tip başına graceful fallback get_questions_for_game içinde yapılır.
+        """
+        rows = await QuestionService.get_questions_for_game(
+            db, player_ids,
+            min_difficulty=min_difficulty,
+            max_difficulty=max_difficulty,
+        )
+        if len(rows) < 5:
+            return None
+        return [QuestionService.question_to_engine_dict(q) for q in rows]
 
     @staticmethod
     async def approve_question(db: AsyncSession, question_id: str) -> Question | None:
