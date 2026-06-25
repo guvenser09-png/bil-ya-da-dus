@@ -1,6 +1,5 @@
 """SQLAlchemy async database engine and session management."""
 
-import ssl as _ssl
 from collections.abc import AsyncGenerator
 from urllib.parse import urlparse
 
@@ -13,18 +12,16 @@ from app.config import settings
 def asyncpg_connect_args(url: str) -> dict:
     """asyncpg bağlantı argümanları.
 
-    Yerel geliştirmede (localhost) Postgres TLS sunmaz → SSL kapalı.
-    Uzak/yönetilen Postgres'te (Railway/Render/Heroku) bağlantı TLS ile
-    şifrelenir. Railway genel proxy'si TLS ister; sertifika ana-makine adı
-    uyuşmayabildiğinden doğrulama gevşetilir (trafik yine şifreli kalır).
+    Yerel geliştirmede (localhost) SSL kapalı. Uzak/yönetilen Postgres'te
+    (Railway/Render/Heroku) `ssl='prefer'`: önce TLS dener, sunucu TLS sunmuyorsa
+    (ör. Railway iç ağ Postgres'i) düz bağlantıya DÜŞER. Böylece hem genel
+    (TLS zorunlu) hem iç (TLS opsiyonel) adreslerde tek ayar çalışır. 'prefer'
+    sertifika doğrulaması YAPMAZ (şifreleme var, hostname kontrolü yok).
     """
     host = (urlparse(url).hostname or "").lower()
     if host in ("localhost", "127.0.0.1", "::1", ""):
         return {}
-    ctx = _ssl.create_default_context()
-    ctx.check_hostname = False
-    ctx.verify_mode = _ssl.CERT_NONE
-    return {"ssl": ctx}
+    return {"ssl": "prefer"}
 
 
 # Bağlantı argümanları (alembic env.py de import eder).
