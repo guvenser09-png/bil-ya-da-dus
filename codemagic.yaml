@@ -38,13 +38,16 @@ workflows:
         script: |
           set -e   # imza adımı sessizce geçmesin; hata olursa BURADA dursun
           keychain initialize
-          # KALICI özel anahtar (Codemagic env var CERTIFICATE_PRIVATE_KEY).
-          # İlk build bu anahtarla TEK bir dağıtım sertifikası oluşturur;
-          # sonraki build'ler aynı anahtara ait sertifikayı BULUP tekrar kullanır
+          # KALICI özel anahtar (Codemagic env var CERTIFICATE_PRIVATE_KEY),
+          # base64 olarak saklanır (çok satırlı PEM yapıştırırken satır sonları
+          # bozulmasın diye). Build'de tek satırlık base64'ü geri PEM'e açıyoruz.
+          echo "$CERTIFICATE_PRIVATE_KEY" | openssl base64 -d -A > /tmp/cert_key.pem
+          # İlk build bu anahtarla TEK dağıtım sertifikası oluşturur; sonraki
+          # build'ler aynı anahtara ait sertifikayı bulup tekrar kullanır
           # → bir daha yeni sertifika üretilmez, limit dolmaz, 409 olmaz.
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
-            --certificate-key=@env:CERTIFICATE_PRIVATE_KEY \
+            --certificate-key=@file:/tmp/cert_key.pem \
             --create \
             --verbose
           keychain add-certificates
