@@ -2,7 +2,8 @@
 # ---------------------------------------------------------------------------
 # Flutter uygulaması bu monorepo'da `mobile/` altında.
 # Kod imzalama, App Store Connect API anahtarı (Codemagic entegrasyonu) ile
-# OTOMATİK yapılır — yerelde Xcode GEREKMEZ.
+# OTOMATİK yapılır: sertifika + provisioning profili YOKSA OLUŞTURULUR
+# (app-store-connect fetch-signing-files --create). Yerelde Xcode GEREKMEZ.
 #
 # Üretilen IPA, prod backend adresine (Railway) bağlanır ve TestFlight'a yüklenir.
 # ---------------------------------------------------------------------------
@@ -14,18 +15,15 @@ workflows:
     max_build_duration: 90
 
     integrations:
-      # ⚠️ ÖNEMLİ: Bu ad, Codemagic'te oluşturacağın App Store Connect
-      #    entegrasyonunun ADIYLA BİREBİR AYNI olmalı.
-      #    (Codemagic → Teams → Integrations → App Store Connect → Connect)
+      # ⚠️ Codemagic'teki App Store Connect entegrasyonunun ADIYLA BİREBİR AYNI.
       app_store_connect: BilYaDaDus_ASC
 
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.bilyadadus.app
       flutter: stable
       xcode: latest
       cocoapods: default
+      vars:
+        BUNDLE_ID: "com.bilyadadus.app"
 
     scripts:
       - name: Flutter paketleri
@@ -34,8 +32,17 @@ workflows:
       - name: CocoaPods kurulumu
         script: cd mobile/ios && pod install
 
-      - name: İmzalama profillerini uygula
-        script: cd mobile && xcode-project use-profiles
+      - name: İmza sertifikası + profili al/oluştur
+        script: |
+          keychain initialize
+          # Bundle id için App Store dağıtım profilini (ve gerekirse sertifikayı)
+          # API anahtarıyla getir; yoksa OLUŞTUR (--create).
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+          keychain add-certificates
+          # Profilleri Xcode projesine uygula + ~/export_options.plist üret.
+          cd mobile && xcode-project use-profiles
 
       - name: IPA derle (prod backend gömülü)
         script: |
@@ -53,6 +60,5 @@ workflows:
       app_store_connect:
         auth: integration
         # İlk yüklemede TestFlight'a otomatik gönderir.
-        # NOT: App Store Connect'te uygulama kaydının (com.bilyadadus.app)
-        # ÖNCEDEN oluşturulmuş olması gerekir.
+        # (App Store Connect'te uygulama kaydı com.bilyadadus.app önceden var.)
         submit_to_testflight: true
