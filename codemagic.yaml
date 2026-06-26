@@ -36,11 +36,14 @@ workflows:
         script: |
           set -e   # imza adımı sessizce geçmesin; hata olursa BURADA dursun
           keychain initialize
-          # Bundle id için App Store dağıtım sertifikası + profilini API
-          # anahtarıyla getir; yoksa OLUŞTUR (--create). (Sertifika oluşturma
-          # Apple'da Admin yetkili API anahtarı ister.)
+          # Apple hesabındaki MEVCUT dağıtım sertifikasının özel anahtarı bu
+          # makinede yok (eski Mac'te kaldı). O yüzden BULUTTA yeni bir özel
+          # anahtar üretip onunla YENİ bir App Store dağıtım sertifikası +
+          # provisioning profili oluşturuyoruz (--certificate-key + --create).
+          ssh-keygen -t rsa -b 2048 -m PEM -f /tmp/cert_key -q -N ""
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
+            --certificate-key=@file:/tmp/cert_key \
             --create \
             --verbose
           keychain add-certificates
