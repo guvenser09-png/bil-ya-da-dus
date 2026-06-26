@@ -49,3 +49,7 @@ flutter/build/
 flutter/.dart_tool/
 flutter/.packages
 .claude/
+
+# yerel test veritabanı (repoda olmamalı)
+backend/test.db
+*.db
