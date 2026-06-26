@@ -22,6 +22,8 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
+      groups:
+        - appstore            # CERTIFICATE_PRIVATE_KEY burada (Codemagic env var)
       vars:
         BUNDLE_ID: "com.bilyadadus.app"
 
@@ -36,14 +38,13 @@ workflows:
         script: |
           set -e   # imza adımı sessizce geçmesin; hata olursa BURADA dursun
           keychain initialize
-          # Apple hesabındaki MEVCUT dağıtım sertifikasının özel anahtarı bu
-          # makinede yok (eski Mac'te kaldı). O yüzden BULUTTA yeni bir özel
-          # anahtar üretip onunla YENİ bir App Store dağıtım sertifikası +
-          # provisioning profili oluşturuyoruz (--certificate-key + --create).
-          ssh-keygen -t rsa -b 2048 -m PEM -f /tmp/cert_key -q -N ""
+          # KALICI özel anahtar (Codemagic env var CERTIFICATE_PRIVATE_KEY).
+          # İlk build bu anahtarla TEK bir dağıtım sertifikası oluşturur;
+          # sonraki build'ler aynı anahtara ait sertifikayı BULUP tekrar kullanır
+          # → bir daha yeni sertifika üretilmez, limit dolmaz, 409 olmaz.
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
-            --certificate-key=@file:/tmp/cert_key \
+            --certificate-key=@env:CERTIFICATE_PRIVATE_KEY \
             --create \
             --verbose
           keychain add-certificates
