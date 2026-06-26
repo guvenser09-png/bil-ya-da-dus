@@ -34,12 +34,15 @@ workflows:
 
       - name: İmza sertifikası + profili al/oluştur
         script: |
+          set -e   # imza adımı sessizce geçmesin; hata olursa BURADA dursun
           keychain initialize
-          # Bundle id için App Store dağıtım profilini (ve gerekirse sertifikayı)
-          # API anahtarıyla getir; yoksa OLUŞTUR (--create).
+          # Bundle id için App Store dağıtım sertifikası + profilini API
+          # anahtarıyla getir; yoksa OLUŞTUR (--create). (Sertifika oluşturma
+          # Apple'da Admin yetkili API anahtarı ister.)
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
-            --create
+            --create \
+            --verbose
           keychain add-certificates
           # Profilleri Xcode projesine uygula + ~/export_options.plist üret.
           cd mobile && xcode-project use-profiles
