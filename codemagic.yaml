@@ -23,7 +23,7 @@ workflows:
       xcode: latest
       cocoapods: default
       groups:
-        - appstore            # CERTIFICATE_PRIVATE_KEY burada (Codemagic env var)
+        - appstore            # CERT_KEY_PASSPHRASE burada (Codemagic env var)
       vars:
         BUNDLE_ID: "com.bilyadadus.app"
 
@@ -38,11 +38,14 @@ workflows:
         script: |
           set -e   # imza adımı sessizce geçmesin; hata olursa BURADA dursun
           keychain initialize
-          # TEŞHİS: değişken uzunluğu (base64 doğruysa ~2272 olmalı; PEM kalmışsa
-          # ~1704; boşsa 0). Gizli değer maskeli kalır, sadece sayı görünür.
-          echo ">> CERTIFICATE_PRIVATE_KEY uzunluk: ${#CERTIFICATE_PRIVATE_KEY} (base64 ~2272 beklenir)"
-          # KALICI özel anahtar base64 olarak saklanır; build'de PEM'e açılır.
-          printf '%s' "$CERTIFICATE_PRIVATE_KEY" | openssl base64 -d -A > /tmp/cert_key.pem 2>/dev/null || true
+          # Özel imza anahtarı repoda ŞİFRELİ tutulur (mobile/ci/cert_key.enc).
+          # Codemagic'e sadece KISA bir parola (CERT_KEY_PASSPHRASE) girilir;
+          # build'de bu parolayla anahtar geri açılır. (2272 karakter yapıştırma
+          # derdi yok; parola kısa olduğu için bozulmaz.)
+          echo ">> CERT_KEY_PASSPHRASE uzunluk: ${#CERT_KEY_PASSPHRASE} (27 beklenir)"
+          openssl enc -d -aes-256-cbc -pbkdf2 -a \
+            -in mobile/ci/cert_key.enc -out /tmp/cert_key.pem \
+            -pass env:CERT_KEY_PASSPHRASE
           echo ">> Çözülen anahtar boyutu: $(wc -c < /tmp/cert_key.pem) bayt (PEM ~1704 beklenir)"
           # İlk build bu anahtarla TEK dağıtım sertifikası oluşturur; sonraki
           # build'ler aynı anahtara ait sertifikayı bulup tekrar kullanır
