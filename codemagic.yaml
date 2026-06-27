@@ -37,6 +37,9 @@ workflows:
       - name: İmza sertifikası + profili al/oluştur
         script: |
           set -e   # imza adımı sessizce geçmesin; hata olursa BURADA dursun
+          # Eski/bozuk CERTIFICATE_PRIVATE_KEY env değişkenini devre dışı bırak:
+          # app-store-connect onu otomatik --certificate-key sanıp hata veriyordu.
+          unset CERTIFICATE_PRIVATE_KEY
           keychain initialize
           # Özel imza anahtarı repoda ŞİFRELİ tutulur (mobile/ci/cert_key.enc).
           # Codemagic'e sadece KISA bir parola (CERT_KEY_PASSPHRASE) girilir;
