@@ -183,6 +183,9 @@ class TournamentService:
                 SeasonScore.points > 0,
                 User.is_active == True,  # noqa: E712
                 User.deleted_at.is_(None),
+                # Misafirler sıralamada listelenmez (puanları season_scores'ta
+                # birikmeye devam eder; hesap kalıcılaşınca görünür olur).
+                User.is_guest == False,  # noqa: E712
             )
             .order_by(SeasonScore.points.desc(), User.id.asc())
             .limit(limit)
@@ -221,6 +224,10 @@ class TournamentService:
         ).scalar_one_or_none()
         if me is None:
             return None
+        # Misafir sezon sıralamasında yer almaz → my_entry üretilmez
+        # (leaderboard API'si response'a guest_hidden=true ekler).
+        if me.is_guest:
+            return None
         my_points = (
             await db.execute(
                 select(SeasonScore.points).where(
@@ -244,6 +251,7 @@ class TournamentService:
                     SeasonScore.points > 0,
                     User.is_active == True,  # noqa: E712
                     User.deleted_at.is_(None),
+                    User.is_guest == False,  # noqa: E712 — misafir rank'e sayılmaz
                     (
                         (SeasonScore.points > my_points)
                         | (
@@ -266,6 +274,7 @@ class TournamentService:
                     SeasonScore.points > 0,
                     User.is_active == True,  # noqa: E712
                     User.deleted_at.is_(None),
+                    User.is_guest == False,  # noqa: E712
                     (
                         (SeasonScore.points > my_points)
                         | (
@@ -619,6 +628,9 @@ class TournamentService:
                     SeasonScore.points > 0,
                     User.is_active == True,  # noqa: E712
                     User.deleted_at.is_(None),
+                    # Misafir sezon sonu ödül hesabına KARIŞMAZ (sıralamada da
+                    # görünmediği için tutarlı: ödül top-N görünen sıraya gider).
+                    User.is_guest == False,  # noqa: E712
                 )
                 .order_by(SeasonScore.points.desc(), User.id.asc())
                 .limit(max_rank)

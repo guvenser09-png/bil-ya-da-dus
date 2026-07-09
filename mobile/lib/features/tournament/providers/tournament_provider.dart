@@ -1,3 +1,7 @@
+// İLK LANSMAN: rafa kaldırıldı, Aşama 3'te geri açılacak.
+// Turnuva (3x) modu UI'dan erişilemez; bu provider yalnızca rafa kalkan
+// tournament_screen.dart tarafından kullanılır ve kod bilerek silinmedi.
+
 import 'dart:async';
 
 import 'package:dio/dio.dart';

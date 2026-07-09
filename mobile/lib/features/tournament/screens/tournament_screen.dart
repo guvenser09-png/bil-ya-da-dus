@@ -1,3 +1,7 @@
+// İLK LANSMAN: rafa kaldırıldı, Aşama 3'te geri açılacak.
+// Bu ekrana UI'dan hiçbir giriş noktası kalmadı (home'daki turnuva kartı
+// kaldırıldı); /tournament rotası yalnızca geriye dönük uyumluluk için durur.
+
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';

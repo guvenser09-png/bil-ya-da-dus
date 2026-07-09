@@ -75,8 +75,13 @@ class MockRedis:
     async def get(self, key):
         return _mock_redis_store.get(key)
 
-    async def set(self, key, value, ex=None):
+    async def set(self, key, value, ex=None, nx=False):
+        # Gerçek Redis SET NX semantiği: anahtar zaten varsa yazma ve None dön
+        # (idempotency testleri — ör. match:rewarded:{game_id} — buna dayanır).
+        if nx and key in _mock_redis_store:
+            return None
         _mock_redis_store[key] = value
+        return True
 
     async def delete(self, *keys):
         for key in keys:

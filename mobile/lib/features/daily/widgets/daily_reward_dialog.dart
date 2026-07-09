@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
+import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/daily/providers/daily_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 
@@ -44,6 +45,10 @@ class _DailyRewardDialogState extends ConsumerState<_DailyRewardDialog>
         _claimedStreak = result.streak;
       });
       _coinCtrl.forward(from: 0);
+      // Bakiye tek gerçek kaynaktan tazelensin: üst bardaki CoinPill
+      // (authProvider.user.coins) günlük ödül sonrası hemen güncellenir.
+      // ignore: unawaited_futures
+      ref.read(authProvider.notifier).refreshUser();
     } else if (result.alreadyClaimed) {
       // Bugün zaten alınmış — bilgilendir ve kapat.
       ScaffoldMessenger.of(context).showSnackBar(

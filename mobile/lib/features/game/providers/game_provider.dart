@@ -27,6 +27,7 @@ class GameState {
     this.myScore = 0,
     this.myRound = 0,
     this.emojiOverlay,
+    this.quickMsg,
     this.betOn,
   });
 
@@ -72,6 +73,10 @@ class GameState {
   /// Emoji string shown in overlay, null when hidden
   final String? emojiOverlay;
 
+  /// 💬 Hazır mesaj baloncuğu: {username, text}. 2sn sonra otomatik silinir.
+  /// Metin SUNUCUDAN gelir (sabit izin listesinden çözülmüş) — serbest metin yok.
+  final Map<String, String>? quickMsg;
+
   /// Şampiyon bahsi (🎯): elenmişken bahis koyulan oyuncunun username'i.
   /// null = henüz bahis yok. Bir kez set edilince değiştirilemez (kilitli).
   final String? betOn;
@@ -97,6 +102,8 @@ class GameState {
     int? myRound,
     String? emojiOverlay,
     bool clearEmoji = false,
+    Map<String, String>? quickMsg,
+    bool clearQuickMsg = false,
     String? betOn,
   }) {
     return GameState(
@@ -117,6 +124,7 @@ class GameState {
       myScore: myScore ?? this.myScore,
       myRound: myRound ?? this.myRound,
       emojiOverlay: clearEmoji ? null : (emojiOverlay ?? this.emojiOverlay),
+      quickMsg: clearQuickMsg ? null : (quickMsg ?? this.quickMsg),
       betOn: betOn ?? this.betOn,
     );
   }
@@ -141,6 +149,7 @@ class GameNotifier extends StateNotifier<GameState> {
   StreamSubscription<Map<String, dynamic>>? _sub;
   Timer? _countdownTimer;
   Timer? _emojiTimer;
+  Timer? _quickMsgTimer;
 
   /// Oyun bir kez 'finished' olduğunda terminal durumdur; geç gelen
   /// round_reveal / round_transition / game_state / spectator_mode mesajları
@@ -218,6 +227,13 @@ class GameNotifier extends StateNotifier<GameState> {
     _wsClient.send({'type': 'emoji', 'emoji': emoji});
   }
 
+  /// 💬 Hazır mesaj gönder — YALNIZCA sabit id gönderilir (serbest metin yok);
+  /// metni sunucu kendi izin listesinden çözüp herkese yayınlar.
+  void sendQuickMsg(String msgId) {
+    if (!AppConstants.quickMessages.containsKey(msgId)) return;
+    _wsClient.send({'type': 'quick_msg', 'msg_id': msgId});
+  }
+
   /// Şampiyon bahsi (🎯): elenmişken hayatta kalan bir oyuncuya TEK SEFERLİK
   /// bahis koy. İyimser kilitlenir; backend 'bet_placed' ile doğrular
   /// (geçersizse 'error' döner ama bahis zaten sunucuda kaydedilmemiştir).
@@ -277,6 +293,8 @@ class GameNotifier extends StateNotifier<GameState> {
         _onGameFinished(msg);
       case 'emoji':
         _onEmoji(msg);
+      case 'quick_msg':
+        _onQuickMsg(msg);
       case 'ws_error':
         // Permanent WS error (4001/4003/4004) — signal screen to go home
         state = state.copyWith(status: 'error');
@@ -378,6 +396,21 @@ class GameNotifier extends StateNotifier<GameState> {
     );
   }
 
+  // quick_msg – gönderenin adıyla 2 saniyelik baloncuk göster.
+  // Güvenlik: metin İSTEMCİDE de izin listesinden doğrulanır — sunucu dışı
+  // bir kaynaktan gelebilecek serbest metin asla ekrana basılmaz.
+  void _onQuickMsg(Map<String, dynamic> msg) {
+    final msgId = msg['msg_id'] as String?;
+    final text = AppConstants.quickMessages[msgId];
+    if (text == null) return; // izin listesinde olmayan id → yok say
+    final username = (msg['username'] as String?) ?? 'oyuncu';
+    _quickMsgTimer?.cancel();
+    state = state.copyWith(quickMsg: {'username': username, 'text': text});
+    _quickMsgTimer = Timer(const Duration(seconds: 2), () {
+      if (mounted) state = state.copyWith(clearQuickMsg: true);
+    });
+  }
+
   // emoji – show floating overlay for 2 seconds
   void _onEmoji(Map<String, dynamic> msg) {
     final emoji = msg['emoji'] as String? ?? '👏';
@@ -433,6 +466,7 @@ class GameNotifier extends StateNotifier<GameState> {
     _sub?.cancel();
     _stopTimer();
     _emojiTimer?.cancel();
+    _quickMsgTimer?.cancel();
     // Oyun kendi WsClient örneğine sahip → ekran kapanınca soketi de kapat.
     // (Lobi'nin paylaşılan tekili DEĞİL; güvenle dispose edilir.)
     _wsClient.dispose();

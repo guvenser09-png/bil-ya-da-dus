@@ -125,6 +125,11 @@ class PlayerState:
     # olduğunu bilmiyor) maça 1 kalkanla başlar. Tur 1-4'te ilk yanlışta
     # elenmek yerine kalkan kırılır; finalde (tahmin) geçersiz.
     shields: int = 1
+    # KALKAN BEDELİ (💰): Bu maçta kalkanı kırıldı mı? Maç sonunda GERÇEK
+    # oyunculardan match_reward_service.SHIELD_COST altın tahsil edilir
+    # (bakiye yetmezse ücretsiz "hediye"). Botlardan tahsilat yok — işaret
+    # botta da konur ama ödeme akışı yalnızca gerçek oyuncuları işler.
+    shield_broken: bool = False
     # HAYALET MODU (👻): elenen GERÇEK oyuncu izlerken cevap vermeye devam
     # edebilir. Hayalet cevaplar elemeye/skora/kazanana ETKİSİZDİR; yalnızca
     # bu sayaç artar ve maç sonunda küçük altın ödülüne çevrilir
@@ -568,6 +573,9 @@ class GameEngine:
                 player = self.players[username]
                 if shields_active and player.shields > 0:
                     player.shields -= 1
+                    # Maç sonu kalkan bedeli tahsilatı için işaretle (gerçek
+                    # oyuncularda ws/game._persist_game_results okur).
+                    player.shield_broken = True
                     shield_saved.append(username)
                     survivors.append(username)
                     # Reveal'da mobilin kişi bazında da okuyabilmesi için işaret.

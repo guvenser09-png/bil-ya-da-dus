@@ -62,7 +62,11 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
       }
     });
 
-    final progress = (state.countdown / AppConstants.lobbyTimeoutSeconds).clamp(0.0, 1.0);
+    // Dolum oranı sunucunun bildirdiği başlangıç değerine (initialCountdown)
+    // göre hesaplanır — sabit 15 varsayımı değil, sunucu otoriter.
+    final progress = state.initialCountdown > 0
+        ? (state.countdown / state.initialCountdown).clamp(0.0, 1.0)
+        : 0.0;
     final urgent = state.countdown <= 5;
     final ringColor = urgent ? AppTheme.cPrimaryContainer : AppTheme.cTertiary;
 
@@ -190,8 +194,9 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      // 12 oyunculu lobi: 4 sütun x 3 satır ızgara (slot sayısı = maxPlayers).
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 5,
+        crossAxisCount: 4,
         mainAxisSpacing: 12,
         crossAxisSpacing: 12,
         childAspectRatio: 0.72,

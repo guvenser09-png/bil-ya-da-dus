@@ -12,6 +12,7 @@ Client -> Server messages:
     {"action": "submit_answer", "answer": X, "time_remaining": float}
     {"action": "place_bet", "username": "..."}   — şampiyon bahsi (elenmişken)
     {"action": "emoji", "emoji": "🔥"}
+    {"action": "quick_msg", "msg_id": "qm_gl"}  — hazır mesaj (sabit izin listesi)
     {"action": "ready"}
 
 Server -> Client messages:
@@ -23,12 +24,14 @@ Server -> Client messages:
     {"type": "bet_placed"}         — Şampiyon bahsi kabul edildi (kişisel)
     {"type": "game_finished"}      — Game over with final standings
     {"type": "emoji"}              — Emoji from another player
+    {"type": "quick_msg"}          — Hazır mesaj (username + sunucuda çözülen text)
     {"type": "error"}              — Error message
 """
 
 import asyncio
 import json
 import logging
+import time
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
@@ -51,6 +54,8 @@ from app.services.game_service import (
 )
 from app.services.match_reward_service import (
     BET_REWARD,
+    SHIELD_COST,
+    charge_shield_costs,
     ghost_reward_for,
     grant_match_rewards,
     grant_match_xp,
@@ -64,6 +69,65 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 ALLOWED_EMOJIS = {"👏", "😂", "😱", "🔥", "💀", "❤️", "👍", "😎"}
+
+# 💬 HAZIR MESAJLAR (güvenli sosyallik): istemci yalnızca sabit bir id
+# gönderir; metin SUNUCUDAKİ bu izin listesinden çözülür. Serbest metin bu
+# tasarımla İMKÂNSIZ (App Store moderasyon riski yok). Mobil taraftaki
+# app_constants.quickMessages ile birebir aynı tutulmalı.
+QUICK_MESSAGES: dict[str, str] = {
+    "qm_gl": "İyi şanslar! 🍀",
+    "qm_wp": "Helal! 👏",
+    "qm_gg": "GG 🔥",
+    "qm_ah": "Ah be! 😅",
+    "qm_wow": "Vay canına! 😱",
+}
+# Kullanıcı başına saniyede 1 hazır mesaj — basit spam koruması.
+QUICK_MSG_COOLDOWN_SECONDS = 1.0
+# user_id -> son hazır mesaj zamanı (time.monotonic tabanlı).
+_quick_msg_last_sent: dict[str, float] = {}
+
+
+def build_quick_msg_payload(
+    engine: "GameEngine",
+    game_id: str,
+    user_id: str,
+    msg_id: object,
+    now: float | None = None,
+) -> dict | None:
+    """Hazır mesaj isteğini doğrula ve yayın payload'unu üret.
+
+    Kurallar:
+      - msg_id, QUICK_MESSAGES izin listesinde olmalı (serbest metin/bilinmeyen
+        id → None; istemcinin gönderdiği olası "text" alanı YOK SAYILIR).
+      - Kullanıcı başına saniyede en fazla 1 mesaj (rate-limit) — erken tekrar
+        None döner ve YAYINLANMAZ.
+
+    ``now`` testlerde zamanı deterministik ilerletmek içindir; verilmezse
+    time.monotonic() kullanılır. Geçerli istekte payload dict'i döner.
+    """
+    if not isinstance(msg_id, str):
+        return None
+    text = QUICK_MESSAGES.get(msg_id)
+    if text is None:
+        return None  # izin listesi dışı → reddet (serbest metin imkânsız)
+    ts = time.monotonic() if now is None else now
+    last = _quick_msg_last_sent.get(user_id)
+    if last is not None and (ts - last) < QUICK_MSG_COOLDOWN_SECONDS:
+        return None  # rate-limit: saniyede 1
+    _quick_msg_last_sent[user_id] = ts
+    sender_username = next(
+        (p.username for p in engine.players.values() if p.user_id == user_id),
+        "oyuncu",
+    )
+    return {
+        "type": "quick_msg",
+        "game_id": game_id,
+        "user_id": user_id,
+        "username": sender_username,
+        "msg_id": msg_id,
+        # Metin HER ZAMAN sunucu listesinden çözülür — istemci metni değil.
+        "text": text,
+    }
 # Tur arası bekleme: eleme/düşüş animasyonu net görülsün diye 3->5 sn
 # (kullanıcı geri bildirimi: "düşme efektleri çok belli olmuyor").
 BETWEEN_ROUNDS_PAUSE = 5  # seconds
@@ -356,19 +420,27 @@ def _bonus_coins_for(player, winner_username: str | None) -> int:
     return bonus
 
 
-async def _persist_game_results(game_id: str, engine: GameEngine, final: dict) -> dict[str, int]:
+async def _persist_game_results(
+    game_id: str, engine: GameEngine, final: dict
+) -> tuple[dict[str, int], dict[str, bool]]:
     """Oyun bitince GERÇEK oyuncuların istatistiklerini KALICI olarak kaydet.
 
     - User tablosu: games_played, games_won, total_score (BİRİKİMLİ), win_rate,
       doğru cevap sayaçları → "çok oynayan çok puan toplar" sistemi.
     - Maç sonu COIN ödülü (pay-to-win YOK): kazanan +50, ilk 3 +25, herkes +10;
       günlük 500 coin cap'i ile. Sadece gerçek oyunculara, idempotent.
+    - KALKAN BEDELİ: kalkanı kırılan gerçek oyuncudan SHIELD_COST altın
+      düşülür (bakiye yetmezse hediye). Ödüller EKLENDİKTEN SONRA, aynı
+      idempotent blokta tahsil edilir — oyuncu bedeli maç kazancıyla ödeyebilir.
     - Redis günlük/haftalık sıralama: o oyunda kazanılan puan kadar artırılır.
 
     Hatalar oyun akışını ASLA bozmasın diye tüm gövde try/except ile sarılı.
 
     Returns:
-        {user_id: coins_earned} — bu maçta her gerçek oyuncunun kazandığı coin.
+        (coins_earned, shield_billing) ikilisi:
+        coins_earned  — {user_id: bu maçta kazanılan coin}.
+        shield_billing — {user_id: True (bedel tahsil edildi) | False (hediye)};
+        kalkanı kırılmayanlar haritada YER ALMAZ.
     """
     winner = final.get("winner") or {}
     winner_username = winner.get("username") if isinstance(winner, dict) else winner
@@ -377,8 +449,9 @@ async def _persist_game_results(game_id: str, engine: GameEngine, final: dict) -
         p for p in engine.players.values() if not p.is_bot and p.user_id
     ]
     coins_earned: dict[str, int] = {}
+    shield_billing: dict[str, bool] = {}
     if not real_players:
-        return coins_earned
+        return coins_earned, shield_billing
 
     # --- İdempotency: bu maç daha önce ödüllendirildiyse coin tekrar verme ---
     rewards_already_granted = False
@@ -481,6 +554,25 @@ async def _persist_game_results(game_id: str, engine: GameEngine, final: dict) -
                     logger.warning(
                         "Game %s: maç XP'si verilemedi: %s", game_id, exc
                     )
+
+                # --- Kalkan bedeli (🛡️💰): ödüllerden SONRA tahsil et ---
+                # Kırılan kalkan başına SHIELD_COST altın; bakiye yetmezse
+                # HİÇ düşülmez (hediye). Botlar zaten real_players dışında.
+                # Ödül cap'inden bağımsız bir GİDER; aynı idempotent blokta
+                # (match:rewarded anahtarı) olduğundan çift tahsilat olmaz.
+                try:
+                    shield_user_ids = [
+                        pl.user_id for pl in real_players
+                        if getattr(pl, "shield_broken", False)
+                    ]
+                    if shield_user_ids:
+                        shield_billing = await charge_shield_costs(
+                            db, shield_user_ids
+                        )
+                except Exception as exc:
+                    logger.warning(
+                        "Game %s: kalkan bedeli tahsil edilemedi: %s", game_id, exc
+                    )
             await db.commit()
     except Exception as exc:
         logger.warning("Game %s: istatistik kaydı başarısız: %s", game_id, exc)
@@ -572,7 +664,7 @@ async def _persist_game_results(game_id: str, engine: GameEngine, final: dict) -
     except Exception as exc:
         logger.warning("Game %s: sonuç anlık görüntüsü kaydedilemedi: %s", game_id, exc)
 
-    return coins_earned
+    return coins_earned, shield_billing
 
 
 def _build_questions_summary(engine: GameEngine) -> list[dict]:
@@ -1137,10 +1229,11 @@ async def _run_game_inner(
                     "winner": ans_data.get("winner", False),
                 })
 
-    # Birikimli puan + sıralama + maç COIN ödülü (cap'li, idempotent) önce
-    # işlenir ki kazanılan coin (coins_earned) kişisel game_finished mesajına
-    # eklenebilsin. Bu fonksiyon hata fırlatmaz (gövdesi try/except sarılı).
-    coins_earned = await _persist_game_results(game_id, engine, final)
+    # Birikimli puan + sıralama + maç COIN ödülü (cap'li, idempotent) + kalkan
+    # bedeli önce işlenir ki kazanılan coin (coins_earned) ve kalkan tahsilat
+    # sonucu (shield_billing) kişisel game_finished mesajına eklenebilsin.
+    # Bu fonksiyon hata fırlatmaz (gövdesi try/except sarılı).
+    coins_earned, shield_billing = await _persist_game_results(game_id, engine, final)
 
     # Maçta oynanan soruların özeti (mobil "soruları & doğru cevapları gör").
     # Genel mesaja kullanıcıdan bağımsız özet konur; aşağıda her gerçek
@@ -1187,6 +1280,14 @@ async def _run_game_inner(
             personal_msg["bet_on"] = p.champion_bet
             personal_msg["bet_won"] = bet_won
             personal_msg["bet_reward"] = BET_REWARD if bet_won else 0
+        # 🛡️💰 Kalkan bedeli sonucu: kalkanı bu maçta kırıldıysa ya bedel
+        # tahsil edildi (shield_cost) ya da bakiye yetmediği için hediye
+        # sayıldı (shield_gift). Kalkanı kırılmayana bu alanlar hiç gitmez.
+        if p.user_id in shield_billing:
+            if shield_billing[p.user_id]:
+                personal_msg["shield_cost"] = SHIELD_COST
+            else:
+                personal_msg["shield_gift"] = True
         # Kişiye özel cevaplar: her soruya your_answer + correct_bool ekle.
         personal_msg["questions"] = _attach_user_answers(
             questions_summary, engine, p.username
@@ -1345,6 +1446,16 @@ async def game_websocket(websocket: WebSocket, game_id: str):
                         "username": sender_username,
                         "emoji": emoji,
                     })
+
+            elif action == "quick_msg":
+                # 💬 Hazır mesaj — emoji broadcast'iyle aynı desen: yalnızca
+                # izinli id kabul edilir, metin sunucu listesinden çözülür,
+                # kullanıcı başına saniyede 1 (rate-limit) korunur.
+                payload_msg = build_quick_msg_payload(
+                    engine, game_id, user_id, message.get("msg_id")
+                )
+                if payload_msg:
+                    await game_manager.broadcast_to_game(game_id, payload_msg)
 
             elif action == "ready":
                 # Acknowledgement — no server action needed but send confirmation

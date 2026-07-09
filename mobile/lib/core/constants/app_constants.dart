@@ -23,14 +23,28 @@ class AppConstants {
       String.fromEnvironment('WS_BASE_URL', defaultValue: 'ws://localhost:8000');
   static const String appName = 'Bil ya da Düş';
 
-  static const int maxPlayers = 20;
-  static const int lobbyTimeoutSeconds = 20;
+  // Sunucu ile birebir aynı değerler (settings.MAX_PLAYERS=12,
+  // settings.LOBBY_TIMEOUT_SECONDS=15). Sunucudan gelen countdown/oyuncu
+  // sayısı her zaman OTORİTERDİR; bunlar yalnızca ilk çizim ve üst sınırdır.
+  static const int maxPlayers = 12;
+  static const int lobbyTimeoutSeconds = 15;
   static const int reconnectWindowSeconds = 10;
   static const int reconnectMaxAttempts = 3;
 
   static const List<String> allowedEmojis = [
     '👏', '😂', '😱', '🔥', '💀', '❤️', '👍', '😎',
   ];
+
+  // Hazır maç içi mesajlar (💬) — SABİT liste, serbest metin YOK.
+  // id sunucuya gönderilir; metin SUNUCU tarafındaki izin listesinden çözülür
+  // (backend ws/game.py QUICK_MESSAGES ile birebir aynı tutulmalı).
+  static const Map<String, String> quickMessages = {
+    'qm_gl': 'İyi şanslar! 🍀',
+    'qm_wp': 'Helal! 👏',
+    'qm_gg': 'GG 🔥',
+    'qm_ah': 'Ah be! 😅',
+    'qm_wow': 'Vay canına! 😱',
+  };
 
   static const List<String> interestTags = [
     'Spor', 'Müzik', 'Film', 'Dizi', 'Teknoloji', 'Bilim',

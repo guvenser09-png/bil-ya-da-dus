@@ -75,8 +75,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    _tournamentCard(context),
+                    // İLK LANSMAN: Turnuva (3x) kartı rafa kaldırıldı — Aşama
+                    // 3'te geri açılacak (tournament_screen.dart durur, UI'dan
+                    // giriş yok).
                     const SizedBox(height: 18),
                     Row(
                       children: [
@@ -147,50 +148,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  /// Turnuva giriş kartı — belirgin altın çerçeveli kart, /tournament açar.
-  Widget _tournamentCard(BuildContext context) {
-    return GestureDetector(
-      onTap: () => context.push('/tournament'),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: AppTheme.cSurfaceContainer.withValues(alpha: 0.7),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppTheme.gold.withValues(alpha: 0.7), width: 1.5),
-          boxShadow: [
-            BoxShadow(color: AppTheme.gold.withValues(alpha: 0.2), blurRadius: 16, offset: const Offset(0, 4)),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                gradient: AppTheme.goldGradient,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              alignment: Alignment.center,
-              child: const Text('⚡', style: TextStyle(fontSize: 22)),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('KENDİNE GÜVENİYOR MUSUN?', style: BiladaText.title(color: AppTheme.gold, size: 15)),
-                  const SizedBox(height: 2),
-                  Text('3X zorlukta turnuvaya gir — zayıflar elenir 🔥',
-                      style: BiladaText.label(color: AppTheme.cOnSurfaceVariant, size: 11)),
-                ],
-              ),
-            ),
-            const Icon(Icons.chevron_right_rounded, color: AppTheme.gold),
-          ],
-        ),
-      ),
-    );
-  }
+  // İLK LANSMAN: _tournamentCard (turnuva giriş kartı) rafa kaldırıldı —
+  // Aşama 3'te git geçmişinden geri alınacak. /tournament rotası duruyor
+  // ama UI'dan hiçbir giriş noktası kalmadı.
 
   /// Sezon girişi — gold şerit, dokununca sezon ödülleri ekranını açar.
   Widget _seasonStrip(BuildContext context) {

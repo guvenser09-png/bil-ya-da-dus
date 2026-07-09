@@ -67,13 +67,14 @@ class SoundService {
       await _sfxPlayer.setReleaseMode(ReleaseMode.stop);
       await _musicPlayer.setReleaseMode(ReleaseMode.loop);
     } catch (_) {}
-    // iOS: sessiz anahtar (mute switch) açıkken de oyun sesleri duyulsun.
-    // 'playback' kategorisi sessiz modu bypass eder; mixWithOthers ile
-    // kullanıcının kendi müziğini (Spotify vb.) kesmeyiz.
+    // iOS: telefonun SESSİZ ANAHTARINA SAYGI göster (kullanıcı isteği):
+    // telefon sessizdeyken oyun da otomatik sessiz olur, ses açıksa çalar.
+    // 'ambient' kategorisi tam bunu yapar; mixWithOthers ile kullanıcının
+    // kendi müziğini (Spotify vb.) kesmeyiz.
     try {
       await AudioPlayer.global.setAudioContext(AudioContext(
         iOS: AudioContextIOS(
-          category: AVAudioSessionCategory.playback,
+          category: AVAudioSessionCategory.ambient,
           options: const {AVAudioSessionOptions.mixWithOthers},
         ),
         android: const AudioContextAndroid(

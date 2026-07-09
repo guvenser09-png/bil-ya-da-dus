@@ -10,6 +10,7 @@ class LobbyState {
     this.lobbyId,
     this.players = const [],
     this.countdown = AppConstants.lobbyTimeoutSeconds,
+    this.initialCountdown = AppConstants.lobbyTimeoutSeconds,
     this.isConnecting = false,
     this.isConnected = false,
     this.error,
@@ -19,6 +20,12 @@ class LobbyState {
   final String? lobbyId;
   final List<Map<String, dynamic>> players;
   final int countdown;
+
+  /// Sayacın başladığı değer — SUNUCUDAN gelen ilk countdown otoriterdir
+  /// (lobby_joined.countdown_seconds). CountdownRing dolum oranı buna göre
+  /// hesaplanır; böylece sabit 15 ile sunucu değeri ayrışırsa halka şaşmaz.
+  final int initialCountdown;
+
   final bool isConnecting;
   final bool isConnected;
   final String? error;
@@ -28,6 +35,7 @@ class LobbyState {
     String? lobbyId,
     List<Map<String, dynamic>>? players,
     int? countdown,
+    int? initialCountdown,
     bool? isConnecting,
     bool? isConnected,
     String? error,
@@ -39,6 +47,7 @@ class LobbyState {
       lobbyId: lobbyId ?? this.lobbyId,
       players: players ?? this.players,
       countdown: countdown ?? this.countdown,
+      initialCountdown: initialCountdown ?? this.initialCountdown,
       isConnecting: isConnecting ?? this.isConnecting,
       isConnected: isConnected ?? this.isConnected,
       error: clearError ? null : (error ?? this.error),
@@ -104,10 +113,15 @@ class LobbyNotifier extends StateNotifier<LobbyState> {
       final type = msg['type'] as String?;
       switch (type) {
         case 'lobby_joined':
+          // Sunucudan gelen ilk countdown OTORİTER: hem sayaç hem de halka
+          // dolum oranının paydası (initialCountdown) buradan beslenir.
+          final serverCountdown =
+              (msg['countdown_seconds'] as num?)?.toInt() ?? AppConstants.lobbyTimeoutSeconds;
           state = state.copyWith(
             lobbyId: msg['lobby_id'] as String?,
             players: List<Map<String, dynamic>>.from(msg['players'] ?? []),
-            countdown: msg['countdown_seconds'] as int? ?? AppConstants.lobbyTimeoutSeconds,
+            countdown: serverCountdown,
+            initialCountdown: serverCountdown,
           );
         case 'player_joined':
           final newUsername = msg['username'];
@@ -117,7 +131,7 @@ class LobbyNotifier extends StateNotifier<LobbyState> {
           final alreadyPresent =
               state.players.any((p) => p['username'] == newUsername);
           if (!alreadyPresent) {
-            // 20 slot üst sınırını aşma: gösterilen liste asla MAX'ı geçmesin.
+            // 12 slot üst sınırını aşma: gösterilen liste asla MAX'ı geçmesin.
             if (state.players.length < AppConstants.maxPlayers) {
               final updated = [
                 ...state.players,
@@ -138,7 +152,13 @@ class LobbyNotifier extends StateNotifier<LobbyState> {
         case 'countdown':
           final remaining = msg['remaining'];
           final countdown = remaining is int ? remaining : (remaining as num?)?.toInt() ?? state.countdown;
-          state = state.copyWith(countdown: countdown);
+          state = state.copyWith(
+            countdown: countdown,
+            // Savunmacı: sunucu sayacı bilinen başlangıcın ÜZERİNDE tikliyorsa
+            // (örn. lobby_joined kaçtı) paydayı da yükselt ki oran taşmasın.
+            initialCountdown:
+                countdown > state.initialCountdown ? countdown : null,
+          );
         case 'game_starting':
           // Oyuna geçiyoruz. Oyun ekranı ARTIK KENDİ bağımsız WsClient
           // örneğiyle ayrı bir OYUN soketi açacak (lobi tekilini paylaşmaz).

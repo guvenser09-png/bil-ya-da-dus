@@ -53,6 +53,27 @@ class _SliderWidgetState extends State<SliderWidget> {
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
       child: Column(
         children: [
+          // 🏆 FİNAL kuralı şeridi — KALICI (tutorial'dan bağımsız, herkese):
+          // tahmin turunda kazananı en yakın tahminin belirlediğini hatırlatır.
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppTheme.gold.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppTheme.gold.withValues(alpha: 0.5)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('🏆', style: TextStyle(fontSize: 14)),
+                const SizedBox(width: 8),
+                Text('En yakın tahmin kazanır',
+                    style: BiladaText.label(color: AppTheme.gold, size: 12)),
+              ],
+            ),
+          ),
           GlassCard(
             padding: const EdgeInsets.all(28),
             child: Column(

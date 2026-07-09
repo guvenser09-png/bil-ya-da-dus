@@ -258,6 +258,11 @@ class StoreNotifier extends StateNotifier<StoreState> {
                 .toList()
             : state.characters,
       );
+      // Bakiye TEK gerçek kaynaktan (authProvider.user.coins) da tazelensin —
+      // home/leaderboard üst barındaki CoinPill satın alma sonrası güncellensin.
+      try {
+        await _ref.read(authProvider.notifier).refreshUser();
+      } catch (_) {}
       return owned;
     } catch (e) {
       final msg = e.toString().contains('400')

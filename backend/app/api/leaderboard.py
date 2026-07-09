@@ -70,6 +70,23 @@ def _optional_user_id(request: Request) -> str | None:
         return None
 
 
+async def _is_guest(db: AsyncSession, user_id: str) -> bool:
+    """İstek sahibi MİSAFİR (is_guest=True) mi?
+
+    MİSAFİR FİLTRESİ (okuma katmanı): misafirler liderlik tablolarında
+    LİSTELENMEZ ve kendi my_entry'leri yerine response'a guest_hidden=true
+    konur (mobil "Hesap oluştur, sıralamaya gir!" gösterir). Redis'e puan
+    yazımı sürer: hesabını kalıcılaştıran (claim) misafirin user_id'si aynı
+    kaldığından birikmiş puanları anında görünür olur — veri kaybı yok.
+    """
+    try:
+        uid = uuid.UUID(user_id)
+    except (ValueError, AttributeError):
+        return False
+    guest = await db.scalar(select(User.is_guest).where(User.id == uid))
+    return bool(guest)
+
+
 def _today_key() -> str:
     return f"leaderboard:daily:{datetime.now(timezone.utc).strftime('%Y%m%d')}"
 
@@ -92,6 +109,7 @@ async def _alltime_entries(db: AsyncSession, limit: int) -> list[dict]:
                 User.is_active == True,  # noqa: E712
                 User.games_played > 0,
                 User.deleted_at.is_(None),  # HATA 4: silinmiş hesapları gizle
+                User.is_guest == False,  # noqa: E712 — misafirler sıralanmaz
             )
         )
         # HATA 2a: deterministik tie-breaker (User.id.asc) → sıra çağrılar arası sabit.
@@ -147,6 +165,10 @@ async def _redis_period_entries(db: AsyncSession, key: str, limit: int) -> list[
         u = by_id.get(uid)
         if u is None:
             continue
+        # Misafirler listelenmez (Redis'te puanları dursa bile); rank ve
+        # points_to_next YALNIZCA görünen (misafir olmayan) satırlarla akar.
+        if u.is_guest:
+            continue
         cur_score = int(score_by_id[uid])
         # HATA 3: bir üstteki oyuncunun dönem skoru − bu oyuncunun skoru.
         ptn = None if prev_score is None else int(prev_score - cur_score)
@@ -164,6 +186,9 @@ async def _my_alltime_entry(db: AsyncSession, user_id: str) -> dict | None:
     me = (await db.execute(select(User).where(User.id == uid))).scalar_one_or_none()
     if me is None:
         return None
+    # Misafir sıralamada yok → my_entry üretilmez (endpoint guest_hidden döner).
+    if me.is_guest:
+        return None
     # HATA 2b: rank, listeyle BİREBİR aynı composite ölçütle hesaplanır
     # (total_score, games_won, id). Böylece eşit skorlu kullanıcılarda liste
     # rank'i ile my_entry rank'i çelişmez.
@@ -174,6 +199,7 @@ async def _my_alltime_entry(db: AsyncSession, user_id: str) -> dict | None:
             User.is_active == True,  # noqa: E712
             User.games_played > 0,
             User.deleted_at.is_(None),  # HATA 4
+            User.is_guest == False,  # noqa: E712 — misafirler rank'e sayılmaz
             or_(
                 User.total_score > me.total_score,
                 and_(
@@ -201,6 +227,7 @@ async def _my_alltime_entry(db: AsyncSession, user_id: str) -> dict | None:
                 User.is_active == True,  # noqa: E712
                 User.games_played > 0,
                 User.deleted_at.is_(None),
+                User.is_guest == False,  # noqa: E712
                 or_(
                     User.total_score > me.total_score,
                     and_(
@@ -233,11 +260,10 @@ async def _my_redis_entry(db: AsyncSession, key: str, user_id: str) -> dict | No
         if score is None:
             return None
         rank = await redis.zrevrank(key, user_id)
-        # HATA 3: bir üstteki oyuncunun dönem skoru − benim skorum (rank 1 ise None).
+        # Üstümdeki TÜM üyeler (misafir düzeltmesi + points_to_next için).
+        above_rows = []
         if rank and rank > 0:
-            above = await redis.zrevrange(key, rank - 1, rank - 1, withscores=True)
-            if above:
-                points_to_next = int(above[0][1] - score)
+            above_rows = await redis.zrevrange(key, 0, rank - 1, withscores=True)
     except Exception:
         return None
     try:
@@ -247,7 +273,39 @@ async def _my_redis_entry(db: AsyncSession, key: str, user_id: str) -> dict | No
     me = (await db.execute(select(User).where(User.id == uid))).scalar_one_or_none()
     if me is None:
         return None
-    return _entry((rank or 0) + 1, me, score=int(score), points_to_next=points_to_next)
+    # Misafir sıralamada yok → my_entry üretilmez (endpoint guest_hidden döner).
+    if me.is_guest:
+        return None
+
+    # Rank'i GÖRÜNEN listeyle tutarlı hesapla: üstümdeki misafirleri düş.
+    # (Redis zrevrank misafirleri de sayar; liste ise onları gizler.)
+    visible_above = 0
+    if above_rows:
+        above_ids: list[uuid.UUID] = []
+        score_by_id: dict[str, float] = {}
+        for member, m_score in above_rows:
+            try:
+                above_ids.append(uuid.UUID(member))
+            except (ValueError, AttributeError):
+                continue
+            score_by_id[member] = m_score
+        if above_ids:
+            rows = (
+                await db.execute(
+                    select(User.id).where(
+                        User.id.in_(above_ids),
+                        User.is_guest == False,  # noqa: E712
+                    )
+                )
+            ).scalars().all()
+            visible_scores = [
+                score_by_id[str(rid)] for rid in rows if str(rid) in score_by_id
+            ]
+            visible_above = len(visible_scores)
+            # HATA 3: bir üstteki GÖRÜNEN oyuncunun skoru − benim skorum.
+            if visible_scores:
+                points_to_next = int(min(visible_scores) - score)
+    return _entry(visible_above + 1, me, score=int(score), points_to_next=points_to_next)
 
 
 # ---------------------------------------------------------------------------
@@ -263,10 +321,21 @@ async def get_all_time(
     """Tüm zamanlar — birikimli toplam puana göre (çok oynayan üste çıkar)."""
     entries = await _alltime_entries(db, limit)
     my_entry = None
+    guest_hidden = False
     uid = _optional_user_id(request)
     if uid:
-        my_entry = await _my_alltime_entry(db, uid)
-    return {"period": "all_time", "entries": entries, "my_entry": my_entry, "total": len(entries)}
+        # Misafir sıralamaya giremez: my_entry yerine guest_hidden döner
+        # (mobil "Hesap oluştur, sıralamaya gir!" gösterir).
+        guest_hidden = await _is_guest(db, uid)
+        if not guest_hidden:
+            my_entry = await _my_alltime_entry(db, uid)
+    return {
+        "period": "all_time",
+        "entries": entries,
+        "my_entry": my_entry,
+        "guest_hidden": guest_hidden,
+        "total": len(entries),
+    }
 
 
 @router.get("/daily")
@@ -282,12 +351,22 @@ async def get_daily(
         entries = await _alltime_entries(db, limit)
         period = "daily_fallback_all_time"
     my_entry = None
+    guest_hidden = False
     uid = _optional_user_id(request)
     if uid:
+        # Misafir sıralamaya giremez (guest_hidden → mobil CTA gösterir).
+        guest_hidden = await _is_guest(db, uid)
         # HATA 1: günlük skor yoksa my_entry None kalır. all-time skor/rank'i
         # "günlük" gibi göstermek YANLIŞTI (hiç oynamadığı gün "1.'sin" gibi).
-        my_entry = await _my_redis_entry(db, _today_key(), uid)
-    return {"period": period, "entries": entries, "my_entry": my_entry, "total": len(entries)}
+        if not guest_hidden:
+            my_entry = await _my_redis_entry(db, _today_key(), uid)
+    return {
+        "period": period,
+        "entries": entries,
+        "my_entry": my_entry,
+        "guest_hidden": guest_hidden,
+        "total": len(entries),
+    }
 
 
 @router.get("/weekly")
@@ -303,14 +382,19 @@ async def get_weekly(
         entries = await _alltime_entries(db, limit)
         period = "weekly_fallback_all_time"
     my_entry = None
+    guest_hidden = False
     uid = _optional_user_id(request)
     if uid:
+        # Misafir sıralamaya giremez (guest_hidden → mobil CTA gösterir).
+        guest_hidden = await _is_guest(db, uid)
         # HATA 1: haftalık skor yoksa my_entry None kalır (all-time'a düşmez).
-        my_entry = await _my_redis_entry(db, _week_key(), uid)
+        if not guest_hidden:
+            my_entry = await _my_redis_entry(db, _week_key(), uid)
     return {
         "period": period,
         "entries": entries,
         "my_entry": my_entry,
+        "guest_hidden": guest_hidden,
         "season_days_left": _days_left_in_week(),
         "total": len(entries),
     }
@@ -331,7 +415,11 @@ async def get_season(
     from app.services.tournament_service import TournamentService
 
     uid = _optional_user_id(request)
-    return await TournamentService.leaderboard(db, user_id=uid, limit=limit)
+    resp = await TournamentService.leaderboard(db, user_id=uid, limit=limit)
+    # Misafir sıralamaya giremez: entries/my_entry zaten servis katmanında
+    # filtrelenir; burada mobilin CTA'sı için guest_hidden bayrağı EKLENİR.
+    resp["guest_hidden"] = bool(uid) and await _is_guest(db, uid)
+    return resp
 
 
 @router.get("/friends")

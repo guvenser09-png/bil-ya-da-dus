@@ -18,6 +18,7 @@ import 'package:quizroyale/features/game/widgets/tutorial_hint.dart';
 import 'package:quizroyale/features/game/providers/tutorial_provider.dart';
 import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
 import 'package:quizroyale/features/result/providers/result_provider.dart';
+import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
 // ---------------------------------------------------------------------------
@@ -39,6 +40,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   // İlk-maç tutorial: aktif ipucu balonu (tur tipi + metin). null → gösterme.
   String? _hintType;
   String? _hintMessage;
+
+  // 🏆 FİNAL duyurusu: tahmin turu başlarken HERKESE bir kez gösterilen tam
+  // ekran kısa overlay (tutorial'dan bağımsız — her maçta, her oyuncuya).
+  bool _finalAnnounceShown = false; // bu maçta bir kez tetiklendi mi
+  bool _showFinalAnnounce = false; // overlay şu an ekranda mı
 
   @override
   void initState() {
@@ -170,6 +176,24 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         }
       }
 
+      // ── 🏆 FİNAL duyurusu ─────────────────────────────────────────────
+      // Final (tahmin) turu aktifleşince 1.8sn'lik tam ekran duyuru göster.
+      // Tur numarası son tura ulaştıysa VEYA tur tipi 'tahmin' ise final
+      // sayılır (erken bitişte finalin daha önce gelmesine karşı savunmacı).
+      if (!_finalAnnounceShown && next.status == 'round_active') {
+        final qType =
+            (next.currentQuestion?['tip'] ?? next.currentQuestion?['type'] ?? '')
+                .toString();
+        final isFinal =
+            next.currentRound >= next.totalRounds || qType == 'tahmin';
+        if (isFinal) {
+          _finalAnnounceShown = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) setState(() => _showFinalAnnounce = true);
+          });
+        }
+      }
+
       if (next.status == 'finished') {
         // Maç bitti — tutorial'ı kalıcı olarak görüldü işaretle.
         ref.read(tutorialProvider.notifier).markSeen();
@@ -210,7 +234,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     // ── Kozmetik görünürlüğü ────────────────────────────────────────────
     // Backend oyuncu listesinde çerçeve göndermiyor; ancak yerel kullanıcının
     // kuşandığı çerçeve burada mevcut. Kendi avatarımıza çerçeveyi giydirerek
-    // 20 kişilik maçta kozmetiğin görünür olmasını sağlarız (satış vitrini).
+    // 12 kişilik maçta kozmetiğin görünür olmasını sağlarız (satış vitrini).
     final myUsername = ref.read(authProvider).user?['username'] as String?;
     final myFrame =
         frameKeyFromId(ref.watch(cosmeticsProvider).equippedFrame);
@@ -321,6 +345,33 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           if (state.emojiOverlay != null)
             _EmojiFloatOverlay(emoji: state.emojiOverlay!),
 
+          // ── 💬 Hazır mesaj baloncuğu (gönderen adı + sabit metin, 2sn) ──
+          if (state.quickMsg != null)
+            _QuickMsgBubble(
+              username: state.quickMsg!['username'] ?? 'oyuncu',
+              text: state.quickMsg!['text'] ?? '',
+            ),
+
+          // ── 💬 Hazır mesaj gönderme butonu (maç bitmediyse) ─────────────
+          if (state.status != 'finished')
+            Positioned(
+              right: 12,
+              bottom: 118,
+              child: SafeArea(
+                child: _QuickMsgButton(
+                  onSelected: (id) => notifier.sendQuickMsg(id),
+                ),
+              ),
+            ),
+
+          // ── 🏆 FİNAL duyurusu — kısa tam ekran overlay (1.8sn) ──────────
+          if (_showFinalAnnounce)
+            _FinalAnnounceOverlay(
+              onDone: () {
+                if (mounted) setState(() => _showFinalAnnounce = false);
+              },
+            ),
+
           // ── İlk-maç tutorial ipucu (non-blocking, kendi kapanır) ───────
           // Sadece tur aktifken ve reveal/ara overlay'leri yokken göster ki
           // sonuç/düşüş animasyonunun önüne geçmesin.
@@ -423,6 +474,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           'bet_won': gameResult['bet_won'] == true,
           'bet_reward': asInt(gameResult['bet_reward']),
         },
+        // 🛡️ Kalkan bedeli (kişisel payload): kalkan kırıldıysa YA
+        // shield_cost (tahsil edildi) YA shield_gift (bakiye yetmedi,
+        // bedava) gelir — sonuç ekranı ilgili satırı gösterir.
+        if (gameResult['shield_cost'] is num)
+          'shield_cost': asInt(gameResult['shield_cost']),
+        if (gameResult['shield_gift'] == true) 'shield_gift': true,
         'is_winner': myIsWinner,
         // Hayatta kalma bayrağı + ham eleme turu → result ekranı "elendin" vs
         // "hayatta kaldın" ayrımını doğru yapar (yanlış "elendin" bug fix).
@@ -1197,6 +1254,270 @@ class _RoundTransitionOverlayState extends State<_RoundTransitionOverlay>
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// _FinalAnnounceOverlay — 🏆 FİNAL turu duyurusu (1.8sn, kendiliğinden kapanır)
+// ---------------------------------------------------------------------------
+
+class _FinalAnnounceOverlay extends StatefulWidget {
+  const _FinalAnnounceOverlay({required this.onDone});
+  final VoidCallback onDone;
+
+  @override
+  State<_FinalAnnounceOverlay> createState() => _FinalAnnounceOverlayState();
+}
+
+class _FinalAnnounceOverlayState extends State<_FinalAnnounceOverlay>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _scale;
+  late final Animation<double> _fade;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    );
+    _scale = Tween<double>(begin: 0.7, end: 1.05).animate(
+      CurvedAnimation(parent: _ctrl, curve: Curves.elasticOut),
+    );
+    // Hızlı belir → sabit kal → yumuşak kaybol (RoundTransition ile aynı dil).
+    _fade = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 15),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.0), weight: 65),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 20),
+    ]).animate(_ctrl);
+    _ctrl.forward();
+    _ctrl.addStatusListener((s) {
+      if (s == AnimationStatus.completed) widget.onDone();
+    });
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _ctrl,
+      builder: (_, __) => IgnorePointer(
+        child: Opacity(
+          opacity: _fade.value,
+          child: Container(
+            color: Colors.black.withValues(alpha: 0.78),
+            alignment: Alignment.center,
+            child: Transform.scale(
+              scale: _scale.value,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('🏆', style: TextStyle(fontSize: 64)),
+                  const SizedBox(height: 12),
+                  ShaderMask(
+                    blendMode: BlendMode.srcIn,
+                    shaderCallback: (bounds) =>
+                        AppTheme.primaryGradient.createShader(
+                      Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                    ),
+                    child: const Text(
+                      'FİNAL',
+                      style: TextStyle(
+                        fontSize: 60,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 6,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 32),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: AppTheme.gold.withValues(alpha: 0.16),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                          color: AppTheme.gold.withValues(alpha: 0.6), width: 1.5),
+                    ),
+                    child: const Text(
+                      'EN YAKIN TAHMİN ŞAMPİYON OLUR!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppTheme.gold,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// _QuickMsgButton — 💬 hazır mesaj sheet'ini açan küçük buton
+// ---------------------------------------------------------------------------
+
+class _QuickMsgButton extends StatelessWidget {
+  const _QuickMsgButton({required this.onSelected});
+
+  /// Seçilen hazır mesajın id'si (qm_*) ile çağrılır.
+  final ValueChanged<String> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _openSheet(context),
+      child: Container(
+        width: 46,
+        height: 46,
+        decoration: BoxDecoration(
+          color: AppTheme.card.withValues(alpha: 0.92),
+          shape: BoxShape.circle,
+          border: Border.all(color: AppTheme.surface, width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.35),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        alignment: Alignment.center,
+        child: const Text('💬', style: TextStyle(fontSize: 20)),
+      ),
+    );
+  }
+
+  void _openSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (sheetCtx) => SafeArea(
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+          decoration: BoxDecoration(
+            color: AppTheme.cSurfaceContainerHigh,
+            borderRadius: BorderRadius.circular(22),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('HAZIR MESAJ GÖNDER',
+                  style: BiladaText.label(
+                      color: AppTheme.cOnSurfaceVariant, size: 12)),
+              const SizedBox(height: 12),
+              // Sabit liste — serbest metin girişi bilerek YOK (moderasyon
+              // riski sıfır; sunucu da yalnızca bu id'leri kabul eder).
+              for (final entry in AppConstants.quickMessages.entries)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ChunkyButton(
+                      height: 48,
+                      depth: 4,
+                      color: AppTheme.cSurfaceContainer,
+                      foreground: AppTheme.cOnSurface,
+                      shadowColor: AppTheme.cSurfaceContainerLowest,
+                      onPressed: () {
+                        onSelected(entry.key);
+                        Navigator.of(sheetCtx).pop();
+                      },
+                      child: Text(entry.value,
+                          style: const TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// _QuickMsgBubble — gelen hazır mesajın 2sn'lik baloncuğu (gönderen adıyla)
+// ---------------------------------------------------------------------------
+
+class _QuickMsgBubble extends StatelessWidget {
+  const _QuickMsgBubble({required this.username, required this.text});
+  final String username;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 56),
+          child: Center(
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0.0, end: 1.0),
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutBack,
+              builder: (_, t, child) => Opacity(
+                opacity: t.clamp(0.0, 1.0),
+                child: Transform.scale(scale: 0.8 + 0.2 * t, child: child),
+              ),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+                decoration: BoxDecoration(
+                  color: AppTheme.card.withValues(alpha: 0.95),
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(
+                      color: AppTheme.cPrimaryContainer.withValues(alpha: 0.6)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.35),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(username,
+                        style: const TextStyle(
+                          color: AppTheme.cPrimary,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 13,
+                        )),
+                    const SizedBox(width: 8),
+                    Text(text,
+                        style: const TextStyle(
+                          color: AppTheme.textPrimary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        )),
+                  ],
+                ),
               ),
             ),
           ),

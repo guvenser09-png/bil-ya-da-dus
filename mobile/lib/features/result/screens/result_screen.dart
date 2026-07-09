@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
+import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/result/providers/result_provider.dart';
+import 'package:quizroyale/features/store/providers/store_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
@@ -27,6 +29,12 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(resultProvider(widget.gameId).notifier).fetchResult(widget.gameId);
+      // MAÇ SONU BAKİYE: coins_earned/kalkan bedeli sunucuda işlendi —
+      // üst bardaki CoinPill'in gerçek kaynağı (authProvider.user.coins)
+      // burada zorunlu tazelenir; mağaza bakiyesi de bir sonraki açılışta
+      // taze yüklensin diye invalidate edilir.
+      ref.read(authProvider.notifier).refreshUser();
+      ref.invalidate(storeProvider);
     });
   }
 
@@ -113,6 +121,11 @@ class _ResultBody extends StatelessWidget {
     final betOn = my['bet_on'] as String?;
     final betWon = my['bet_won'] == true;
     final betReward = my['bet_reward'] as int? ?? 0;
+    // 🛡️ Kalkan bedeli (game_finished kişisel payload): kalkan kırıldıysa ya
+    // bedel tahsil edildi (shield_cost) ya da bakiye yetmedi → hediye
+    // (shield_gift). İkisi birden gelmez; kırılmadıysa ikisi de yok.
+    final shieldCost = (my['shield_cost'] as num?)?.toInt() ?? 0;
+    final shieldGift = my['shield_gift'] == true;
 
     // Resolve the winner name: explicit `winner` field, else top1 username.
     final top1 = top3.isNotEmpty ? top3.first as Map? : null;
@@ -199,6 +212,11 @@ class _ResultBody extends StatelessWidget {
             if (betOn != null) ...[
               const SizedBox(height: 14),
               _BetResultBanner(betOn: betOn, won: betWon, reward: betReward),
+            ],
+            // 🛡️ Kalkan bedeli — tahsil edildi ya da hediye sayıldı.
+            if (shieldCost > 0 || shieldGift) ...[
+              const SizedBox(height: 14),
+              _ShieldBillingBanner(cost: shieldCost, gift: shieldGift),
             ],
             // ── Maç özeti — soruları & doğru cevapları gör ──────────────
             // Yalnızca gerçek soru verisi varsa göster (eski maçlarda boş).
@@ -342,6 +360,43 @@ class _BetResultBanner extends StatelessWidget {
               won
                   ? 'Bahsin tuttu: $betOn şampiyon oldu — +$reward altın!'
                   : 'Bahsin tutmadı ($betOn) — bir dahaki sefere!',
+              textAlign: TextAlign.center,
+              style: BiladaText.title(color: color, size: 15),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 🛡️ Kalkan bedeli banner'ı — kalkan bu maçta kırıldıysa gösterilir:
+/// bedel tahsil edildiyse "−50 altın", bakiye yetmediyse "hediye" satırı.
+/// (_GhostRewardBanner/_BetResultBanner ile aynı desen.)
+class _ShieldBillingBanner extends StatelessWidget {
+  const _ShieldBillingBanner({required this.cost, required this.gift});
+
+  /// Tahsil edilen bedel (0 → tahsilat yok, [gift] geçerli).
+  final int cost;
+
+  /// Bakiye yetmedi → kalkan bu seferlik ücretsiz sayıldı.
+  final bool gift;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = gift ? AppTheme.cTertiary : AppTheme.accent;
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('🛡️', style: TextStyle(fontSize: 24)),
+          const SizedBox(width: 12),
+          Flexible(
+            child: Text(
+              gift
+                  ? 'Kalkan hediye — bu sefer bizden 🎁'
+                  : 'Kalkan bedeli: −$cost altın',
               textAlign: TextAlign.center,
               style: BiladaText.title(color: color, size: 15),
             ),

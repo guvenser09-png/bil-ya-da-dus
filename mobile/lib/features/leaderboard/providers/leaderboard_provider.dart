@@ -12,6 +12,7 @@ class LeaderboardState {
     this.error,
     this.seasonDaysLeft = 0,
     this.seasonSecondsLeft = 0,
+    this.guestHidden = false,
   });
 
   final LeaderboardTab tab;
@@ -24,6 +25,10 @@ class LeaderboardState {
   /// Sezon sekmesi için bitime kalan saniye (GET /api/leaderboard/season).
   final int seasonSecondsLeft;
 
+  /// Backend guest_hidden=true döndürdü: misafir kullanıcı sıralamada
+  /// LİSTELENMEZ ve my_entry gelmez — ekran "hesabını kaydet" daveti gösterir.
+  final bool guestHidden;
+
   LeaderboardState copyWith({
     LeaderboardTab? tab,
     List<Map<String, dynamic>>? entries,
@@ -33,6 +38,7 @@ class LeaderboardState {
     String? error,
     int? seasonDaysLeft,
     int? seasonSecondsLeft,
+    bool? guestHidden,
   }) => LeaderboardState(
     tab: tab ?? this.tab,
     entries: entries ?? this.entries,
@@ -41,6 +47,7 @@ class LeaderboardState {
     error: error,
     seasonDaysLeft: seasonDaysLeft ?? this.seasonDaysLeft,
     seasonSecondsLeft: seasonSecondsLeft ?? this.seasonSecondsLeft,
+    guestHidden: guestHidden ?? this.guestHidden,
   );
 }
 
@@ -72,6 +79,8 @@ class LeaderboardNotifier extends StateNotifier<LeaderboardState> {
         clearMyEntry: myEntry == null,
         seasonDaysLeft: (data['season_days_left'] as num?)?.toInt() ?? 0,
         seasonSecondsLeft: (data['seconds_left'] as num?)?.toInt() ?? 0,
+        // Misafir: my_entry yerine kayıt daveti kartı gösterilir.
+        guestHidden: data['guest_hidden'] == true,
       );
     } catch (e) {
       state = state.copyWith(isLoading: false, error: 'Yüklenemedi');

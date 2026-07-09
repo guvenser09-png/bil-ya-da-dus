@@ -3,6 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quizroyale/core/network/api_client.dart';
 import 'package:quizroyale/core/storage/device_id_store.dart';
 import 'package:quizroyale/core/storage/secure_storage.dart';
+import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
+import 'package:quizroyale/features/daily/providers/daily_provider.dart';
+import 'package:quizroyale/features/friends/providers/friends_provider.dart';
+import 'package:quizroyale/features/inventory/providers/inventory_provider.dart';
+import 'package:quizroyale/features/leaderboard/providers/leaderboard_provider.dart';
+import 'package:quizroyale/features/profile/providers/profile_provider.dart';
+import 'package:quizroyale/features/season/providers/season_provider.dart';
+import 'package:quizroyale/features/store/providers/store_provider.dart';
 
 class AuthState {
   const AuthState({
@@ -34,8 +42,30 @@ class AuthState {
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier() : super(const AuthState()) {
+  AuthNotifier(this._ref) : super(const AuthState()) {
     _checkLogin();
+  }
+
+  final Ref _ref;
+
+  /// KÖK ÇÖZÜM (oturum sızıntısı): Kullanıcı-kapsamlı TÜM provider'ları
+  /// geçersiz kıl. Bu provider'lar (profil, mağaza, sezon, sıralama, günlük
+  /// ödül, kozmetik, envanter, arkadaşlar) constructor'larında bir kez veri
+  /// yükleyip uygulama ömrü boyunca canlı kaldıkları için, çıkış yapıp farklı
+  /// hesapla (veya misafir) girildiğinde ESKİ kullanıcının verisi ekranda
+  /// kalıyordu. invalidate → notifier dispose edilir, bir sonraki watch'ta
+  /// YENİ token ile sıfırdan yüklenir. Hem logout'ta hem her başarılı yeni
+  /// girişte çağrılır (girişte de: önceki oturumun artığı kalmasın).
+  void _resetUserScopedProviders() {
+    _ref.invalidate(profileProvider);
+    _ref.invalidate(otherProfileProvider);
+    _ref.invalidate(storeProvider);
+    _ref.invalidate(seasonProvider);
+    _ref.invalidate(leaderboardProvider);
+    _ref.invalidate(dailyProvider);
+    _ref.invalidate(cosmeticsProvider);
+    _ref.invalidate(inventoryProvider);
+    _ref.invalidate(friendsProvider);
   }
 
   Future<void> _checkLogin() async {
@@ -71,6 +101,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         isLoggedIn: true,
         user: data['user'] as Map<String, dynamic>,
       );
+      // Yeni oturum: önceki kullanıcının cache'lenmiş state'i sızmasın.
+      _resetUserScopedProviders();
       return true;
     } on DioException catch (e) {
       state = state.copyWith(
@@ -110,6 +142,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         isLoggedIn: true,
         user: data['user'] as Map<String, dynamic>,
       );
+      // Yeni oturum: önceki kullanıcının cache'lenmiş state'i sızmasın.
+      _resetUserScopedProviders();
       return true;
     } on DioException catch (e) {
       state = state.copyWith(
@@ -151,6 +185,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         isLoggedIn: true,
         user: data['user'] as Map<String, dynamic>,
       );
+      // Yeni (misafir) oturum: önceki kullanıcının verisi ekranda kalmasın.
+      _resetUserScopedProviders();
       return true;
     } on DioException catch (e) {
       state = state.copyWith(
@@ -191,6 +227,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
         );
       } catch (_) {}
       state = state.copyWith(isLoading: false, user: user);
+      // Hesap kalıcılaştı (is_guest=false): misafir olarak yüklenmiş
+      // ekran verileri (sıralama guest_hidden vb.) tazelensin.
+      _resetUserScopedProviders();
       return true;
     } on DioException catch (e) {
       state = state.copyWith(isLoading: false, error: ApiClient.friendlyError(e));
@@ -208,8 +247,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       await ApiClient.instance.post('/api/auth/logout');
     } catch (_) {}
+    // Token + kullanıcı bilgisi (userId/username) tamamen silinir.
     await SecureStorage.instance.clearAll();
     state = const AuthState();
+    // Çıkışta TÜM kullanıcı-kapsamlı state temizlenir — "çıkış yaptım ama
+    // eski profil duruyor" hatasının kök çözümü.
+    _resetUserScopedProviders();
   }
 
   /// Şifremi unuttum — e-postaya sıfırlama bağlantısı gönderir.
@@ -286,6 +329,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await ApiClient.instance.delete('/api/users/me');
       await SecureStorage.instance.clearAll();
       state = const AuthState();
+      // Hesap silindi: kullanıcı-kapsamlı tüm state de temizlensin.
+      _resetUserScopedProviders();
       return true;
     } on DioException catch (e) {
       state = state.copyWith(isLoading: false, error: ApiClient.friendlyError(e));
@@ -313,5 +358,5 @@ class AuthNotifier extends StateNotifier<AuthState> {
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>(
-  (_) => AuthNotifier(),
+  (ref) => AuthNotifier(ref),
 );

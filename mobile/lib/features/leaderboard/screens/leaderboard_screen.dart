@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
@@ -80,8 +81,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                 ),
               ),
             ),
-            if (state.tab == LeaderboardTab.season)
+            if (state.tab == LeaderboardTab.season) ...[
               _SeasonStrip(secondsLeft: state.seasonSecondsLeft),
+              const _SeasonHowItWorksCard(),
+            ],
             Expanded(
               child: state.isLoading
                   ? const Center(child: CircularProgressIndicator(color: AppTheme.cPrimaryContainer))
@@ -89,7 +92,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                       ? _ErrorView(onRetry: () => ref.read(leaderboardProvider.notifier).load(state.tab))
                       : _list(context, state.entries, state.tab),
             ),
-            if (state.myEntry != null) _MyRankBar(entry: state.myEntry!),
+            // Misafir kullanıcı: kendi-sıram barı yerine kayıt daveti kartı
+            // (backend guest_hidden=true → misafir listede/sıralamada yok).
+            if (state.myEntry != null)
+              _MyRankBar(entry: state.myEntry!)
+            else if (state.guestHidden)
+              const _GuestInviteCard(),
           ],
         ),
       ],
@@ -295,6 +303,96 @@ class _SeasonStrip extends StatelessWidget {
           ),
           Text(label,
               style: BiladaText.title(color: const Color(0xFF58002F), size: 14)),
+        ],
+      ),
+    );
+  }
+}
+
+/// Sezon sekmesi "Nasıl çalışır?" kartı — ödül kuralları tek bakışta.
+/// (Turnuva/3x çarpan referansı BİLEREK yok: ilk lansmanda turnuva rafta.)
+class _SeasonHowItWorksCard extends StatelessWidget {
+  const _SeasonHowItWorksCard();
+
+  static const _lines = [
+    ('🎮', 'Her maç sezon puanı kazandırır'),
+    ('🔄', 'Sıralama her ay sıfırlanır'),
+    ('🏆', 'Ay sonunda ilk 7 ödül kazanır — 1. 1500 altın + özel kozmetik · 2-3. 600 · 4-7. 250'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+      child: GlassCard(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('NASIL ÇALIŞIR?',
+                style: BiladaText.label(color: AppTheme.gold, size: 11)),
+            const SizedBox(height: 8),
+            for (final (emoji, text) in _lines)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(emoji, style: const TextStyle(fontSize: 12)),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(text,
+                          style: BiladaText.label(
+                              color: AppTheme.cOnSurfaceVariant, size: 11)),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Misafir daveti — guest_hidden=true iken kendi-sıram barının yerine geçer.
+/// Buton, claim (hesabı kalıcılaştırma) akışının yaşadığı profil sekmesine
+/// götürür (oradaki "Hesabını kaydet" bandı tek dokunuşla formu açar).
+class _GuestInviteCard extends StatelessWidget {
+  const _GuestInviteCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(20, 0, 20, 92 + MediaQuery.of(context).padding.bottom),
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      decoration: BoxDecoration(
+        color: AppTheme.cSurfaceContainerHigh.withValues(alpha: 0.95),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppTheme.gold.withValues(alpha: 0.5), width: 1.5),
+      ),
+      child: Row(
+        children: [
+          const Text('🏅', style: TextStyle(fontSize: 26)),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              'Misafir oynuyorsun — sıralamaya girmek için hesabını kaydet',
+              style: BiladaText.label(color: AppTheme.cOnSurface, size: 12),
+            ),
+          ),
+          const SizedBox(width: 10),
+          ChunkyButton(
+            height: 40,
+            depth: 4,
+            expand: false,
+            color: AppTheme.gold,
+            foreground: AppTheme.cOnPrimaryContainer,
+            shadowColor: const Color(0xFF8A6A00),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            onPressed: () => context.go('/profile'),
+            child: const Text('KAYDET', style: TextStyle(fontSize: 13)),
+          ),
         ],
       ),
     );

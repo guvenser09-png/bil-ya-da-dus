@@ -275,6 +275,10 @@ class QuestionService:
           3) tip + max (alt sınırı bırak)   4) tip (zorluk filtresiz)
           5) tip-bağımsız + [min,max]   6) herhangi onaylı soru
         Böylece mevcut dağılımla her tur için bir soru bulunur.
+
+        İSTİSNA — final tahmin (5. tur) NORMAL maçta: tercih sırası ters
+        (zor→kolay). Önce difficulty>=4, yoksa 3, yoksa yukarıdaki normal
+        basamaklar. Turnuva (min_difficulty'li) etkilenmez.
         """
         questions: list[Question] = []
         used_ids: set[str] = set()
@@ -294,6 +298,24 @@ class QuestionService:
             attempts: list[tuple[QuestionType | None, int | None, int | None]] = [
                 (q_type, min_difficulty, max_difficulty),
             ]
+            # FİNAL TAHMİN ZORLAŞTIRMA (kullanıcı geri bildirimi: "son soru çok
+            # kolay olunca saçma oluyor"): NORMAL maçta (max_difficulty'li,
+            # min'siz — turnuva zaten zor havuzda, dokunma) 5. turun tahmin
+            # sorusu için tercih sırası TERSİNE çevrilir: önce difficulty>=4,
+            # yoksa 3, yoksa mevcut kolay-havuz davranışı (aşağıdaki attempts).
+            # Diğer turların kolay→zor rampası DEĞİŞMEZ. Zor tahmin havuzu
+            # dedup'la daralırsa mevcut döngü aynı basamağı önce dedup'suz
+            # dener — maç asla sorusuz kalmaz.
+            if (
+                round_num == 5
+                and q_type == QuestionType.TAHMIN
+                and min_difficulty is None
+                and max_difficulty is not None
+            ):
+                attempts = [
+                    (q_type, 4, None),  # önce gerçekten zor (4-5)
+                    (q_type, 3, None),  # yoksa orta (3)
+                ] + attempts            # yoksa mevcut davranış (kolay havuz + gevşeme)
             if max_difficulty is not None:
                 # Üst sınırı gevşet (zor sızsın → tipte yeterli orta soru yoksa).
                 attempts.append((q_type, min_difficulty, None))
