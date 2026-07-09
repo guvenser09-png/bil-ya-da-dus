@@ -185,6 +185,30 @@ def generate_bot_answer_time(
     return round(delay, 1)
 
 
+# Tahmin (slider) turu sapma oranları: aralığın (max-min) yüzdesi olarak
+# Gauss standart sapması. Zor botlar gerçek değere daha yakın tahmin eder.
+_GUESS_SPREADS = {"easy": 0.30, "medium": 0.15, "hard": 0.07}
+# İlk-maç senaryosu (cömert mod): sapma GENİŞLETİLİR ki yeni oyuncunun finali
+# kazanma olasılığı belirgin artsın (easy %30 → %45 vb.).
+_GENEROUS_GUESS_SPREADS = {"easy": 0.45, "medium": 0.25, "hard": 0.12}
+
+
+def bot_guess_spread(difficulty: str, generous: bool = False) -> float:
+    """Tahmin (slider) turunda botun sapma oranını döndür (aralığın yüzdesi).
+
+    Args:
+        difficulty: 'easy', 'medium' veya 'hard'.
+        generous:   True ise ilk-maç senaryosu için genişletilmiş sapma
+                    tablosu kullanılır (botlar daha kötü tahmin eder).
+
+    Returns:
+        Gauss standart sapması olarak kullanılacak oran (0-1 arası).
+    """
+    if generous:
+        return _GENEROUS_GUESS_SPREADS.get(difficulty, 0.25)
+    return _GUESS_SPREADS.get(difficulty, 0.15)
+
+
 def should_bot_skip_answer(difficulty: str = "medium") -> bool:
     """Bot bu turda HİÇ cevap vermesin mi? (his için "süre doldu / cevapsız").
 

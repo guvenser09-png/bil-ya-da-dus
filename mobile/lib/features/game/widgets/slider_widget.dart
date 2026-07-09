@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:quizroyale/core/services/haptic_service.dart';
+import 'package:quizroyale/core/services/sound_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 
@@ -136,7 +137,8 @@ class _SliderWidgetState extends State<SliderWidget> {
                             widget.onValueChanged(v);
                             final tick = (v / tickInterval).roundToDouble() * tickInterval;
                             if ((tick - _lastTickValue).abs() >= tickInterval * 0.9) {
-                              HapticFeedback.selectionClick();
+                              // Ayara saygılı seçim tıkı (servis üzerinden).
+                              HapticService().sliderTick();
                               _lastTickValue = tick;
                             }
                           },
@@ -158,7 +160,9 @@ class _SliderWidgetState extends State<SliderWidget> {
                   onPressed: widget.isLocked
                       ? null
                       : () {
-                          HapticFeedback.mediumImpact();
+                          // Cevabı kilitleme: tık sesi + hafif haptik (ayara saygılı).
+                          SoundService().playSound(GameSound.click);
+                          HapticService().buttonTap();
                           // Mevcut değeri (sürüklenmese bile) provider'a yaz, sonra kilitle+gönder.
                           widget.onValueChanged(_value);
                           widget.onLock();

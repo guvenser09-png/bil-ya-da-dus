@@ -2,7 +2,11 @@
 
 import pytest
 
-from app.services.game_service import GameEngine, ROUND_CONFIG
+from app.services.game_service import (
+    ROUND_CONFIG,
+    TOURNAMENT_ROUND_CONFIG,
+    GameEngine,
+)
 
 
 def _create_test_engine() -> GameEngine:
@@ -34,9 +38,26 @@ class TestGameEngineInit:
         assert len(engine.alive_real_players) == 3
 
     def test_round_config(self):
-        assert ROUND_CONFIG[0]["type"] == "dogru_yanlis"
+        # Eleme rampası: ilk tur kolay 4 şıklı ısınma, final tahmin.
+        assert ROUND_CONFIG[0]["type"] == "coktan_secmeli"
+        assert ROUND_CONFIG[1]["type"] == "dogru_yanlis"
+        assert ROUND_CONFIG[2]["type"] == "gorsel"
+        assert ROUND_CONFIG[3]["type"] == "karsilastirma"
         assert ROUND_CONFIG[4]["type"] == "tahmin"
         assert len(ROUND_CONFIG) == 5
+        # Zorluk merdiveni 1-5 sıralı.
+        assert [c["difficulty"] for c in ROUND_CONFIG] == [1, 2, 3, 4, 5]
+        # Turnuva config'i aynı TİP sırasında (cömert sürelerle).
+        assert [c["type"] for c in TOURNAMENT_ROUND_CONFIG] == [
+            c["type"] for c in ROUND_CONFIG
+        ]
+        assert [c["difficulty"] for c in TOURNAMENT_ROUND_CONFIG] == [1, 2, 3, 4, 5]
+
+    def test_players_start_with_one_shield(self):
+        """Herkes (botlar DAHİL) maça 1 Kalkanla başlar."""
+        engine = _create_test_engine()
+        for p in engine.players.values():
+            assert p.shields == 1
 
 
 class TestRoundManagement:
@@ -94,7 +115,8 @@ class TestRoundManagement:
         question = {"content": "Q?", "options": ["Doğru", "Yanlış"]}
         engine.start_round(question)
 
-        # Player1 answers wrong, rest correct
+        # Kalkanı tükenmiş player1 yanlış cevaplar → normal eleme.
+        engine.players["player1"].shields = 0
         engine.players["player1"].current_answer = 1
         engine.players["player1"].answer_time = 3.0
         for p in engine.alive_players:
@@ -128,6 +150,8 @@ class TestRoundManagement:
         engine.players["player1"].current_answer = 1
         engine.players["player1"].answer_time = 3.0
         # player2: eski sabit-eşleme gibi index 0 gönderir → yanlış/elenir.
+        # (Kalkanı sıfırlanır ki kalkan kurtarması elemeyi maskelemesin.)
+        engine.players["player2"].shields = 0
         engine.players["player2"].current_answer = 0
         engine.players["player2"].answer_time = 3.0
         # Kalanlar da doğru (index 1) ki "herkes yanlış → kimse elenmez" kuralı
@@ -146,7 +170,11 @@ class TestRoundManagement:
         assert "player2" in result.eliminated
 
     def test_all_wrong_no_elimination(self):
-        """If everyone answers wrong, nobody is eliminated."""
+        """If everyone answers wrong, nobody is eliminated.
+
+        KALKAN ETKİLEŞİMİ: bu kural kalkandan ÖNCE uygulanır — kimse
+        elenmeyeceği için kimsenin kalkanı da KIRILMAZ.
+        """
         engine = _create_test_engine()
         question = {"content": "Q?", "options": ["Doğru", "Yanlış"]}
         engine.start_round(question)
@@ -158,6 +186,266 @@ class TestRoundManagement:
         result = engine.end_round(correct_answer=0, question=question)
         assert len(result.eliminated) == 0  # Nobody eliminated
         assert engine.alive_count == 5
+        # Kalkanlar boşa harcanmadı, kimse "kalkanla kurtuldu" sayılmadı.
+        assert result.shield_saved == []
+        for p in engine.players.values():
+            assert p.shields == 1
+
+
+class TestShieldMechanic:
+    """Kalkan (🛡️) mekaniği testleri."""
+
+    def test_shield_saves_first_wrong(self):
+        """İlk yanlışta kalkan KIRILIR, oyuncu hayatta kalır ama puan almaz."""
+        engine = _create_test_engine()
+        question = {"content": "Q?", "options": ["Doğru", "Yanlış"]}
+        engine.start_round(question)
+
+        engine.players["player1"].current_answer = 1  # yanlış
+        engine.players["player1"].answer_time = 3.0
+        for p in engine.alive_players:
+            if p.username != "player1":
+                p.current_answer = 0
+                p.answer_time = 3.0
+
+        result = engine.end_round(correct_answer=0, question=question)
+
+        # Elenmedi, kalkanıyla kurtuldu.
+        assert "player1" not in result.eliminated
+        assert "player1" in result.survivors
+        assert result.shield_saved == ["player1"]
+        assert engine.players["player1"].is_alive is True
+        assert engine.players["player1"].shields == 0
+        # Yanlış cevapladı: puan YOK, correct=False, streak sıfır.
+        assert result.player_answers["player1"]["correct"] is False
+        assert result.player_answers["player1"]["score"] == 0
+        assert engine.players["player1"].streak == 0
+        # Reveal payload'ı sözleşmeye uygun: shield_saved listesi mesajda var.
+        msg = engine.get_round_end_message(result)
+        assert msg["shield_saved"] == ["player1"]
+        assert msg["results"]["player1"]["shield_saved"] is True
+        # Doğru cevaplayanların kalkanı yerinde duruyor.
+        assert engine.players["player2"].shields == 1
+
+    def test_second_wrong_eliminates(self):
+        """Kalkan tek kullanımlık: ikinci yanlış = normal eleme."""
+        engine = _create_test_engine()
+        question = {"content": "Q?", "options": ["Doğru", "Yanlış"]}
+
+        # Tur 1: player1 yanlış → kalkan kırılır, hayatta.
+        engine.start_round(question)
+        engine.players["player1"].current_answer = 1
+        engine.players["player1"].answer_time = 3.0
+        for p in engine.alive_players:
+            if p.username != "player1":
+                p.current_answer = 0
+                p.answer_time = 3.0
+        engine.end_round(correct_answer=0, question=question)
+        assert engine.players["player1"].is_alive is True
+        assert engine.players["player1"].shields == 0
+
+        # Tur 2: player1 yine yanlış → kalkan yok, elenir.
+        engine.start_round(question)
+        engine.players["player1"].current_answer = 1
+        engine.players["player1"].answer_time = 3.0
+        for p in engine.alive_players:
+            if p.username != "player1":
+                p.current_answer = 0
+                p.answer_time = 3.0
+        result = engine.end_round(correct_answer=0, question=question)
+
+        assert "player1" in result.eliminated
+        assert result.shield_saved == []
+        assert engine.players["player1"].is_alive is False
+        assert engine.players["player1"].eliminated_at_round == 2
+
+    def test_shield_invalid_in_final_round(self):
+        """Final (tahmin) turunda kalkan GEÇERSİZ: uzak tahmin kalkana rağmen elenir."""
+        engine = _create_test_engine()
+        engine.current_round = 4  # start_round → 5. tur (tahmin)
+        question = {
+            "content": "Tahmin?",
+            "min_value": 0,
+            "max_value": 1000,
+            "real_answer": 500,
+        }
+        engine.start_round(question)
+
+        # player1 kalkanlı ama tolerans bandının (±100) çok dışında.
+        assert engine.players["player1"].shields == 1
+        engine.players["player1"].current_answer = 990
+        engine.players["player1"].answer_time = 3.0
+        for p in engine.alive_players:
+            if p.username != "player1":
+                p.current_answer = 505
+                p.answer_time = 3.0
+
+        result = engine.end_round(correct_answer=500, question=question)
+
+        # Kalkan finali kurtarmaz: player1 elendi, kalkanı da harcanmadı.
+        assert "player1" in result.eliminated
+        assert engine.players["player1"].is_alive is False
+        assert result.shield_saved == []
+        assert engine.players["player1"].shields == 1
+
+    def test_round_start_payload_includes_shields(self):
+        """round_start ve game_state oyuncu listelerinde shields alanı bulunur."""
+        engine = _create_test_engine()
+        msg = engine.start_round({"content": "Q?", "options": ["A", "B"]})
+        for entry in msg["players"]:
+            assert entry["shields"] == 1
+        for entry in engine.players_summary():
+            assert entry["shields"] == 1
+
+
+class TestGhostMode:
+    """Hayalet modu (👻) testleri — elenen oyuncu gölge cevap verir."""
+
+    def _eliminate(self, engine: GameEngine, username: str, at_round: int = 1):
+        p = engine.players[username]
+        p.is_alive = False
+        p.eliminated_at_round = at_round
+        p.shields = 0
+
+    def test_ghost_answer_counted_without_affecting_results(self):
+        """Doğru hayalet cevap sayaç artırır; eleme/skor/results'a karışmaz."""
+        engine = _create_test_engine()
+        self._eliminate(engine, "player1")
+        question = {"content": "Q?", "options": ["Doğru", "Yanlış"]}
+        engine.start_round(question)
+
+        # Elenmiş player1 hayalet cevap verir (doğru).
+        assert engine.submit_ghost_answer("player1", 0, 3.0) is True
+        # Aynı turda ikinci hayalet cevap reddedilir.
+        assert engine.submit_ghost_answer("player1", 1, 2.0) is False
+
+        for p in engine.alive_players:
+            p.current_answer = 0
+            p.answer_time = 3.0
+        result = engine.end_round(correct_answer=0, question=question)
+
+        assert engine.players["player1"].ghost_correct == 1
+        # Hayalet skoru/puanı YOK; results map'ine karışmadı.
+        assert engine.players["player1"].score == 0
+        assert "player1" not in result.player_answers
+        assert "player1" not in result.survivors
+        assert "player1" not in result.eliminated
+        # Reveal payload'ında kişiye özel ghost_results girdisi var.
+        msg = engine.get_round_end_message(result)
+        assert msg["ghost_results"]["player1"]["correct"] is True
+        assert "player1" not in msg["results"]
+
+    def test_ghost_wrong_not_counted_and_alive_rejected(self):
+        """Yanlış hayalet cevap sayaç artırmaz; HAYATTA olan hayalet olamaz."""
+        engine = _create_test_engine()
+        self._eliminate(engine, "player1")
+        question = {"content": "Q?", "options": ["Doğru", "Yanlış"]}
+        engine.start_round(question)
+
+        # Hayatta olan player2'nin hayalet cevabı reddedilir.
+        assert engine.submit_ghost_answer("player2", 0, 3.0) is False
+        # player1 yanlış hayalet cevap verir.
+        assert engine.submit_ghost_answer("player1", 1, 3.0) is True
+
+        for p in engine.alive_players:
+            p.current_answer = 0
+            p.answer_time = 3.0
+        result = engine.end_round(correct_answer=0, question=question)
+
+        assert engine.players["player1"].ghost_correct == 0
+        assert result.ghost_results["player1"]["correct"] is False
+
+    def test_ghost_estimation_tolerance(self):
+        """Tahmin turunda tolerans bandı içindeki hayalet tahmin doğru sayılır."""
+        engine = _create_test_engine()
+        self._eliminate(engine, "player1", at_round=3)
+        engine.current_round = 4  # start_round → 5. tur (tahmin)
+        question = {
+            "content": "Tahmin?",
+            "min_value": 0,
+            "max_value": 1000,
+            "real_answer": 500,
+        }
+        engine.start_round(question)
+
+        # Tolerans ±100: 560 içeride → doğru sayılmalı.
+        assert engine.submit_ghost_answer("player1", 560, 3.0) is True
+        for p in engine.alive_players:
+            p.current_answer = 505
+            p.answer_time = 3.0
+        result = engine.end_round(correct_answer=500, question=question)
+
+        assert engine.players["player1"].ghost_correct == 1
+        assert result.ghost_results["player1"]["correct"] is True
+
+
+class TestChampionBet:
+    """Şampiyon bahsi (🎯) testleri."""
+
+    def test_place_bet_valid_and_locked(self):
+        """Elenmiş oyuncu hayatta kalana bahis koyar; ikinci bahis reddedilir."""
+        engine = _create_test_engine()
+        engine.players["player1"].is_alive = False
+        engine.players["player1"].eliminated_at_round = 2
+
+        ok, err = engine.place_champion_bet("player1", "player2")
+        assert ok is True and err == ""
+        assert engine.players["player1"].champion_bet == "player2"
+
+        # Değiştirilemez: ikinci bahis reddedilir, ilk bahis korunur.
+        ok, err = engine.place_champion_bet("player1", "player3")
+        assert ok is False and err
+        assert engine.players["player1"].champion_bet == "player2"
+
+    def test_place_bet_invalid_cases(self):
+        """Hayattayken, ölü hedefe veya olmayan oyuncuya bahis reddedilir."""
+        engine = _create_test_engine()
+
+        # Hayatta olan oyuncu bahis yapamaz.
+        ok, _ = engine.place_champion_bet("player1", "player2")
+        assert ok is False
+
+        # Elenmiş oyuncu, ELENMİŞ bir hedefe bahis yapamaz.
+        engine.players["player1"].is_alive = False
+        engine.players["player2"].is_alive = False
+        ok, _ = engine.place_champion_bet("player1", "player2")
+        assert ok is False
+        # Olmayan oyuncuya da yapamaz.
+        ok, _ = engine.place_champion_bet("player1", "yok_boyle_biri")
+        assert ok is False
+        assert engine.players["player1"].champion_bet is None
+
+
+class TestGhostAndBetRewards:
+    """Hayalet altını + bahis ödülü hesap kuralları."""
+
+    def test_ghost_reward_capped(self):
+        from app.services.match_reward_service import (
+            GHOST_GOLD_MAX,
+            ghost_reward_for,
+        )
+
+        assert ghost_reward_for(0) == 0
+        assert ghost_reward_for(1) == 5
+        assert ghost_reward_for(4) == 20
+        # Üst sınır: 4'ten fazla doğru bile olsa 20'yi aşamaz.
+        assert ghost_reward_for(9) == GHOST_GOLD_MAX
+
+    def test_bonus_coins_for_ghost_and_winning_bet(self):
+        from app.ws.game import _bonus_coins_for
+
+        engine = _create_test_engine()
+        p = engine.players["player1"]
+        p.is_alive = False
+        p.ghost_correct = 3
+        p.champion_bet = "player2"
+
+        # Bahis tuttu: 3×5 hayalet + 25 bahis = 40.
+        assert _bonus_coins_for(p, "player2") == 40
+        # Bahis tutmadı: sadece hayalet altını.
+        assert _bonus_coins_for(p, "player3") == 15
+        # Kazanan belirsizse bahis ödenmez.
+        assert _bonus_coins_for(p, None) == 15
 
 
 class TestBotSimulation:

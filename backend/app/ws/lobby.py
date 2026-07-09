@@ -22,7 +22,6 @@ Server → Client:
     {"type": "connected",         "user_id": "...", "timestamp": "..."}
     {"type": "lobby_joined",      "lobby_id": "...", "players": [...], "countdown_seconds": 20}
     {"type": "reconnected",       "lobby_id": "...", "players": [...], "remaining_seconds": N}
-    {"type": "warmup_question",   "question": "...", "options": [...], "note": "Skora etkisi yok!"}
     {"type": "player_joined",     "username": "...", "avatar_id": "...", "player_count": N}
     {"type": "player_left",       "user_id": "...", "player_count": N}
     {"type": "countdown",         "remaining": N, "player_count": N, "max_players": 20}
@@ -48,8 +47,9 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from app.config import settings
 from app.redis_client import get_redis
+from app.services.anti_tilt_service import get_bot_difficulty_override
 from app.services.cap_service import add_to_queue, get_min_real_players, remove_from_queue
-from app.services.matchmaking_service import matchmaking
+from app.services.matchmaking_service import FIRST_MATCH_MAX_GAMES, matchmaking
 from app.services.game_service import create_game
 from app.ws.game import run_game
 from app.utils.security import decode_token
@@ -233,8 +233,8 @@ class ConnectionManager:
             lobby = matchmaking.get_lobby(lobby_id)
             if lobby is None or lobby.status in ("cancelled", "starting", "in_game"):
                 return
-            # Son ~3 sn temiz kalsın; lobi dolduysa dur.
-            if lobby.is_full or (time.monotonic() - start) > 16.0:
+            # Son ~3 sn temiz kalsın (15 sn sayaca göre); lobi dolduysa dur.
+            if lobby.is_full or (time.monotonic() - start) > 11.0:
                 return
             bot = lobby.add_one_bot()
             if bot is not None:
@@ -314,12 +314,15 @@ class ConnectionManager:
                 # is_tournament=False ile active_games'e girer, run_game o
                 # hazır (yanlış bayraklı) engine'i yeniden kullanır ve maç
                 # sonu ranked sezon puanı 3x ASLA uygulanmaz.
-                create_game(
+                engine = create_game(
                     game_id=lobby.game_id,
                     players=lobby.players,
                     bots=lobby.bots,
                     is_tournament=lobby.is_tournament,
                 )
+                # İlk-maç senaryosu: botların final (slider) tahmin sapması
+                # genişletilir → yeni oyuncunun finali kazanma şansı artar.
+                engine.generous_bot_guesses = (lobby.bot_mix == "first_match")
                 asyncio.create_task(
                     run_game(
                         lobby.game_id,
@@ -528,6 +531,53 @@ async def _fetch_user_cosmetics(user_id: str) -> dict[str, Any] | None:
         return None
 
 
+async def _fetch_games_played(user_id: str) -> int | None:
+    """Oyuncunun toplam oynanmış maç sayısını DB'den çek (ilk-maç senaryosu).
+
+    User.games_played alanını okur (AAS/cap_service'in kullandığı bilgiyle
+    aynı kaynak). Hata olursa None döner → senaryo tetiklenmez, lobi normal
+    karışımla devam eder (katılımı asla bloklamaz).
+    """
+    try:
+        from app.database import async_session_factory
+        from app.services.user_service import UserService
+
+        async with async_session_factory() as db:
+            user = await UserService.get_user_by_id(db, user_id)
+        if user is None:
+            return None
+        return int(user.games_played or 0)
+    except Exception:
+        logger.debug("games_played çekilemedi (user %s)", user_id)
+        return None
+
+
+async def _apply_bot_mix_overrides(lobby: Any, user_id: str) -> None:
+    """Katılan oyuncuya göre lobinin bot karışım override'ını belirle.
+
+    Öncelik sırası (set_bot_mix içinde de korunur):
+      1. İlk-maç senaryosu: oyuncunun toplam maçı < FIRST_MATCH_MAX_GAMES ise
+         karışım "first_match" (≈9 easy + 2 medium + 0 hard) olur.
+      2. Anti-tilt: 3 üst üste kayıpta karışım "easy_heavy" (%80 easy) olur.
+      3. Varsayılan karışım.
+
+    Sadece NORMAL eşleşme lobileri için; turnuva lobisinde set_bot_mix no-op.
+    Hatalar katılımı asla engellemez (best-effort).
+    """
+    try:
+        games_played = await _fetch_games_played(user_id)
+        if games_played is not None and games_played < FIRST_MATCH_MAX_GAMES:
+            lobby.set_bot_mix("first_match")
+            return
+        # Anti-tilt override'ı (yalnızca ilk-maç tetiklenmediyse anlamlı;
+        # set_bot_mix zaten önceliği korur).
+        tilt_override = await get_bot_difficulty_override(user_id)
+        if tilt_override == "easy_heavy":
+            lobby.set_bot_mix("easy_heavy")
+    except Exception:
+        logger.debug("Bot karışım override'ı uygulanamadı (user %s)", user_id)
+
+
 def _authenticate_token(token: str) -> dict[str, Any] | None:
     """Decode and validate a JWT access token.
 
@@ -537,26 +587,6 @@ def _authenticate_token(token: str) -> dict[str, Any] | None:
         return decode_token(token, expected_type="access")
     except Exception:
         return None
-
-
-# ---------------------------------------------------------------------------
-# Warmup-question helper
-# ---------------------------------------------------------------------------
-
-def _build_warmup_message(lobby_id: str) -> dict[str, Any] | None:
-    """Build a ``warmup_question`` server message from the lobby's question bank."""
-    lobby = matchmaking.get_lobby(lobby_id)
-    if lobby is None:
-        return None
-    warmup = lobby.get_warmup_question()
-    if warmup is None:
-        return None
-    return {
-        "type": "warmup_question",
-        "question": warmup["question"],
-        "options": warmup["options"],
-        "note": "Skora etkisi yok!",
-    }
 
 
 # ---------------------------------------------------------------------------
@@ -673,11 +703,6 @@ async def lobby_websocket(websocket: WebSocket) -> None:
                             "remaining_seconds": remaining_secs,
                         }, default=str))
 
-                        # Re-send warmup question on reconnect
-                        warmup_msg = _build_warmup_message(prior_lobby_id)
-                        if warmup_msg:
-                            await websocket.send_text(json.dumps(warmup_msg))
-
                         logger.info("User %s reconnected to lobby %s", user_id, prior_lobby_id)
                         continue  # Done — back to receive loop
 
@@ -694,6 +719,11 @@ async def lobby_websocket(websocket: WebSocket) -> None:
                     is_tournament=is_tournament,
                 )
                 current_lobby_id = lobby.lobby_id
+
+                # İlk-maç senaryosu + anti-tilt bot karışımı (turnuva HARİÇ).
+                if not is_tournament:
+                    await _apply_bot_mix_overrides(lobby, user_id)
+
                 await manager.connect(user_id, websocket, lobby.lobby_id)
                 await add_to_queue(user_id)
 
@@ -706,11 +736,6 @@ async def lobby_websocket(websocket: WebSocket) -> None:
                     "max_players": settings.MAX_PLAYERS,
                     "countdown_seconds": settings.LOBBY_TIMEOUT_SECONDS,
                 }, default=str))
-
-                # Send warmup question (informational; no score impact)
-                warmup_msg = _build_warmup_message(lobby.lobby_id)
-                if warmup_msg:
-                    await websocket.send_text(json.dumps(warmup_msg))
 
                 # Notify existing lobby members that a new player arrived.
                 # Katılan oyuncunun KENDİSİNE gönderme — yoksa kendini iki kez

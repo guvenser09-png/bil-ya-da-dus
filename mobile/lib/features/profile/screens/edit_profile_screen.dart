@@ -30,7 +30,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     // Katalogdaki bir karaktere işaret etmiyorsa starter'ın ilkine düş.
     final saved = profile['avatar_id'] as String?;
     _avatarId = (saved != null && isCatalogCharacter(saved)) ? saved : 'robot';
-    _selectedInterests = (profile['interests'] as List? ?? []).cast<String>();
+    // Backend alan adı interest_tags ('interests' anahtarı backend'de yok).
+    _selectedInterests = (profile['interest_tags'] as List? ?? []).cast<String>();
     _bioController.addListener(() => setState(() => _dirty = true));
     // Karakter sahipliğini tazele (bireysel owned/price için backend otoritedir).
     WidgetsBinding.instance.addPostFrameCallback((_) {

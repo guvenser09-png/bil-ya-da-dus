@@ -19,6 +19,7 @@ Optional flags::
 
     uv run python scripts/seed_questions.py --dry-run   # show what would happen
     uv run python scripts/seed_questions.py --file path/to/other.json
+    uv run python scripts/seed_questions.py --validate-only  # DB'siz yapısal kontrol
 """
 
 from __future__ import annotations
@@ -134,6 +135,59 @@ def build_question(raw: dict) -> Question:
     )
 
 
+def validate_only(path: Path) -> None:
+    """DB'siz yapısal doğrulama: dosyayı yükle, valide et, dağılımı raporla.
+
+    CI/lokal kontrol için kullanılır — veritabanı bağlantısı GEREKTİRMEZ.
+    Dosya-içi mükerrer id'ler (aynı tip+içerik hash'i) de raporlanır.
+    """
+    questions = load_questions(path)
+    print(f"Loaded {len(questions)} questions from {path}")
+
+    for i, raw in enumerate(questions):
+        validate(raw, i)
+
+    # Zorluk aralığı kontrolü (1-5 dışına taşan soru seed edilmemeli).
+    for i, raw in enumerate(questions):
+        diff = int(raw.get("difficulty", 3))
+        if not (1 <= diff <= 5):
+            raise ValueError(f"[#{i}] difficulty {diff} 1-5 aralığında değil")
+        # Tahmin sorularında gerçek cevap slider aralığının içinde olmalı.
+        if raw.get("type") == "tahmin":
+            lo, hi, real = raw["min_value"], raw["max_value"], raw["real_answer"]
+            if not (lo < hi):
+                raise ValueError(f"[#{i}] tahmin: min_value < max_value olmalı")
+            if not (lo <= real <= hi):
+                raise ValueError(
+                    f"[#{i}] tahmin: real_answer ({real}) aralık dışında [{lo},{hi}]"
+                )
+
+    # Dosya-içi mükerrerler (deterministic id çakışması).
+    seen: dict[str, int] = {}
+    dupes = 0
+    for i, raw in enumerate(questions):
+        qid = deterministic_id(raw["type"], raw["content"])
+        if qid in seen:
+            print(f"  DUPE: #{i} aynı içerik #{seen[qid]} ile (id={qid})")
+            dupes += 1
+        else:
+            seen[qid] = i
+
+    # Tip × zorluk dağılımı.
+    dist: dict[tuple[str, int], int] = {}
+    for raw in questions:
+        key = (raw["type"], int(raw.get("difficulty", 3)))
+        dist[key] = dist.get(key, 0) + 1
+    print("\nTip × zorluk dağılımı:")
+    for (q_type, diff), count in sorted(dist.items()):
+        print(f"  {q_type:<16} d{diff}  {count}")
+
+    print(f"\nOK — {len(questions)} soru yapısal olarak geçerli, "
+          f"{dupes} dosya-içi mükerrer.")
+    if dupes:
+        raise SystemExit(1)
+
+
 async def seed(path: Path, dry_run: bool = False) -> None:
     questions = load_questions(path)
     print(f"Loaded {len(questions)} questions from {path}")
@@ -216,7 +270,16 @@ def main() -> None:
         action="store_true",
         help="Show what would be inserted without writing to the DB.",
     )
+    parser.add_argument(
+        "--validate-only",
+        action="store_true",
+        help="DB'siz yapısal doğrulama: yükle + valide et + dağılımı raporla.",
+    )
     args = parser.parse_args()
+
+    if args.validate_only:
+        validate_only(args.file)
+        return
 
     asyncio.run(seed(args.file, dry_run=args.dry_run))
 

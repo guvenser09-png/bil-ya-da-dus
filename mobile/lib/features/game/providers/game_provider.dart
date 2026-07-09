@@ -27,6 +27,7 @@ class GameState {
     this.myScore = 0,
     this.myRound = 0,
     this.emojiOverlay,
+    this.betOn,
   });
 
   final String gameId;
@@ -71,6 +72,10 @@ class GameState {
   /// Emoji string shown in overlay, null when hidden
   final String? emojiOverlay;
 
+  /// Şampiyon bahsi (🎯): elenmişken bahis koyulan oyuncunun username'i.
+  /// null = henüz bahis yok. Bir kez set edilince değiştirilemez (kilitli).
+  final String? betOn;
+
   GameState copyWith({
     String? gameId,
     String? status,
@@ -92,6 +97,7 @@ class GameState {
     int? myRound,
     String? emojiOverlay,
     bool clearEmoji = false,
+    String? betOn,
   }) {
     return GameState(
       gameId: gameId ?? this.gameId,
@@ -111,6 +117,7 @@ class GameState {
       myScore: myScore ?? this.myScore,
       myRound: myRound ?? this.myRound,
       emojiOverlay: clearEmoji ? null : (emojiOverlay ?? this.emojiOverlay),
+      betOn: betOn ?? this.betOn,
     );
   }
 }
@@ -211,6 +218,16 @@ class GameNotifier extends StateNotifier<GameState> {
     _wsClient.send({'type': 'emoji', 'emoji': emoji});
   }
 
+  /// Şampiyon bahsi (🎯): elenmişken hayatta kalan bir oyuncuya TEK SEFERLİK
+  /// bahis koy. İyimser kilitlenir; backend 'bet_placed' ile doğrular
+  /// (geçersizse 'error' döner ama bahis zaten sunucuda kaydedilmemiştir).
+  void placeBet(String username) {
+    if (state.betOn != null) return; // tek seferlik — değiştirilemez
+    if (!state.isSpectator) return; // sadece elenmiş oyuncu
+    _wsClient.send({'type': 'place_bet', 'username': username});
+    state = state.copyWith(betOn: username);
+  }
+
   // ------------------------------------------------------------------
   // Internal – message dispatch
   // ------------------------------------------------------------------
@@ -254,6 +271,8 @@ class GameNotifier extends StateNotifier<GameState> {
         _onRoundTransition(msg);
       case 'spectator_mode':
         _onSpectatorMode(msg);
+      case 'bet_placed':
+        _onBetPlaced(msg);
       case 'game_finished':
         _onGameFinished(msg);
       case 'emoji':
@@ -338,6 +357,14 @@ class GameNotifier extends StateNotifier<GameState> {
       isSpectator: true,
       allPlayers: players.isNotEmpty ? players : null,
     );
+  }
+
+  // bet_placed – sunucu şampiyon bahsini onayladı; kilitli hedefi senkronla.
+  void _onBetPlaced(Map<String, dynamic> msg) {
+    final betOn = msg['bet_on'] as String?;
+    if (betOn != null && betOn.isNotEmpty) {
+      state = state.copyWith(betOn: betOn);
+    }
   }
 
   // game_finished – terminal durum. status='finished' + gameResult set edilir;

@@ -32,9 +32,17 @@ class User(Base):
 
     # Auth provider (for future OAuth)
     auth_provider: Mapped[str | None] = mapped_column(
-        String(20)  # "email", "google", "apple", None
+        String(20)  # "email", "google", "apple", "guest", None
     )
     auth_provider_id: Mapped[str | None] = mapped_column(String(255))
+
+    # Misafir girişi: cihaz kimliği ile şifresiz hesap. device_id mobil
+    # tarafta üretilip kalıcı saklanır; aynı cihaz tekrar girince aynı
+    # hesaba bağlanır. Hesap kalıcılaştırılınca (claim) is_guest=False olur.
+    device_id: Mapped[str | None] = mapped_column(
+        String(64), unique=True, nullable=True, index=True
+    )
+    is_guest: Mapped[bool] = mapped_column(Boolean, default=False)
 
     # Profile
     display_name: Mapped[str | None] = mapped_column(String(50))

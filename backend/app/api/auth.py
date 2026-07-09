@@ -1,7 +1,7 @@
 """Authentication endpoints — register, login, refresh, logout, password reset, e-posta doğrulama."""
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -50,6 +50,28 @@ class SendVerificationResponse(BaseModel):
     message: str
     success: bool = True
     debug_token: str | None = None
+
+
+class GuestLoginRequest(BaseModel):
+    """Misafir girişi — mobilde üretilip kalıcı saklanan cihaz kimliği."""
+    device_id: str = Field(..., min_length=8, max_length=64)
+
+
+class ClaimAccountRequest(BaseModel):
+    """Misafir hesabı kalıcılaştırma (email + şifre + opsiyonel yeni username)."""
+    email: str = Field(..., max_length=255)
+    password: str = Field(..., min_length=6, max_length=128)
+    username: str | None = Field(
+        None, min_length=3, max_length=30, pattern=r"^[a-zA-Z0-9_.]+$"
+    )
+
+    @field_validator("password")
+    @classmethod
+    def password_strength(cls, v: str) -> str:
+        """Kayıt akışıyla aynı temel şifre kuralı."""
+        if v.isdigit():
+            raise ValueError("Şifre sadece rakamlardan oluşamaz.")
+        return v
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
@@ -112,6 +134,72 @@ async def login(request: UserLoginRequest, db: AsyncSession = Depends(get_db)):
         expires_in=settings.JWT_ACCESS_EXPIRATION_MINUTES * 60,
         user=UserMeResponse.model_validate(user),
     )
+
+
+@router.post("/guest", response_model=TokenResponse)
+async def guest_login(request: GuestLoginRequest, db: AsyncSession = Depends(get_db)):
+    """Misafir olarak giriş yap (şifresiz, cihaz kimliğine bağlı).
+
+    device_id'ye bağlı bir hesap varsa onun token'ları döner; yoksa
+    "Oyuncu" + rastgele ekli yeni bir misafir hesabı oluşturulur.
+    Mevcut login/register akışları değişmez.
+    """
+    try:
+        user, access_token, refresh_token = await AuthService.guest_login(
+            db=db,
+            device_id=request.device_id,
+        )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
+    except PermissionError as e:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=str(e),
+        )
+
+    return TokenResponse(
+        access_token=access_token,
+        refresh_token=refresh_token,
+        expires_in=settings.JWT_ACCESS_EXPIRATION_MINUTES * 60,
+        user=UserMeResponse.model_validate(user),
+    )
+
+
+@router.post("/claim", response_model=UserMeResponse)
+async def claim_account(
+    request: ClaimAccountRequest,
+    user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db),
+):
+    """Misafir hesabı kalıcılaştır (email + şifre, opsiyonel yeni username).
+
+    Giriş yapmış MİSAFİR kullanıcı içindir; başarıda is_guest=False olur ve
+    tüm ilerleme (XP, coin, istatistik) aynı hesapta korunur.
+    Email/username çakışmasında 409 döner.
+    """
+    try:
+        user = await AuthService.claim_guest_account(
+            db=db,
+            user_id=user_id,
+            email=request.email,
+            password=request.password,
+            username=request.username,
+        )
+    except ValueError as e:
+        detail = str(e)
+        # Çakışma (email/username) → 409, diğer doğrulama hataları → 400.
+        conflict = "zaten kayıtlı" in detail or "zaten alınmış" in detail
+        raise HTTPException(
+            status_code=(
+                status.HTTP_409_CONFLICT if conflict else status.HTTP_400_BAD_REQUEST
+            ),
+            detail=detail,
+        )
+
+    return UserMeResponse.model_validate(user)
 
 
 @router.post("/refresh", response_model=TokenResponse)

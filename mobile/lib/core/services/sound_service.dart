@@ -9,6 +9,12 @@ enum GameSound {
   win,
   lobbyJoin,
   roundStart,
+
+  /// Şık seçme / buton kilitleme tıkı.
+  click,
+
+  /// Kalkan kırılma efekti — UI tetiği sonraki dalgada bağlanacak, ses hazır.
+  shieldBreak,
 }
 
 class SoundService {
@@ -21,14 +27,17 @@ class SoundService {
   final AudioPlayer _sfxPlayer = AudioPlayer();
   final AudioPlayer _musicPlayer = AudioPlayer();
 
+  // Sentezlenmiş WAV varlıkları (assets/audio/ altında, pubspec'e kayıtlı).
   static const _assetMap = {
-    GameSound.correct: 'audio/correct.mp3',
-    GameSound.wrong: 'audio/wrong.mp3',
-    GameSound.countdown: 'audio/countdown.mp3',
-    GameSound.elimination: 'audio/elimination.mp3',
-    GameSound.win: 'audio/win.mp3',
-    GameSound.lobbyJoin: 'audio/lobby_join.mp3',
-    GameSound.roundStart: 'audio/round_start.mp3',
+    GameSound.correct: 'audio/correct.wav',
+    GameSound.wrong: 'audio/wrong.wav',
+    GameSound.countdown: 'audio/tick.wav',
+    GameSound.elimination: 'audio/fall.wav',
+    GameSound.win: 'audio/champion.wav',
+    GameSound.lobbyJoin: 'audio/click.wav',
+    GameSound.roundStart: 'audio/round_start.wav',
+    GameSound.click: 'audio/click.wav',
+    GameSound.shieldBreak: 'audio/shield_break.wav',
   };
 
   static const String _prefKeySound = 'sound_enabled';
@@ -37,7 +46,20 @@ class SoundService {
   bool get soundEnabled => _soundEnabled;
   bool get musicEnabled => _musicEnabled;
 
+  /// init() bir kez çalıştı mı? İlk playSound çağrısında tembel başlatılır;
+  /// böylece uygulama açılışına ek yük binmez ve init unutulsa bile ayarlar
+  /// (ses aç/kapa) her zaman prefs'ten okunur.
+  bool _initialized = false;
+  Future<void>? _initFuture;
+
   Future<void> init() async {
+    if (_initialized) return;
+    // Eşzamanlı çağrılar aynı init'i beklesin (çifte başlatma olmasın).
+    _initFuture ??= _doInit();
+    await _initFuture;
+  }
+
+  Future<void> _doInit() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       _soundEnabled = prefs.getBool(_prefKeySound) ?? true;
@@ -45,9 +67,33 @@ class SoundService {
       await _sfxPlayer.setReleaseMode(ReleaseMode.stop);
       await _musicPlayer.setReleaseMode(ReleaseMode.loop);
     } catch (_) {}
+    // iOS: sessiz anahtar (mute switch) açıkken de oyun sesleri duyulsun.
+    // 'playback' kategorisi sessiz modu bypass eder; mixWithOthers ile
+    // kullanıcının kendi müziğini (Spotify vb.) kesmeyiz.
+    try {
+      await AudioPlayer.global.setAudioContext(AudioContext(
+        iOS: AudioContextIOS(
+          category: AVAudioSessionCategory.playback,
+          options: const {AVAudioSessionOptions.mixWithOthers},
+        ),
+        android: const AudioContextAndroid(
+          contentType: AndroidContentType.sonification,
+          usageType: AndroidUsageType.game,
+          // Kısa SFX'ler için odak çalma — diğer uygulamaların sesini kısmayız.
+          audioFocus: AndroidAudioFocus.none,
+        ),
+      ));
+    } catch (_) {}
+    // Kısa efektlerde düşük gecikme (Android'de SoundPool) — reveal anındaki
+    // ses, görselle aynı karede hissedilsin.
+    try {
+      await _sfxPlayer.setPlayerMode(PlayerMode.lowLatency);
+    } catch (_) {}
+    _initialized = true;
   }
 
   Future<void> playSound(GameSound sound) async {
+    await init(); // tembel başlatma — ilk çağrıda ayarları/oturumu kurar
     if (!_soundEnabled) return;
     final assetPath = _assetMap[sound];
     if (assetPath == null) return;
@@ -58,6 +104,7 @@ class SoundService {
   }
 
   Future<void> startLobbyMusic() async {
+    await init();
     if (!_musicEnabled) return;
     try {
       await _musicPlayer.stop();
@@ -67,6 +114,7 @@ class SoundService {
   }
 
   Future<void> startGameMusic() async {
+    await init();
     if (!_musicEnabled) return;
     try {
       await _musicPlayer.stop();

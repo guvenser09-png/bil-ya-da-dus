@@ -122,6 +122,8 @@ class UserMeResponse(UserPublicResponse):
     total_questions_answered: int = 0
     is_active: bool
     is_verified: bool = False
+    # Misafir hesap mı? (claim ile kalıcılaşınca False olur)
+    is_guest: bool = False
     last_login_at: datetime | None
     updated_at: datetime | None
     # Tutundurma + kozmetik

@@ -13,9 +13,6 @@ class LobbyState {
     this.isConnecting = false,
     this.isConnected = false,
     this.error,
-    this.warmupQuestion,
-    this.selectedWarmupAnswer,
-    this.warmupCorrect,
     this.gameId,
   });
 
@@ -25,9 +22,6 @@ class LobbyState {
   final bool isConnecting;
   final bool isConnected;
   final String? error;
-  final Map<String, dynamic>? warmupQuestion;
-  final int? selectedWarmupAnswer;
-  final bool? warmupCorrect;
   final String? gameId; // set when game_starting received
 
   LobbyState copyWith({
@@ -37,9 +31,6 @@ class LobbyState {
     bool? isConnecting,
     bool? isConnected,
     String? error,
-    Map<String, dynamic>? warmupQuestion,
-    int? selectedWarmupAnswer,
-    bool? warmupCorrect,
     String? gameId,
     bool clearError = false,
     bool clearGame = false,
@@ -51,9 +42,6 @@ class LobbyState {
       isConnecting: isConnecting ?? this.isConnecting,
       isConnected: isConnected ?? this.isConnected,
       error: clearError ? null : (error ?? this.error),
-      warmupQuestion: warmupQuestion ?? this.warmupQuestion,
-      selectedWarmupAnswer: selectedWarmupAnswer ?? this.selectedWarmupAnswer,
-      warmupCorrect: warmupCorrect ?? this.warmupCorrect,
       gameId: clearGame ? null : (gameId ?? this.gameId),
     );
   }
@@ -151,15 +139,6 @@ class LobbyNotifier extends StateNotifier<LobbyState> {
           final remaining = msg['remaining'];
           final countdown = remaining is int ? remaining : (remaining as num?)?.toInt() ?? state.countdown;
           state = state.copyWith(countdown: countdown);
-        case 'warmup_question':
-          // Backend sends question text and options as top-level fields
-          state = state.copyWith(
-            warmupQuestion: {
-              'question': msg['question'] as String? ?? '',
-              'options': List<dynamic>.from(msg['options'] as List? ?? []),
-              'correct': msg['correct'] as int? ?? 0,
-            },
-          );
         case 'game_starting':
           // Oyuna geçiyoruz. Oyun ekranı ARTIK KENDİ bağımsız WsClient
           // örneğiyle ayrı bir OYUN soketi açacak (lobi tekilini paylaşmaz).
@@ -181,13 +160,6 @@ class LobbyNotifier extends StateNotifier<LobbyState> {
     } catch (_) {
       // Silently ignore parse errors — don't kill the stream
     }
-  }
-
-  void selectWarmupAnswer(int index) {
-    final q = state.warmupQuestion;
-    if (q == null || state.selectedWarmupAnswer != null) return;
-    final correct = (q['correct'] as int?) == index;
-    state = state.copyWith(selectedWarmupAnswer: index, warmupCorrect: correct);
   }
 
   void sendEmoji(String emoji) {

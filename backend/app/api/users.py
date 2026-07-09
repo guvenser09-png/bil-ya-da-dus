@@ -144,8 +144,10 @@ async def get_user_profile(
     """Get another player's public profile.
 
     Returns only publicly visible information (no email, phone, etc.)
+    Hem UUID hem username kabul eder (mobil iki biçimi de gönderebiliyor;
+    eskiden username gelince uuid parse hatası 500 döndürüyordu).
     """
-    user = await UserService.get_user_by_id(db, target_user_id)
+    user = await UserService.get_user_by_id_or_username(db, target_user_id)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -169,8 +171,9 @@ async def get_user_stats(
     """Get another player's game statistics.
 
     Returns public game stats for any active user.
+    Hem UUID hem username kabul eder (profil ucuyla tutarlı).
     """
-    user = await UserService.get_user_by_id(db, target_user_id)
+    user = await UserService.get_user_by_id_or_username(db, target_user_id)
     if not user or user.is_banned:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -178,7 +181,7 @@ async def get_user_stats(
         )
 
     try:
-        stats = await UserService.get_user_stats(db, target_user_id)
+        stats = await UserService.get_user_stats(db, str(user.id))
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

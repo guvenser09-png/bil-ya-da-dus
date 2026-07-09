@@ -43,6 +43,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  /// Misafir girişi: hesap/şifre istemeden tek dokunuşla oyuna sok.
+  /// device_id auth_provider içinde üretilip kalıcı saklanır; aynı cihaz
+  /// tekrar girince aynı misafir hesabına bağlanır.
+  Future<void> _handleGuestLogin() async {
+    FocusScope.of(context).unfocus();
+    final ok = await ref.read(authProvider.notifier).guestLogin();
+    if (!mounted) return;
+    if (ok) {
+      context.go('/home');
+    } else {
+      final error = ref.read(authProvider).error ?? 'Misafir girişi başarısız';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error), backgroundColor: AppTheme.danger),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(authProvider).isLoading;
@@ -61,6 +78,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   const SizedBox(height: 8),
                   Text('Hoş geldin!', style: BiladaText.body(color: AppTheme.cOnSurfaceVariant)),
                   const SizedBox(height: 32),
+                  // BİRİNCİL aksiyon: misafir olarak hemen oyna (sürtünmesiz
+                  // onboarding). Email/şifre formu ikincil kalır.
+                  ChunkyButton(
+                    height: 64,
+                    onPressed: isLoading ? null : _handleGuestLogin,
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.rocket_launch_rounded, size: 22),
+                        SizedBox(width: 10),
+                        Text('MİSAFİR OLARAK OYNA', style: TextStyle(fontSize: 17)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Kayıt gerekmez — hemen oyuna katıl',
+                    style: BiladaText.label(color: AppTheme.cOnSurfaceVariant, size: 11),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      const Expanded(child: Divider(color: AppTheme.cOutlineVariant)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: Text('veya hesabınla gir',
+                            style: BiladaText.label(color: AppTheme.cOutline, size: 11)),
+                      ),
+                      const Expanded(child: Divider(color: AppTheme.cOutlineVariant)),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                   GlassCard(
                     padding: const EdgeInsets.all(24),
                     child: Form(

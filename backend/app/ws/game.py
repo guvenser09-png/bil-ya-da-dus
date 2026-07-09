@@ -10,6 +10,7 @@ Connection: ws://host/ws/game/{game_id}?token=<JWT_ACCESS_TOKEN>
 
 Client -> Server messages:
     {"action": "submit_answer", "answer": X, "time_remaining": float}
+    {"action": "place_bet", "username": "..."}   — şampiyon bahsi (elenmişken)
     {"action": "emoji", "emoji": "🔥"}
     {"action": "ready"}
 
@@ -19,6 +20,7 @@ Server -> Client messages:
     {"type": "round_reveal"}       — Answers revealed, eliminations shown
     {"type": "round_transition"}   — Brief pause before next round
     {"type": "spectator_mode"}     — You were eliminated
+    {"type": "bet_placed"}         — Şampiyon bahsi kabul edildi (kişisel)
     {"type": "game_finished"}      — Game over with final standings
     {"type": "emoji"}              — Emoji from another player
     {"type": "error"}              — Error message
@@ -35,6 +37,7 @@ from app.config import settings
 from app.database import async_session_factory
 from app.redis_client import get_redis
 from app.services.bot_service import (
+    bot_guess_spread,
     generate_bot_answer_time,
     should_bot_answer_correctly,
     should_bot_skip_answer,
@@ -46,7 +49,12 @@ from app.services.game_service import (
     normalize_question_type,
     remove_game,
 )
-from app.services.match_reward_service import grant_match_rewards
+from app.services.match_reward_service import (
+    BET_REWARD,
+    ghost_reward_for,
+    grant_match_rewards,
+    grant_match_xp,
+)
 from app.services.season_service import SeasonService
 from app.services.user_service import UserService
 from app.utils.security import decode_token
@@ -56,8 +64,9 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 ALLOWED_EMOJIS = {"👏", "😂", "😱", "🔥", "💀", "❤️", "👍", "😎"}
-# Tur arası bekleme: ölü zamanı kısmak için 5->3 sn (tempo iyileştirmesi).
-BETWEEN_ROUNDS_PAUSE = 3  # seconds
+# Tur arası bekleme: eleme/düşüş animasyonu net görülsün diye 3->5 sn
+# (kullanıcı geri bildirimi: "düşme efektleri çok belli olmuyor").
+BETWEEN_ROUNDS_PAUSE = 5  # seconds
 # Erken bitirme tamponu: tüm canlı oyuncular cevaplayınca süre dolmadan turu
 # kapatmadan önce kısa bir bekleme (oyuncular son anı/cevabı görsün).
 EARLY_FINISH_BUFFER = 1.2  # seconds
@@ -83,46 +92,52 @@ _running_games: set[str] = set()
 # ---------------------------------------------------------------------------
 
 def get_mock_questions() -> list[dict]:
-    """Return 5 mock questions, one per round type."""
+    """Return 5 mock questions, one per round type.
+
+    Sıra, ROUND_CONFIG'teki eleme rampasıyla (coktan_secmeli → dogru_yanlis →
+    gorsel → karsilastirma → tahmin) birebir aynıdır; ilk tur kolay 4 şıklı
+    ısınma sorusudur. time_seconds bilgilendirme amaçlıdır — hem sunucu
+    zamanlayıcısı hem istemciye giden süre config["time"]'dan beslenir.
+    """
     return [
         {
             "id": "mock_1",
-            "type": "dogru_yanlis",
-            "content": "Ankara Türkiye'nin başkentidir.",
-            "question": "Ankara Türkiye'nin başkentidir.",
-            "options": ["Doğru", "Yanlış"],
-            "correct_answer": 0,
-            "time_seconds": 5,
-            "image_url": None,
-        },
-        {
-            "id": "mock_2",
-            "type": "gorsel",
-            "content": "Bu hangi ülkenin bayrağıdır?",
-            "question": "Bu hangi ülkenin bayrağıdır?",
-            "options": ["Türkiye", "Japonya", "Kanada", "İsviçre"],
-            "correct_answer": 0,
-            "time_seconds": 7,
-            "image_url": "https://flagcdn.com/w320/tr.png",
-        },
-        {
-            "id": "mock_3",
-            "type": "karsilastirma",
-            "content": "Hangisi daha kalabalık?",
-            "question": "Hangisi daha kalabalık?",
-            "options": ["İstanbul", "Ankara"],
-            "correct_answer": 0,
-            "time_seconds": 7,
-            "image_url": None,
-        },
-        {
-            "id": "mock_4",
             "type": "coktan_secmeli",
             "content": "Türkiye'nin para birimi hangisidir?",
             "question": "Türkiye'nin para birimi hangisidir?",
             "options": ["Euro", "Dolar", "Türk Lirası", "Sterlin"],
             "correct_answer": 2,
-            "time_seconds": 8,
+            "time_seconds": 9,
+            "image_url": None,
+        },
+        {
+            "id": "mock_2",
+            "type": "dogru_yanlis",
+            "content": "Ankara Türkiye'nin başkentidir.",
+            "question": "Ankara Türkiye'nin başkentidir.",
+            "options": ["Doğru", "Yanlış"],
+            "correct_answer": 0,
+            "time_seconds": 7,
+            "image_url": None,
+        },
+        {
+            "id": "mock_3",
+            "type": "gorsel",
+            "content": "Bu hangi ülkenin bayrağıdır?",
+            "question": "Bu hangi ülkenin bayrağıdır?",
+            "options": ["Türkiye", "Japonya", "Kanada", "İsviçre"],
+            "correct_answer": 0,
+            "time_seconds": 9,
+            "image_url": "https://flagcdn.com/w320/tr.png",
+        },
+        {
+            "id": "mock_4",
+            "type": "karsilastirma",
+            "content": "Hangisi daha kalabalık?",
+            "question": "Hangisi daha kalabalık?",
+            "options": ["İstanbul", "Ankara"],
+            "correct_answer": 0,
+            "time_seconds": 9,
             "image_url": None,
         },
         {
@@ -136,7 +151,7 @@ def get_mock_questions() -> list[dict]:
             "min_value": 50,
             "max_value": 150,
             "unit": "milyon",
-            "time_seconds": 8,
+            "time_seconds": 10,
             "image_url": None,
         },
     ]
@@ -284,6 +299,8 @@ def _build_state_snapshot(engine: GameEngine) -> dict:
             "is_alive": p.is_alive,
             "score": p.score,
             "streak": p.streak,
+            # Kalan kalkan sayısı (mobil 🛡️ rozetini bundan çizer).
+            "shields": p.shields,
             "eliminated_at_round": p.eliminated_at_round,
             "is_bot": p.is_bot,
             # Kuşanılmış kozmetikler (mobil oyuncu objesinden okur).
@@ -323,6 +340,20 @@ def _connected_real_participant_count(game_id: str, engine: GameEngine) -> int:
     )
     real_ids = {p.user_id for p in engine.players.values() if not p.is_bot and p.user_id}
     return len(real_ids & connected)
+
+
+def _bonus_coins_for(player, winner_username: str | None) -> int:
+    """Bir oyuncunun maç sonu BONUS altını: hayalet doğruları + tutan bahis.
+
+    Hayalet: doğru başına +5 (üst sınır GHOST_GOLD_MAX). Bahis: elenmişken
+    koyduğu şampiyon tahmini tutarsa +BET_REWARD. Günlük cap'e dahil edilmek
+    üzere grant_match_rewards'a bonuses olarak geçilir.
+    """
+    bonus = ghost_reward_for(getattr(player, "ghost_correct", 0))
+    bet = getattr(player, "champion_bet", None)
+    if bet and winner_username and bet == winner_username:
+        bonus += BET_REWARD
+    return bonus
 
 
 async def _persist_game_results(game_id: str, engine: GameEngine, final: dict) -> dict[str, int]:
@@ -421,10 +452,34 @@ async def _persist_game_results(game_id: str, engine: GameEngine, final: dict) -
                         real_players, key=lambda pl: pl.score, reverse=True
                     )
                     ranked_user_ids = [pl.user_id for pl in ranked]
-                    coins_earned = await grant_match_rewards(db, ranked_user_ids)
+                    # Hayalet (👻) + şampiyon bahsi (🎯) bonusları — sıralama
+                    # ödülüyle aynı idempotent akış ve günlük cap havuzunda.
+                    bonuses = {
+                        pl.user_id: _bonus_coins_for(pl, winner_username)
+                        for pl in real_players
+                    }
+                    coins_earned = await grant_match_rewards(
+                        db, ranked_user_ids, bonuses=bonuses
+                    )
                 except Exception as exc:
                     logger.warning(
                         "Game %s: maç coin ödülü verilemedi: %s", game_id, exc
+                    )
+
+                # --- Maç sonu XP (seviye sistemi; coin ile aynı idempotent blok) ---
+                try:
+                    await grant_match_xp(db, [
+                        {
+                            "user_id": pl.user_id,
+                            # eliminated_at_round yoksa (kazandı/son tura kaldı) 5 tur sayılır.
+                            "rounds_survived": pl.eliminated_at_round or 5,
+                            "won": pl.username == winner_username,
+                        }
+                        for pl in real_players
+                    ])
+                except Exception as exc:
+                    logger.warning(
+                        "Game %s: maç XP'si verilemedi: %s", game_id, exc
                     )
             await db.commit()
     except Exception as exc:
@@ -696,6 +751,8 @@ async def _run_game_inner(
     if questions is None:
         # Önce DB'deki onaylı (seed'li) soruları kullan; yetersizse mock'a düş.
         # Turnuva ise ZOR havuzdan (difficulty>=eşik) seç (kolay→zor rampa yok).
+        min_diff: int | None = None
+        max_diff: int | None = None
         try:
             from app.database import async_session_factory
             from app.services.question_service import QuestionService
@@ -704,15 +761,25 @@ async def _run_game_inner(
                 TOURNAMENT_MIN_DIFFICULTY,
             )
             # Turnuva: zor havuz (difficulty>=4). Normal: kolay/orta (difficulty<=3).
-            # Tip başına yeterli soru yoksa question_service kademeli gevşetir;
-            # maç ASLA iptal olmaz (mock'a düşmeden önce DB fallback'i tüketilir).
+            # Tip başına yeterli soru yoksa question_service kademeli gevşetir
+            # (önce 30-gün dedup bırakılır, sonra zorluk sınırları); maç ASLA
+            # iptal olmaz (mock'a düşmeden önce DB fallback'i tüketilir).
             if is_tournament:
                 min_diff, max_diff = TOURNAMENT_MIN_DIFFICULTY, None
             else:
                 min_diff, max_diff = None, NORMAL_MAX_DIFFICULTY
+            # 30-gün tekrar önleme: maçtaki GERÇEK oyuncuların id'leri soru
+            # seçimine geçilir → bu oyunculara son 30 günde çıkmış sorular
+            # dışlanır ve servis edilenler "görüldü" olarak kaydedilir.
+            real_player_ids = [
+                p.get("user_id") for p in players if p.get("user_id")
+            ]
             async with async_session_factory() as db:
                 questions = await QuestionService.get_game_questions_dicts(
-                    db, min_difficulty=min_diff, max_difficulty=max_diff
+                    db,
+                    player_ids=real_player_ids,
+                    min_difficulty=min_diff,
+                    max_difficulty=max_diff,
                 )
             if questions:
                 logger.info(
@@ -720,11 +787,28 @@ async def _run_game_inner(
                     game_id, len(questions), is_tournament, min_diff, max_diff,
                 )
         except Exception as e:  # pragma: no cover
-            logger.warning("DB soru yüklenemedi, mock sorulara düşülüyor: %s", e)
+            logger.error(
+                "Game %s: DB soru yükleme HATASI (tournament=%s, min=%s, max=%s): %s",
+                game_id, is_tournament, min_diff, max_diff, e,
+            )
             questions = None
         if not questions:
+            # SON ÇARE: DB'de 5 onaylı soru bile yok (ya da DB erişilemedi).
+            # Bu prod'da ASLA olmamalı — seed çalışmamış ya da DB boş demektir.
+            # question_service zaten tüm filtreleri (dedup → zorluk → tip)
+            # kademeli gevşetip gerçek soru bulmayı denedi; buraya düşmek
+            # havuzun kendisinin yetersiz olduğu anlamına gelir. Bağıra bağıra
+            # logla ki alarma düşsün; maç yine de mock sorularla oynatılır
+            # (oyuncu mağdur olmaz).
             questions = get_mock_questions()
-            logger.info("Game %s: mock sorular kullanılıyor", game_id)
+            logger.error(
+                "PROD'DA MOCK SORU SERVİS EDİLDİ — game=%s tournament=%s "
+                "min_difficulty=%s max_difficulty=%s tipler=%s. Onaylı soru "
+                "havuzu yetersiz ya da DB erişilemedi; seed_questions.py "
+                "çalıştırılmalı!",
+                game_id, is_tournament, min_diff, max_diff,
+                [q.get("type") for q in questions],
+            )
 
     # Create (or reuse) the engine
     if game_id not in active_games:
@@ -881,7 +965,8 @@ async def _run_game_inner(
                     real = q.get("real_answer", 500)
                     min_val = q.get("min_value", 0)
                     max_val = q.get("max_value", 1000)
-                    spread = {"easy": 0.3, "medium": 0.15, "hard": 0.07}.get(player.bot_difficulty, 0.15)
+                    # İlk-maç senaryosunda sapma GENİŞ (bot_service tablosu).
+                    spread = bot_guess_spread(player.bot_difficulty, generous=getattr(eng, "generous_bot_guesses", False))
                     offset = random.gauss(0, spread * (max_val - min_val))
                     guess = max(min_val, min(max_val, real + offset))
                     player.current_answer = round(guess, 1)
@@ -1081,6 +1166,7 @@ async def _run_game_inner(
     # sonuç ekranı/"oyun patladı" karışıklığı. Kişisel mesaj gönderdiklerimizi
     # işaretleyip genel yayını yalnızca KALANLARA (kişisel alamayanlara) yap.
     personally_notified: set[str] = set()
+    final_winner_username = (final.get("winner") or {}).get("username")
     for p in engine.players.values():
         if p.is_bot or not p.user_id:
             continue
@@ -1088,6 +1174,19 @@ async def _run_game_inner(
         personal_msg["your_score"] = p.score
         # Bu maçta kazanılan coin (cap sonrası gerçek miktar; 0 olabilir).
         personal_msg["coins_earned"] = int(coins_earned.get(p.user_id, 0))
+        # 👻 Hayalet modu özeti: elendikten sonra bilinen doğru sayısı ve
+        # bunun nominal altın karşılığı (günlük cap coins_earned'e yansır).
+        personal_msg["ghost_correct"] = int(p.ghost_correct)
+        personal_msg["ghost_reward"] = ghost_reward_for(p.ghost_correct)
+        # 🎯 Şampiyon bahsi sonucu (bahis yaptıysa).
+        if p.champion_bet is not None:
+            bet_won = bool(
+                final_winner_username
+                and p.champion_bet == final_winner_username
+            )
+            personal_msg["bet_on"] = p.champion_bet
+            personal_msg["bet_won"] = bet_won
+            personal_msg["bet_reward"] = BET_REWARD if bet_won else 0
         # Kişiye özel cevaplar: her soruya your_answer + correct_bool ekle.
         personal_msg["questions"] = _attach_user_answers(
             questions_summary, engine, p.username
@@ -1199,6 +1298,39 @@ async def game_websocket(websocket: WebSocket, game_id: str):
                     "message": "Cevap kilitlendi.",
                 }))
 
+            elif action == "place_bet":
+                # 🎯 ŞAMPİYON BAHSİ — sadece elenmiş gerçek oyuncudan, sadece
+                # hayatta kalan bir oyuncuya, tek seferlik (engine doğrular).
+                target = str(message.get("username") or "")
+                bettor = next(
+                    (
+                        p for p in engine.players.values()
+                        if p.user_id == user_id and not p.is_bot
+                    ),
+                    None,
+                )
+                if not bettor:
+                    await websocket.send_text(json.dumps({
+                        "type": "error",
+                        "message": "Oyuncu bulunamadı.",
+                    }))
+                else:
+                    ok, err = engine.place_champion_bet(
+                        bettor.username, target
+                    )
+                    if ok:
+                        await websocket.send_text(json.dumps({
+                            "type": "bet_placed",
+                            "game_id": game_id,
+                            "bet_on": target,
+                            "reward": BET_REWARD,
+                        }))
+                    else:
+                        await websocket.send_text(json.dumps({
+                            "type": "error",
+                            "message": err,
+                        }))
+
             elif action == "emoji":
                 emoji = message.get("emoji", "")
                 if emoji in ALLOWED_EMOJIS:
@@ -1253,6 +1385,10 @@ def _handle_submit_answer(engine: GameEngine, user_id: str, message: dict) -> No
 
     accepted = engine.submit_answer(player.username, answer, time_remaining)
     if not accepted:
+        # 👻 HAYALET MODU: elenmiş oyuncunun cevabı gölge sayaca gider —
+        # elemeye/skora/erken-bitişe etkisiz, sadece maç sonu mini altın.
+        if not player.is_alive:
+            engine.submit_ghost_answer(player.username, answer, time_remaining)
         return  # Already answered or not alive
 
     # Mark this user as answered

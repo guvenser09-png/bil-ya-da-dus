@@ -52,9 +52,9 @@ class Settings(BaseSettings):
     ANTHROPIC_API_KEY: str = ""
 
     # Game Settings
-    LOBBY_TIMEOUT_SECONDS: int = 20
+    LOBBY_TIMEOUT_SECONDS: int = 15
     MIN_PLAYERS: int = 5
-    MAX_PLAYERS: int = 20
+    MAX_PLAYERS: int = 12
     ROUND_COUNT: int = 5
 
     # AAS (Adaptive Threshold System) settings
@@ -71,9 +71,6 @@ class Settings(BaseSettings):
 
     # Reconnect window
     RECONNECT_WINDOW_SECONDS: int = 10
-
-    # Warmup question TTL
-    WARMUP_QUESTION_TTL: int = 30
 
     # IAP (In-App Purchase) — makbuz doğrulama
     #

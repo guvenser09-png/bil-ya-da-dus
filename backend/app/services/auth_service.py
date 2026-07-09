@@ -3,6 +3,7 @@
 Handles all auth business logic, separating it from API endpoint code.
 """
 
+import secrets
 import uuid as uuid_mod
 from datetime import datetime, timezone
 
@@ -88,6 +89,130 @@ class AuthService:
         )
 
         return user, access_token, refresh_token
+
+    @staticmethod
+    async def _issue_tokens(user: User) -> tuple[str, str]:
+        """Bir kullanıcı için access+refresh token üret ve refresh'i Redis'e yaz.
+
+        register/login/guest akışlarının ortak token adımı.
+        """
+        access_token = create_access_token(user_id=str(user.id))
+        refresh_token = create_refresh_token(user_id=str(user.id))
+
+        refresh_payload = decode_token(refresh_token, expected_type="refresh")
+        refresh_expires = settings.JWT_REFRESH_EXPIRATION_DAYS * 86400
+        await store_refresh_token(
+            user_id=str(user.id),
+            jti=refresh_payload["jti"],
+            expires_in_seconds=refresh_expires,
+        )
+        return access_token, refresh_token
+
+    @staticmethod
+    async def guest_login(db: AsyncSession, device_id: str) -> tuple[User, str, str]:
+        """Misafir girişi: device_id'ye bağlı hesap varsa onu döndür, yoksa oluştur.
+
+        Şifresiz, cihaz kimliğine bağlı hesap. Username otomatik üretilir
+        ("Oyuncu" + kısa rastgele ek) ve çakışmaya karşı yeniden denenir.
+
+        Raises:
+            ValueError: device_id boşsa ya da benzersiz username üretilemezse.
+            PermissionError: Hesap askıya alınmışsa.
+        """
+        device_id = (device_id or "").strip()
+        if not device_id:
+            raise ValueError("Geçersiz cihaz kimliği.")
+
+        result = await db.execute(
+            select(User).where(
+                User.device_id == device_id,
+                User.deleted_at.is_(None),
+            )
+        )
+        user = result.scalar_one_or_none()
+
+        if user is not None:
+            if user.is_banned:
+                raise PermissionError("Bu hesap askıya alınmış.")
+            user.last_login_at = datetime.now(timezone.utc)
+        else:
+            # Çakışmaya dayanıklı otomatik username: "Oyuncu" + kısa hex ek.
+            username = None
+            for _ in range(10):
+                candidate = f"Oyuncu{secrets.token_hex(3)}"  # ör. Oyuncu3fa9c1
+                exists = await db.execute(
+                    select(User.id).where(User.username == candidate)
+                )
+                if exists.scalar_one_or_none() is None:
+                    username = candidate
+                    break
+            if username is None:
+                raise ValueError("Misafir hesabı oluşturulamadı, tekrar deneyin.")
+
+            user = User(
+                username=username,
+                display_name="Oyuncu",
+                device_id=device_id,
+                is_guest=True,
+                auth_provider="guest",
+                last_login_at=datetime.now(timezone.utc),
+            )
+            db.add(user)
+            await db.flush()
+            await db.refresh(user)
+
+        access_token, refresh_token = await AuthService._issue_tokens(user)
+        return user, access_token, refresh_token
+
+    @staticmethod
+    async def claim_guest_account(
+        db: AsyncSession,
+        user_id: str,
+        email: str,
+        password: str,
+        username: str | None = None,
+    ) -> User:
+        """Misafir hesabı kalıcılaştır: email+şifre (ve isteğe bağlı username) bağla.
+
+        Başarıda is_guest=False olur; oyuncunun tüm ilerlemesi (XP, coin,
+        istatistik) aynı hesapta kalır.
+
+        Raises:
+            ValueError: Kullanıcı yok/misafir değil, email veya username çakışıyor.
+        """
+        result = await db.execute(
+            select(User).where(User.id == uuid_mod.UUID(str(user_id)))
+        )
+        user = result.scalar_one_or_none()
+        if not user or user.deleted_at is not None:
+            raise ValueError("Kullanıcı bulunamadı.")
+        if not user.is_guest:
+            raise ValueError("Bu hesap zaten kalıcı.")
+
+        # Email çakışması (başka bir hesapta kayıtlıysa düzgün hata)
+        email_check = await db.execute(
+            select(User.id).where(User.email == email, User.id != user.id)
+        )
+        if email_check.scalar_one_or_none():
+            raise ValueError("Bu e-posta adresi zaten kayıtlı.")
+
+        # İsteğe bağlı yeni username (çakışma kontrolü ile)
+        if username and username != user.username:
+            name_check = await db.execute(
+                select(User.id).where(User.username == username)
+            )
+            if name_check.scalar_one_or_none():
+                raise ValueError("Bu kullanıcı adı zaten alınmış.")
+            user.username = username
+
+        user.email = email
+        user.password_hash = hash_password(password)
+        user.is_guest = False
+        user.auth_provider = "email"
+
+        await db.flush()
+        await db.refresh(user)
+        return user
 
     @staticmethod
     async def login(

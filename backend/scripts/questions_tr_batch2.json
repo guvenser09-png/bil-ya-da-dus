@@ -1,0 +1,4091 @@
+[
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Türk bayrağının zemin rengi nedir?",
+    "options": [
+      "Yeşil",
+      "Kırmızı",
+      "Mavi",
+      "Beyaz"
+    ],
+    "correct_answer": 1,
+    "explanation": "Türk bayrağı kırmızı zemin üzerinde beyaz ay ve yıldızdan oluşur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 1,
+    "content": "İstiklal Marşı'nın şairi kimdir?",
+    "options": [
+      "Nazım Hikmet",
+      "Yahya Kemal Beyatlı",
+      "Mehmet Akif Ersoy",
+      "Orhan Veli Kanık"
+    ],
+    "correct_answer": 2,
+    "explanation": "İstiklal Marşı'nı Mehmet Akif Ersoy yazmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 1,
+    "content": "Türkiye Cumhuriyeti'nin kurucusu kimdir?",
+    "options": [
+      "Mustafa Kemal Atatürk",
+      "İsmet İnönü",
+      "Fatih Sultan Mehmet",
+      "Kanuni Sultan Süleyman"
+    ],
+    "correct_answer": 0,
+    "explanation": "Türkiye Cumhuriyeti, Mustafa Kemal Atatürk önderliğinde kurulmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Bir düzine kaç adettir?",
+    "options": [
+      "6",
+      "10",
+      "12",
+      "24"
+    ],
+    "correct_answer": 2,
+    "explanation": "Bir düzine 12 adettir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Uzay",
+    "difficulty": 1,
+    "content": "Dünya'nın tek doğal uydusu hangisidir?",
+    "options": [
+      "Mars",
+      "Ay",
+      "Venüs",
+      "Güneş"
+    ],
+    "correct_answer": 1,
+    "explanation": "Dünya'nın tek doğal uydusu Ay'dır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Güneş hangi yönden doğar?",
+    "options": [
+      "Batıdan",
+      "Kuzeyden",
+      "Güneyden",
+      "Doğudan"
+    ],
+    "correct_answer": 3,
+    "explanation": "Dünya'nın dönüşü nedeniyle Güneş doğudan doğar, batıdan batar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Balı hangi hayvan üretir?",
+    "options": [
+      "Karınca",
+      "Kelebek",
+      "Arı",
+      "Ateş böceği"
+    ],
+    "correct_answer": 2,
+    "explanation": "Bal, bal arılarının çiçek nektarını işlemesiyle üretilir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Nasreddin Hoca fıkralarında hangi hayvana ters biner?",
+    "options": [
+      "At",
+      "Deve",
+      "Katır",
+      "Eşek"
+    ],
+    "correct_answer": 3,
+    "explanation": "Nasreddin Hoca fıkralarında eşeğine ters binmesiyle ünlüdür."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Peri bacalarıyla ünlü Kapadokya bölgesinin merkezi hangi ilimizdedir?",
+    "options": [
+      "Nevşehir",
+      "Konya",
+      "Sivas",
+      "Ankara"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kapadokya'nın peri bacalarıyla ünlü merkezi Nevşehir ilindedir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Beyaz travertenleriyle ünlü Pamukkale hangi ilimizdedir?",
+    "options": [
+      "Aydın",
+      "Denizli",
+      "Muğla",
+      "İzmir"
+    ],
+    "correct_answer": 1,
+    "explanation": "Pamukkale travertenleri Denizli il sınırları içindedir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Mevlana Müzesi hangi ilimizdedir?",
+    "options": [
+      "Kayseri",
+      "Eskişehir",
+      "Konya",
+      "Ankara"
+    ],
+    "correct_answer": 2,
+    "explanation": "Mevlana Müzesi (Yeşil Kubbe) Konya'dadır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Türkiye'nin en kalabalık şehri hangisidir?",
+    "options": [
+      "Ankara",
+      "İzmir",
+      "Bursa",
+      "İstanbul"
+    ],
+    "correct_answer": 3,
+    "explanation": "İstanbul, açık farkla Türkiye'nin en kalabalık şehridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Türkiye'nin en büyük gölü hangisidir?",
+    "options": [
+      "Tuz Gölü",
+      "Van Gölü",
+      "Beyşehir Gölü",
+      "Eğirdir Gölü"
+    ],
+    "correct_answer": 1,
+    "explanation": "Van Gölü, yüzölçümü bakımından Türkiye'nin en büyük gölüdür."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Karadeniz, Türkiye'nin hangi yönündedir?",
+    "options": [
+      "Güney",
+      "Batı",
+      "Kuzey",
+      "Doğu"
+    ],
+    "correct_answer": 2,
+    "explanation": "Karadeniz, Türkiye'nin kuzey kıyılarını çevreler."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Türkiye'nin güney kıyılarını çevreleyen deniz hangisidir?",
+    "options": [
+      "Akdeniz",
+      "Karadeniz",
+      "Ege Denizi",
+      "Marmara Denizi"
+    ],
+    "correct_answer": 0,
+    "explanation": "Türkiye'nin güney kıyıları Akdeniz'e bakar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Ankara hangi coğrafi bölgemizdedir?",
+    "options": [
+      "Ege",
+      "İç Anadolu",
+      "Marmara",
+      "Karadeniz"
+    ],
+    "correct_answer": 1,
+    "explanation": "Ankara, İç Anadolu Bölgesi'nde yer alır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 1,
+    "content": "Çayıyla ünlü ilimiz hangisidir?",
+    "options": [
+      "Rize",
+      "Edirne",
+      "Malatya",
+      "Hatay"
+    ],
+    "correct_answer": 0,
+    "explanation": "Türkiye'de çay üretimi büyük ölçüde Rize ve çevresinde yapılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 1,
+    "content": "Kayısısıyla ünlü ilimiz hangisidir?",
+    "options": [
+      "Bursa",
+      "Mersin",
+      "Malatya",
+      "Samsun"
+    ],
+    "correct_answer": 2,
+    "explanation": "Malatya, dünyaca ünlü kayısısıyla tanınır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 1,
+    "content": "Dövme dondurmasıyla ünlü ilimiz hangisidir?",
+    "options": [
+      "Erzurum",
+      "Kahramanmaraş",
+      "Van",
+      "Tekirdağ"
+    ],
+    "correct_answer": 1,
+    "explanation": "Kahramanmaraş, salepli dövme dondurmasıyla ünlüdür."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 1,
+    "content": "Menemenin ana malzemelerinden biri hangisidir?",
+    "options": [
+      "Patates",
+      "Nohut",
+      "Pirinç",
+      "Yumurta"
+    ],
+    "correct_answer": 3,
+    "explanation": "Menemen; domates, biber ve yumurta ile yapılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 1,
+    "content": "Cacık hangi iki ana malzemeyle yapılır?",
+    "options": [
+      "Yoğurt ve salatalık",
+      "Domates ve biber",
+      "Un ve şeker",
+      "Süt ve pirinç"
+    ],
+    "correct_answer": 0,
+    "explanation": "Cacık; yoğurt, salatalık ve sarımsakla hazırlanır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 1,
+    "content": "Simidin üzerinde geleneksel olarak ne bulunur?",
+    "options": [
+      "Haşhaş",
+      "Çörek otu",
+      "Susam",
+      "Ay çekirdeği"
+    ],
+    "correct_answer": 2,
+    "explanation": "Simit, susamla kaplanarak pişirilir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 1,
+    "content": "Ayran hangi gıdadan yapılır?",
+    "options": [
+      "Peynir",
+      "Yoğurt",
+      "Tereyağı",
+      "Krema"
+    ],
+    "correct_answer": 1,
+    "explanation": "Ayran, yoğurdun su ve tuzla çırpılmasıyla yapılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 1,
+    "content": "Geleneksel gölge oyununda Karagöz'ün yol arkadaşı kimdir?",
+    "options": [
+      "Hacivat",
+      "Keloğlan",
+      "Köroğlu",
+      "Kavuklu"
+    ],
+    "correct_answer": 0,
+    "explanation": "Karagöz ile Hacivat, geleneksel Türk gölge oyununun iki ana karakteridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 1,
+    "content": "Masal kahramanı Keloğlan'ın en belirgin fiziksel özelliği nedir?",
+    "options": [
+      "Çok uzun boylu olması",
+      "Saçının olmaması",
+      "Tek gözlü olması",
+      "Çok güçlü olması"
+    ],
+    "correct_answer": 1,
+    "explanation": "Keloğlan, adını kel (saçsız) oluşundan alır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 1,
+    "content": "Galatasaray'ın renkleri hangileridir?",
+    "options": [
+      "Sarı-lacivert",
+      "Siyah-beyaz",
+      "Sarı-kırmızı",
+      "Bordo-mavi"
+    ],
+    "correct_answer": 2,
+    "explanation": "Galatasaray'ın renkleri sarı ve kırmızıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 1,
+    "content": "Fenerbahçe'nin renkleri hangileridir?",
+    "options": [
+      "Sarı-lacivert",
+      "Sarı-kırmızı",
+      "Yeşil-beyaz",
+      "Siyah-beyaz"
+    ],
+    "correct_answer": 0,
+    "explanation": "Fenerbahçe'nin renkleri sarı ve laciverttir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 1,
+    "content": "Beşiktaş'ın renkleri hangileridir?",
+    "options": [
+      "Bordo-mavi",
+      "Yeşil-kırmızı",
+      "Sarı-kırmızı",
+      "Siyah-beyaz"
+    ],
+    "correct_answer": 3,
+    "explanation": "Beşiktaş'ın renkleri siyah ve beyazdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 1,
+    "content": "Trabzonspor'un renkleri hangileridir?",
+    "options": [
+      "Bordo-mavi",
+      "Siyah-beyaz",
+      "Yeşil-siyah",
+      "Mor-sarı"
+    ],
+    "correct_answer": 0,
+    "explanation": "Trabzonspor'un renkleri bordo ve mavidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 1,
+    "content": "Futbolda bir takım sahaya kaç oyuncuyla başlar?",
+    "options": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "correct_answer": 2,
+    "explanation": "Futbolda her takım 11 oyuncuyla (kaleci dahil) sahaya çıkar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 1,
+    "content": "Futbolda oyuncunun oyundan atılması hangi kartla olur?",
+    "options": [
+      "Sarı kart",
+      "Kırmızı kart",
+      "Yeşil kart",
+      "Mavi kart"
+    ],
+    "correct_answer": 1,
+    "explanation": "Kırmızı kart gören oyuncu oyundan ihraç edilir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 1,
+    "content": "Olimpiyat bayrağında kaç halka vardır?",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correct_answer": 2,
+    "explanation": "Olimpiyat bayrağındaki 5 halka, 5 kıtayı simgeler."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 1,
+    "content": "Yaz Olimpiyat Oyunları kaç yılda bir düzenlenir?",
+    "options": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "correct_answer": 2,
+    "explanation": "Yaz Olimpiyatları 4 yılda bir yapılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 1,
+    "content": "Gökkuşağında geleneksel olarak kaç renk sayılır?",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "correct_answer": 2,
+    "explanation": "Gökkuşağında geleneksel olarak 7 renk sayılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 1,
+    "content": "Suyun deniz seviyesindeki donma noktası kaç derecedir?",
+    "options": [
+      "-10°C",
+      "0°C",
+      "10°C",
+      "100°C"
+    ],
+    "correct_answer": 1,
+    "explanation": "Saf su deniz seviyesinde 0°C'de donar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Uzay",
+    "difficulty": 1,
+    "content": "\"Kızıl Gezegen\" olarak bilinen gezegen hangisidir?",
+    "options": [
+      "Venüs",
+      "Jüpiter",
+      "Merkür",
+      "Mars"
+    ],
+    "correct_answer": 3,
+    "explanation": "Mars, yüzeyindeki demir oksit nedeniyle kızıl görünür."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Balıklar suda neyle nefes alır?",
+    "options": [
+      "Akciğer",
+      "Solungaç",
+      "Deri",
+      "Yüzgeç"
+    ],
+    "correct_answer": 1,
+    "explanation": "Balıklar sudaki oksijeni solungaçlarıyla alır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Kelebek, başkalaşımdan önce hangi haldedir?",
+    "options": [
+      "Tırtıl",
+      "Solucan",
+      "Kurbağa",
+      "Arı"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kelebekler, tırtıl halinden koza evresi sonrası kelebeğe dönüşür."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Bir örümceğin kaç bacağı vardır?",
+    "options": [
+      "4",
+      "6",
+      "8",
+      "10"
+    ],
+    "correct_answer": 2,
+    "explanation": "Örümcekler 8 bacaklıdır; bu yüzden böcek sayılmazlar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Penguenler doğal yaşamda ağırlıklı olarak nerede bulunur?",
+    "options": [
+      "Kuzey Kutbu çevresi",
+      "Güney Yarımküre",
+      "Ekvator ormanları",
+      "Çöller"
+    ],
+    "correct_answer": 1,
+    "explanation": "Penguenler doğal olarak Güney Yarımküre'de (Antarktika ve çevresi) yaşar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Türkiye'de 23 Nisan hangi bayram olarak kutlanır?",
+    "options": [
+      "Cumhuriyet Bayramı",
+      "Zafer Bayramı",
+      "Ulusal Egemenlik ve Çocuk Bayramı",
+      "Gençlik ve Spor Bayramı"
+    ],
+    "correct_answer": 2,
+    "explanation": "23 Nisan 1920'de TBMM açılmıştır; bu gün çocuklara armağan edilmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Türkiye'de 29 Ekim'de hangi bayram kutlanır?",
+    "options": [
+      "Cumhuriyet Bayramı",
+      "Çocuk Bayramı",
+      "Zafer Bayramı",
+      "Gençlik ve Spor Bayramı"
+    ],
+    "correct_answer": 0,
+    "explanation": "Cumhuriyet 29 Ekim 1923'te ilan edilmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 1,
+    "content": "Türkiye'de 30 Ağustos'ta hangi bayram kutlanır?",
+    "options": [
+      "Çocuk Bayramı",
+      "Zafer Bayramı",
+      "Cumhuriyet Bayramı",
+      "Gençlik ve Spor Bayramı"
+    ],
+    "correct_answer": 1,
+    "explanation": "30 Ağustos Zafer Bayramı, Büyük Taarruz'un zaferle sonuçlanmasını kutlar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 1,
+    "content": "19 Mayıs'ta hangi bayram kutlanır?",
+    "options": [
+      "Zafer Bayramı",
+      "Cumhuriyet Bayramı",
+      "Atatürk'ü Anma, Gençlik ve Spor Bayramı",
+      "Ulusal Egemenlik Bayramı"
+    ],
+    "correct_answer": 2,
+    "explanation": "19 Mayıs 1919'da Atatürk Samsun'a çıkmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 1,
+    "content": "Mavi ile sarı boya karıştırılınca hangi renk elde edilir?",
+    "options": [
+      "Mor",
+      "Yeşil",
+      "Turuncu",
+      "Kahverengi"
+    ],
+    "correct_answer": 1,
+    "explanation": "Mavi ve sarının karışımı yeşili verir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 1,
+    "content": "Anıtkabir hangi şehrimizdedir?",
+    "options": [
+      "İstanbul",
+      "İzmir",
+      "Ankara",
+      "Bursa"
+    ],
+    "correct_answer": 2,
+    "explanation": "Atatürk'ün anıt mezarı Anıtkabir, Ankara'dadır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 1,
+    "content": "Osmanlı Devleti'nin kurucusu kimdir?",
+    "options": [
+      "Osman Bey",
+      "Orhan Bey",
+      "Ertuğrul Gazi",
+      "Yıldırım Bayezid"
+    ],
+    "correct_answer": 0,
+    "explanation": "Osmanlı Devleti, Osman Bey tarafından kurulmuştur ve adını ondan alır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Yılın en az gün içeren ayı hangisidir?",
+    "options": [
+      "Ocak",
+      "Nisan",
+      "Aralık",
+      "Şubat"
+    ],
+    "correct_answer": 3,
+    "explanation": "Şubat 28 (artık yıllarda 29) gün çeker."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Ağaçların yapraklarını döktüğü mevsim hangisidir?",
+    "options": [
+      "İlkbahar",
+      "Yaz",
+      "Sonbahar",
+      "Kış"
+    ],
+    "correct_answer": 2,
+    "explanation": "Yaprak döken ağaçlar sonbaharda yapraklarını döker."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 1,
+    "content": "Recep İvedik karakterini canlandıran komedyen kimdir?",
+    "options": [
+      "Cem Yılmaz",
+      "Şahan Gökbakar",
+      "Ata Demirer",
+      "Tolga Çevik"
+    ],
+    "correct_answer": 1,
+    "explanation": "Recep İvedik karakterini Şahan Gökbakar canlandırır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 1,
+    "content": "Bağlamanın halk arasındaki diğer yaygın adı nedir?",
+    "options": [
+      "Saz",
+      "Ud",
+      "Kanun",
+      "Cümbüş"
+    ],
+    "correct_answer": 0,
+    "explanation": "Bağlama, halk arasında saz olarak da bilinir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 1,
+    "content": "Nota dizisinde \"do\"dan sonra hangi nota gelir?",
+    "options": [
+      "Mi",
+      "Fa",
+      "Re",
+      "Sol"
+    ],
+    "correct_answer": 2,
+    "explanation": "Nota dizisi do-re-mi-fa-sol-la-si şeklindedir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "İstanbul'u Avrupa ve Asya yakası olarak ikiye ayıran su yolu hangisidir?",
+    "options": [
+      "Çanakkale Boğazı",
+      "Haliç",
+      "İstanbul Boğazı",
+      "Süveyş Kanalı"
+    ],
+    "correct_answer": 2,
+    "explanation": "İstanbul Boğazı, şehri Avrupa ve Asya yakalarına ayırır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Hangi hayvan hörgücüyle bilinir?",
+    "options": [
+      "At",
+      "Eşek",
+      "İnek",
+      "Deve"
+    ],
+    "correct_answer": 3,
+    "explanation": "Develer, sırtlarındaki hörgüçte yağ depolar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Bir saat kaç dakikadır?",
+    "options": [
+      "30",
+      "45",
+      "60",
+      "90"
+    ],
+    "correct_answer": 2,
+    "explanation": "Bir saat 60 dakikadan oluşur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 1,
+    "content": "Türk kahvesinin yanında geleneksel olarak ne ikram edilir?",
+    "options": [
+      "Bir bardak su",
+      "Kek",
+      "Meyve",
+      "Cips"
+    ],
+    "correct_answer": 0,
+    "explanation": "Türk kahvesi geleneksel olarak bir bardak su ile servis edilir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Nasreddin Hoca, \"Ya tutarsa!\" diyerek hangi göle maya çalar?",
+    "options": [
+      "Van Gölü",
+      "Akşehir Gölü",
+      "Tuz Gölü",
+      "Sapanca Gölü"
+    ],
+    "correct_answer": 1,
+    "explanation": "Meşhur fıkrada Nasreddin Hoca, Akşehir Gölü'ne yoğurt mayası çalar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 1,
+    "content": "Dünyaca ünlü \"Şımarık\" şarkısıyla tanınan Türk pop yıldızı kimdir?",
+    "options": [
+      "Mustafa Sandal",
+      "Serdar Ortaç",
+      "Tarkan",
+      "Kenan Doğulu"
+    ],
+    "correct_answer": 2,
+    "explanation": "Tarkan'ın \"Şımarık\" şarkısı uluslararası alanda büyük ün kazanmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 1,
+    "content": "Fındığıyla özdeşleşen Karadeniz ilimiz hangisidir?",
+    "options": [
+      "Konya",
+      "Giresun",
+      "Aydın",
+      "Mardin"
+    ],
+    "correct_answer": 1,
+    "explanation": "Giresun, kaliteli fındığıyla dünyaca tanınır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "Baklavasıyla özdeşleşen ilimiz hangisidir?",
+    "options": [
+      "Gaziantep",
+      "Konya",
+      "Trabzon",
+      "Edirne"
+    ],
+    "correct_answer": 0,
+    "explanation": "Gaziantep baklavası coğrafi işaretli, dünyaca ünlü bir tatlıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "İskender kebap hangi şehrimizle özdeşleşmiştir?",
+    "options": [
+      "Adana",
+      "Bursa",
+      "Şanlıurfa",
+      "İzmir"
+    ],
+    "correct_answer": 1,
+    "explanation": "İskender kebap, Bursa'da İskender Efendi tarafından geliştirilmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "Mantısıyla ünlü ilimiz hangisidir?",
+    "options": [
+      "Kayseri",
+      "Denizli",
+      "Çanakkale",
+      "Rize"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kayseri mantısı, küçük boyutuyla ünlü geleneksel bir yemektir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "Çiğ köfte hangi ilimizle özdeşleşmiştir?",
+    "options": [
+      "İzmir",
+      "Zonguldak",
+      "Şanlıurfa",
+      "Muğla"
+    ],
+    "correct_answer": 2,
+    "explanation": "Çiğ köfte, Şanlıurfa mutfağının simge lezzetlerindendir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "Künefesiyle ünlü ilimiz hangisidir?",
+    "options": [
+      "Kastamonu",
+      "Hatay",
+      "Yozgat",
+      "Kırklareli"
+    ],
+    "correct_answer": 1,
+    "explanation": "Hatay (Antakya) künefesi, tel kadayıf ve özel peynirle yapılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "Kestane şekeriyle ünlü ilimiz hangisidir?",
+    "options": [
+      "Bursa",
+      "Ordu",
+      "Artvin",
+      "Niğde"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kestane şekeri, Bursa'nın simge tatlısıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "Leblebisiyle ünlü ilimiz hangisidir?",
+    "options": [
+      "Amasya",
+      "Tokat",
+      "Bolu",
+      "Çorum"
+    ],
+    "correct_answer": 3,
+    "explanation": "Çorum leblebisi Türkiye çapında meşhurdur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "Ezogelin çorbasının ana malzemesi nedir?",
+    "options": [
+      "Kırmızı mercimek",
+      "Nohut",
+      "Tarhana",
+      "Patates"
+    ],
+    "correct_answer": 0,
+    "explanation": "Ezogelin çorbası kırmızı mercimek, bulgur ve pirinçle yapılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "İmambayıldı yemeğinin ana malzemesi hangisidir?",
+    "options": [
+      "Kabak",
+      "Ispanak",
+      "Patlıcan",
+      "Pırasa"
+    ],
+    "correct_answer": 2,
+    "explanation": "İmambayıldı, zeytinyağlı patlıcan yemeğidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "Hamsi en çok hangi bölgemizle özdeşleşmiştir?",
+    "options": [
+      "Akdeniz",
+      "Karadeniz",
+      "Ege",
+      "İç Anadolu"
+    ],
+    "correct_answer": 1,
+    "explanation": "Hamsi, Karadeniz mutfağının simgesidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "Lokumun İngilizcedeki yaygın adı \"Turkish ...\" nedir?",
+    "options": [
+      "Sweet",
+      "Delight",
+      "Candy",
+      "Sugar"
+    ],
+    "correct_answer": 1,
+    "explanation": "Lokum, İngilizcede \"Turkish delight\" olarak bilinir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Truva antik kenti hangi ilimizdedir?",
+    "options": [
+      "Çanakkale",
+      "Balıkesir",
+      "İzmir",
+      "Muğla"
+    ],
+    "correct_answer": 0,
+    "explanation": "Truva (Troya), Çanakkale il sınırları içindedir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Efes antik kenti hangi ilimizdedir?",
+    "options": [
+      "Aydın",
+      "Denizli",
+      "İzmir",
+      "Manisa"
+    ],
+    "correct_answer": 2,
+    "explanation": "Efes, İzmir'in Selçuk ilçesindedir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Ölüdeniz hangi ilimizdedir?",
+    "options": [
+      "Antalya",
+      "Muğla",
+      "Aydın",
+      "Mersin"
+    ],
+    "correct_answer": 1,
+    "explanation": "Ölüdeniz, Muğla'nın Fethiye ilçesindedir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Tarihi Kırkpınar yağlı güreşleri hangi ilimizde yapılır?",
+    "options": [
+      "Tekirdağ",
+      "Bursa",
+      "Samsun",
+      "Edirne"
+    ],
+    "correct_answer": 3,
+    "explanation": "Kırkpınar güreşleri her yıl Edirne'de düzenlenir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Türkiye, 2002 FIFA Dünya Kupası'nda kaçıncı olmuştur?",
+    "options": [
+      "Birinci",
+      "İkinci",
+      "Üçüncü",
+      "Dördüncü"
+    ],
+    "correct_answer": 2,
+    "explanation": "Türkiye, 2002 Dünya Kupası'nı üçüncü tamamlamıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Galatasaray, 2000 yılında hangi Avrupa kupasını kazanmıştır?",
+    "options": [
+      "Şampiyonlar Ligi",
+      "UEFA Kupası",
+      "Kupa Galipleri Kupası",
+      "Konferans Ligi"
+    ],
+    "correct_answer": 1,
+    "explanation": "Galatasaray, 2000'de UEFA Kupası'nı kazanan ilk Türk takımı olmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Efsanevi sporcu Naim Süleymanoğlu hangi branşta yarışmıştır?",
+    "options": [
+      "Halter",
+      "Güreş",
+      "Boks",
+      "Atletizm"
+    ],
+    "correct_answer": 0,
+    "explanation": "\"Cep Herkülü\" Naim Süleymanoğlu, halterde olimpiyat şampiyonu olmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "\"İmparator\" lakabıyla anılan Türk teknik direktör kimdir?",
+    "options": [
+      "Şenol Güneş",
+      "Mustafa Denizli",
+      "Fatih Terim",
+      "Abdullah Avcı"
+    ],
+    "correct_answer": 2,
+    "explanation": "Fatih Terim, futbol camiasında \"İmparator\" lakabıyla anılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 2,
+    "content": "Satrançta en güçlü taş hangisidir?",
+    "options": [
+      "Kale",
+      "Vezir",
+      "Fil",
+      "At"
+    ],
+    "correct_answer": 1,
+    "explanation": "Vezir, hem düz hem çapraz gidebildiği için en güçlü taştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 2,
+    "content": "Kurtlar Vadisi dizisinin ana karakteri kimdir?",
+    "options": [
+      "Süleyman Çakır",
+      "Polat Alemdar",
+      "Memati",
+      "Abdülhey"
+    ],
+    "correct_answer": 1,
+    "explanation": "Dizinin ana karakteri Polat Alemdar'dır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 2,
+    "content": "Hababam Sınıfı filmlerinde Mahmut Hoca'yı canlandıran usta oyuncu kimdir?",
+    "options": [
+      "Münir Özkul",
+      "Halit Akçatepe",
+      "Şener Şen",
+      "Tarık Akan"
+    ],
+    "correct_answer": 0,
+    "explanation": "Mahmut Hoca'yı Münir Özkul canlandırmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 2,
+    "content": "Kemal Sunal'ın Hababam Sınıfı'ndaki karakterinin lakabı nedir?",
+    "options": [
+      "Güdük Necmi",
+      "Damat Ferit",
+      "İnek Şaban",
+      "Tulum Hayri"
+    ],
+    "correct_answer": 2,
+    "explanation": "Kemal Sunal, İnek Şaban karakteriyle hafızalara kazınmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 2,
+    "content": "Cem Yılmaz'ın uzay temalı komedi filmi hangisidir?",
+    "options": [
+      "A.R.O.G",
+      "G.O.R.A.",
+      "Yahşi Batı",
+      "Hokkabaz"
+    ],
+    "correct_answer": 1,
+    "explanation": "G.O.R.A. (2004), uzayda geçen bir komedi filmidir; A.R.O.G taş devrinde geçer."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 2,
+    "content": "Muhteşem Yüzyıl dizisi hangi padişahın dönemini anlatır?",
+    "options": [
+      "Fatih Sultan Mehmet",
+      "Yavuz Sultan Selim",
+      "II. Abdülhamid",
+      "Kanuni Sultan Süleyman"
+    ],
+    "correct_answer": 3,
+    "explanation": "Dizi, Kanuni Sultan Süleyman dönemini ve Hürrem Sultan'ı konu alır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 2,
+    "content": "Çocuklar Duymasın dizisindeki baba karakterinin adı nedir?",
+    "options": [
+      "Haluk",
+      "Selami",
+      "Cevdet",
+      "Faruk"
+    ],
+    "correct_answer": 0,
+    "explanation": "Dizide Haluk karakterini Tamer Karadağlı canlandırmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 2,
+    "content": "Kurtlar Vadisi'nde Polat Alemdar'ı canlandıran oyuncu kimdir?",
+    "options": [
+      "Kenan İmirzalıoğlu",
+      "Necati Şaşmaz",
+      "Oktay Kaynarca",
+      "Ozan Akbaba"
+    ],
+    "correct_answer": 1,
+    "explanation": "Polat Alemdar karakterini Necati Şaşmaz canlandırmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 2,
+    "content": "Sezen Aksu'nun lakabı nedir?",
+    "options": [
+      "Sanat Güneşi",
+      "Diva",
+      "Minik Serçe",
+      "Süperstar"
+    ],
+    "correct_answer": 2,
+    "explanation": "Sezen Aksu, \"Minik Serçe\" lakabıyla tanınır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 2,
+    "content": "Zeki Müren'in lakabı nedir?",
+    "options": [
+      "Sanat Güneşi",
+      "Minik Serçe",
+      "Paşa",
+      "İmparator"
+    ],
+    "correct_answer": 0,
+    "explanation": "Zeki Müren, \"Sanat Güneşi\" olarak anılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 2,
+    "content": "\"Arkadaşım Eşek\" şarkısı hangi sanatçıya aittir?",
+    "options": [
+      "Cem Karaca",
+      "Erkin Koray",
+      "Fikret Kızılok",
+      "Barış Manço"
+    ],
+    "correct_answer": 3,
+    "explanation": "\"Arkadaşım Eşek\", Barış Manço'nun sevilen şarkılarındandır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 2,
+    "content": "\"Uzun İnce Bir Yoldayım\" türküsü hangi halk ozanına aittir?",
+    "options": [
+      "Aşık Veysel",
+      "Neşet Ertaş",
+      "Karacaoğlan",
+      "Pir Sultan Abdal"
+    ],
+    "correct_answer": 0,
+    "explanation": "Bu türkü, Aşık Veysel Şatıroğlu'nun en bilinen eseridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 2,
+    "content": "\"Für Elise\" adlı eser hangi besteciye aittir?",
+    "options": [
+      "Mozart",
+      "Beethoven",
+      "Bach",
+      "Chopin"
+    ],
+    "correct_answer": 1,
+    "explanation": "Für Elise, Ludwig van Beethoven'ın piyano eseridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 2,
+    "content": "Ney hangi müzik geleneğiyle özdeşleşmiş bir çalgıdır?",
+    "options": [
+      "Rock müziği",
+      "Opera",
+      "Tasavvuf müziği",
+      "Caz"
+    ],
+    "correct_answer": 2,
+    "explanation": "Ney, tasavvuf müziğinin ve Mevlevi ayinlerinin simge çalgısıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 2,
+    "content": "\"Yıldızlı Gece\" tablosunun ressamı kimdir?",
+    "options": [
+      "Vincent van Gogh",
+      "Claude Monet",
+      "Pablo Picasso",
+      "Salvador Dali"
+    ],
+    "correct_answer": 0,
+    "explanation": "Yıldızlı Gece (1889), Van Gogh'un en ünlü eserlerindendir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 2,
+    "content": "Geleneksel ebru sanatı hangi yüzey üzerinde icra edilir?",
+    "options": [
+      "Cam",
+      "Ahşap",
+      "Kumaş",
+      "Su"
+    ],
+    "correct_answer": 3,
+    "explanation": "Ebruda boyalar kitreli su yüzeyine serpilir ve kağıda aktarılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Malazgirt Zaferi hangi yıl kazanılmıştır?",
+    "options": [
+      "1071",
+      "1453",
+      "1299",
+      "1923"
+    ],
+    "correct_answer": 0,
+    "explanation": "Malazgirt Zaferi 26 Ağustos 1071'de kazanılmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Malazgirt Savaşı'nda Bizans ordusunu yenen Selçuklu sultanı kimdir?",
+    "options": [
+      "Melikşah",
+      "Alparslan",
+      "Tuğrul Bey",
+      "Kılıç Arslan"
+    ],
+    "correct_answer": 1,
+    "explanation": "Sultan Alparslan, 1071'de Malazgirt'te Bizans'ı yenmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Mimar Sinan hangi padişah döneminde baş mimarlığa getirilmiştir?",
+    "options": [
+      "Fatih Sultan Mehmet",
+      "Yavuz Sultan Selim",
+      "II. Mahmut",
+      "Kanuni Sultan Süleyman"
+    ],
+    "correct_answer": 3,
+    "explanation": "Mimar Sinan, Kanuni döneminde Hassa Baş Mimarı olmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 2,
+    "content": "Mimar Sinan'ın \"ustalık eserim\" dediği Selimiye Camii hangi ilimizdedir?",
+    "options": [
+      "İstanbul",
+      "Edirne",
+      "Bursa",
+      "Konya"
+    ],
+    "correct_answer": 1,
+    "explanation": "Selimiye Camii, Edirne'dedir ve UNESCO Dünya Mirası listesindedir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 2,
+    "content": "Evliya Çelebi hangi eseriyle ünlüdür?",
+    "options": [
+      "Seyahatname",
+      "Divan-ı Hümayun",
+      "Mesnevi",
+      "Kutadgu Bilig"
+    ],
+    "correct_answer": 0,
+    "explanation": "Evliya Çelebi, gezilerini anlattığı Seyahatname ile tanınır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Osmanlı denizcisi Piri Reis en çok neyle ünlüdür?",
+    "options": [
+      "Minyatürleriyle",
+      "Dünya haritasıyla",
+      "Çinileriyle",
+      "Şiirleriyle"
+    ],
+    "correct_answer": 1,
+    "explanation": "Piri Reis'in 1513 tarihli dünya haritası, dönemin en önemli haritalarındandır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "1492'de Amerika kıtasına ulaşan denizci kimdir?",
+    "options": [
+      "Macellan",
+      "Vasco da Gama",
+      "Kristof Kolomb",
+      "James Cook"
+    ],
+    "correct_answer": 2,
+    "explanation": "Kristof Kolomb, 1492'de Amerika kıtasına ulaşmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Atatürk hangi şehirde doğmuştur?",
+    "options": [
+      "Selanik",
+      "İstanbul",
+      "Ankara",
+      "Manastır"
+    ],
+    "correct_answer": 0,
+    "explanation": "Mustafa Kemal Atatürk, 1881'de Selanik'te doğmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Türkiye Büyük Millet Meclisi hangi tarihte açılmıştır?",
+    "options": [
+      "29 Ekim 1923",
+      "23 Nisan 1920",
+      "19 Mayıs 1919",
+      "30 Ağustos 1922"
+    ],
+    "correct_answer": 1,
+    "explanation": "TBMM, 23 Nisan 1920'de Ankara'da açılmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Uzay",
+    "difficulty": 2,
+    "content": "Ay'a ayak basan ilk insan kimdir?",
+    "options": [
+      "Buzz Aldrin",
+      "Yuri Gagarin",
+      "Michael Collins",
+      "Neil Armstrong"
+    ],
+    "correct_answer": 3,
+    "explanation": "Neil Armstrong, 1969'da Ay'a ayak basan ilk insandır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Telefonun mucidi olarak kabul edilen bilim insanı kimdir?",
+    "options": [
+      "Alexander Graham Bell",
+      "Thomas Edison",
+      "Nikola Tesla",
+      "Guglielmo Marconi"
+    ],
+    "correct_answer": 0,
+    "explanation": "Graham Bell, 1876'da telefonun patentini almıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Evrensel kütle çekim yasasını ortaya koyan bilim insanı kimdir?",
+    "options": [
+      "Albert Einstein",
+      "Isaac Newton",
+      "Galileo Galilei",
+      "Johannes Kepler"
+    ],
+    "correct_answer": 1,
+    "explanation": "Newton, kütle çekim yasasını ve hareket yasalarını formüle etmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Fotosentez sırasında bitkilerin havaya verdiği gaz hangisidir?",
+    "options": [
+      "Karbondioksit",
+      "Azot",
+      "Oksijen",
+      "Hidrojen"
+    ],
+    "correct_answer": 2,
+    "explanation": "Bitkiler fotosentezde karbondioksit alıp oksijen verir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Güneş ışığı yardımıyla vücutta sentezlenen vitamin hangisidir?",
+    "options": [
+      "C vitamini",
+      "A vitamini",
+      "B12 vitamini",
+      "D vitamini"
+    ],
+    "correct_answer": 3,
+    "explanation": "D vitamini, güneş ışığının etkisiyle deride sentezlenir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Deprem dalgalarını kaydeden cihazın adı nedir?",
+    "options": [
+      "Sismograf",
+      "Barometre",
+      "Termometre",
+      "Higrometre"
+    ],
+    "correct_answer": 0,
+    "explanation": "Sismograf, yer sarsıntılarını ölçüp kaydeder."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Yunanistan'ın başkenti neresidir?",
+    "options": [
+      "Selanik",
+      "Atina",
+      "Sofya",
+      "Üsküp"
+    ],
+    "correct_answer": 1,
+    "explanation": "Yunanistan'ın başkenti Atina'dır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Amerika Birleşik Devletleri'nin başkenti neresidir?",
+    "options": [
+      "New York",
+      "Los Angeles",
+      "Washington D.C.",
+      "Chicago"
+    ],
+    "correct_answer": 2,
+    "explanation": "ABD'nin başkenti Washington D.C.'dir; New York en kalabalık şehridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Azerbaycan'ın başkenti neresidir?",
+    "options": [
+      "Bakü",
+      "Gence",
+      "Tiflis",
+      "Aşkabat"
+    ],
+    "correct_answer": 0,
+    "explanation": "Azerbaycan'ın başkenti Hazar kıyısındaki Bakü'dür."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Mısır'ın başkenti neresidir?",
+    "options": [
+      "İskenderiye",
+      "Şam",
+      "Amman",
+      "Kahire"
+    ],
+    "correct_answer": 3,
+    "explanation": "Mısır'ın başkenti Kahire'dir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Çanakkale Boğazı hangi iki denizi birbirine bağlar?",
+    "options": [
+      "Ege - Marmara",
+      "Karadeniz - Marmara",
+      "Ege - Akdeniz",
+      "Karadeniz - Ege"
+    ],
+    "correct_answer": 0,
+    "explanation": "Çanakkale Boğazı, Ege Denizi ile Marmara Denizi'ni bağlar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Fuji Dağı hangi ülkededir?",
+    "options": [
+      "Çin",
+      "Japonya",
+      "Nepal",
+      "Güney Kore"
+    ],
+    "correct_answer": 1,
+    "explanation": "Fuji Dağı, Japonya'nın simgesi olan volkanik dağdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Amazon yağmur ormanlarının en büyük bölümü hangi ülkededir?",
+    "options": [
+      "Peru",
+      "Kolombiya",
+      "Brezilya",
+      "Meksika"
+    ],
+    "correct_answer": 2,
+    "explanation": "Amazon ormanlarının yaklaşık yüzde 60'ı Brezilya sınırlarındadır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 2,
+    "content": "Nobel Edebiyat Ödülü'nü kazanan ilk Türk yazar kimdir?",
+    "options": [
+      "Yaşar Kemal",
+      "Aziz Nesin",
+      "Orhan Pamuk",
+      "Elif Şafak"
+    ],
+    "correct_answer": 2,
+    "explanation": "Orhan Pamuk, 2006'da Nobel Edebiyat Ödülü'nü kazanmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 2,
+    "content": "\"Çalıkuşu\" romanının yazarı kimdir?",
+    "options": [
+      "Reşat Nuri Güntekin",
+      "Halide Edib Adıvar",
+      "Yakup Kadri Karaosmanoğlu",
+      "Hüseyin Rahmi Gürpınar"
+    ],
+    "correct_answer": 0,
+    "explanation": "Çalıkuşu, Reşat Nuri Güntekin'in 1922 tarihli romanıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Dünyanın ilk kadın savaş pilotu kabul edilen Türk kadını kimdir?",
+    "options": [
+      "Halide Edib Adıvar",
+      "Sabiha Gökçen",
+      "Afet İnan",
+      "Keriman Halis"
+    ],
+    "correct_answer": 1,
+    "explanation": "Sabiha Gökçen, dünyanın ilk kadın savaş pilotu kabul edilir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 3,
+    "content": "\"Kürk Mantolu Madonna\" romanının yazarı kimdir?",
+    "options": [
+      "Sait Faik Abasıyanık",
+      "Sabahattin Ali",
+      "Orhan Kemal",
+      "Kemal Tahir"
+    ],
+    "correct_answer": 1,
+    "explanation": "Kürk Mantolu Madonna (1943), Sabahattin Ali'nin romanıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 3,
+    "content": "\"İnce Memed\" romanının yazarı kimdir?",
+    "options": [
+      "Yaşar Kemal",
+      "Orhan Kemal",
+      "Fakir Baykurt",
+      "Rıfat Ilgaz"
+    ],
+    "correct_answer": 0,
+    "explanation": "İnce Memed, Yaşar Kemal'in dünyaca tanınan dörtlemesidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Nobel Kimya Ödülü'nü kazanan Türk bilim insanı kimdir?",
+    "options": [
+      "Cahit Arf",
+      "Feza Gürsey",
+      "Aziz Sancar",
+      "Oktay Sinanoğlu"
+    ],
+    "correct_answer": 2,
+    "explanation": "Aziz Sancar, 2015 Nobel Kimya Ödülü'nü paylaşmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "\"Kaplumbağa Terbiyecisi\" tablosunun ressamı kimdir?",
+    "options": [
+      "İbrahim Çallı",
+      "Fikret Mualla",
+      "Bedri Rahmi Eyüboğlu",
+      "Osman Hamdi Bey"
+    ],
+    "correct_answer": 3,
+    "explanation": "Kaplumbağa Terbiyecisi, Osman Hamdi Bey'in en ünlü eseridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "\"Çığlık\" tablosunun ressamı kimdir?",
+    "options": [
+      "Edvard Munch",
+      "Gustav Klimt",
+      "Paul Cezanne",
+      "Henri Matisse"
+    ],
+    "correct_answer": 0,
+    "explanation": "Çığlık, Norveçli ressam Edvard Munch'un eseridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "Sistine Şapeli'nin tavan fresklerini yapan sanatçı kimdir?",
+    "options": [
+      "Leonardo da Vinci",
+      "Michelangelo",
+      "Raffaello",
+      "Botticelli"
+    ],
+    "correct_answer": 1,
+    "explanation": "Michelangelo, Sistine Şapeli tavanını 1508-1512 arasında boyamıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "\"Guernica\" tablosunun ressamı kimdir?",
+    "options": [
+      "Salvador Dali",
+      "Joan Miro",
+      "Pablo Picasso",
+      "Francisco Goya"
+    ],
+    "correct_answer": 2,
+    "explanation": "Guernica (1937), Picasso'nun savaş karşıtı başyapıtıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "\"Düşünen Adam\" heykelinin sanatçısı kimdir?",
+    "options": [
+      "Michelangelo",
+      "Donatello",
+      "Bernini",
+      "Auguste Rodin"
+    ],
+    "correct_answer": 3,
+    "explanation": "Düşünen Adam, Fransız heykeltıraş Auguste Rodin'in eseridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 3,
+    "content": "\"Dört Mevsim\" adlı keman konçertolarının bestecisi kimdir?",
+    "options": [
+      "Antonio Vivaldi",
+      "Johann Sebastian Bach",
+      "Handel",
+      "Haydn"
+    ],
+    "correct_answer": 0,
+    "explanation": "Dört Mevsim, Vivaldi'nin 1725'te yayımlanan eseridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "İnsan vücudunun en büyük organı hangisidir?",
+    "options": [
+      "Karaciğer",
+      "Deri",
+      "Beyin",
+      "Akciğer"
+    ],
+    "correct_answer": 1,
+    "explanation": "Deri, yüzölçümü ve ağırlık bakımından vücudun en büyük organıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Vücudumuzdaki en küçük kemik nerede bulunur?",
+    "options": [
+      "Parmakta",
+      "Burunda",
+      "Orta kulakta",
+      "Bilekte"
+    ],
+    "correct_answer": 2,
+    "explanation": "En küçük kemik olan üzengi kemiği orta kulaktadır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Uzay",
+    "difficulty": 3,
+    "content": "Güneş Sistemi'nin en sıcak gezegeni hangisidir?",
+    "options": [
+      "Merkür",
+      "Venüs",
+      "Mars",
+      "Jüpiter"
+    ],
+    "correct_answer": 1,
+    "explanation": "Venüs, yoğun sera etkisi yapan atmosferi sayesinde Merkür'den bile sıcaktır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Uzay",
+    "difficulty": 3,
+    "content": "Güneş Sistemi'nin en küçük gezegeni hangisidir?",
+    "options": [
+      "Merkür",
+      "Mars",
+      "Venüs",
+      "Plüton"
+    ],
+    "correct_answer": 0,
+    "explanation": "Merkür en küçük gezegendir; Plüton artık cüce gezegen sayılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Radyoaktivite çalışmalarıyla iki farklı dalda Nobel kazanan bilim insanı kimdir?",
+    "options": [
+      "Lise Meitner",
+      "Rosalind Franklin",
+      "Ada Lovelace",
+      "Marie Curie"
+    ],
+    "correct_answer": 3,
+    "explanation": "Marie Curie, fizik (1903) ve kimya (1911) dallarında Nobel kazanmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Penisilini keşfeden bilim insanı kimdir?",
+    "options": [
+      "Louis Pasteur",
+      "Alexander Fleming",
+      "Robert Koch",
+      "Edward Jenner"
+    ],
+    "correct_answer": 1,
+    "explanation": "Alexander Fleming, 1928'de penisilini keşfetmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Kana kırmızı rengini veren protein hangisidir?",
+    "options": [
+      "Hemoglobin",
+      "Keratin",
+      "Kolajen",
+      "İnsülin"
+    ],
+    "correct_answer": 0,
+    "explanation": "Alyuvarlardaki hemoglobin, kana kırmızı rengini verir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Elektrik akımının birimi nedir?",
+    "options": [
+      "Volt",
+      "Watt",
+      "Amper",
+      "Ohm"
+    ],
+    "correct_answer": 2,
+    "explanation": "Akım amperle, gerilim voltla, güç wattla ölçülür."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Teknoloji",
+    "difficulty": 3,
+    "content": "Türkçenin harf sıklığına göre tasarlanan klavye düzeni hangisidir?",
+    "options": [
+      "Q klavye",
+      "AZERTY",
+      "Dvorak",
+      "F klavye"
+    ],
+    "correct_answer": 3,
+    "explanation": "F klavye, Türkçe metinler için 1955'te geliştirilmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Sümela Manastırı hangi ilimizdedir?",
+    "options": [
+      "Rize",
+      "Trabzon",
+      "Artvin",
+      "Gümüşhane"
+    ],
+    "correct_answer": 1,
+    "explanation": "Sümela Manastırı, Trabzon'un Maçka ilçesindedir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Zirvesindeki dev heykellerle ünlü Nemrut Dağı hangi ilimizdedir?",
+    "options": [
+      "Adıyaman",
+      "Malatya",
+      "Bitlis",
+      "Şanlıurfa"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kommagene Krallığı'ndan kalma heykellerin bulunduğu Nemrut Dağı Adıyaman'dadır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Tarihi evleriyle ünlü Safranbolu hangi ilimizdedir?",
+    "options": [
+      "Kastamonu",
+      "Bolu",
+      "Karabük",
+      "Zonguldak"
+    ],
+    "correct_answer": 2,
+    "explanation": "UNESCO listesindeki Safranbolu, Karabük ilindedir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 3,
+    "content": "Mesir macunu hangi ilimizle özdeşleşmiştir?",
+    "options": [
+      "Manisa",
+      "Kütahya",
+      "Uşak",
+      "Balıkesir"
+    ],
+    "correct_answer": 0,
+    "explanation": "Mesir macunu festivali her yıl Manisa'da düzenlenir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 3,
+    "content": "Pişmaniyesiyle ünlü ilimiz hangisidir?",
+    "options": [
+      "Sakarya",
+      "Kocaeli",
+      "Yalova",
+      "Bilecik"
+    ],
+    "correct_answer": 1,
+    "explanation": "Pişmaniye, Kocaeli (İzmit) ile özdeşleşmiş bir tatlıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 3,
+    "content": "Tantuni hangi ilimizle özdeşleşmiştir?",
+    "options": [
+      "Adana",
+      "Hatay",
+      "Gaziantep",
+      "Mersin"
+    ],
+    "correct_answer": 3,
+    "explanation": "Tantuni, Mersin mutfağının simge lezzetidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Avustralya'nın başkenti neresidir?",
+    "options": [
+      "Sidney",
+      "Melbourne",
+      "Kanberra",
+      "Brisbane"
+    ],
+    "correct_answer": 2,
+    "explanation": "Avustralya'nın başkenti Kanberra'dır; Sidney en kalabalık şehridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Kanada'nın başkenti neresidir?",
+    "options": [
+      "Toronto",
+      "Ottawa",
+      "Vancouver",
+      "Montreal"
+    ],
+    "correct_answer": 1,
+    "explanation": "Kanada'nın başkenti Ottawa'dır; Toronto en büyük şehridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Brezilya'nın başkenti neresidir?",
+    "options": [
+      "Rio de Janeiro",
+      "Sao Paulo",
+      "Salvador",
+      "Brasilia"
+    ],
+    "correct_answer": 3,
+    "explanation": "1960'ta başkent olarak planlanıp inşa edilen Brasilia, Brezilya'nın başkentidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 3,
+    "content": "Geleneksel kış içeceği salep hangi bitkiden elde edilir?",
+    "options": [
+      "Orkide kökü",
+      "Zencefil",
+      "Meyan kökü",
+      "Tarçın kabuğu"
+    ],
+    "correct_answer": 0,
+    "explanation": "Salep tozu, yabani orkide yumrularından elde edilir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Türkiye Cumhuriyeti'nin ilk başbakanı kimdir?",
+    "options": [
+      "Celal Bayar",
+      "Fevzi Çakmak",
+      "İsmet İnönü",
+      "Rauf Orbay"
+    ],
+    "correct_answer": 2,
+    "explanation": "Cumhuriyetin ilanıyla ilk hükümeti İsmet İnönü kurmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Osmanlı Devleti'nin İstanbul'dan önceki başkenti hangi şehirdi?",
+    "options": [
+      "Bursa",
+      "Söğüt",
+      "Edirne",
+      "Konya"
+    ],
+    "correct_answer": 2,
+    "explanation": "Edirne, 1453'e kadar Osmanlı'nın başkentiydi; ondan önce Bursa'ydı."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Fransız İhtilali hangi yıl başlamıştır?",
+    "options": [
+      "1789",
+      "1776",
+      "1848",
+      "1815"
+    ],
+    "correct_answer": 0,
+    "explanation": "Fransız İhtilali 1789'da Bastille Baskını ile başlamıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 3,
+    "content": "\"Ezel\" dizisinde Ezel karakterini canlandıran oyuncu kimdir?",
+    "options": [
+      "Engin Akyürek",
+      "Kıvanç Tatlıtuğ",
+      "Kenan İmirzalıoğlu",
+      "Burak Özçivit"
+    ],
+    "correct_answer": 2,
+    "explanation": "Ezel dizisinin başrolünde Kenan İmirzalıoğlu oynamıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 3,
+    "content": "\"Selvi Boylum Al Yazmalım\" filminde başrol erkek oyuncu kimdir?",
+    "options": [
+      "Kadir İnanır",
+      "Tarık Akan",
+      "Cüneyt Arkın",
+      "Ediz Hun"
+    ],
+    "correct_answer": 0,
+    "explanation": "Filmde Türkan Şoray'a Kadir İnanır eşlik etmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 3,
+    "content": "Türkan Şoray'ın Yeşilçam'daki lakabı nedir?",
+    "options": [
+      "Yıldız",
+      "Sultan",
+      "Melek",
+      "Prenses"
+    ],
+    "correct_answer": 1,
+    "explanation": "Türkan Şoray, Türk sinemasında \"Sultan\" lakabıyla anılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Galatasaray, 2000 UEFA Süper Kupası'nda hangi takımı yenmiştir?",
+    "options": [
+      "Arsenal",
+      "Milan",
+      "Bayern Münih",
+      "Real Madrid"
+    ],
+    "correct_answer": 3,
+    "explanation": "Galatasaray, 2000'de Real Madrid'i 2-1 yenerek UEFA Süper Kupası'nı kazanmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Ali Sami Yen kimdir?",
+    "options": [
+      "Galatasaray'ın kurucusu",
+      "Fenerbahçe'nin ilk başkanı",
+      "İlk milli takım kaptanı",
+      "İlk Türk hakem"
+    ],
+    "correct_answer": 0,
+    "explanation": "Ali Sami Yen, 1905'te Galatasaray Spor Kulübü'nü kurmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Türkiye A Milli Futbol Takımı, EURO 2008'de hangi aşamaya kadar yükselmiştir?",
+    "options": [
+      "Çeyrek final",
+      "Yarı final",
+      "Final",
+      "Grup aşaması"
+    ],
+    "correct_answer": 1,
+    "explanation": "Türkiye, EURO 2008'de yarı finalde Almanya'ya elenmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 3,
+    "content": "\"Vizontele\" filminin hem senaristi hem başrol oyuncusu kimdir?",
+    "options": [
+      "Cem Yılmaz",
+      "Ata Demirer",
+      "Yılmaz Erdoğan",
+      "Şafak Sezer"
+    ],
+    "correct_answer": 2,
+    "explanation": "Vizontele (2001), Yılmaz Erdoğan'ın yazıp yönettiği ve oynadığı filmdir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 3,
+    "content": "\"Leyla ile Mecnun\" dizisinde Mecnun'u canlandıran oyuncu kimdir?",
+    "options": [
+      "Ali Atay",
+      "Serkan Keskin",
+      "Osman Sonant",
+      "Ahmet Mümtaz Taylan"
+    ],
+    "correct_answer": 0,
+    "explanation": "Mecnun Çınar karakterini Ali Atay canlandırmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Maraton koşusu adını nereden alır?",
+    "options": [
+      "Bir Yunan kasabasından",
+      "Bir Roma imparatorundan",
+      "Bir dağ adından",
+      "Bir nehir adından"
+    ],
+    "correct_answer": 0,
+    "explanation": "Maraton, Yunanistan'daki Maraton kasabasından Atina'ya koşan haberciden esinlenir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "1402 Ankara Savaşı'nda Osmanlı ordusunu yenen hükümdar kimdir?",
+    "options": [
+      "Cengiz Han",
+      "Timur",
+      "Hülagü Han",
+      "Şah İsmail"
+    ],
+    "correct_answer": 1,
+    "explanation": "Timur, Ankara Savaşı'nda Yıldırım Bayezid'i yenmiş ve Fetret Devri başlamıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "1538 Preveze Deniz Zaferi'nde Osmanlı donanmasını komuta eden denizci kimdir?",
+    "options": [
+      "Turgut Reis",
+      "Piri Reis",
+      "Barbaros Hayreddin Paşa",
+      "Kılıç Ali Paşa"
+    ],
+    "correct_answer": 2,
+    "explanation": "Barbaros Hayreddin Paşa, Preveze'de Haçlı donanmasını yenmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "1526 Mohaç Meydan Muharebesi hangi krallığa karşı kazanılmıştır?",
+    "options": [
+      "Macaristan",
+      "Avusturya",
+      "Lehistan",
+      "Venedik"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kanuni, Mohaç'ta Macar ordusunu yaklaşık iki saatte yenmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Osmanlı'da ilk Türk matbaasını kuran kişi kimdir?",
+    "options": [
+      "Katip Çelebi",
+      "İbrahim Müteferrika",
+      "Takiyüddin",
+      "Ahmed Cevdet Paşa"
+    ],
+    "correct_answer": 1,
+    "explanation": "İbrahim Müteferrika, 1727'de ilk Türk matbaasını kurmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Lale Devri hangi padişah döneminde yaşanmıştır?",
+    "options": [
+      "II. Osman",
+      "I. Mahmut",
+      "IV. Murat",
+      "III. Ahmet"
+    ],
+    "correct_answer": 3,
+    "explanation": "Lale Devri (1718-1730), III. Ahmet ve sadrazamı Nevşehirli Damat İbrahim Paşa dönemidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Yeniçeri Ocağı'nı 1826'da kaldıran padişah kimdir?",
+    "options": [
+      "III. Selim",
+      "II. Mahmut",
+      "Abdülmecid",
+      "II. Abdülhamid"
+    ],
+    "correct_answer": 1,
+    "explanation": "II. Mahmut, Vaka-i Hayriye ile Yeniçeri Ocağı'nı kaldırmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 4,
+    "content": "\"Tutunamayanlar\" romanının yazarı kimdir?",
+    "options": [
+      "Yusuf Atılgan",
+      "Oğuz Atay",
+      "Bilge Karasu",
+      "Ahmet Hamdi Tanpınar"
+    ],
+    "correct_answer": 1,
+    "explanation": "Tutunamayanlar (1972), Oğuz Atay'ın başyapıtıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 4,
+    "content": "\"Saatleri Ayarlama Enstitüsü\" romanının yazarı kimdir?",
+    "options": [
+      "Ahmet Hamdi Tanpınar",
+      "Peyami Safa",
+      "Halid Ziya Uşaklıgil",
+      "Refik Halid Karay"
+    ],
+    "correct_answer": 0,
+    "explanation": "Saatleri Ayarlama Enstitüsü (1961), Tanpınar'ın modern klasiğidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Elementlerin periyodik tablosunu ilk düzenleyen kimyager kimdir?",
+    "options": [
+      "Antoine Lavoisier",
+      "John Dalton",
+      "Dmitri Mendeleyev",
+      "Marie Curie"
+    ],
+    "correct_answer": 2,
+    "explanation": "Mendeleyev, 1869'da elementleri periyodik tabloda düzenlemiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Evrende en bol bulunan element hangisidir?",
+    "options": [
+      "Hidrojen",
+      "Helyum",
+      "Oksijen",
+      "Karbon"
+    ],
+    "correct_answer": 0,
+    "explanation": "Hidrojen, evrendeki atomların büyük çoğunluğunu oluşturur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Aziz Sancar, Nobel Kimya Ödülü'nü hangi çalışmasıyla kazanmıştır?",
+    "options": [
+      "Protein katlanması",
+      "DNA onarım mekanizmaları",
+      "Gen klonlama",
+      "Aşı geliştirme"
+    ],
+    "correct_answer": 1,
+    "explanation": "Sancar, hücrelerin DNA hasarını onarma mekanizmalarını aydınlatmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 4,
+    "content": "\"Bir Zamanlar Anadolu'da\" filminin yönetmeni kimdir?",
+    "options": [
+      "Nuri Bilge Ceylan",
+      "Zeki Demirkubuz",
+      "Semih Kaplanoğlu",
+      "Reha Erdem"
+    ],
+    "correct_answer": 0,
+    "explanation": "Film, Nuri Bilge Ceylan'a 2011 Cannes'da Büyük Ödül kazandırmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 4,
+    "content": "İstiklal Marşı'nın bestecisi kimdir?",
+    "options": [
+      "Ahmed Adnan Saygun",
+      "Osman Zeki Üngör",
+      "Cemal Reşit Rey",
+      "Ulvi Cemal Erkin"
+    ],
+    "correct_answer": 1,
+    "explanation": "Bugün okunan beste Osman Zeki Üngör'e aittir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Teknoloji",
+    "difficulty": 4,
+    "content": "1961'de üretilen ilk yerli Türk otomobilinin adı nedir?",
+    "options": [
+      "Anadol",
+      "Murat",
+      "Devrim",
+      "TOGG"
+    ],
+    "correct_answer": 2,
+    "explanation": "Devrim, 1961'de Eskişehir'de üretilen ilk yerli otomobil prototipidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 4,
+    "content": "\"Babam ve Oğlum\" filminin yönetmeni kimdir?",
+    "options": [
+      "Çağan Irmak",
+      "Ömer Faruk Sorak",
+      "Yavuz Turgul",
+      "Ferzan Özpetek"
+    ],
+    "correct_answer": 0,
+    "explanation": "Babam ve Oğlum (2005), Çağan Irmak'ın yazıp yönettiği filmdir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 5,
+    "content": "Kanuni Sultan Süleyman hangi sefer sırasında vefat etmiştir?",
+    "options": [
+      "Mohaç Seferi",
+      "Viyana Kuşatması",
+      "Zigetvar Seferi",
+      "Bağdat Seferi"
+    ],
+    "correct_answer": 2,
+    "explanation": "Kanuni, 1566 Zigetvar kuşatması sırasında vefat etmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 5,
+    "content": "İstanbul'un antik Yunan kolonisi dönemindeki adı nedir?",
+    "options": [
+      "Nikomedya",
+      "Byzantion",
+      "Halkedon",
+      "Pera"
+    ],
+    "correct_answer": 1,
+    "explanation": "Şehir, MÖ 7. yüzyılda Byzantion adıyla kurulmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 5,
+    "content": "2014 Cannes Film Festivali'nde Altın Palmiye kazanan Nuri Bilge Ceylan filmi hangisidir?",
+    "options": [
+      "Üç Maymun",
+      "Uzak",
+      "Ahlat Ağacı",
+      "Kış Uykusu"
+    ],
+    "correct_answer": 3,
+    "explanation": "Kış Uykusu, 2014'te Altın Palmiye kazanmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 5,
+    "content": "Yılmaz Güney'in 1982'de Cannes'da Altın Palmiye kazanan filmi hangisidir?",
+    "options": [
+      "Yol",
+      "Sürü",
+      "Umut",
+      "Duvar"
+    ],
+    "correct_answer": 0,
+    "explanation": "Yol, 1982 Cannes'da Altın Palmiye'yi paylaşmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Uzay",
+    "difficulty": 5,
+    "content": "Mars'ın iki uydusunun adları nelerdir?",
+    "options": [
+      "Io ve Europa",
+      "Phobos ve Deimos",
+      "Titan ve Rhea",
+      "Triton ve Nereid"
+    ],
+    "correct_answer": 1,
+    "explanation": "Mars'ın uyduları Phobos ve Deimos'tur; Io ve Europa Jüpiter'in uydularıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 5,
+    "content": "Nobel Barış Ödülü hangi şehirde takdim edilir?",
+    "options": [
+      "Stokholm",
+      "Kopenhag",
+      "Oslo",
+      "Helsinki"
+    ],
+    "correct_answer": 2,
+    "explanation": "Barış ödülü Oslo'da, diğer Nobel ödülleri Stokholm'de verilir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Uzay",
+    "difficulty": 1,
+    "content": "Güneş bir yıldızdır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Güneş, Samanyolu'ndaki milyarlarca yıldızdan biridir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Balinalar memeli hayvanlardır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Balinalar akciğerle solunum yapan, yavrularını sütle besleyen memelilerdir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Penguenler uçamayan kuşlardır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Penguenler uçamaz; kanatlarını suda yüzmek için kullanır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Türk bayrağında ay ve yıldız bulunur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Türk bayrağı kırmızı zemin üzerinde beyaz hilal ve yıldızdan oluşur."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Uzay",
+    "difficulty": 1,
+    "content": "Ay, kendi ışığını üretir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Ay ışık üretmez; Güneş'ten aldığı ışığı yansıtır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Akdeniz, Türkiye'nin kuzeyinde yer alır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Akdeniz güneydedir; kuzeyde Karadeniz vardır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Bir gün 24 saattir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Dünya kendi ekseni etrafındaki dönüşünü yaklaşık 24 saatte tamamlar."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Örümcekler ağ örerek avlanabilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Birçok örümcek türü, avını yakalamak için ağ örer."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 1,
+    "content": "Mustafa Kemal Atatürk, Kurtuluş Savaşı'nın başkomutanıdır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Atatürk, 1921'de Başkomutanlık görevini üstlenmiştir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Köpekler yumurtlayarak çoğalır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Köpekler memelidir; yavrularını doğurur."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 1,
+    "content": "Türkiye'de kış günleri, yaz günlerinden daha kısadır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kuzey Yarımküre'de kışın gündüzler kısalır, geceler uzar."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 2,
+    "content": "Kanguru, Avustralya'ya özgü bir hayvandır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kangurular doğal olarak yalnızca Avustralya ve çevresinde yaşar."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 2,
+    "content": "Kutup ayıları Antarktika'da yaşar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Kutup ayıları Kuzey Kutbu çevresinde yaşar; Antarktika'da penguenler vardır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Galatasaray, Fenerbahçe'den önce kurulmuştur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Galatasaray 1905'te, Fenerbahçe 1907'de kurulmuştur."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "İnsan kalbi, göğsün tam ortasında değil hafif solunda yer alır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kalp göğüs ortasına yakın konumlanır ama sola doğru eğimlidir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 2,
+    "content": "Bukalemunlar renk değiştirebilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Bukalemunlar derilerindeki özel hücrelerle renk değiştirir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Domates, botanik açıdan bir meyvedir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Domates, çiçeğin döllenmesiyle oluştuğu için botanikte meyvedir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Genel Kültür",
+    "difficulty": 2,
+    "content": "Mevlana, hayatının büyük bölümünü Konya'da geçirmiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Mevlana Celaleddin Rumi, Konya'da yaşamış ve orada vefat etmiştir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Kızılırmak, tamamı Türkiye sınırları içinde kalan en uzun akarsudur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "1.355 km'lik Kızılırmak, doğduğu ve döküldüğü yer Türkiye'de olan en uzun nehirdir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Genel Kültür",
+    "difficulty": 2,
+    "content": "İpek, ipek böceğinin kozasından elde edilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "İpek lifi, ipek böceği kozasının çözülmesiyle elde edilir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Ankara, nüfus bakımından İstanbul'dan daha kalabalıktır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "İstanbul'un nüfusu Ankara'nın yaklaşık üç katıdır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Türkiye, üç tarafı denizlerle çevrili bir yarımada ülkesidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Türkiye; Karadeniz, Ege ve Akdeniz ile çevrilidir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Ampulün yaygınlaşmasını sağlayan mucit Thomas Edison'dur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Edison, dayanıklı akkor ampulü geliştirip ticarileştirmiştir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Ses, suda havadakinden daha hızlı yayılır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Ses suda yaklaşık 1.480 m/s, havada yaklaşık 343 m/s hızla yayılır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Yemek",
+    "difficulty": 3,
+    "content": "Bal, uygun koşullarda saklandığında binlerce yıl bozulmadan kalabilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Düşük nem ve asidik yapısı sayesinde bal bozulmaya çok dirençlidir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Şimşeğin ışığı, gök gürültüsünden önce görülür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Işık sesten çok daha hızlı olduğu için önce şimşek görülür."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Titanik, ilk seferinde batmıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Titanik, 1912'deki ilk yolculuğunda buz dağına çarparak batmıştır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Osmanlı İmparatorluğu, 600 yıldan uzun süre varlığını sürdürmüştür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Osmanlı, 1299'dan 1922'ye kadar yaklaşık 623 yıl hüküm sürmüştür."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Atatürk, 10 Kasım 1938'de vefat etmiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Atatürk, 10 Kasım 1938 saat dokuzu beş geçe Dolmabahçe'de vefat etmiştir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Fransız İhtilali, 18. yüzyılda gerçekleşmiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "İhtilal 1789'da, yani 18. yüzyılın sonunda başlamıştır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "Mona Lisa tablosu, Paris'teki Louvre Müzesi'nde sergilenmektedir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Mona Lisa, 1797'den beri Louvre'dadır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Çanakkale Savaşları, Kurtuluş Savaşı'nın bir cephesidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Çanakkale Savaşları (1915), I. Dünya Savaşı'nın bir cephesidir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "İnsan DNA'sının büyük bölümü şempanze DNA'sıyla benzerdir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "İnsan ve şempanze genomları yaklaşık yüzde 98-99 oranında benzerdir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Altın, havada kolayca paslanan bir metaldir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Altın soy metaldir; oksitlenmeye ve paslanmaya karşı çok dirençlidir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Vücudumuzdaki en uzun kemik, uyluk kemiğidir (femur).",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Femur, hem en uzun hem en güçlü kemiğimizdir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Fatih Sultan Mehmet, İstanbul'u fethettiğinde 21 yaşındaydı.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "1432 doğumlu Fatih, 1453'teki fetihte 21 yaşındaydı."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Ayasofya'yı Mimar Sinan inşa etmiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Ayasofya, 537'de Bizans döneminde inşa edilmiştir; Sinan sonradan güçlendirme yapmıştır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Merkür'ün bilinen doğal uydusu yoktur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Merkür ve Venüs, uydusu olmayan iki gezegendir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Yeniçeri Ocağı, Tanzimat Fermanı ile kaldırılmıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Ocak, 1826 Vaka-i Hayriye ile kaldırıldı; Tanzimat Fermanı 1839'dadır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "İnsan beyni, vücudun enerji tüketiminin yaklaşık yüzde yirmisini kullanır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Beyin, ağırlığına oranla çok yüksek enerji tüketir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Aspirinin etken maddesi, söğüt kabuğundaki bileşikten esinlenilerek geliştirilmiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Salisilik asit söğüt kabuğunda bulunur; aspirin bunun türevidir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 4,
+    "content": "Ahtapotların üç kalbi vardır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Ahtapotlarda iki solungaç kalbi ve bir ana kalp bulunur."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Uzay",
+    "difficulty": 5,
+    "content": "Işık yılı, bir zaman ölçüsü birimidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Işık yılı, ışığın bir yılda aldığı mesafedir; uzunluk birimidir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 5,
+    "content": "Bizans İmparatorluğu, Doğu Roma İmparatorluğu'nun diğer adıdır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "\"Bizans\" adı, Doğu Roma için sonradan kullanılan tarihçilik terimidir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 5,
+    "content": "Yavuz Sultan Selim'in Mısır Seferi sonrasında halifelik Osmanlı hanedanına geçmiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "1517 Mısır Seferi ile halifelik Osmanlı'ya geçmiştir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 1,
+    "content": "Hangisi daha hızlıdır?",
+    "options": [
+      "Işık",
+      "Ses"
+    ],
+    "correct_answer": 0,
+    "explanation": "Işık saniyede yaklaşık 300.000 km, ses ise 343 metre yol alır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Uzay",
+    "difficulty": 1,
+    "content": "Hangisi daha büyük bir gezegendir?",
+    "options": [
+      "Mars",
+      "Jüpiter"
+    ],
+    "correct_answer": 1,
+    "explanation": "Jüpiter, Güneş Sistemi'nin en büyük gezegenidir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Hangisi daha büyük bir hayvandır?",
+    "options": [
+      "Mavi balina",
+      "Fil"
+    ],
+    "correct_answer": 0,
+    "explanation": "Mavi balina, yaşamış en büyük hayvandır; 30 metreye ulaşabilir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Spor",
+    "difficulty": 1,
+    "content": "Hangi sporda bir takım sahada daha çok oyuncuyla oynar?",
+    "options": [
+      "Basketbol",
+      "Futbol"
+    ],
+    "correct_answer": 1,
+    "explanation": "Futbolda 11, basketbolda 5 oyuncu sahada bulunur."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Hangi ülkede daha fazla insan yaşar?",
+    "options": [
+      "Çin",
+      "Japonya"
+    ],
+    "correct_answer": 0,
+    "explanation": "Çin'in nüfusu bir milyarın üzerindedir; Japonya'nınkinin on katından fazladır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Hangisinin ortalama ömrü daha uzundur?",
+    "options": [
+      "Kelebek",
+      "Kaplumbağa"
+    ],
+    "correct_answer": 1,
+    "explanation": "Kaplumbağalar onlarca yıl yaşar; birçok kelebek türü haftalarca yaşar."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Hangi kulüp daha önce kurulmuştur?",
+    "options": [
+      "Galatasaray",
+      "Fenerbahçe"
+    ],
+    "correct_answer": 0,
+    "explanation": "Galatasaray 1905'te, Fenerbahçe 1907'de kurulmuştur."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Hangi kulüp daha eskidir?",
+    "options": [
+      "Trabzonspor",
+      "Beşiktaş"
+    ],
+    "correct_answer": 1,
+    "explanation": "Beşiktaş 1903'te, Trabzonspor 1967'de kurulmuştur."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Hangisi daha yüksek bir dağdır?",
+    "options": [
+      "Ağrı Dağı",
+      "Uludağ"
+    ],
+    "correct_answer": 0,
+    "explanation": "Ağrı Dağı 5.137 m, Uludağ 2.543 m yüksekliğindedir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Hangi ülke daha büyük bir alanı kaplar?",
+    "options": [
+      "Kanada",
+      "Rusya"
+    ],
+    "correct_answer": 1,
+    "explanation": "Rusya yaklaşık 17,1 milyon km² ile dünyanın en büyük ülkesidir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Hangi il daha kuzeydedir?",
+    "options": [
+      "Sinop",
+      "Antalya"
+    ],
+    "correct_answer": 0,
+    "explanation": "Sinop, Türkiye'nin en kuzey ucunda yer alır; Antalya güney kıyısındadır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Hangi gölün yüzölçümü daha büyüktür?",
+    "options": [
+      "Tuz Gölü",
+      "Van Gölü"
+    ],
+    "correct_answer": 1,
+    "explanation": "Van Gölü yaklaşık 3.713 km² ile Türkiye'nin en büyük gölüdür."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Hangi nehrin toplam uzunluğu daha fazladır?",
+    "options": [
+      "Nil",
+      "Kızılırmak"
+    ],
+    "correct_answer": 0,
+    "explanation": "Nil yaklaşık 6.650 km, Kızılırmak 1.355 km uzunluğundadır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Hangisi daha eski bir yapıdır?",
+    "options": [
+      "Kolezyum",
+      "Mısır Piramitleri"
+    ],
+    "correct_answer": 1,
+    "explanation": "Giza Piramitleri MÖ 2500'lerde, Kolezyum MS 80'de tamamlanmıştır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangi akarsu daha uzundur?",
+    "options": [
+      "Fırat",
+      "Dicle"
+    ],
+    "correct_answer": 0,
+    "explanation": "Fırat yaklaşık 2.800 km, Dicle yaklaşık 1.900 km uzunluğundadır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangi dağın zirvesi daha yüksektir?",
+    "options": [
+      "Nemrut Dağı (Adıyaman)",
+      "Erciyes Dağı"
+    ],
+    "correct_answer": 1,
+    "explanation": "Erciyes 3.917 m, Adıyaman'daki Nemrut Dağı yaklaşık 2.150 m'dir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangi ülkenin toprakları daha geniştir?",
+    "options": [
+      "Kazakistan",
+      "Türkiye"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kazakistan yaklaşık 2,7 milyon km²; Türkiye yaklaşık 783 bin km²'dir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Hangi ülke daha fazla FIFA Dünya Kupası kazanmıştır?",
+    "options": [
+      "İngiltere",
+      "Brezilya"
+    ],
+    "correct_answer": 1,
+    "explanation": "Brezilya 5 kez, İngiltere 1 kez (1966) kazanmıştır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Genel Kültür",
+    "difficulty": 3,
+    "content": "Hangisi Nobel Ödülü'nü daha önce kazanmıştır?",
+    "options": [
+      "Orhan Pamuk",
+      "Aziz Sancar"
+    ],
+    "correct_answer": 0,
+    "explanation": "Pamuk 2006'da edebiyat, Sancar 2015'te kimya ödülü almıştır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Uzay",
+    "difficulty": 3,
+    "content": "Hangi gezegen Güneş'e daha uzaktır?",
+    "options": [
+      "Satürn",
+      "Neptün"
+    ],
+    "correct_answer": 1,
+    "explanation": "Neptün, Güneş Sistemi'nin en dış gezegenidir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Hangi kurum daha önce kurulmuştur?",
+    "options": [
+      "Türk Hava Yolları",
+      "TRT"
+    ],
+    "correct_answer": 0,
+    "explanation": "THY 1933'te, TRT 1964'te kurulmuştur."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangisi daha soğuk bir bölgedir?",
+    "options": [
+      "Antarktika",
+      "Sibirya"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kaydedilen en düşük sıcaklık (-89°C) Antarktika'dadır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Yemek",
+    "difficulty": 3,
+    "content": "100 gramında daha çok kalori hangisinde bulunur?",
+    "options": [
+      "Elma",
+      "Fındık"
+    ],
+    "correct_answer": 1,
+    "explanation": "Fındık 100 gramda yaklaşık 630 kalori, elma yaklaşık 52 kalori içerir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Hangisi daha önce yaşanmıştır?",
+    "options": [
+      "Malazgirt Zaferi",
+      "İstanbul'un Fethi"
+    ],
+    "correct_answer": 0,
+    "explanation": "Malazgirt 1071'de, İstanbul'un Fethi 1453'te gerçekleşmiştir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Hangisi daha erken bir tarihte gerçekleşmiştir?",
+    "options": [
+      "Cumhuriyet'in ilanı",
+      "TBMM'nin açılışı"
+    ],
+    "correct_answer": 1,
+    "explanation": "TBMM 1920'de açılmış, Cumhuriyet 1923'te ilan edilmiştir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Hangi gezegenin çapı daha büyüktür?",
+    "options": [
+      "Merkür",
+      "Mars"
+    ],
+    "correct_answer": 1,
+    "explanation": "Mars'ın çapı yaklaşık 6.779 km, Merkür'ünki 4.879 km'dir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Ses hangisinde daha hızlı yayılır?",
+    "options": [
+      "Su",
+      "Hava"
+    ],
+    "correct_answer": 0,
+    "explanation": "Ses suda yaklaşık 1.480 m/s, havada 343 m/s hızla yayılır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Genel Kültür",
+    "difficulty": 4,
+    "content": "Hangi üniversite daha önce kurulmuştur?",
+    "options": [
+      "İstanbul Üniversitesi",
+      "ODTÜ"
+    ],
+    "correct_answer": 0,
+    "explanation": "İstanbul Üniversitesi'nin kökeni 1453'e dayanır; ODTÜ 1956'da kurulmuştur."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Sanat",
+    "difficulty": 5,
+    "content": "Hangisi daha önce doğmuştur?",
+    "options": [
+      "Leonardo da Vinci",
+      "Mimar Sinan"
+    ],
+    "correct_answer": 0,
+    "explanation": "Leonardo 1452'de, Mimar Sinan yaklaşık 1490'da doğmuştur."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 5,
+    "content": "Hangi padişah tahta daha önce çıkmıştır?",
+    "options": [
+      "Kanuni Sultan Süleyman",
+      "Yavuz Sultan Selim"
+    ],
+    "correct_answer": 1,
+    "explanation": "Yavuz 1512'de, oğlu Kanuni 1520'de tahta çıkmıştır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 5,
+    "content": "Hangisi daha derindir?",
+    "options": [
+      "Van Gölü",
+      "Karadeniz"
+    ],
+    "correct_answer": 1,
+    "explanation": "Karadeniz'in en derin noktası 2.200 metreyi aşar; Van Gölü yaklaşık 450 metredir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Bir futbol maçının normal süresi kaç dakikadır?",
+    "min_value": 30,
+    "max_value": 150,
+    "real_answer": 90,
+    "unit": "dakika",
+    "explanation": "Futbol maçı 45'er dakikalık iki devreden, toplam 90 dakikadan oluşur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kültür",
+    "difficulty": 2,
+    "content": "Satranç tahtasında toplam kaç kare vardır?",
+    "min_value": 16,
+    "max_value": 200,
+    "real_answer": 64,
+    "unit": "kare",
+    "explanation": "Satranç tahtası 8x8 = 64 kareden oluşur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Türkiye kaç ilden oluşur?",
+    "min_value": 40,
+    "max_value": 120,
+    "real_answer": 81,
+    "unit": "il",
+    "explanation": "Türkiye'de 81 il bulunur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kültür",
+    "difficulty": 2,
+    "content": "Bir yıl kaç haftadan oluşur?",
+    "min_value": 20,
+    "max_value": 100,
+    "real_answer": 52,
+    "unit": "hafta",
+    "explanation": "Bir yıl yaklaşık 52 haftadır (365 / 7 ≈ 52,1)."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "İstanbul hangi yılda fethedilmiştir?",
+    "min_value": 1200,
+    "max_value": 1700,
+    "real_answer": 1453,
+    "unit": "yıl",
+    "explanation": "İstanbul, 29 Mayıs 1453'te Fatih Sultan Mehmet tarafından fethedilmiştir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Müzik",
+    "difficulty": 3,
+    "content": "Standart bir piyanoda kaç tuş vardır?",
+    "min_value": 30,
+    "max_value": 150,
+    "real_answer": 88,
+    "unit": "tuş",
+    "explanation": "Standart piyanoda 52 beyaz, 36 siyah olmak üzere 88 tuş bulunur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Türkiye Büyük Millet Meclisi hangi yıl açılmıştır?",
+    "min_value": 1850,
+    "max_value": 1980,
+    "real_answer": 1920,
+    "unit": "yıl",
+    "explanation": "TBMM, 23 Nisan 1920'de açılmıştır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Bir maraton koşusu kaç kilometredir?",
+    "min_value": 10,
+    "max_value": 100,
+    "real_answer": 42.195,
+    "unit": "km",
+    "explanation": "Maratonun resmi mesafesi 42,195 kilometredir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Everest Dağı'nın yüksekliği kaç metredir?",
+    "min_value": 5000,
+    "max_value": 10000,
+    "real_answer": 8849,
+    "unit": "metre",
+    "explanation": "Everest, 8.849 metre ile dünyanın en yüksek dağıdır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "İnsan hücresinde kaç kromozom bulunur?",
+    "min_value": 10,
+    "max_value": 100,
+    "real_answer": 46,
+    "unit": "kromozom",
+    "explanation": "İnsan hücrelerinde 23 çift, yani 46 kromozom vardır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 3,
+    "content": "İnsanlık, Ay'a ilk kez hangi yıl ayak basmıştır?",
+    "min_value": 1900,
+    "max_value": 2000,
+    "real_answer": 1969,
+    "unit": "yıl",
+    "explanation": "Apollo 11 ile 1969'da Ay'a ilk kez ayak basılmıştır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Titanik hangi yıl batmıştır?",
+    "min_value": 1850,
+    "max_value": 1990,
+    "real_answer": 1912,
+    "unit": "yıl",
+    "explanation": "Titanik, 15 Nisan 1912'de Kuzey Atlantik'te batmıştır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Yetişkin bir insanın vücudunda ortalama kaç litre kan bulunur?",
+    "min_value": 1,
+    "max_value": 15,
+    "real_answer": 5,
+    "unit": "litre",
+    "explanation": "Yetişkin insanda ortalama 5 litre kan bulunur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Atatürk hangi yıl doğmuştur?",
+    "min_value": 1800,
+    "max_value": 1930,
+    "real_answer": 1881,
+    "unit": "yıl",
+    "explanation": "Mustafa Kemal Atatürk, 1881'de Selanik'te doğmuştur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Berlin Duvarı hangi yıl yıkılmıştır?",
+    "min_value": 1900,
+    "max_value": 2020,
+    "real_answer": 1989,
+    "unit": "yıl",
+    "explanation": "Berlin Duvarı, 9 Kasım 1989'da yıkılmıştır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Ay'ın Dünya'ya ortalama uzaklığı kaç bin kilometredir?",
+    "min_value": 100,
+    "max_value": 1000,
+    "real_answer": 384,
+    "unit": "bin km",
+    "explanation": "Ay, Dünya'ya ortalama 384.400 km uzaklıktadır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Osmanlı tahtına toplam kaç padişah çıkmıştır?",
+    "min_value": 10,
+    "max_value": 80,
+    "real_answer": 36,
+    "unit": "padişah",
+    "explanation": "Osman Bey'den Vahdettin'e kadar 36 padişah tahta çıkmıştır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Müzik",
+    "difficulty": 4,
+    "content": "Beethoven kaç senfoni bestelemiştir?",
+    "min_value": 1,
+    "max_value": 30,
+    "real_answer": 9,
+    "unit": "senfoni",
+    "explanation": "Beethoven'ın tamamlanmış 9 senfonisi vardır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "İstiklal Marşı hangi yıl kabul edilmiştir?",
+    "min_value": 1900,
+    "max_value": 1950,
+    "real_answer": 1921,
+    "unit": "yıl",
+    "explanation": "İstiklal Marşı, 12 Mart 1921'de TBMM'de kabul edilmiştir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 4,
+    "content": "Fenerbahçe Spor Kulübü hangi yıl kurulmuştur?",
+    "min_value": 1880,
+    "max_value": 1950,
+    "real_answer": 1907,
+    "unit": "yıl",
+    "explanation": "Fenerbahçe, 1907'de Kadıköy'de kurulmuştur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kültür",
+    "difficulty": 4,
+    "content": "Boğaziçi Köprüsü (15 Temmuz Şehitler Köprüsü) hangi yıl açılmıştır?",
+    "min_value": 1950,
+    "max_value": 2000,
+    "real_answer": 1973,
+    "unit": "yıl",
+    "explanation": "Köprü, Cumhuriyet'in 50. yılında, 1973'te açılmıştır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Ağrı Dağı'nın yüksekliği kaç metredir?",
+    "min_value": 2000,
+    "max_value": 8000,
+    "real_answer": 5137,
+    "unit": "metre",
+    "explanation": "Ağrı Dağı 5.137 metre ile Türkiye'nin en yüksek noktasıdır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 4,
+    "content": "2002 Dünya Kupası'nda Hakan Şükür'ün Güney Kore'ye attığı gol, maçın kaçıncı saniyesinde gelmiştir?",
+    "min_value": 1,
+    "max_value": 60,
+    "real_answer": 10.8,
+    "unit": "saniye",
+    "explanation": "10,8 saniyelik bu gol, Dünya Kupası tarihinin en hızlı golüdür."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 5,
+    "content": "Anıtkabir'in yapımı hangi yıl tamamlanmıştır?",
+    "min_value": 1920,
+    "max_value": 1990,
+    "real_answer": 1953,
+    "unit": "yıl",
+    "explanation": "Anıtkabir 1953'te tamamlanmış ve Atatürk'ün naaşı buraya taşınmıştır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Sanat",
+    "difficulty": 5,
+    "content": "Mimar Sinan'ın Süleymaniye Camii hangi yıl tamamlanmıştır?",
+    "min_value": 1400,
+    "max_value": 1700,
+    "real_answer": 1557,
+    "unit": "yıl",
+    "explanation": "Süleymaniye Camii'nin yapımı 1550-1557 yılları arasında sürmüştür."
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 5,
+    "content": "Kızılırmak kaç kilometre uzunluğundadır?",
+    "min_value": 500,
+    "max_value": 3000,
+    "real_answer": 1355,
+    "unit": "km",
+    "explanation": "Kızılırmak, 1.355 km ile Türkiye'nin en uzun nehridir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kültür",
+    "difficulty": 5,
+    "content": "TRT hangi yıl kurulmuştur?",
+    "min_value": 1920,
+    "max_value": 2010,
+    "real_answer": 1964,
+    "unit": "yıl",
+    "explanation": "Türkiye Radyo Televizyon Kurumu, 1964'te kurulmuştur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Bu bayrak hangi ülkeye aittir? (Üç yatay şerit: siyah-kırmızı-sarı)",
+    "options": [
+      "Belçika",
+      "Almanya",
+      "İspanya",
+      "Avusturya"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/de.png",
+    "explanation": "Almanya bayrağı siyah, kırmızı ve altın sarısı yatay şeritlerden oluşur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Bu bayrak hangi ülkeye aittir? (Üç dikey şerit: mavi-beyaz-kırmızı)",
+    "options": [
+      "Hollanda",
+      "Rusya",
+      "Fransa",
+      "Lüksemburg"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/fr.png",
+    "explanation": "Fransa bayrağı mavi, beyaz ve kırmızı dikey şeritlerden oluşur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Bu bayrak hangi ülkeye aittir? (Üç dikey şerit: yeşil-beyaz-kırmızı)",
+    "options": [
+      "Macaristan",
+      "Bulgaristan",
+      "Portekiz",
+      "İtalya"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/it.png",
+    "explanation": "İtalya bayrağı yeşil, beyaz ve kırmızı dikey şeritlerden oluşur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Bu bayrak hangi ülkeye aittir? (Yıldızlar ve kırmızı-beyaz çizgiler)",
+    "options": [
+      "ABD",
+      "Malezya",
+      "Liberya",
+      "Küba"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/us.png",
+    "explanation": "ABD bayrağında 50 yıldız ve 13 çizgi bulunur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Bu bayrak hangi ülkeye aittir? (Yeşil zemin, sarı eşkenar dörtgen, mavi küre)",
+    "options": [
+      "Portekiz",
+      "Brezilya",
+      "Arjantin",
+      "Kolombiya"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/br.png",
+    "explanation": "Brezilya bayrağında yeşil zemin üzerinde sarı eşkenar dörtgen ve yıldızlı mavi küre vardır."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Bu bayrak hangi ülkeye aittir? (Kırmızı-sarı-kırmızı yatay şeritler ve arma)",
+    "options": [
+      "Portekiz",
+      "Romanya",
+      "İspanya",
+      "Kolombiya"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/es.png",
+    "explanation": "İspanya bayrağı kırmızı-sarı-kırmızı şeritler ve kraliyet armasından oluşur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Bu bayrak hangi ülkeye aittir? (Kırmızı-beyaz çapraz haçlı Union Jack)",
+    "options": [
+      "Avustralya",
+      "Yeni Zelanda",
+      "İrlanda",
+      "Birleşik Krallık"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/gb.png",
+    "explanation": "Union Jack, Birleşik Krallık'ın bayrağıdır."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Bu bayrak hangi ülkeye aittir? (Kırmızı zemin, köşede beş sarı yıldız)",
+    "options": [
+      "Çin",
+      "Vietnam",
+      "Kuzey Kore",
+      "Singapur"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/cn.png",
+    "explanation": "Çin bayrağında bir büyük, dört küçük sarı yıldız bulunur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir? (Ortada kırmızı akçaağaç yaprağı)",
+    "options": [
+      "Danimarka",
+      "Kanada",
+      "İsviçre",
+      "Norveç"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/ca.png",
+    "explanation": "Kanada bayrağının ortasında kırmızı akçaağaç yaprağı bulunur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir? (Mavi-beyaz yatay şeritler, köşede haç)",
+    "options": [
+      "Finlandiya",
+      "İsrail",
+      "Yunanistan",
+      "Uruguay"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/gr.png",
+    "explanation": "Yunanistan bayrağı dokuz mavi-beyaz şerit ve köşedeki haçtan oluşur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir? (Üç yatay şerit: kırmızı-beyaz-mavi)",
+    "options": [
+      "Hollanda",
+      "Fransa",
+      "Çekya",
+      "Polonya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/nl.png",
+    "explanation": "Hollanda bayrağı kırmızı, beyaz ve mavi yatay şeritlerden oluşur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir? (Mavi zemin üzerinde sarı haç)",
+    "options": [
+      "Danimarka",
+      "Finlandiya",
+      "İzlanda",
+      "İsveç"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/se.png",
+    "explanation": "İsveç bayrağı mavi zemin üzerinde sarı İskandinav haçıdır."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir? (Kırmızı zemin, mavi-beyaz haç)",
+    "options": [
+      "Norveç",
+      "Danimarka",
+      "İzlanda",
+      "Finlandiya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/no.png",
+    "explanation": "Norveç bayrağı kırmızı zemin üzerinde beyaz kenarlıklı mavi haçtır."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir? (Kare biçimli kırmızı zemin, beyaz haç)",
+    "options": [
+      "Danimarka",
+      "Gürcistan",
+      "İsviçre",
+      "Malta"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/ch.png",
+    "explanation": "İsviçre bayrağı kare biçimlidir; kırmızı zeminde beyaz haç bulunur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir? (Yeşil-kırmızı dikey şeritler ve arma)",
+    "options": [
+      "İtalya",
+      "Portekiz",
+      "Fas",
+      "Bolivya"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/pt.png",
+    "explanation": "Portekiz bayrağı yeşil-kırmızı şeritler ve küre armasından oluşur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir? (Açık mavi-beyaz-açık mavi, ortada güneş)",
+    "options": [
+      "Uruguay",
+      "Yunanistan",
+      "Guatemala",
+      "Arjantin"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/ar.png",
+    "explanation": "Arjantin bayrağında ortada Mayıs Güneşi bulunur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir? (Turuncu-beyaz-yeşil, ortada tekerlek)",
+    "options": [
+      "Hindistan",
+      "İrlanda",
+      "Fildişi Sahili",
+      "Nijer"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/in.png",
+    "explanation": "Hindistan bayrağının ortasında Ashoka Çakrası (tekerlek) bulunur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir? (Yeşil-beyaz-kırmızı dikey, ortada kartal arması)",
+    "options": [
+      "İtalya",
+      "Macaristan",
+      "Meksika",
+      "İran"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/mx.png",
+    "explanation": "Meksika bayrağının ortasında yılan tutan kartal arması vardır."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir? (Beyaz zemin, ortada kırmızı-mavi yuvarlak simge)",
+    "options": [
+      "Japonya",
+      "Güney Kore",
+      "Tayvan",
+      "Tayland"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/kr.png",
+    "explanation": "Güney Kore bayrağında taegeuk simgesi ve dört trigram bulunur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir? (Mavi-kırmızı-yeşil yatay şeritler, hilal ve yıldız)",
+    "options": [
+      "Özbekistan",
+      "Türkmenistan",
+      "Azerbaycan",
+      "Pakistan"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/az.png",
+    "explanation": "Azerbaycan bayrağı mavi-kırmızı-yeşil şeritler ile hilal ve sekiz köşeli yıldızdan oluşur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir? (İki yatay şerit: mavi-sarı)",
+    "options": [
+      "Ukrayna",
+      "İsveç",
+      "Kazakistan",
+      "Romanya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/ua.png",
+    "explanation": "Ukrayna bayrağı üstte mavi, altta sarı iki şeritten oluşur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir? (Yana yatık Y biçiminde altı renkli tasarım)",
+    "options": [
+      "Kenya",
+      "Nijerya",
+      "Jamaika",
+      "Güney Afrika"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/za.png",
+    "explanation": "Güney Afrika bayrağı, Y biçimli altı renkli tasarımıyla tanınır."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir? (Kırmızı-beyaz-siyah yatay şeritler, ortada altın kartal)",
+    "options": [
+      "Mısır",
+      "Yemen",
+      "Suriye",
+      "Irak"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/eg.png",
+    "explanation": "Mısır bayrağının ortasında Selahaddin Kartalı bulunur."
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir? (Kırmızı-beyaz-mavi-beyaz-kırmızı yatay şeritler)",
+    "options": [
+      "Kosta Rika",
+      "Tayland",
+      "Kuzey Kore",
+      "Laos"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/th.png",
+    "explanation": "Tayland bayrağında ortadaki mavi şerit diğerlerinden geniştir."
+  }
+]

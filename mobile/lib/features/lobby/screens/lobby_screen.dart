@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quizroyale/core/constants/app_constants.dart';
+import 'package:quizroyale/core/services/sound_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
@@ -41,9 +42,17 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(lobbyProvider);
 
-    ref.listen(lobbyProvider, (_, next) {
+    ref.listen(lobbyProvider, (prev, next) {
       if (next.gameId != null) {
         context.go('/game/${next.gameId}');
+      }
+      // Geri sayımın son 3 saniyesi: her saniye tık (maç başlıyor gerilimi).
+      if (next.gameId == null &&
+          prev != null &&
+          next.countdown != prev.countdown &&
+          next.countdown >= 1 &&
+          next.countdown <= 3) {
+        SoundService().playSound(GameSound.countdown);
       }
       if (next.error != null && next.error!.contains('iptal')) {
         ScaffoldMessenger.of(context).showSnackBar(

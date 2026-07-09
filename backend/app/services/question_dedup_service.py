@@ -44,6 +44,55 @@ async def mark_question_shown(user_id: str, question_id: str) -> None:
     logger.debug("Marked question %s shown for user %s", question_id, user_id)
 
 
+async def get_seen_question_ids(user_ids: list[str]) -> set[str]:
+    """Bir grup oyuncunun son 30 günde GÖRDÜĞÜ tüm soru id'lerinin birleşimi.
+
+    Maç başında soru seçiminde kullanılır: dönen kümedeki sorular, maçtaki
+    HİÇBİR oyuncuya tekrar çıkmasın diye dışlanır. Redis erişilemezse boş
+    küme döner (dedup sessizce devre dışı kalır — maç ASLA engellenmez).
+
+    Args:
+        user_ids: Maçtaki gerçek oyuncuların user id'leri.
+
+    Returns:
+        Son 30 günde en az bir oyuncuya gösterilmiş soru id'leri kümesi.
+    """
+    seen: set[str] = set()
+    if not user_ids:
+        return seen
+    try:
+        redis = await get_redis()
+        for uid in user_ids:
+            members: set[str] = await redis.smembers(_recent_questions_key(uid))
+            seen.update(members)
+    except Exception as exc:  # Redis çökse bile oyun akışı bozulmasın
+        logger.warning("Dedup okuma başarısız (Redis?): %s — dedup atlanıyor", exc)
+        return set()
+    return seen
+
+
+async def mark_questions_shown(user_ids: list[str], question_ids: list[str]) -> None:
+    """Servis edilen soruları TÜM gerçek oyuncular için 'görüldü' işaretle.
+
+    Maçta sorular herkese aynı anda gösterildiği için oyuncu × soru çapraz
+    kaydı yapılır. Hata durumunda sessizce loglar — oyun akışını bozmaz.
+
+    Args:
+        user_ids:     Maçtaki gerçek oyuncuların user id'leri.
+        question_ids: Bu maçta servis edilen soru id'leri.
+    """
+    if not user_ids or not question_ids:
+        return
+    try:
+        redis = await get_redis()
+        for uid in user_ids:
+            key = _recent_questions_key(uid)
+            await redis.sadd(key, *question_ids)
+            await redis.expire(key, THIRTY_DAYS_SECONDS)
+    except Exception as exc:  # Redis çökse bile oyun akışı bozulmasın
+        logger.warning("Dedup yazma başarısız (Redis?): %s", exc)
+
+
 async def was_shown_recently(user_id: str, question_id: str) -> bool:
     """Check whether a question was shown to a user in the past 30 days.
 

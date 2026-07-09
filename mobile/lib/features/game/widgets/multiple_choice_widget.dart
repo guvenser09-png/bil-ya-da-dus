@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:quizroyale/core/services/haptic_service.dart';
+import 'package:quizroyale/core/services/sound_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 
@@ -172,7 +173,14 @@ class MultipleChoiceWidget extends StatelessWidget {
                       shadowColor: shadow,
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                       // Cevaptan sonra null yerine no-op: ChunkyButton griye boğmasın.
-                      onPressed: answered ? () {} : () { HapticFeedback.lightImpact(); onAnswer(i); },
+                      // Şık kilitleme: yumuşak tık sesi + hafif haptik (ayara saygılı).
+                      onPressed: answered
+                          ? () {}
+                          : () {
+                              SoundService().playSound(GameSound.click);
+                              HapticService().buttonTap();
+                              onAnswer(i);
+                            },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [

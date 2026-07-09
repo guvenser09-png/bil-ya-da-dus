@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:quizroyale/core/services/haptic_service.dart';
+import 'package:quizroyale/core/services/sound_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 
@@ -170,7 +171,14 @@ class TrueFalseWidget extends StatelessWidget {
             // Cevaplandıktan sonra onPressed'i null bırakmıyoruz; aksi halde
             // ChunkyButton disabled olup şıkkı griye boğuyor. No-op ile canlı
             // renk korunur, onAnswer yine tek sefer tetiklenir.
-            onPressed: answered ? () {} : () { HapticFeedback.lightImpact(); onAnswer(index); },
+            // Şık kilitleme: yumuşak tık sesi + hafif haptik (ayara saygılı).
+            onPressed: answered
+                ? () {}
+                : () {
+                    SoundService().playSound(GameSound.click);
+                    HapticService().buttonTap();
+                    onAnswer(index);
+                  },
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [Icon(displayIcon, size: 28), const SizedBox(width: 12), Text(label)],

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:quizroyale/core/services/haptic_service.dart';
+import 'package:quizroyale/core/services/sound_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
@@ -55,11 +57,13 @@ class _RoundRevealWidgetState extends State<RoundRevealWidget>
 
   late final AnimationController _fallCtrl;
 
-  // Total reveal budget ≈ 4.4s: 2.4s sonuç gösterimi + 2.0s düşüş.
-  // (Sonuç gösterimi 1.4s->2.4s'ye çıkarıldı; kim bildi/kim elendi daha net
-  // görünsün diye ~1sn daha uzun kalıyor.)
-  static const _resultsDuration = Duration(milliseconds: 2400);
-  static const _fallDuration = Duration(milliseconds: 2400);
+  // Toplam reveal bütçesi ≈ 4.8s (tur arası 5sn penceresinin içinde):
+  // 2.2s sonuç gösterimi + 2.6s düşüş sekansı. Düşüş sekansının ilk ~%20'si
+  // titreme/sallanma (kapı henüz açılmadı), kalan ~2.1s gerçek düşüş —
+  // kullanıcı geri bildirimi ("düşme efektleri çok belli olmuyor") üzerine
+  // düşüş fazı uzatıldı ve dramatikleştirildi.
+  static const _resultsDuration = Duration(milliseconds: 2200);
+  static const _fallDuration = Duration(milliseconds: 2600);
 
   _RevealPhase _phase = _RevealPhase.results;
 
@@ -75,6 +79,28 @@ class _RoundRevealWidgetState extends State<RoundRevealWidget>
       widget.myUsername != null &&
       widget.eliminatedPlayers
           .any((p) => p['username'] == widget.myUsername);
+
+  /// Bu tur kalkanıyla kurtulanlar (round_reveal.shield_saved listesi).
+  List<String> get _shieldSaved =>
+      (widget.roundResult['shield_saved'] as List?)
+          ?.map((e) => e.toString())
+          .toList() ??
+      const [];
+
+  /// Benim kalkanım bu tur mu kırıldı? (belirgin uyarı banner'ı için)
+  bool get _myShieldBroke =>
+      widget.myUsername != null && _shieldSaved.contains(widget.myUsername);
+
+  /// 👻 Hayalet (elenmişken verilen gölge cevap) sonucum — {answer, correct}
+  /// ya da null. Reveal'da yarı saydam, hafif bir rozetle gösterilir.
+  Map<String, dynamic>? get _myGhostResult {
+    final me = widget.myUsername;
+    if (me == null) return null;
+    final ghosts =
+        (widget.roundResult['ghost_results'] as Map?)?.cast<String, dynamic>();
+    final mine = ghosts?[me];
+    return mine is Map ? Map<String, dynamic>.from(mine) : null;
+  }
 
   @override
   void initState() {
@@ -99,6 +125,11 @@ class _RoundRevealWidgetState extends State<RoundRevealWidget>
     _resultsTimer = Timer(_resultsDuration, () {
       if (!mounted) return;
       setState(() => _phase = _RevealPhase.falling);
+      // Trapdoor açılıyor — düşüş glissandosu; kendim düşüyorsam güçlü titreşim.
+      SoundService().playSound(GameSound.elimination);
+      if (_amIEliminated) {
+        HapticService().elimination();
+      }
       _fallCtrl.forward();
     });
     _fallCtrl.addStatusListener((s) {
@@ -204,6 +235,18 @@ class _RoundRevealWidgetState extends State<RoundRevealWidget>
               ),
               const SizedBox(height: 16),
 
+              // ── 🛡️ Kalkanım bu tur kırıldı — belirgin uyarı ────────────
+              if (_myShieldBroke) ...[
+                const _ShieldBrokenBanner(),
+                const SizedBox(height: 12),
+              ],
+
+              // ── 👻 Hayalet sonucum — yarı saydam, hafif geri bildirim ──
+              if (_myGhostResult != null) ...[
+                _GhostResultChip(correct: _myGhostResult!['correct'] == true),
+                const SizedBox(height: 12),
+              ],
+
               // ── Survivor summary: kalan + bu turda elenen ──────────────
               _SurvivorSummary(
                 aliveCount: widget.aliveCount,
@@ -231,6 +274,8 @@ class _RoundRevealWidgetState extends State<RoundRevealWidget>
                         avatarId: avatarId,
                         correct: correct,
                         score: score,
+                        // Kalkanıyla kurtuldu → satırda kırık-kalkan rozeti.
+                        shieldBroke: data['shield_saved'] == true,
                       );
                     }).toList(),
                   ),
@@ -323,16 +368,48 @@ class _FallOverlay extends StatelessWidget {
         animation: controller,
         builder: (context, _) {
           final t = controller.value;
-          // Kapılar ilk %25'te açılır (zemin açıldı hissi).
-          final doorT = (t / 0.25).clamp(0.0, 1.0);
+          // DRAMATİK SEKANS: ilk ~%20 titreme/sallanma (kapı kapalı, gerilim),
+          // kapılar %12-32 aralığında açılır, düşüş %20'den sonra başlar.
+          final doorT = ((t - 0.12) / 0.20).clamp(0.0, 1.0);
           // "ELENDİN!" yazısı kapı açıldıktan sonra belirginleşir.
-          final titleOpacity = ((t - 0.15) / 0.2).clamp(0.0, 1.0);
+          final titleOpacity = ((t - 0.22) / 0.2).clamp(0.0, 1.0);
 
-          return Container(
+          // Ekran sarsıntısı — SADECE kendim eleniyorsam; titreme fazında
+          // güçlü, düşüş başlayınca hızla söner.
+          final shakeAmp = amIEliminated
+              ? (t < 0.2 ? 6.0 : (t < 0.4 ? 6.0 * (1 - (t - 0.2) / 0.2) : 0.0))
+              : 0.0;
+          final shakeX = math.sin(t * 90) * shakeAmp;
+          final shakeY = math.cos(t * 70) * shakeAmp * 0.6;
+
+          return Transform.translate(
+            offset: Offset(shakeX, shakeY),
+            child: Container(
             color: Colors.black.withOpacity(0.55 * (1 - t * 0.4)),
             child: Stack(
               alignment: Alignment.center,
               children: [
+                // Kırmızı vinyet — kendim eleniyorsam tam ekran; düşüş
+                // ilerledikçe yumuşakça söner.
+                if (amIEliminated)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: RadialGradient(
+                            radius: 1.1,
+                            colors: [
+                              Colors.transparent,
+                              AppTheme.cError.withOpacity(
+                                  (0.5 * (1 - t * 0.55)).clamp(0.0, 1.0)),
+                            ],
+                            stops: const [0.55, 1.0],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
                 // Trapdoor — ortada açılan iki kanat
                 _Trapdoor(open: doorT),
 
@@ -402,6 +479,7 @@ class _FallOverlay extends StatelessWidget {
                     ),
                   ),
               ],
+            ),
             ),
           );
         },
@@ -493,16 +571,34 @@ class _FallingAvatar extends StatelessWidget {
     final stagger = total > 1 ? (index / total) * 0.12 : 0.0;
     final raw = ((progress - stagger) / (1 - stagger)).clamp(0.0, 1.0);
 
+    // FAZ 1 (0–0.2): platformda TİTREME + kırmızı parlama — düşüş öncesi
+    // gerilim ("düşecek!" hissi). Kapılar bu fazın sonunda açılır.
+    const shakeEnd = 0.2;
+    final falling = raw > shakeEnd;
+    final fallRaw =
+        falling ? ((raw - shakeEnd) / (1 - shakeEnd)).clamp(0.0, 1.0) : 0.0;
+
     // easeIn → düşüş hızlanır (yer çekimi hissi).
-    final eased = Curves.easeIn.transform(raw);
+    final eased = Curves.easeIn.transform(fallRaw);
 
     final dy = eased * (screenHeight * 0.95);
-    final rotation = eased * (emphasized ? 0.9 : 0.6);
+    // Titreme fazı: hızlı yatay jitter + minik sallanma (wobble).
+    final jitterX = falling ? 0.0 : math.sin(raw * 85) * 3.5;
+    final wobble = falling ? 0.0 : math.sin(raw * 60) * 0.06;
+    // Düşerken hafif DÖNME (kendim düşüyorsam daha dramatik).
+    final rotation = wobble + eased * (emphasized ? 1.5 : 1.0);
     // Karakter düşerken NET görünsün: çoğu yol boyunca tam opak kalsın,
-    // yalnızca son %25'te solup kaybolsun (eskiden baştan soluyordu).
-    final opacity = raw < 0.75 ? 1.0 : (1.0 - (raw - 0.75) / 0.25).clamp(0.0, 1.0);
-    // Daha az küçülsün ki düşüş daha net izlensin.
-    final scale = 1.0 - eased * 0.30;
+    // yalnızca son %25'te solup kaybolsun (soluklaşma).
+    final opacity =
+        fallRaw < 0.75 ? 1.0 : (1.0 - (fallRaw - 0.75) / 0.25).clamp(0.0, 1.0);
+    // Düşerken küçülme (uzaklaşma hissi) — yine de izlenebilir kalsın.
+    final scale = 1.0 - eased * 0.35;
+
+    // Kırmızı parlama: titreme fazında yanıp söner (uyarı), düşüşte yalnızca
+    // vurgulanan (kendi) avatarda kalır.
+    final glowOpacity = falling
+        ? (emphasized ? 0.7 : 0.0)
+        : (0.35 + 0.45 * math.sin(raw * 55).abs());
 
     // Yatay yelpaze: avatarlar trapdoor çevresinde dağılsın.
     final spread = total > 1 ? (index - (total - 1) / 2) * 56.0 : 0.0;
@@ -510,7 +606,7 @@ class _FallingAvatar extends StatelessWidget {
     final avatarSize = emphasized ? 124.0 : 60.0;
 
     return Transform.translate(
-      offset: Offset(spread, dy - screenHeight * 0.06),
+      offset: Offset(spread + jitterX, dy - screenHeight * 0.06),
       child: Opacity(
         opacity: opacity,
         child: Transform.rotate(
@@ -520,16 +616,18 @@ class _FallingAvatar extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Kendi karakterim parıltılı bir halka ile öne çıksın.
+                // Titreme fazında herkes kırmızı parlar; düşüşte kendi
+                // karakterim parıltılı halkayla öne çıkmayı sürdürür.
                 Container(
-                  decoration: emphasized
+                  decoration: glowOpacity > 0
                       ? BoxDecoration(
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: AppTheme.cError.withOpacity(0.7),
-                              blurRadius: 26,
-                              spreadRadius: 3,
+                              color: AppTheme.cError
+                                  .withOpacity(glowOpacity.clamp(0.0, 1.0)),
+                              blurRadius: emphasized ? 26 : 16,
+                              spreadRadius: emphasized ? 3 : 1,
                             ),
                           ],
                         )
@@ -656,12 +754,20 @@ class _StatChip extends StatelessWidget {
 }
 
 class _PlayerResultRow extends StatelessWidget {
-  const _PlayerResultRow(
-      {required this.username, required this.avatarId, required this.correct, required this.score});
+  const _PlayerResultRow({
+    required this.username,
+    required this.avatarId,
+    required this.correct,
+    required this.score,
+    this.shieldBroke = false,
+  });
   final String username;
   final String avatarId;
   final bool correct;
   final int score;
+
+  /// Bu tur kalkanıyla kurtuldu → satırda küçük kırık-kalkan rozeti.
+  final bool shieldBroke;
 
   @override
   Widget build(BuildContext context) {
@@ -686,11 +792,105 @@ class _PlayerResultRow extends StatelessWidget {
               child: Text(username,
                   style: const TextStyle(
                       fontWeight: FontWeight.w600, fontSize: 13))),
+          // Kalkanıyla kurtuldu: yanlış ama elenmedi — kırık-kalkan rozeti.
+          if (shieldBroke) ...[
+            const Text('🛡️💥', style: TextStyle(fontSize: 13)),
+            const SizedBox(width: 6),
+          ],
           Icon(correct ? Icons.check_circle : Icons.cancel,
               color: correct ? AppTheme.success : AppTheme.danger, size: 18),
           const SizedBox(width: 8),
           if (correct) _ScoreBadge(score: score),
         ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// _ShieldBrokenBanner — 🛡️ kalkan kırıldı uyarısı (sallanma + pop animasyonu)
+// ---------------------------------------------------------------------------
+
+class _ShieldBrokenBanner extends StatelessWidget {
+  const _ShieldBrokenBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    // Tek seferlik pop + sallanma: ölçek 0.6→1.0 (elastik) + yatay titreşim.
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.easeOut,
+      builder: (_, t, child) {
+        final shake = math.sin(t * math.pi * 6) * 6 * (1 - t);
+        return Transform.translate(
+          offset: Offset(shake, 0),
+          child: Transform.scale(
+            scale: 0.6 + 0.4 * Curves.elasticOut.transform(t),
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppTheme.accent.withOpacity(0.16),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppTheme.accent, width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: AppTheme.accent.withOpacity(0.45),
+              blurRadius: 18,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: const Text(
+          '🛡️ Kalkanın kırıldı — bir hakkın daha yok!',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: AppTheme.accent,
+            fontSize: 15,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 0.3,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// _GhostResultChip — 👻 hayalet cevabın hafif (yarı saydam) geri bildirimi
+// ---------------------------------------------------------------------------
+
+class _GhostResultChip extends StatelessWidget {
+  const _GhostResultChip({required this.correct});
+  final bool correct;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = correct ? AppTheme.success : AppTheme.danger;
+    // Yarı saydam: normal oyuncu deneyimiyle karışmasın; skor değişmez,
+    // sadece "bilseydin/bilemedin" hissi + altın hatırlatması.
+    return Opacity(
+      opacity: 0.75,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.14),
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(color: color.withOpacity(0.5)),
+        ),
+        child: Text(
+          correct ? '👻 Hayalet cevabın DOĞRU — +5 altın!' : '👻 Hayalet cevabın yanlış',
+          style: TextStyle(
+            color: color,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
       ),
     );
   }

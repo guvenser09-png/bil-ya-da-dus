@@ -55,8 +55,28 @@ class TestGetProfile:
         assert "email" not in data
         assert "coins" not in data
 
+    @pytest.mark.asyncio
+    async def test_get_profile_by_username(self, client: AsyncClient):
+        """REGRESYON: username ile profil çekmek 500 DEĞİL 200 dönmeli.
 
-class TestUpdateProfile:
+        Mobil profil sayfası /api/users/{username} çağırıyor; eskiden uç
+        UUID bekleyip uuid.UUID(username) ValueError'ı ile 500 veriyordu.
+        """
+        await register_and_get_token(client, "byname1")
+
+        response = await client.get("/api/users/byname1")
+        assert response.status_code == 200
+        assert response.json()["username"] == "byname1"
+
+        # İstatistik ucu da username kabul etmeli
+        stats = await client.get("/api/users/byname1/stats")
+        assert stats.status_code == 200
+
+    @pytest.mark.asyncio
+    async def test_get_profile_unknown_identifier_404(self, client: AsyncClient):
+        """Ne UUID ne username eşleşirse 404 (500 değil) dönmeli."""
+        response = await client.get("/api/users/boyle_biri_yok")
+        assert response.status_code == 404
     """Test profile updates."""
 
     @pytest.mark.asyncio

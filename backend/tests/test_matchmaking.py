@@ -3,7 +3,6 @@
 import pytest
 
 from app.services.matchmaking_service import (
-    WARMUP_QUESTIONS,
     LobbyState,
     MatchmakingManager,
 )
@@ -186,23 +185,6 @@ class TestMatchmakingManager:
         # Stored on the lobby object
         assert lobby.bot_join_schedule == offsets
 
-    def test_warmup_question_returned(self):
-        """get_warmup_question must return a dict with required keys."""
-        lobby = LobbyState("warmup-test")
-
-        question = lobby.get_warmup_question()
-
-        assert question is not None
-        assert isinstance(question, dict)
-        assert "question" in question
-        assert "options" in question
-        assert "correct" in question
-        assert isinstance(question["options"], list)
-        assert len(question["options"]) >= 2
-        assert isinstance(question["correct"], int)
-        # Correct index must be a valid index into options
-        assert 0 <= question["correct"] < len(question["options"])
-
     def test_min_real_players_respected(self):
         """When min_real=2 but only 1 real player is present the lobby still
         starts — bots fill the gap. Cancel only fires at 0 real players."""
@@ -218,3 +200,89 @@ class TestMatchmakingManager:
         assert lobby.min_real_players == 2
         # Game can still proceed: bots topped up the rest
         assert lobby.total_count == 20
+
+
+class TestBotMixOverrides:
+    """İlk-maç senaryosu + anti-tilt bot karışım override'ları."""
+
+    def test_first_match_mix_gradual_and_fill(self):
+        """first_match karışımı: ilk 11 bot ≈ 9 easy + 2 medium + 0 hard.
+
+        Hem kademeli ekleme (add_one_bot) hem toplu doldurma (fill_with_bots)
+        AYNI merdiveni kullanmalı.
+        """
+        lobby = LobbyState("first-match-1")
+        lobby.add_player("u_new", "yeni_oyuncu", "Yeni Oyuncu", "default_01")
+        lobby.set_bot_mix("first_match")
+
+        # Kademeli görünür ekleme (ws/lobby._bot_fill_loop'un kullandığı yol)
+        for _ in range(5):
+            lobby.add_one_bot()
+        # Kalanı resolve anındaki toplu doldurma tamamlar (fill_with_bots)
+        lobby.fill_with_bots()
+
+        # Karışım her iki yolda da korunur; hiçbir slotta hard bot olmamalı
+        assert all(b["difficulty"] != "hard" for b in lobby.bots)
+
+        first_11 = lobby.bots[:11]
+        easy = sum(1 for b in first_11 if b["difficulty"] == "easy")
+        medium = sum(1 for b in first_11 if b["difficulty"] == "medium")
+        hard = sum(1 for b in first_11 if b["difficulty"] == "hard")
+
+        assert easy == 9, f"9 easy bekleniyordu, {easy} geldi"
+        assert medium == 2, f"2 medium bekleniyordu, {medium} geldi"
+        assert hard == 0, f"first_match karışımında hard bot olmamalı, {hard} geldi"
+
+    def test_priority_first_match_beats_anti_tilt(self):
+        """Öncelik sırası: ilk-maç > anti-tilt > varsayılan.
+
+        Hangi sırada tetiklenirse tetiklensin first_match kazanmalı; ayrıca
+        önceden eklenmiş botların zorlukları yeni merdivene göre güncellenmeli.
+        """
+        # anti-tilt önce, ilk-maç sonra → first_match kazanır
+        lobby = LobbyState("prio-1")
+        lobby.add_player("u1", "p1", "P1", "default_01")
+        for _ in range(6):  # varsayılan karışımla bot eklenmiş olsun
+            lobby.add_one_bot()
+        lobby.set_bot_mix("easy_heavy")
+        lobby.set_bot_mix("first_match")
+        assert lobby.bot_mix == "first_match"
+        # Mevcut botlar yeniden dağıtıldı: first_match'te hard bot kalmaz
+        assert all(b["difficulty"] != "hard" for b in lobby.bots)
+
+        # ilk-maç önce, anti-tilt sonra → first_match korunur (düşürme yok)
+        lobby2 = LobbyState("prio-2")
+        lobby2.set_bot_mix("first_match")
+        lobby2.set_bot_mix("easy_heavy")
+        assert lobby2.bot_mix == "first_match"
+
+        # Tek başına anti-tilt → easy_heavy uygulanır (ilk 11: 9e + 2m + 0h)
+        lobby3 = LobbyState("prio-3")
+        lobby3.add_player("u3", "p3", "P3", "default_01")
+        lobby3.set_bot_mix("easy_heavy")
+        while len(lobby3.bots) < 11:
+            lobby3.add_one_bot()
+        easy = sum(1 for b in lobby3.bots if b["difficulty"] == "easy")
+        assert lobby3.bot_mix == "easy_heavy"
+        assert easy >= 8, f"easy_heavy karışımında ilk 11 botun ~%80'i easy olmalı ({easy} easy)"
+
+    def test_tournament_lobby_ignores_overrides(self):
+        """Turnuva lobisinde override NO-OP: varsayılan karışım korunur."""
+        lobby = LobbyState("tourn-1", is_tournament=True)
+        lobby.add_player("u1", "p1", "P1", "default_01")
+        lobby.set_bot_mix("first_match")
+        lobby.set_bot_mix("easy_heavy")
+        assert lobby.bot_mix == "default"
+
+        lobby.fill_with_bots()
+        # Varsayılan merdiven (4e+4m+4h) → hard botlar mevcut olmalı
+        assert any(b["difficulty"] == "hard" for b in lobby.bots)
+
+    def test_generous_guess_spread_widened(self):
+        """İlk-maç senaryosunda bot slider sapması genişletilir (easy %30→%45)."""
+        from app.services.bot_service import bot_guess_spread
+
+        for diff in ("easy", "medium", "hard"):
+            assert bot_guess_spread(diff, generous=True) > bot_guess_spread(diff)
+        assert bot_guess_spread("easy") == 0.30
+        assert bot_guess_spread("easy", generous=True) == 0.45

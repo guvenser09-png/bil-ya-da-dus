@@ -72,7 +72,9 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
       final body = <String, dynamic>{};
       if (bio != null) body['bio'] = bio;
       if (avatarId != null) body['avatar_id'] = avatarId;
-      if (interests != null) body['interests'] = interests;
+      // Backend şema alanı interest_tags — eski 'interests' anahtarı backend
+      // tarafından tanınmıyordu ve seçimler HİÇ kaydedilmiyordu.
+      if (interests != null) body['interest_tags'] = interests;
       final resp = await ApiClient.instance.patch('/api/users/me', body: body);
       state = state.copyWith(isSaving: false, profile: resp);
       return true;

@@ -86,7 +86,13 @@ class _SheetContent extends StatelessWidget {
     final avatarId = profile['avatar_id'] as String? ?? 'default_01';
     final bio = profile['bio'] as String? ?? '';
     final level = profile['level'] as int? ?? 1;
-    final stats = profile['stats'] as Map<String, dynamic>? ?? {};
+    // İstatistikler public profil yanıtında ÜST SEVİYE alanlardır
+    // (games_played/games_won/win_rate); iç 'stats' nesnesi hiç dönmez.
+    final stats = <String, dynamic>{
+      'games_played': profile['games_played'] ?? 0,
+      'games_won': profile['games_won'] ?? 0,
+      'win_rate': (profile['win_rate'] as num?)?.round() ?? 0,
+    };
     final badges = (profile['badges'] as List? ?? []).cast<String>();
 
     return SingleChildScrollView(

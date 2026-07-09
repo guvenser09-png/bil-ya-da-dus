@@ -12,6 +12,7 @@ Pipeline:
 """
 
 import json
+import logging
 import random
 import re
 import uuid as uuid_mod
@@ -23,6 +24,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
 from app.models.question import ApprovalStatus, Question, QuestionHistory, QuestionType
 
+logger = logging.getLogger(__name__)
+
 # --- Categories ---
 CATEGORIES = [
     "Genel Kültür", "Bilim", "Tarih", "Coğrafya", "Spor",
@@ -30,11 +33,15 @@ CATEGORIES = [
     "Sanat", "Doğa", "Uzay", "Mitoloji", "Matematik",
 ]
 
+# Tur → soru tipi eşlemesi. game_service.ROUND_CONFIG'teki eleme rampasıyla
+# (kolaydan zora: ilk tur 4 şıklı ısınma, final tahmin) BİREBİR aynı sırada
+# tutulmalıdır — aksi halde istemciye duyurulan tur tipi ile servis edilen
+# soru tipi ayrışır.
 ROUND_TYPE_MAP = {
-    1: QuestionType.DOGRU_YANLIS,
-    2: QuestionType.GORSEL,
-    3: QuestionType.KARSILASTIRMA,
-    4: QuestionType.COKTAN_SECMELI,
+    1: QuestionType.COKTAN_SECMELI,
+    2: QuestionType.DOGRU_YANLIS,
+    3: QuestionType.GORSEL,
+    4: QuestionType.KARSILASTIRMA,
     5: QuestionType.TAHMIN,
 }
 
@@ -181,11 +188,16 @@ class QuestionService:
         for i, q in enumerate(questions):
             q_id = f"q_{str(current_count + i + 1).zfill(5)}"
 
-            qtype = ROUND_TYPE_MAP.get(
-                {"dogru_yanlis": 1, "gorsel": 2, "karsilastirma": 3,
-                 "coktan_secmeli": 4, "tahmin": 5}.get(question_type, 4),
-                QuestionType.COKTAN_SECMELI,
-            )
+            # Tip adı → QuestionType (tur sırasından BAĞIMSIZ doğrudan eşleme;
+            # eski kod ROUND_TYPE_MAP üzerinden dolaylı gidiyordu ve tur
+            # sırası değiştiğinde yanlış tipe kaydediyordu).
+            qtype = {
+                "dogru_yanlis": QuestionType.DOGRU_YANLIS,
+                "gorsel": QuestionType.GORSEL,
+                "karsilastirma": QuestionType.KARSILASTIRMA,
+                "coktan_secmeli": QuestionType.COKTAN_SECMELI,
+                "tahmin": QuestionType.TAHMIN,
+            }.get(question_type, QuestionType.COKTAN_SECMELI)
 
             question = Question(
                 id=q_id,
@@ -247,6 +259,13 @@ class QuestionService:
         """Get 5 questions (one per round) for a game.
         Ensures 30-day dedup for real players.
 
+        30 GÜN TEKRAR ÖNLEME (dedup): player_ids verilirse, maçtaki gerçek
+        oyunculardan HERHANGİ birine son 30 günde çıkmış sorular önce dışlanır
+        (question_dedup_service, Redis tabanlı). Havuz daralırsa kademeli
+        gevşeme: her zorluk basamağı önce dedup'LU denenir, bulunamazsa AYNI
+        basamak dedup'SUZ denenir (önce dedup'tan vazgeç, sonra zorluğu gevşet).
+        Redis erişilemezse dedup sessizce atlanır — maç ASLA sorusuz kalmaz.
+
         Zorluk havuzu yönlendirmesi (graceful fallback, maç ASLA iptal olmaz):
         - min_difficulty: alt sınır (turnuva: 4 → gerçekten zor 4-5).
         - max_difficulty: üst sınır (normal maç: 3 → kolay/orta 1-3).
@@ -259,6 +278,14 @@ class QuestionService:
         """
         questions: list[Question] = []
         used_ids: set[str] = set()
+
+        # Maçtaki gerçek oyuncuların son 30 günde gördüğü sorular (birleşim).
+        # Redis hatası dedup servisinde yutulur → boş küme = dedup kapalı.
+        seen_ids: set[str] = set()
+        if player_ids:
+            from app.services.question_dedup_service import get_seen_question_ids
+
+            seen_ids = await get_seen_question_ids(player_ids)
 
         for round_num in range(1, 6):
             q_type = ROUND_TYPE_MAP[round_num]
@@ -280,6 +307,21 @@ class QuestionService:
 
             q: Question | None = None
             for qt, lo, hi in attempts:
+                # Önce dedup'lu dene (30 günde görülmüşleri dışla); bu basamakta
+                # soru kalmadıysa AYNI basamağı dedup'suz dene. Böylece dedup,
+                # zorluk gevşetilmeden ÖNCE bırakılır (havuz daralınca tekrar
+                # kabul edilir ama zorluk profili korunur).
+                if seen_ids:
+                    q = await QuestionService._pick_one(
+                        db, qt, lo, hi, used_ids | seen_ids
+                    )
+                    if q is not None:
+                        break
+                    logger.info(
+                        "Soru seçimi: dedup havuzu daraldı (tip=%s, min=%s, max=%s) "
+                        "— bu basamak dedup'suz deneniyor.",
+                        getattr(qt, "value", qt), lo, hi,
+                    )
                 q = await QuestionService._pick_one(db, qt, lo, hi, used_ids)
                 if q is not None:
                     break
@@ -330,6 +372,10 @@ class QuestionService:
         ORM objects. Returns ``None`` if fewer than 5 approved questions exist,
         so the caller can fall back to its built-in mock questions.
 
+        player_ids verilirse, seçilen 5 soru bu oyunculara "görüldü" olarak
+        işaretlenir (30 gün Redis dedup) — böylece aynı sorular 30 gün boyunca
+        aynı oyunculara tekrar çıkmaz. İşaretleme hatası maçı ASLA engellemez.
+
         Zorluk havuzu:
         - min_difficulty: turnuva modunda zorlu havuz (difficulty>=eşik, ör. 4).
         - max_difficulty: normal maçta üst sınır (difficulty<=eşik, ör. 3).
@@ -342,6 +388,15 @@ class QuestionService:
         )
         if len(rows) < 5:
             return None
+
+        # Servis edilen soruları oyunculara "görüldü" işaretle (30 gün dedup).
+        # Sadece gerçekten servis edilecek (5'i tamamlanan) set işaretlenir;
+        # mock'a düşülürse hiçbir şey işaretlenmez.
+        if player_ids:
+            from app.services.question_dedup_service import mark_questions_shown
+
+            await mark_questions_shown(player_ids, [q.id for q in rows])
+
         return [QuestionService.question_to_engine_dict(q) for q in rows]
 
     @staticmethod

@@ -63,6 +63,26 @@ class UserService:
         return result.scalar_one_or_none()
 
     @staticmethod
+    async def get_user_by_id_or_username(
+        db: AsyncSession, identifier: str
+    ) -> User | None:
+        """UUID ya da username ile kullanıcı bul (herkese açık profil uçları için).
+
+        Mobil bazı yerlerde username, bazı yerlerde UUID gönderir. Eskiden
+        username gelince uuid.UUID(...) ValueError fırlatıp 500 dönüyordu;
+        burada iki biçimi de destekleriz.
+        """
+        try:
+            uid = _to_uuid(identifier)
+        except (ValueError, AttributeError, TypeError):
+            result = await db.execute(
+                select(User).where(User.username == identifier)
+            )
+            return result.scalar_one_or_none()
+        result = await db.execute(select(User).where(User.id == uid))
+        return result.scalar_one_or_none()
+
+    @staticmethod
     async def update_profile(
         db: AsyncSession,
         user_id: str,
@@ -416,6 +436,11 @@ class UserService:
         user.interest_tags = None
         user.auth_provider = None
         user.auth_provider_id = None
+        # Misafir bağını kopar: device_id unique olduğundan temizlenmezse aynı
+        # cihaz bir daha misafir hesabı AÇAMAZ (unique ihlali) ya da silinmiş
+        # hesaba bağlanırdı.
+        user.device_id = None
+        user.is_guest = False
 
         # Doğrulama / premium durumunu sıfırla
         user.is_verified = False

@@ -36,7 +36,32 @@ BOT_AVATARS = [
     "unicorn", "owl", "smiling_face_with_sunglasses", "nerd_face",
     "cowboy_hat_face", "clown_face",
 ]
-_BOT_DIFFICULTIES = ["easy"] * 5 + ["medium"] * 7 + ["hard"] * 8
+# 12 kişilik lobiye göre: 4 easy + 4 medium + 4 hard (11 bot + 1 gerçek tipik).
+_BOT_DIFFICULTIES = ["easy"] * 4 + ["medium"] * 4 + ["hard"] * 4
+
+# --- İlk-maç senaryosu + anti-tilt bot karışım override'ları ---
+# İlk-maç eşiği: lobide toplam oynanmış maçı bu sayının ALTINDA olan en az bir
+# GERÇEK oyuncu varsa bot karışımı kolaylaştırılır (sadece normal eşleşme
+# havuzu; turnuva ve özel oda HARİÇ).
+FIRST_MATCH_MAX_GAMES = 3
+
+# İlk-maç merdiveni: 11 bot varsayımıyla ~9 easy + 2 medium + 0 hard.
+# Botlar kademeli eklenirken index sırasına göre zorluk alır; 12. slot da easy
+# kalır (oran korunur, hard hiç girmez).
+_FIRST_MATCH_DIFFICULTIES = ["easy"] * 9 + ["medium"] * 2 + ["easy"] * 1
+# Anti-tilt merdiveni (3 üst üste kayıp): ~%80 easy + %15 medium + %5 hard.
+_EASY_HEAVY_DIFFICULTIES = ["easy"] * 9 + ["medium"] * 2 + ["hard"] * 1
+
+# Karışım adı → zorluk merdiveni. fill_with_bots ve add_one_bot AYNI merdiveni
+# kullanır; böylece kademeli görünür ekleme de override'a uyar.
+_MIX_LADDERS: dict[str, list[str]] = {
+    "default": _BOT_DIFFICULTIES,
+    "first_match": _FIRST_MATCH_DIFFICULTIES,
+    "easy_heavy": _EASY_HEAVY_DIFFICULTIES,
+}
+# Öncelik sırası: ilk-maç senaryosu > anti-tilt > varsayılan karışım.
+# (İkisi birden tetiklenirse ilk-maç kazanır.)
+_MIX_PRIORITY: dict[str, int] = {"default": 0, "easy_heavy": 1, "first_match": 2}
 
 
 def _bot_cosmetics(bot_name: str) -> dict[str, Any]:
@@ -48,64 +73,6 @@ def _bot_cosmetics(bot_name: str) -> dict[str, Any]:
     from app.services.cosmetics_service import CosmeticsService
 
     return CosmeticsService.cosmetics_for_bot(bot_name)
-
-
-# ---------------------------------------------------------------------------
-# Warmup questions (shown during lobby countdown, do not affect score)
-# ---------------------------------------------------------------------------
-
-WARMUP_QUESTIONS: list[dict[str, Any]] = [
-    {
-        "question": "Türkiye'nin başkenti neresidir?",
-        "options": ["İstanbul", "Ankara", "İzmir", "Bursa"],
-        "correct": 1,
-    },
-    {
-        "question": "Hangisi bir Türk televizyon dizisidir?",
-        "options": ["Breaking Bad", "Diriliş Ertuğrul", "Squid Game", "Dark"],
-        "correct": 1,
-    },
-    {
-        "question": "Türkiye hangi kıtalarda yer alır?",
-        "options": ["Asya ve Avrupa", "Afrika ve Avrupa", "Asya ve Afrika", "Sadece Asya"],
-        "correct": 0,
-    },
-    {
-        "question": "Türkiye'nin resmi dili hangisidir?",
-        "options": ["Arapça", "Farsça", "Türkçe", "Osmanlıca"],
-        "correct": 2,
-    },
-    {
-        "question": "Boğaziçi Köprüsü hangi şehirdedir?",
-        "options": ["Ankara", "İzmir", "İstanbul", "Bursa"],
-        "correct": 2,
-    },
-    {
-        "question": "Galatasaray hangi şehrin kulübüdür?",
-        "options": ["Ankara", "İzmir", "Trabzon", "İstanbul"],
-        "correct": 3,
-    },
-    {
-        "question": "Türk lirası hangi ülkenin para birimidir?",
-        "options": ["Azerbaycan", "Türkiye", "Kuzey Kıbrıs", "Kazakistan"],
-        "correct": 1,
-    },
-    {
-        "question": "Kapadokya hangi ilimizde yer alır?",
-        "options": ["Konya", "Kayseri / Nevşehir", "Sivas", "Ankara"],
-        "correct": 1,
-    },
-    {
-        "question": "Türkiye'nin en uzun nehri hangisidir?",
-        "options": ["Fırat", "Dicle", "Kızılırmak", "Sakarya"],
-        "correct": 2,
-    },
-    {
-        "question": "İstanbul'un simgesi sayılan tarihi yapı hangisidir?",
-        "options": ["Anıtkabir", "Eyfel Kulesi", "Ayasofya", "Kız Kulesi"],
-        "correct": 2,
-    },
-]
 
 
 # ---------------------------------------------------------------------------
@@ -131,6 +98,11 @@ class LobbyState:
 
         # AAS integration
         self.min_real_players: int = 1
+
+        # Bot karışım override'ı: "default" | "easy_heavy" (anti-tilt) |
+        # "first_match" (ilk-maç senaryosu). set_bot_mix ile öncelik sırasına
+        # göre yükseltilir; turnuva lobisinde daima "default" kalır.
+        self.bot_mix: str = "default"
 
         # Timestamps (seconds-from-lobby-creation) at which each bot "visibly joins"
         self.bot_join_schedule: list[float] = []
@@ -192,6 +164,39 @@ class LobbyState:
         self.players = [p for p in self.players if p["user_id"] != user_id]
         return len(self.players) < before
 
+    def _bot_difficulty_ladder(self) -> list[str]:
+        """Aktif karışıma (bot_mix) göre zorluk merdivenini döndür."""
+        return _MIX_LADDERS.get(self.bot_mix, _BOT_DIFFICULTIES)
+
+    def _bot_difficulty_for_index(self, index: int) -> str:
+        """index'inci botun zorluğunu aktif merdivene göre döndür.
+
+        Varsayılan karışımda ESKİ davranış korunur (merdiven biterse son
+        eleman, yani "hard"). Override karışımlarında merdiven MODULO ile
+        sarılır ki 12'den büyük lobilerde de kolay ağırlıklı ORAN korunsun
+        (clamp edilseydi 12+ botların hepsi merdivenin son elemanı olurdu).
+        """
+        ladder = self._bot_difficulty_ladder()
+        if self.bot_mix == "default":
+            return ladder[min(index, len(ladder) - 1)]
+        return ladder[index % len(ladder)]
+
+    def set_bot_mix(self, mix: str) -> None:
+        """Bot karışım override'ı uygula (öncelik: first_match > easy_heavy > default).
+
+        - Turnuva lobisinde NO-OP (senaryolar sadece normal eşleşme havuzu için).
+        - Daha yüksek veya eşit öncelikli bir karışım zaten aktifse düşürmez.
+        - Önceden eklenmiş botların zorlukları yeni merdivene göre yeniden
+          atanır (isim/avatar değişmez — zorluk sunucu içi gizli bilgidir).
+        """
+        if self.is_tournament or mix not in _MIX_LADDERS:
+            return
+        if _MIX_PRIORITY.get(mix, 0) <= _MIX_PRIORITY.get(self.bot_mix, 0):
+            return
+        self.bot_mix = mix
+        for i, bot in enumerate(self.bots):
+            bot["difficulty"] = self._bot_difficulty_for_index(i)
+
     def fill_with_bots(self) -> int:
         """Fill remaining slots with bots.
 
@@ -211,7 +216,7 @@ class LobbyState:
                 name = generate_bot_name()
                 attempts += 1
 
-            difficulty = _BOT_DIFFICULTIES[min(len(self.bots), len(_BOT_DIFFICULTIES) - 1)]
+            difficulty = self._bot_difficulty_for_index(len(self.bots))
             self.bots.append(
                 {
                     "bot_name": name,
@@ -241,7 +246,7 @@ class LobbyState:
             attempts += 1
         bot = {
             "bot_name": name,
-            "difficulty": _BOT_DIFFICULTIES[min(len(self.bots), len(_BOT_DIFFICULTIES) - 1)],
+            "difficulty": self._bot_difficulty_for_index(len(self.bots)),
             "avatar_id": random.choice(BOT_AVATARS),
             **_bot_cosmetics(name),
         }
@@ -282,17 +287,6 @@ class LobbyState:
         offsets.sort()
         self.bot_join_schedule = offsets
         return offsets
-
-    def get_warmup_question(self) -> dict[str, Any] | None:
-        """Return a random warmup question (does not affect score).
-
-        Returns:
-            A dict with keys ``question``, ``options``, and ``correct``,
-            or None if the question list is empty.
-        """
-        if not WARMUP_QUESTIONS:
-            return None
-        return random.choice(WARMUP_QUESTIONS)
 
     def to_dict(self) -> dict[str, Any]:
         """Serialize lobby state for Redis / WebSocket broadcast."""

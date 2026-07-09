@@ -7,14 +7,23 @@ Manages the entire game lifecycle from CLAUDE.md Section 1:
 - Score calculation and winner determination
 - Bot behavior integration
 
-Round structure:
+Round structure (eleme rampası — kolaydan zora):
 | Round | Type              | Time | Difficulty | Elimination        |
 |-------|-------------------|------|------------|-------------------|
-| 1     | True/False        | 5s   | Very easy  | Wrong answers      |
-| 2     | Visual            | 7s   | Easy       | Wrong answers      |
-| 3     | Comparison        | 7s   | Medium     | Wrong answers      |
-| 4     | Multiple choice   | 8s   | Med-hard   | Wrong answers      |
-| 5     | Slider estimation | 8s   | Intuition  | Closest wins       |
+| 1     | Multiple choice   | 9s   | Very easy  | Wrong answers      |
+| 2     | True/False        | 7s   | Easy       | Wrong answers      |
+| 3     | Visual            | 9s   | Medium     | Wrong answers      |
+| 4     | Comparison        | 9s   | Med-hard   | Wrong answers      |
+| 5     | Slider estimation | 10s  | Intuition  | Closest wins       |
+
+Kalkan (🛡️) mekaniği:
+- Her oyuncu (botlar DAHİL — kimse kimin bot olduğunu bilmez) maça 1 Kalkan
+  ile başlar.
+- Tur 1-4'te yanlış cevap veren oyuncunun Kalkanı varsa elenmek yerine Kalkan
+  KIRILIR, oyuncu hayatta kalır (o turdan puan ALMAZ, streak sıfırlanır).
+- İkinci yanlış = normal eleme. Final (tahmin) turunda Kalkan GEÇERSİZ.
+- "Herkes yanlışsa kimse elenmez" kuralı ÖNCE uygulanır: kimse elenmeyecekse
+  kalkan da kırılmaz.
 """
 
 import asyncio
@@ -25,6 +34,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from app.services.bot_service import (
+    bot_guess_spread,
     generate_bot_answer_time,
     should_bot_answer_correctly,
 )
@@ -33,12 +43,17 @@ from app.services.score_service import calculate_game_score, calculate_round_sco
 
 # --- Round Configuration ---
 
+# ELEME RAMPASI: ilk tur artık kolay 4 şıklı ISINMA sorusu (eski dogru_yanlis
+# açılışı 50/50 yazı-tura infazıydı). Tipler kolaydan zora sıralanır; difficulty
+# alanı 1-5 rampasıdır (bilgilendirme amaçlı — soru havuzu filtresi
+# tournament_service.NORMAL_MAX_DIFFICULTY / TOURNAMENT_MIN_DIFFICULTY ile
+# yönetilir, bu alan o filtreyi ETKİLEMEZ).
 ROUND_CONFIG = [
-    {"round": 1, "type": "dogru_yanlis",    "time": 5, "difficulty": 1},
-    {"round": 2, "type": "gorsel",          "time": 7, "difficulty": 2},
-    {"round": 3, "type": "karsilastirma",   "time": 7, "difficulty": 3},
-    {"round": 4, "type": "coktan_secmeli",  "time": 8, "difficulty": 4},
-    {"round": 5, "type": "tahmin",          "time": 8, "difficulty": 5},
+    {"round": 1, "type": "coktan_secmeli",  "time": 9,  "difficulty": 1},
+    {"round": 2, "type": "dogru_yanlis",    "time": 7,  "difficulty": 2},
+    {"round": 3, "type": "gorsel",          "time": 9,  "difficulty": 3},
+    {"round": 4, "type": "karsilastirma",   "time": 9,  "difficulty": 4},
+    {"round": 5, "type": "tahmin",          "time": 10, "difficulty": 5},
 ]
 
 # TURNUVA tur süreleri (KÖK NEDEN DÜZELTMESİ).
@@ -54,11 +69,11 @@ ROUND_CONFIG = [
 # istemciye yolladığı time_seconds DA, run_game'deki sunucu tur-zamanlayıcısı DA
 # aynı config["time"]'tan beslenir → istemci sayacı ile sunucu penceresi eşleşir.
 TOURNAMENT_ROUND_CONFIG = [
-    {"round": 1, "type": "dogru_yanlis",    "time": 10, "difficulty": 1},
-    {"round": 2, "type": "gorsel",          "time": 14, "difficulty": 2},
-    {"round": 3, "type": "karsilastirma",   "time": 14, "difficulty": 3},
-    {"round": 4, "type": "coktan_secmeli",  "time": 16, "difficulty": 4},
-    {"round": 5, "type": "tahmin",          "time": 16, "difficulty": 5},
+    {"round": 1, "type": "coktan_secmeli",  "time": 16, "difficulty": 1},
+    {"round": 2, "type": "dogru_yanlis",    "time": 12, "difficulty": 2},
+    {"round": 3, "type": "gorsel",          "time": 16, "difficulty": 3},
+    {"round": 4, "type": "karsilastirma",   "time": 16, "difficulty": 4},
+    {"round": 5, "type": "tahmin",          "time": 18, "difficulty": 5},
 ]
 
 # Geçerli soru tipleri (küçük harf, kanonik biçim). Slider/tahmin tek başına;
@@ -106,6 +121,19 @@ class PlayerState:
     name_color: str | None = None
     effect: str | None = None
     is_alive: bool = True
+    # KALKAN (🛡️): Her oyuncu (bot DAHİL — tutarlılık şart, kimse kimin bot
+    # olduğunu bilmiyor) maça 1 kalkanla başlar. Tur 1-4'te ilk yanlışta
+    # elenmek yerine kalkan kırılır; finalde (tahmin) geçersiz.
+    shields: int = 1
+    # HAYALET MODU (👻): elenen GERÇEK oyuncu izlerken cevap vermeye devam
+    # edebilir. Hayalet cevaplar elemeye/skora/kazanana ETKİSİZDİR; yalnızca
+    # bu sayaç artar ve maç sonunda küçük altın ödülüne çevrilir
+    # (doğru başına +5, üst sınır match_reward_service.GHOST_GOLD_MAX).
+    ghost_correct: int = 0
+    # ŞAMPİYON BAHSİ (🎯): elenen oyuncunun "şampiyon olur" dediği username.
+    # Tek seferlik, değiştirilemez. None = bahis yok. Tutarsa maç sonunda
+    # +BET_REWARD altın (aynı idempotent ödül akışında, günlük cap dahil).
+    champion_bet: str | None = None
     eliminated_at_round: int | None = None
     score: int = 0
     round_scores: list[int] = field(default_factory=list)
@@ -125,6 +153,11 @@ class RoundResult:
     player_answers: dict[str, dict]  # username -> {answer, time, correct, score}
     eliminated: list[str]  # usernames that were eliminated
     survivors: list[str]   # usernames that survived
+    # Bu tur KALKANIYLA kurtulan (yanlış cevapladı ama elenmedi) oyuncular.
+    shield_saved: list[str] = field(default_factory=list)
+    # HAYALET cevap sonuçları: {username: {answer, correct}}. Elenmiş
+    # oyuncuların gölge cevapları — results'a KARIŞMAZ, elemeye etkisizdir.
+    ghost_results: dict[str, dict] = field(default_factory=dict)
 
 
 class GameEngine:
@@ -267,6 +300,10 @@ class GameEngine:
             p.current_answer = None
             p.answer_time = None
 
+        # HAYALET MODU: elenmiş oyuncuların bu tura ait gölge cevapları.
+        # Her tur başında sıfırlanır; end_round'da değerlendirilir.
+        self._ghost_answers: dict[str, dict] = {}  # type: ignore[attr-defined]
+
         # Prepare question for clients (hide correct answer)
         # Use "tip" key to match Flutter client and CLAUDE.md spec
         question_text = question.get("question", question.get("content", ""))
@@ -306,6 +343,8 @@ class GameEngine:
                     "is_alive": p.is_alive,
                     "score": p.score,
                     "is_bot": p.is_bot,
+                    # Kalan kalkan sayısı (mobil 🛡️ rozetini bundan çizer).
+                    "shields": p.shields,
                     "frame": p.frame,
                     "name_color": p.name_color,
                     "effect": p.effect,
@@ -323,6 +362,75 @@ class GameEngine:
         player.current_answer = answer
         player.answer_time = time_remaining
         return True
+
+    def submit_ghost_answer(
+        self, username: str, answer: Any, time_remaining: float
+    ) -> bool:
+        """HAYALET MODU: elenmiş GERÇEK oyuncunun gölge cevabını kaydet.
+
+        Elemeye/skora/kazanana ETKİSİZDİR — yalnızca end_round'da
+        değerlendirilip ghost_correct sayacını artırır (maç sonunda küçük
+        altın ödülü). Tur başına tek cevap; sadece tur aktifken kabul edilir.
+        """
+        player = self.players.get(username)
+        if not player or player.is_alive or player.is_bot:
+            return False
+        if self.status != "round_active":
+            return False
+        ghosts: dict[str, dict] | None = getattr(self, "_ghost_answers", None)
+        if ghosts is None or username in ghosts:
+            return False
+        ghosts[username] = {"answer": answer, "time_remaining": time_remaining}
+        return True
+
+    def _resolve_ghost_answers(self, is_correct_fn) -> dict[str, dict]:
+        """Bu turun hayalet cevaplarını değerlendir; sayaçları güncelle.
+
+        Returns:
+            {username: {answer, correct}} — reveal'da kişiye gösterilecek
+            gölge sonuçlar (results map'ine KARIŞMAZ).
+        """
+        ghosts: dict[str, dict] = getattr(self, "_ghost_answers", None) or {}
+        out: dict[str, dict] = {}
+        for username, data in ghosts.items():
+            player = self.players.get(username)
+            if not player or player.is_alive:
+                continue
+            try:
+                correct = bool(is_correct_fn(data.get("answer")))
+            except Exception:
+                correct = False
+            if correct:
+                player.ghost_correct += 1
+            out[username] = {"answer": data.get("answer"), "correct": correct}
+        return out
+
+    def place_champion_bet(
+        self, username: str, target_username: str
+    ) -> tuple[bool, str]:
+        """ŞAMPİYON BAHSİ: elenmiş oyuncu hayatta kalan birine bahis koyar.
+
+        Tek seferlik ve değiştirilemez; yalnızca elenmiş GERÇEK oyuncudan,
+        yalnızca HAYATTA olan bir oyuncuya. Tutarsa maç sonunda +BET_REWARD
+        altın (idempotent ödül akışında, günlük cap dahil).
+
+        Returns:
+            (kabul_edildi, hata_mesajı) — kabulde hata mesajı boş string.
+        """
+        player = self.players.get(username)
+        if not player or player.is_bot:
+            return False, "Oyuncu bulunamadı."
+        if player.is_alive:
+            return False, "Bahis sadece elendikten sonra yapılabilir."
+        if player.champion_bet is not None:
+            return False, "Bahsini zaten yaptın — değiştirilemez."
+        if self.status == "finished":
+            return False, "Oyun bitti — bahis yapılamaz."
+        target = self.players.get(target_username)
+        if not target or not target.is_alive:
+            return False, "Sadece hayatta olan bir oyuncuya bahis yapabilirsin."
+        player.champion_bet = target_username
+        return True, ""
 
     def simulate_bot_answers(self, correct_answer: Any, question: dict) -> None:
         """Generate answers for all bots still alive.
@@ -348,12 +456,11 @@ class GameEngine:
                 min_val = question.get("min_value", 0)
                 max_val = question.get("max_value", 1000)
 
-                # Harder bots guess closer
-                spread = {
-                    "easy": 0.3,
-                    "medium": 0.15,
-                    "hard": 0.07,
-                }.get(player.bot_difficulty, 0.15)
+                # Harder bots guess closer (ilk-maç senaryosunda sapma GENİŞ)
+                spread = bot_guess_spread(
+                    player.bot_difficulty,
+                    generous=getattr(self, "generous_bot_guesses", False),
+                )
 
                 offset = random.gauss(0, spread * (max_val - min_val))
                 guess = max(min_val, min(max_val, real + offset))
@@ -403,7 +510,10 @@ class GameEngine:
             # Final round: closest to real answer wins
             return self._end_estimation_round(correct_answer, question)
 
-        # Regular round: wrong answers are eliminated
+        # Regular round: wrong answers are eliminated (kalkan yoksa)
+        shield_saved: list[str] = []
+        wrong_players: list[str] = []
+
         for player in self.alive_players:
             answer = player.current_answer
             time_remaining = player.answer_time or 0
@@ -420,6 +530,8 @@ class GameEngine:
                     streak_count=player.streak,
                 )
             else:
+                # Yanlış cevap: puan YOK, streak sıfır (kalkanla kurtulsa bile
+                # — kalkan sadece hayatta tutar, puan kazandırmaz).
                 player.streak = 0
                 round_score = 0
 
@@ -436,15 +548,32 @@ class GameEngine:
             }
 
             if not is_correct:
-                eliminated.append(player.username)
+                wrong_players.append(player.username)
             else:
                 survivors.append(player.username)
 
         # Special rules from CLAUDE.md:
-        # - If everyone would be eliminated, nobody is eliminated
-        if len(eliminated) == len(self.alive_players):
+        # - If everyone would be eliminated, nobody is eliminated.
+        #   Bu kural KALKANDAN ÖNCE uygulanır: kimse elenmeyecekse kimsenin
+        #   kalkanı da boşa kırılmaz.
+        if len(wrong_players) == len(self.alive_players):
             eliminated = []
             survivors = [p.username for p in self.alive_players]
+        else:
+            # KALKAN (🛡️): Tur 1-4'te yanlış cevaplayanın kalkanı varsa
+            # elenmek yerine kalkan KIRILIR, oyuncu hayatta kalır (puansız).
+            # Finalde (tahmin) bu yol zaten çalışmaz (_end_estimation_round).
+            shields_active = self.current_round <= 4
+            for username in wrong_players:
+                player = self.players[username]
+                if shields_active and player.shields > 0:
+                    player.shields -= 1
+                    shield_saved.append(username)
+                    survivors.append(username)
+                    # Reveal'da mobilin kişi bazında da okuyabilmesi için işaret.
+                    player_answers[username]["shield_saved"] = True
+                else:
+                    eliminated.append(username)
 
         # - If nobody is eliminated, everyone continues
         # (this is the default behavior)
@@ -461,6 +590,11 @@ class GameEngine:
             player.is_alive = False
             player.eliminated_at_round = self.current_round
 
+        # HAYALET cevaplar: elemeye/skora etkisiz, sadece sayaç + reveal bilgisi.
+        ghost_results = self._resolve_ghost_answers(
+            lambda ans: ans == correct_answer
+        )
+
         result = RoundResult(
             round_number=self.current_round,
             question=question,
@@ -468,6 +602,8 @@ class GameEngine:
             player_answers=player_answers,
             eliminated=eliminated,
             survivors=survivors,
+            shield_saved=shield_saved,
+            ghost_results=ghost_results,
         )
         self.round_results.append(result)
         self.status = "round_end"
@@ -566,6 +702,12 @@ class GameEngine:
                 player_answers[username]["correct"] = False
                 player_answers[username]["score"] = 0
 
+        # HAYALET cevaplar: tahmin turunda tolerans bandı içi "doğru" sayılır.
+        ghost_results = self._resolve_ghost_answers(
+            lambda ans: ans is not None
+            and abs(float(ans) - real_answer) <= tolerance
+        )
+
         result = RoundResult(
             round_number=5,
             question=question,
@@ -573,6 +715,7 @@ class GameEngine:
             player_answers=player_answers,
             eliminated=eliminated,
             survivors=survivors,
+            ghost_results=ghost_results,
         )
         self.round_results.append(result)
         return result
@@ -709,6 +852,8 @@ class GameEngine:
                 "is_alive": p.is_alive,
                 "score": p.score,
                 "is_bot": p.is_bot,
+                # Kalan kalkan sayısı (mobil 🛡️ rozetini bundan çizer).
+                "shields": p.shields,
                 "frame": p.frame,
                 "name_color": p.name_color,
                 "effect": p.effect,
@@ -725,6 +870,9 @@ class GameEngine:
                 "correct": ans.get("correct", ans.get("winner", False)),
                 "score": ans.get("score", 0),
                 "answer": ans.get("answer"),
+                # Kalkanıyla kurtuldu mu? (top-level shield_saved listesinin
+                # kişi bazlı karşılığı — mobil hangisini isterse onu okur)
+                "shield_saved": bool(ans.get("shield_saved", False)),
                 "total_score": ans.get("total_score", self.players[username].score
                                        if username in self.players else 0),
             }
@@ -741,6 +889,13 @@ class GameEngine:
             "player_results": result.player_answers,
             "eliminated": result.eliminated,
             "eliminated_count": len(result.eliminated),
+            # Bu tur kalkanıyla kurtulan (yanlış cevapladı ama elenmedi)
+            # oyuncuların username listesi. Finalde her zaman boştur.
+            "shield_saved": result.shield_saved,
+            # HAYALET (👻) sonuçlar: {username: {answer, correct}} — elenmiş
+            # oyuncuların gölge cevapları. Mobil yalnızca KENDİ girdisini okur;
+            # results map'ine karışmaz, skor/eleme etkilemez.
+            "ghost_results": result.ghost_results,
             "survivors": result.survivors,
             "survivors_count": len(result.survivors),
             "alive_count": self.alive_count,

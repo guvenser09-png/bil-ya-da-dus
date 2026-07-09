@@ -106,6 +106,13 @@ class _ResultBody extends StatelessWidget {
     final finalRound = my['final_round'] as int? ?? 0;
     final rank = my['rank'] as int? ?? 0;
     final coinsEarned = my['coins_earned'] as int? ?? 0;
+    // 👻 Hayalet modu: elendikten sonra bilinen doğrular + altın karşılığı.
+    final ghostCorrect = my['ghost_correct'] as int? ?? 0;
+    final ghostReward = my['ghost_reward'] as int? ?? 0;
+    // 🎯 Şampiyon bahsi: bahis yapıldıysa hedef + tuttu mu + ödül.
+    final betOn = my['bet_on'] as String?;
+    final betWon = my['bet_won'] == true;
+    final betReward = my['bet_reward'] as int? ?? 0;
 
     // Resolve the winner name: explicit `winner` field, else top1 username.
     final top1 = top3.isNotEmpty ? top3.first as Map? : null;
@@ -181,6 +188,17 @@ class _ResultBody extends StatelessWidget {
             if (coinsEarned > 0) ...[
               const SizedBox(height: 14),
               _CoinsEarnedBanner(coins: coinsEarned),
+            ],
+            // 👻 Hayalet modu ödülü — elenmişken bilinen doğrular altın oldu.
+            if (ghostCorrect > 0) ...[
+              const SizedBox(height: 14),
+              _GhostRewardBanner(
+                  correctCount: ghostCorrect, reward: ghostReward),
+            ],
+            // 🎯 Şampiyon bahsi sonucu — tuttu mu, kaç altın?
+            if (betOn != null) ...[
+              const SizedBox(height: 14),
+              _BetResultBanner(betOn: betOn, won: betWon, reward: betReward),
             ],
             // ── Maç özeti — soruları & doğru cevapları gör ──────────────
             // Yalnızca gerçek soru verisi varsa göster (eski maçlarda boş).
@@ -264,6 +282,70 @@ class _CoinsEarnedBanner extends StatelessWidget {
           const SizedBox(width: 12),
           Text('+$coins Altın kazandın!',
               style: BiladaText.title(color: AppTheme.gold, size: 18)),
+        ],
+      ),
+    );
+  }
+}
+
+/// 👻 Hayalet modu ödül banner'ı — elenmişken bilinen doğrular mini altın oldu.
+class _GhostRewardBanner extends StatelessWidget {
+  const _GhostRewardBanner({required this.correctCount, required this.reward});
+  final int correctCount;
+  final int reward;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('👻', style: TextStyle(fontSize: 24)),
+          const SizedBox(width: 12),
+          Flexible(
+            child: Text(
+              'Hayalet modunda $correctCount doğru bildin — +$reward altın!',
+              textAlign: TextAlign.center,
+              style: BiladaText.title(color: AppTheme.cSecondary, size: 15),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 🎯 Şampiyon bahsi sonucu banner'ı — tuttuysa altın, tutmadıysa teselli.
+class _BetResultBanner extends StatelessWidget {
+  const _BetResultBanner({
+    required this.betOn,
+    required this.won,
+    required this.reward,
+  });
+  final String betOn;
+  final bool won;
+  final int reward;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = won ? AppTheme.gold : AppTheme.cOnSurfaceVariant;
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('🎯', style: TextStyle(fontSize: 24)),
+          const SizedBox(width: 12),
+          Flexible(
+            child: Text(
+              won
+                  ? 'Bahsin tuttu: $betOn şampiyon oldu — +$reward altın!'
+                  : 'Bahsin tutmadı ($betOn) — bir dahaki sefere!',
+              textAlign: TextAlign.center,
+              style: BiladaText.title(color: color, size: 15),
+            ),
+          ),
         ],
       ),
     );

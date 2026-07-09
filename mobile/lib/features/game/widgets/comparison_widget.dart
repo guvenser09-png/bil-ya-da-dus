@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:quizroyale/core/services/haptic_service.dart';
+import 'package:quizroyale/core/services/sound_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 
@@ -132,7 +133,14 @@ class ComparisonWidget extends StatelessWidget {
             shadowColor: shadow,
             padding: const EdgeInsets.all(12),
             // Cevaptan sonra null yerine no-op: ChunkyButton griye boğmasın.
-            onPressed: answered ? () {} : () { HapticFeedback.lightImpact(); onAnswer(index); },
+            // Kart seçimi: yumuşak tık sesi + hafif haptik (ayara saygılı).
+            onPressed: answered
+                ? () {}
+                : () {
+                    SoundService().playSound(GameSound.click);
+                    HapticService().buttonTap();
+                    onAnswer(index);
+                  },
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,

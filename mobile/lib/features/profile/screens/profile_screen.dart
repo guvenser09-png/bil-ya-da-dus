@@ -45,8 +45,16 @@ class _ProfileBody extends ConsumerWidget {
     final level = profile['level'] as int? ?? 1;
     final xp = profile['xp'] as int? ?? 0;
     final coins = profile['coins'] as int? ?? 0;
-    final interests = (profile['interests'] as List? ?? []).cast<String>();
-    final xpProgress = (xp % 1000) / 1000.0;
+    final isGuest = profile['is_guest'] as bool? ?? false;
+    // Backend alan adı interest_tags ('interests' anahtarı backend'de yok).
+    final interests = (profile['interest_tags'] as List? ?? []).cast<String>();
+    // XP çubuğu backend seviye eğrisiyle aynı: T(L) = L*(L-1)*50.
+    // Mevcut seviye tabanından bir sonraki seviyeye ilerleme oranı.
+    final levelFloor = level * (level - 1) * 50;
+    final nextLevelXp = (level + 1) * level * 50;
+    final levelSpan = nextLevelXp - levelFloor;
+    final xpProgress =
+        levelSpan > 0 ? ((xp - levelFloor) / levelSpan).clamp(0.0, 1.0) : 0.0;
 
     // Kuşanılmış kozmetikler: önce profil (/users/me) equipped_* alanları,
     // yoksa cosmetics provider equipped state. İsim rengini katalog color_hex'i
@@ -81,6 +89,32 @@ class _ProfileBody extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: 8),
+        // Misafir kullanıcıya kalıcılaştırma bandı: tek dokunuşla claim formu.
+        if (isGuest) ...[
+          GlassCard(
+            padding: const EdgeInsets.all(16),
+            onTap: () => _showClaimSheet(context, ref, username),
+            child: Row(
+              children: [
+                const Icon(Icons.shield_rounded, color: AppTheme.gold, size: 26),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Hesabını kaydet', style: BiladaText.title(size: 15)),
+                      const SizedBox(height: 3),
+                      Text('İlerlemen kaybolmasın — e-posta ve şifre ekle',
+                          style: BiladaText.label(color: AppTheme.cOnSurfaceVariant, size: 11)),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right_rounded, color: AppTheme.cOnSurfaceVariant),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
         GlassCard(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -158,7 +192,8 @@ class _ProfileBody extends ConsumerWidget {
               const SizedBox(height: 4),
               Align(
                 alignment: Alignment.centerRight,
-                child: Text('${xp % 1000}/1000 XP', style: BiladaText.label(color: AppTheme.cOutline, size: 10)),
+                child: Text('${xp - levelFloor}/$levelSpan XP',
+                    style: BiladaText.label(color: AppTheme.cOutline, size: 10)),
               ),
             ],
           ),
@@ -358,6 +393,16 @@ class _ProfileBody extends ConsumerWidget {
     );
   }
 
+  /// Misafir hesabı kalıcılaştırma formunu (claim) alttan açar.
+  void _showClaimSheet(BuildContext context, WidgetRef ref, String username) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => _ClaimAccountSheet(currentUsername: username),
+    );
+  }
+
   Widget _statsGrid(Map<String, dynamic> stats) {
     final winRate = (stats['win_rate'] as num?)?.round() ?? 0;
     final bestRank = stats['best_rank'];
@@ -393,6 +438,186 @@ class _ProfileBody extends ConsumerWidget {
                 ),
               ))
           .toList(),
+    );
+  }
+}
+
+/// Misafir hesabı kalıcılaştırma formu (basit claim akışı).
+///
+/// E-posta + şifre (ve isteğe bağlı yeni kullanıcı adı) alır,
+/// POST /api/auth/claim çağırır. Başarıda profil tazelenir ve
+/// "Hesabını kaydet" bandı kaybolur (is_guest=false).
+class _ClaimAccountSheet extends ConsumerStatefulWidget {
+  const _ClaimAccountSheet({required this.currentUsername});
+  final String currentUsername;
+
+  @override
+  ConsumerState<_ClaimAccountSheet> createState() => _ClaimAccountSheetState();
+}
+
+class _ClaimAccountSheetState extends ConsumerState<_ClaimAccountSheet> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  bool _obscurePassword = true;
+  bool _saving = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _usernameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _saving = true);
+    final ok = await ref.read(authProvider.notifier).claimAccount(
+          email: _emailController.text,
+          password: _passwordController.text,
+          username: _usernameController.text.trim().isEmpty
+              ? null
+              : _usernameController.text,
+        );
+    if (!mounted) return;
+    setState(() => _saving = false);
+    if (ok) {
+      // Profili tazele ki is_guest=false olsun ve bant kaybolsun.
+      await ref.read(profileProvider.notifier).load();
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Hesabın kaydedildi! Artık ilerlemen güvende.'),
+          backgroundColor: AppTheme.success,
+        ),
+      );
+    } else {
+      final error = ref.read(authProvider).error ?? 'Kaydedilemedi, tekrar dene';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error), backgroundColor: AppTheme.danger),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: AppTheme.cSurfaceContainerLow,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        ),
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppTheme.cOutlineVariant,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text('Hesabını kaydet', style: BiladaText.headline(size: 20)),
+              const SizedBox(height: 6),
+              Text(
+                'E-posta ve şifre ekle; seviyen, altınların ve istatistiklerin '
+                'bu hesapta kalıcı olsun.',
+                style: BiladaText.body(color: AppTheme.cOnSurfaceVariant, size: 13),
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _emailController,
+                enabled: !_saving,
+                keyboardType: TextInputType.emailAddress,
+                style: BiladaText.body(),
+                decoration: const InputDecoration(
+                  labelText: 'E-posta',
+                  prefixIcon: Icon(Icons.mail_rounded),
+                ),
+                validator: (v) {
+                  final val = v?.trim() ?? '';
+                  if (val.isEmpty) return 'E-posta zorunludur';
+                  if (!val.contains('@') || !val.contains('.')) {
+                    return 'Geçerli bir e-posta gir';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 14),
+              TextFormField(
+                controller: _passwordController,
+                enabled: !_saving,
+                obscureText: _obscurePassword,
+                style: BiladaText.body(),
+                decoration: InputDecoration(
+                  labelText: 'Şifre (en az 6 karakter)',
+                  prefixIcon: const Icon(Icons.lock_rounded),
+                  suffixIcon: IconButton(
+                    icon: Icon(_obscurePassword
+                        ? Icons.visibility_off_rounded
+                        : Icons.visibility_rounded),
+                    onPressed: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
+                  ),
+                ),
+                validator: (v) {
+                  if (v == null || v.length < 6) return 'En az 6 karakter olmalı';
+                  if (RegExp(r'^\d+$').hasMatch(v)) {
+                    return 'Şifre sadece rakamlardan oluşamaz';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 14),
+              TextFormField(
+                controller: _usernameController,
+                enabled: !_saving,
+                style: BiladaText.body(),
+                decoration: InputDecoration(
+                  labelText: 'Kullanıcı adı (opsiyonel)',
+                  hintText: widget.currentUsername,
+                  prefixIcon: const Icon(Icons.person_rounded),
+                ),
+                validator: (v) {
+                  final val = v?.trim() ?? '';
+                  if (val.isEmpty) return null; // opsiyonel
+                  if (val.length < 3) return 'En az 3 karakter olmalı';
+                  if (!RegExp(r'^[a-zA-Z0-9_.]+$').hasMatch(val)) {
+                    return 'Sadece harf, rakam, _ ve . kullanılabilir';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 24),
+              ChunkyButton(
+                height: 56,
+                onPressed: _saving ? null : _submit,
+                child: _saving
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2, color: AppTheme.cOnPrimaryContainer),
+                      )
+                    : const Text('HESABIMI KAYDET'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

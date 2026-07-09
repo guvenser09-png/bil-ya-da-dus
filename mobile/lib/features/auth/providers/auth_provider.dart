@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quizroyale/core/network/api_client.dart';
+import 'package:quizroyale/core/storage/device_id_store.dart';
 import 'package:quizroyale/core/storage/secure_storage.dart';
 
 class AuthState {
@@ -115,6 +116,84 @@ class AuthNotifier extends StateNotifier<AuthState> {
         isLoading: false,
         error: ApiClient.friendlyError(e),
       );
+      return false;
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+      );
+      return false;
+    }
+  }
+
+  /// Misafir olarak giriş: kalıcı device_id ile /api/auth/guest çağrılır.
+  /// Aynı cihazdan tekrar girişte backend aynı hesabı döndürür; token
+  /// saklama/oto-login akışı normal girişle birebir aynıdır.
+  Future<bool> guestLogin() async {
+    state = state.copyWith(isLoading: true, clearError: true);
+    try {
+      final deviceId = await DeviceIdStore.getOrCreate();
+      final data = await ApiClient.instance.post('/api/auth/guest', body: {
+        'device_id': deviceId,
+      });
+      try {
+        await SecureStorage.instance.saveTokens(
+          accessToken: data['access_token'] as String,
+          refreshToken: data['refresh_token'] as String,
+        );
+        await SecureStorage.instance.saveUserInfo(
+          userId: data['user']['id'].toString(),
+          username: data['user']['username'] as String,
+        );
+      } catch (_) {}
+      state = state.copyWith(
+        isLoading: false,
+        isLoggedIn: true,
+        user: data['user'] as Map<String, dynamic>,
+      );
+      return true;
+    } on DioException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: ApiClient.friendlyError(e),
+      );
+      return false;
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+      );
+      return false;
+    }
+  }
+
+  /// Misafir hesabı kalıcılaştır (email + şifre + opsiyonel yeni username).
+  /// Başarıda user state'i backend yanıtıyla tazelenir (is_guest=false olur).
+  Future<bool> claimAccount({
+    required String email,
+    required String password,
+    String? username,
+  }) async {
+    state = state.copyWith(isLoading: true, clearError: true);
+    try {
+      final body = <String, dynamic>{
+        'email': email.trim(),
+        'password': password,
+      };
+      if (username != null && username.trim().isNotEmpty) {
+        body['username'] = username.trim();
+      }
+      final user = await ApiClient.instance.post('/api/auth/claim', body: body);
+      try {
+        await SecureStorage.instance.saveUserInfo(
+          userId: user['id'].toString(),
+          username: user['username'] as String,
+        );
+      } catch (_) {}
+      state = state.copyWith(isLoading: false, user: user);
+      return true;
+    } on DioException catch (e) {
+      state = state.copyWith(isLoading: false, error: ApiClient.friendlyError(e));
       return false;
     } catch (e) {
       state = state.copyWith(

@@ -11,11 +11,23 @@ class HapticService {
 
   bool get enabled => _enabled;
 
+  /// Tembel başlatma — ilk titreşim çağrısında ayar prefs'ten okunur; init
+  /// unutulsa bile kullanıcının titreşim tercihi her zaman uygulanır.
+  bool _initialized = false;
+  Future<void>? _initFuture;
+
   Future<void> init() async {
+    if (_initialized) return;
+    _initFuture ??= _doInit();
+    await _initFuture;
+  }
+
+  Future<void> _doInit() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       _enabled = prefs.getBool(_prefKey) ?? true;
     } catch (_) {}
+    _initialized = true;
   }
 
   Future<void> setEnabled(bool value) async {
@@ -27,6 +39,7 @@ class HapticService {
   }
 
   Future<void> correctAnswer() async {
+    await init();
     if (!_enabled) return;
     try {
       await HapticFeedback.lightImpact();
@@ -34,20 +47,26 @@ class HapticService {
   }
 
   Future<void> wrongAnswer() async {
+    await init();
     if (!_enabled) return;
     try {
-      await HapticFeedback.heavyImpact();
+      // Orta şiddet — yanlış cevap can sıkıcı ama cezalandırıcı olmasın.
+      await HapticFeedback.mediumImpact();
     } catch (_) {}
   }
 
   Future<void> elimination() async {
+    await init();
     if (!_enabled) return;
     try {
+      // Güçlü his: tam titreşim + ağır darbe (trapdoor düşüşü).
       await HapticFeedback.vibrate();
+      await HapticFeedback.heavyImpact();
     } catch (_) {}
   }
 
   Future<void> sliderTick() async {
+    await init();
     if (!_enabled) return;
     try {
       await HapticFeedback.selectionClick();
@@ -55,6 +74,7 @@ class HapticService {
   }
 
   Future<void> buttonTap() async {
+    await init();
     if (!_enabled) return;
     try {
       await HapticFeedback.selectionClick();
@@ -62,6 +82,7 @@ class HapticService {
   }
 
   Future<void> win() async {
+    await init();
     if (!_enabled) return;
     try {
       await HapticFeedback.vibrate();
