@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -61,6 +62,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     // Tur başlangıcı — kısa dikkat sinyali.
     if (next.status == 'round_active' && prev?.status != 'round_active') {
       SoundService().playSound(GameSound.roundStart);
+      // Görsel soru: resmi hemen ısıt (precache) — süre işlerken oyuncu
+      // spinner'a bakmasın, bayrak/resim ilk karede hazır olsun.
+      final imageUrl = next.currentQuestion?['image_url'] as String?;
+      if (imageUrl != null && imageUrl.isNotEmpty && mounted) {
+        precacheImage(CachedNetworkImageProvider(imageUrl), context);
+      }
     }
 
     // Sayaç son 3 saniye: her saniye geçişinde tık (3→2→1).

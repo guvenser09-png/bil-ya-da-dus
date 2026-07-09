@@ -1,164 +1,1752 @@
 [
-  {"type": "dogru_yanlis", "category": "Genel Kültür", "difficulty": 1, "content": "Türkiye'nin başkenti Ankara'dır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Ankara, 1923'ten beri Türkiye Cumhuriyeti'nin başkentidir."},
-  {"type": "dogru_yanlis", "category": "Coğrafya", "difficulty": 2, "content": "Dünya'nın en büyük okyanusu Atlas (Atlantik) Okyanusu'dur.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "En büyük okyanus Büyük Okyanus (Pasifik) Okyanusu'dur."},
-  {"type": "dogru_yanlis", "category": "Bilim", "difficulty": 2, "content": "Yetişkin bir insan vücudunda 206 kemik bulunur.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Yetişkin insan iskeleti 206 kemikten oluşur."},
-  {"type": "dogru_yanlis", "category": "Bilim", "difficulty": 3, "content": "Albert Einstein, fizik dalında Nobel Ödülü almıştır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Einstein 1921'de fotoelektrik etki üzerine çalışmasıyla Nobel Fizik Ödülü almıştır."},
-  {"type": "dogru_yanlis", "category": "Uzay", "difficulty": 1, "content": "Mars, Güneş'e en yakın gezegendir.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "Güneş'e en yakın gezegen Merkür'dür."},
-  {"type": "dogru_yanlis", "category": "Bilim", "difficulty": 2, "content": "DNA molekülü çift sarmal yapıdadır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "DNA'nın çift sarmal yapısı Watson ve Crick tarafından 1953'te tanımlanmıştır."},
-  {"type": "dogru_yanlis", "category": "Coğrafya", "difficulty": 2, "content": "Everest Dağı, Hindistan sınırları içindedir.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "Everest, Nepal ile Tibet (Çin) sınırında yer alır."},
-  {"type": "dogru_yanlis", "category": "Bilim", "difficulty": 1, "content": "Deniz seviyesinde saf su 100°C'de kaynar.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Standart atmosfer basıncında suyun kaynama noktası 100°C'dir."},
-  {"type": "dogru_yanlis", "category": "Tarih", "difficulty": 2, "content": "Türkiye Cumhuriyeti 29 Ekim 1923'te ilan edilmiştir.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Cumhuriyet 29 Ekim 1923'te ilan edilmiştir."},
-  {"type": "dogru_yanlis", "category": "Doğa", "difficulty": 2, "content": "Yarasalar kör hayvanlardır ve hiç göremezler.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "Yarasaların çoğu görebilir; ek olarak ekolokasyon kullanırlar."},
-  {"type": "dogru_yanlis", "category": "Bilim", "difficulty": 3, "content": "Ses, boşlukta (vakumda) yayılamaz.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Ses bir ortam gerektirir; boşlukta yayılmaz."},
-  {"type": "dogru_yanlis", "category": "Coğrafya", "difficulty": 3, "content": "Vatikan, dünyanın yüzölçümü en küçük ülkesidir.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Vatikan yaklaşık 0,49 km² ile en küçük ülkedir."},
-  {"type": "dogru_yanlis", "category": "Doğa", "difficulty": 2, "content": "Balina bir balıktır.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "Balinalar memeli hayvanlardır, balık değildir."},
-  {"type": "dogru_yanlis", "category": "Tarih", "difficulty": 3, "content": "İstanbul, 1453'te Osmanlılar tarafından fethedilmiştir.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "İstanbul 29 Mayıs 1453'te Fatih Sultan Mehmet tarafından fethedildi."},
-  {"type": "dogru_yanlis", "category": "Bilim", "difficulty": 2, "content": "Altın, suda paslanan bir metaldir.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "Altın soy metaldir, normal koşullarda paslanmaz/oksitlenmez."},
-  {"type": "dogru_yanlis", "category": "Spor", "difficulty": 2, "content": "Bir futbol maçı normal süresi toplam 90 dakikadır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Futbolda normal süre iki devre halinde toplam 90 dakikadır."},
-  {"type": "dogru_yanlis", "category": "Teknoloji", "difficulty": 3, "content": "İlk programlanabilir elektronik bilgisayarlardan ENIAC 1940'lı yıllarda yapılmıştır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "ENIAC 1945'te tamamlanmıştır."},
-  {"type": "dogru_yanlis", "category": "Coğrafya", "difficulty": 2, "content": "Sahra Çölü, dünyanın en büyük sıcak çölüdür.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Sahra, yaklaşık 9 milyon km² ile en büyük sıcak çöldür."},
-  {"type": "dogru_yanlis", "category": "Sanat", "difficulty": 3, "content": "Mona Lisa tablosunu Leonardo da Vinci yapmıştır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Mona Lisa, Leonardo da Vinci'nin eseridir."},
-  {"type": "dogru_yanlis", "category": "Bilim", "difficulty": 3, "content": "İnsan kalbi vücudun sol tarafında, tamamen göğüs kafesinin solunda yer alır.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "Kalp göğüs ortasında, hafif sola kayık konumdadır."},
-  {"type": "dogru_yanlis", "category": "Müzik", "difficulty": 2, "content": "Klasik bir piyanoda 88 tuş bulunur.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Standart bir piyanoda 52 beyaz, 36 siyah olmak üzere 88 tuş vardır."},
-  {"type": "dogru_yanlis", "category": "Sinema", "difficulty": 3, "content": "Titanic filminin yönetmeni James Cameron'dır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "1997 yapımı Titanic'in yönetmeni James Cameron'dır."},
-  {"type": "dogru_yanlis", "category": "Doğa", "difficulty": 1, "content": "Bukalemunlar bulundukları ortama göre renk değiştirebilir.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Bukalemunlar iletişim ve sıcaklık düzenleme için renk değiştirebilir."},
-  {"type": "dogru_yanlis", "category": "Uzay", "difficulty": 2, "content": "Güneş bir gezegendir.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "Güneş bir yıldızdır."},
-  {"type": "dogru_yanlis", "category": "Tarih", "difficulty": 4, "content": "Birinci Dünya Savaşı 1914-1918 yılları arasında yaşanmıştır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "I. Dünya Savaşı 1914'te başlayıp 1918'de sona ermiştir."},
-  {"type": "dogru_yanlis", "category": "Genel Kültür", "difficulty": 2, "content": "Bir yılda 12 ay vardır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Gregoryen takviminde bir yıl 12 aydan oluşur."},
-  {"type": "dogru_yanlis", "category": "Bilim", "difficulty": 4, "content": "Bir ışık yılı, bir zaman birimidir.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "Işık yılı bir mesafe birimidir; ışığın bir yılda aldığı yoldur."},
-  {"type": "dogru_yanlis", "category": "Coğrafya", "difficulty": 3, "content": "Karadeniz, Türkiye'nin kuzeyinde yer alır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Karadeniz, Türkiye'nin kuzey kıyısını oluşturur."},
-  {"type": "dogru_yanlis", "category": "Teknoloji", "difficulty": 3, "content": "HTML bir programlama dilidir.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "HTML bir işaretleme (markup) dilidir, programlama dili değildir."},
-  {"type": "dogru_yanlis", "category": "Spor", "difficulty": 3, "content": "Olimpiyat Oyunları her 4 yılda bir düzenlenir.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Modern Olimpiyatlar dört yılda bir yapılır."},
-
-  {"type": "coktan_secmeli", "category": "Bilim", "difficulty": 2, "content": "Periyodik tabloda 'Au' simgesi hangi elementi ifade eder?", "options": ["Gümüş", "Altın", "Alüminyum", "Argon"], "correct_answer": 1, "explanation": "Au, Latince 'Aurum' (altın) kelimesinden gelir."},
-  {"type": "coktan_secmeli", "category": "Teknoloji", "difficulty": 3, "content": "Aşağıdakilerden hangisi bir programlama dili değildir?", "options": ["Python", "Java", "HTML", "Rust"], "correct_answer": 2, "explanation": "HTML bir işaretleme dilidir."},
-  {"type": "coktan_secmeli", "category": "Tarih", "difficulty": 2, "content": "İstanbul'u fetheden Osmanlı padişahı kimdir?", "options": ["Yavuz Sultan Selim", "Kanuni Sultan Süleyman", "Fatih Sultan Mehmet", "II. Bayezid"], "correct_answer": 2, "explanation": "Fatih Sultan Mehmet 1453'te İstanbul'u fethetti."},
-  {"type": "coktan_secmeli", "category": "Bilim", "difficulty": 2, "content": "Işığın boşluktaki hızı yaklaşık olarak kaç km/s'dir?", "options": ["150.000", "300.000", "450.000", "600.000"], "correct_answer": 1, "explanation": "Işık hızı yaklaşık 299.792 km/s'dir."},
-  {"type": "coktan_secmeli", "category": "Genel Kültür", "difficulty": 3, "content": "Aşağıdakilerden hangisi bir Nobel Ödülü kategorisi değildir?", "options": ["Fizik", "Matematik", "Edebiyat", "Barış"], "correct_answer": 1, "explanation": "Nobel Ödülleri arasında Matematik kategorisi yoktur."},
-  {"type": "coktan_secmeli", "category": "Teknoloji", "difficulty": 3, "content": "Python programlama dilini kim geliştirmiştir?", "options": ["James Gosling", "Guido van Rossum", "Dennis Ritchie", "Bjarne Stroustrup"], "correct_answer": 1, "explanation": "Python, Guido van Rossum tarafından 1991'de yayımlanmıştır."},
-  {"type": "coktan_secmeli", "category": "Coğrafya", "difficulty": 3, "content": "Dünya'nın en uzun nehri hangisidir?", "options": ["Amazon", "Nil", "Mississippi", "Yangtze"], "correct_answer": 1, "explanation": "Nil Nehri yaklaşık 6.650 km uzunluğundadır."},
-  {"type": "coktan_secmeli", "category": "Coğrafya", "difficulty": 3, "content": "Aşağıdakilerden hangisi Türkiye'nin komşusu değildir?", "options": ["Gürcistan", "İran", "Mısır", "Suriye"], "correct_answer": 2, "explanation": "Mısır'ın Türkiye ile kara sınırı yoktur."},
-  {"type": "coktan_secmeli", "category": "Sanat", "difficulty": 3, "content": "'Yıldızlı Gece' tablosunun ressamı kimdir?", "options": ["Pablo Picasso", "Claude Monet", "Vincent van Gogh", "Salvador Dali"], "correct_answer": 2, "explanation": "'Yıldızlı Gece' Vincent van Gogh'a aittir."},
-  {"type": "coktan_secmeli", "category": "Edebiyat", "difficulty": 3, "content": "'Tutunamayanlar' romanının yazarı kimdir?", "options": ["Orhan Pamuk", "Oğuz Atay", "Yaşar Kemal", "Sabahattin Ali"], "correct_answer": 1, "explanation": "'Tutunamayanlar' Oğuz Atay'ın eseridir."},
-  {"type": "coktan_secmeli", "category": "Tarih", "difficulty": 4, "content": "Malazgirt Savaşı hangi yılda yapılmıştır?", "options": ["1071", "1176", "1243", "1402"], "correct_answer": 0, "explanation": "Malazgirt Savaşı 1071'de Sultan Alparslan komutasında kazanılmıştır."},
-  {"type": "coktan_secmeli", "category": "Bilim", "difficulty": 3, "content": "İnsan vücudundaki en büyük organ hangisidir?", "options": ["Karaciğer", "Beyin", "Deri", "Akciğer"], "correct_answer": 2, "explanation": "Deri, vücudun en büyük organıdır."},
-  {"type": "coktan_secmeli", "category": "Uzay", "difficulty": 2, "content": "Güneş Sistemi'nin en büyük gezegeni hangisidir?", "options": ["Satürn", "Jüpiter", "Neptün", "Dünya"], "correct_answer": 1, "explanation": "Jüpiter, Güneş Sistemi'nin en büyük gezegenidir."},
-  {"type": "coktan_secmeli", "category": "Coğrafya", "difficulty": 2, "content": "Japonya'nın başkenti neresidir?", "options": ["Osaka", "Kyoto", "Tokyo", "Nagoya"], "correct_answer": 2, "explanation": "Japonya'nın başkenti Tokyo'dur."},
-  {"type": "coktan_secmeli", "category": "Sinema", "difficulty": 3, "content": "Aşağıdaki filmlerden hangisini Christopher Nolan yönetmemiştir?", "options": ["Inception", "Interstellar", "The Matrix", "Dunkirk"], "correct_answer": 2, "explanation": "The Matrix, Wachowski kardeşler tarafından yönetilmiştir."},
-  {"type": "coktan_secmeli", "category": "Müzik", "difficulty": 3, "content": "'Bohemian Rhapsody' şarkısı hangi gruba aittir?", "options": ["The Beatles", "Queen", "Led Zeppelin", "Pink Floyd"], "correct_answer": 1, "explanation": "'Bohemian Rhapsody' 1975'te Queen tarafından yayımlandı."},
-  {"type": "coktan_secmeli", "category": "Spor", "difficulty": 3, "content": "FIFA Dünya Kupası ilk kez hangi yıl düzenlenmiştir?", "options": ["1924", "1930", "1950", "1962"], "correct_answer": 1, "explanation": "İlk Dünya Kupası 1930'da Uruguay'da düzenlendi."},
-  {"type": "coktan_secmeli", "category": "Genel Kültür", "difficulty": 2, "content": "Bir haftada kaç gün vardır?", "options": ["5", "6", "7", "8"], "correct_answer": 2, "explanation": "Bir hafta 7 günden oluşur."},
-  {"type": "coktan_secmeli", "category": "Bilim", "difficulty": 3, "content": "Suyun kimyasal formülü nedir?", "options": ["CO2", "H2O", "O2", "NaCl"], "correct_answer": 1, "explanation": "Su, iki hidrojen ve bir oksijen atomundan oluşur: H2O."},
-  {"type": "coktan_secmeli", "category": "Coğrafya", "difficulty": 4, "content": "Türkiye'nin en yüksek dağı hangisidir?", "options": ["Erciyes", "Kaçkar", "Ağrı Dağı", "Süphan"], "correct_answer": 2, "explanation": "Ağrı Dağı 5.137 m ile Türkiye'nin en yüksek dağıdır."},
-  {"type": "coktan_secmeli", "category": "Tarih", "difficulty": 3, "content": "Kurtuluş Savaşı'nın başkomutanı kimdir?", "options": ["İsmet İnönü", "Mustafa Kemal Atatürk", "Fevzi Çakmak", "Kazım Karabekir"], "correct_answer": 1, "explanation": "Başkomutan Mustafa Kemal Atatürk'tür."},
-  {"type": "coktan_secmeli", "category": "Bilim", "difficulty": 4, "content": "Bir maddenin gaz halinden doğrudan katı hale geçmesine ne denir?", "options": ["Süblimleşme", "Kırağılaşma", "Buharlaşma", "Erime"], "correct_answer": 1, "explanation": "Gazdan katıya geçiş kırağılaşma (depozisyon) olarak adlandırılır."},
-  {"type": "coktan_secmeli", "category": "Genel Kültür", "difficulty": 3, "content": "Avrupa Birliği'nin ortak para birimi nedir?", "options": ["Dolar", "Euro", "Sterlin", "Frank"], "correct_answer": 1, "explanation": "AB'nin ortak para birimi Euro'dur."},
-  {"type": "coktan_secmeli", "category": "Edebiyat", "difficulty": 4, "content": "Nobel Edebiyat Ödülü alan ilk Türk yazar kimdir?", "options": ["Yaşar Kemal", "Nazım Hikmet", "Orhan Pamuk", "Sait Faik"], "correct_answer": 2, "explanation": "Orhan Pamuk, 2006'da Nobel Edebiyat Ödülü'nü kazanmıştır."},
-  {"type": "coktan_secmeli", "category": "Doğa", "difficulty": 2, "content": "Dünyanın en büyük kara hayvanı hangisidir?", "options": ["Zürafa", "Afrika fili", "Su aygırı", "Gergedan"], "correct_answer": 1, "explanation": "Afrika fili en büyük kara hayvanıdır."},
-  {"type": "coktan_secmeli", "category": "Uzay", "difficulty": 3, "content": "Ay'a ilk ayak basan insan kimdir?", "options": ["Buzz Aldrin", "Yuri Gagarin", "Neil Armstrong", "Michael Collins"], "correct_answer": 2, "explanation": "Neil Armstrong 1969'da Ay'a ilk ayak basan insandır."},
-  {"type": "coktan_secmeli", "category": "Sinema", "difficulty": 3, "content": "'Esaretin Bedeli' (The Shawshank Redemption) filmi hangi yazarın eserinden uyarlanmıştır?", "options": ["George R. R. Martin", "Stephen King", "J.K. Rowling", "Dan Brown"], "correct_answer": 1, "explanation": "'Esaretin Bedeli' Stephen King'in 'Rita Hayworth and Shawshank Redemption' adlı öyküsünden uyarlanmıştır."},
-  {"type": "coktan_secmeli", "category": "Matematik", "difficulty": 2, "content": "Bir üçgenin iç açıları toplamı kaç derecedir?", "options": ["90", "180", "270", "360"], "correct_answer": 1, "explanation": "Düzlemde bir üçgenin iç açıları toplamı 180°'dir."},
-  {"type": "coktan_secmeli", "category": "Matematik", "difficulty": 3, "content": "Pi (π) sayısının yaklaşık değeri nedir?", "options": ["2,14", "3,14", "4,14", "1,41"], "correct_answer": 1, "explanation": "Pi sayısı yaklaşık 3,14159'dur."},
-  {"type": "coktan_secmeli", "category": "Yemek", "difficulty": 2, "content": "Klasik İtalyan pizzasının kökeni hangi şehirdir?", "options": ["Roma", "Milano", "Napoli", "Venedik"], "correct_answer": 2, "explanation": "Modern pizza Napoli'de doğmuştur."},
-  {"type": "coktan_secmeli", "category": "Mitoloji", "difficulty": 3, "content": "Yunan mitolojisinde gök tanrısı ve tanrıların kralı kimdir?", "options": ["Poseidon", "Hades", "Zeus", "Apollon"], "correct_answer": 2, "explanation": "Zeus, Yunan mitolojisinde tanrıların kralıdır."},
-  {"type": "coktan_secmeli", "category": "Genel Kültür", "difficulty": 3, "content": "Birleşmiş Milletler'in merkezi hangi şehirdedir?", "options": ["Cenevre", "New York", "Brüksel", "Viyana"], "correct_answer": 1, "explanation": "BM'nin genel merkezi New York'tadır."},
-  {"type": "coktan_secmeli", "category": "Bilim", "difficulty": 3, "content": "Fotosentez sırasında bitkiler hangi gazı havadan alır?", "options": ["Oksijen", "Azot", "Karbondioksit", "Hidrojen"], "correct_answer": 2, "explanation": "Bitkiler fotosentezde karbondioksit alır, oksijen verir."},
-  {"type": "coktan_secmeli", "category": "Coğrafya", "difficulty": 4, "content": "Aşağıdaki başkent-ülke eşleştirmelerinden hangisi yanlıştır?", "options": ["Kanada - Ottawa", "Avustralya - Sidney", "Brezilya - Brasília", "İsviçre - Bern"], "correct_answer": 1, "explanation": "Avustralya'nın başkenti Canberra'dır, Sidney değil."},
-  {"type": "coktan_secmeli", "category": "Tarih", "difficulty": 4, "content": "Fransız İhtilali hangi yılda başlamıştır?", "options": ["1776", "1789", "1804", "1815"], "correct_answer": 1, "explanation": "Fransız İhtilali 1789'da başlamıştır."},
-  {"type": "coktan_secmeli", "category": "Spor", "difficulty": 4, "content": "Bir basketbol takımında sahada aynı anda kaç oyuncu bulunur?", "options": ["4", "5", "6", "7"], "correct_answer": 1, "explanation": "Basketbolda her takım sahada 5 oyuncu ile oynar."},
-  {"type": "coktan_secmeli", "category": "Müzik", "difficulty": 4, "content": "'Beşinci Senfoni' eseriyle ünlü besteci kimdir?", "options": ["Mozart", "Bach", "Beethoven", "Chopin"], "correct_answer": 2, "explanation": "Ünlü 5. Senfoni Ludwig van Beethoven'a aittir."},
-  {"type": "coktan_secmeli", "category": "Teknoloji", "difficulty": 4, "content": "Dünyanın ilk web tarayıcısını ve World Wide Web'i kim icat etmiştir?", "options": ["Bill Gates", "Steve Jobs", "Tim Berners-Lee", "Linus Torvalds"], "correct_answer": 2, "explanation": "World Wide Web'i 1989'da Tim Berners-Lee icat etmiştir."},
-  {"type": "coktan_secmeli", "category": "Doğa", "difficulty": 3, "content": "Aşağıdaki hayvanlardan hangisi memeli değildir?", "options": ["Yunus", "Yarasa", "Penguen", "Yarasa balina"], "correct_answer": 2, "explanation": "Penguen bir kuştur, memeli değildir."},
-  {"type": "coktan_secmeli", "category": "Genel Kültür", "difficulty": 2, "content": "Gökkuşağında kaç temel renk vardır?", "options": ["5", "6", "7", "8"], "correct_answer": 2, "explanation": "Gökkuşağında klasik olarak 7 renk sayılır."},
-  {"type": "coktan_secmeli", "category": "Bilim", "difficulty": 4, "content": "İnsan kanında oksijeni taşıyan protein hangisidir?", "options": ["İnsülin", "Hemoglobin", "Keratin", "Kollajen"], "correct_answer": 1, "explanation": "Hemoglobin, alyuvarlarda oksijeni taşır."},
-  {"type": "coktan_secmeli", "category": "Coğrafya", "difficulty": 3, "content": "Dünyanın en kalabalık nüfuslu ülkesi hangisidir? (2023 itibarıyla)", "options": ["Çin", "Hindistan", "ABD", "Endonezya"], "correct_answer": 1, "explanation": "2023'te Hindistan, Çin'i geçerek en kalabalık ülke oldu."},
-  {"type": "coktan_secmeli", "category": "Sinema", "difficulty": 4, "content": "En çok Oscar kazanan filmlerden biri olan 'Yüzüklerin Efendisi: Kralın Dönüşü' kaç Oscar kazanmıştır?", "options": ["7", "9", "11", "13"], "correct_answer": 2, "explanation": "Film, aday olduğu 11 dalın hepsini kazanmıştır."},
-
-  {"type": "karsilastirma", "category": "Coğrafya", "difficulty": 2, "content": "Hangisi daha yüksektir?", "options": ["Everest Dağı (8.849 m)", "K2 Dağı (8.611 m)"], "correct_answer": 0, "explanation": "Everest 8.849 m ile dünyanın en yüksek dağıdır."},
-  {"type": "karsilastirma", "category": "Tarih", "difficulty": 3, "content": "Hangisi tarihsel olarak daha eski bir uygarlıktır?", "options": ["Sümerler", "Roma İmparatorluğu"], "correct_answer": 0, "explanation": "Sümer uygarlığı MÖ 4. binyıla kadar uzanır; Roma çok daha sonradır."},
-  {"type": "karsilastirma", "category": "Coğrafya", "difficulty": 2, "content": "Hangi şehrin nüfusu daha fazladır?", "options": ["İstanbul", "Londra"], "correct_answer": 0, "explanation": "İstanbul'un nüfusu 15 milyonun üzerindedir, Londra'dan fazladır."},
-  {"type": "karsilastirma", "category": "Doğa", "difficulty": 3, "content": "Hangisi daha yüksek hıza ulaşabilir?", "options": ["Çita", "Göçmen şahin (dalışta)"], "correct_answer": 1, "explanation": "Göçmen şahin dalışta 300+ km/s hıza ulaşır; çita ~110 km/s'dir."},
-  {"type": "karsilastirma", "category": "Coğrafya", "difficulty": 3, "content": "Hangi ülkenin yüzölçümü daha büyüktür?", "options": ["Türkiye", "Fransa"], "correct_answer": 0, "explanation": "Türkiye yaklaşık 783.562 km², Fransa ise daha küçüktür."},
-  {"type": "karsilastirma", "category": "Uzay", "difficulty": 2, "content": "Hangi gök cismi daha büyüktür?", "options": ["Dünya", "Ay"], "correct_answer": 0, "explanation": "Dünya'nın çapı Ay'ınkinin yaklaşık 4 katıdır."},
-  {"type": "karsilastirma", "category": "Doğa", "difficulty": 2, "content": "Hangi hayvan daha ağırdır?", "options": ["Afrika fili", "Mavi balina"], "correct_answer": 1, "explanation": "Mavi balina, dünyanın bilinen en büyük ve en ağır hayvanıdır."},
-  {"type": "karsilastirma", "category": "Coğrafya", "difficulty": 3, "content": "Hangi nehir daha uzundur?", "options": ["Nil", "Fırat"], "correct_answer": 0, "explanation": "Nil ~6.650 km, Fırat ~2.800 km'dir."},
-  {"type": "karsilastirma", "category": "Bilim", "difficulty": 4, "content": "Hangi gezegen Güneş'e daha yakındır?", "options": ["Venüs", "Mars"], "correct_answer": 0, "explanation": "Venüs, Mars'a göre Güneş'e daha yakındır."},
-  {"type": "karsilastirma", "category": "Tarih", "difficulty": 4, "content": "Hangisi daha önce gerçekleşmiştir?", "options": ["İstanbul'un Fethi (1453)", "Amerika'nın Keşfi (1492)"], "correct_answer": 0, "explanation": "İstanbul 1453'te fethedildi, Amerika 1492'de keşfedildi."},
-  {"type": "karsilastirma", "category": "Coğrafya", "difficulty": 3, "content": "Hangi göl daha büyüktür?", "options": ["Van Gölü", "Tuz Gölü"], "correct_answer": 0, "explanation": "Van Gölü, Türkiye'nin en büyük gölüdür ve Tuz Gölü'nden büyüktür."},
-  {"type": "karsilastirma", "category": "Spor", "difficulty": 4, "content": "Hangi sporda standart bir maç süresi daha uzundur?", "options": ["Futbol (90 dk)", "Basketbol (NBA, 48 dk)"], "correct_answer": 0, "explanation": "Futbolda normal süre 90 dakika, NBA basketbolunda 48 dakikadır."},
-  {"type": "karsilastirma", "category": "Bilim", "difficulty": 3, "content": "Hangisi daha sıcaktır?", "options": ["Güneş'in yüzeyi", "Yıldırım kıvılcımı"], "correct_answer": 1, "explanation": "Yıldırım kanalı ~30.000°C'ye çıkabilir; Güneş yüzeyi ~5.500°C'dir."},
-  {"type": "karsilastirma", "category": "Doğa", "difficulty": 2, "content": "Hangisi daha uzun yaşar?", "options": ["Galápagos kaplumbağası", "Ev kedisi"], "correct_answer": 0, "explanation": "Dev kaplumbağalar 100 yılı aşabilir; kediler genelde 15-20 yıl yaşar."},
-  {"type": "karsilastirma", "category": "Teknoloji", "difficulty": 3, "content": "Hangisi daha önce icat edilmiştir?", "options": ["Telefon", "Televizyon"], "correct_answer": 0, "explanation": "Telefon 1876'da, televizyon 1920'lerde geliştirilmiştir."},
-  {"type": "karsilastirma", "category": "Coğrafya", "difficulty": 4, "content": "Hangi kıtanın yüzölçümü daha büyüktür?", "options": ["Afrika", "Avrupa"], "correct_answer": 0, "explanation": "Afrika, Avrupa'dan çok daha büyük bir kıtadır."},
-  {"type": "karsilastirma", "category": "Genel Kültür", "difficulty": 2, "content": "Hangisinin değeri daha büyüktür?", "options": ["Bir düzine (12)", "Yarım deste (5)"], "correct_answer": 0, "explanation": "Bir düzine 12, yarım deste ise 5'tir."},
-  {"type": "karsilastirma", "category": "Bilim", "difficulty": 4, "content": "Hangi element periyodik tabloda daha hafiftir?", "options": ["Hidrojen", "Helyum"], "correct_answer": 0, "explanation": "Hidrojen, atom numarası 1 ile en hafif elementtir."},
-  {"type": "karsilastirma", "category": "Coğrafya", "difficulty": 3, "content": "Hangi ülkenin nüfusu daha fazladır?", "options": ["Almanya", "Türkiye"], "correct_answer": 1, "explanation": "Türkiye ~85,3 milyon, Almanya ~83,5 milyon nüfusludur; Türkiye daha kalabalıktır."},
-  {"type": "karsilastirma", "category": "Müzik", "difficulty": 4, "content": "Hangi çalgı genellikle daha pes (kalın) seslidir?", "options": ["Kontrbas", "Keman"], "correct_answer": 0, "explanation": "Kontrbas, yaylı çalgılar arasında en pes sesli olanıdır."},
-
-  {"type": "tahmin", "category": "Genel Kültür", "difficulty": 3, "content": "Türkiye'nin nüfusu yaklaşık kaç milyondur? (2024)", "options": null, "min_value": 50, "max_value": 120, "real_answer": 85.3, "unit": "milyon", "explanation": "2024 itibarıyla Türkiye nüfusu yaklaşık 85 milyondur."},
-  {"type": "tahmin", "category": "Tarih", "difficulty": 4, "content": "İstanbul'daki Ayasofya hangi yılda (ilk büyük yapı olarak) tamamlanmıştır?", "options": null, "min_value": 300, "max_value": 1000, "real_answer": 537, "unit": "yıl", "explanation": "Justinianus dönemindeki Ayasofya 537'de tamamlanmıştır."},
-  {"type": "tahmin", "category": "Coğrafya", "difficulty": 4, "content": "İstanbul Boğazı'nın en dar yeri yaklaşık kaç metredir?", "options": null, "min_value": 100, "max_value": 3000, "real_answer": 700, "unit": "metre", "explanation": "Boğazın en dar yeri yaklaşık 700 metredir."},
-  {"type": "tahmin", "category": "Genel Kültür", "difficulty": 3, "content": "Birleşmiş Milletler'in kaç üye devleti vardır?", "options": null, "min_value": 100, "max_value": 250, "real_answer": 193, "unit": "ülke", "explanation": "BM'nin 193 üye devleti bulunmaktadır."},
-  {"type": "tahmin", "category": "Uzay", "difficulty": 4, "content": "Ay'ın Dünya'ya ortalama uzaklığı yaklaşık kaç bin km'dir?", "options": null, "min_value": 100, "max_value": 800, "real_answer": 384, "unit": "bin km", "explanation": "Ay, Dünya'ya ortalama 384.400 km uzaklıktadır."},
-  {"type": "tahmin", "category": "Bilim", "difficulty": 4, "content": "Normal bir yetişkin insanın kalbi dakikada yaklaşık kaç kez atar (dinlenme)?", "options": null, "min_value": 30, "max_value": 150, "real_answer": 72, "unit": "atım", "explanation": "Dinlenme halinde nabız ortalama 60-100, tipik olarak ~72'dir."},
-  {"type": "tahmin", "category": "Coğrafya", "difficulty": 3, "content": "Türkiye kaç ile (il) sahiptir?", "options": null, "min_value": 50, "max_value": 100, "real_answer": 81, "unit": "il", "explanation": "Türkiye'de 81 il bulunur."},
-  {"type": "tahmin", "category": "Doğa", "difficulty": 4, "content": "Yetişkin bir Afrika filinin ağırlığı yaklaşık kaç tondur?", "options": null, "min_value": 1, "max_value": 12, "real_answer": 6, "unit": "ton", "explanation": "Yetişkin Afrika filleri ortalama 5-6 ton ağırlığındadır."},
-  {"type": "tahmin", "category": "Spor", "difficulty": 3, "content": "Bir maraton koşusu yaklaşık kaç kilometredir?", "options": null, "min_value": 10, "max_value": 80, "real_answer": 42, "unit": "km", "explanation": "Maraton mesafesi 42,195 km'dir."},
-  {"type": "tahmin", "category": "Bilim", "difficulty": 5, "content": "Bir yetişkin insan vücudunda yaklaşık yüzde kaç su bulunur?", "options": null, "min_value": 20, "max_value": 90, "real_answer": 60, "unit": "%", "explanation": "Yetişkin insan vücudunun yaklaşık %60'ı sudur."},
-  {"type": "tahmin", "category": "Coğrafya", "difficulty": 4, "content": "Dünyanın yüzeyinin yaklaşık yüzde kaçı sularla kaplıdır?", "options": null, "min_value": 40, "max_value": 95, "real_answer": 71, "unit": "%", "explanation": "Dünya yüzeyinin yaklaşık %71'i su ile kaplıdır."},
-  {"type": "tahmin", "category": "Tarih", "difficulty": 3, "content": "Mustafa Kemal Atatürk hangi yılda doğmuştur?", "options": null, "min_value": 1850, "max_value": 1900, "real_answer": 1881, "unit": "yıl", "explanation": "Atatürk 1881'de Selanik'te doğmuştur."},
-  {"type": "tahmin", "category": "Uzay", "difficulty": 5, "content": "Güneş ışığı Dünya'ya yaklaşık kaç dakikada ulaşır?", "options": null, "min_value": 1, "max_value": 30, "real_answer": 8, "unit": "dakika", "explanation": "Güneş ışığı Dünya'ya yaklaşık 8 dakika 20 saniyede ulaşır."},
-  {"type": "tahmin", "category": "Teknoloji", "difficulty": 4, "content": "İlk iPhone hangi yılda piyasaya çıkmıştır?", "options": null, "min_value": 2000, "max_value": 2015, "real_answer": 2007, "unit": "yıl", "explanation": "İlk iPhone 2007'de tanıtıldı."},
-  {"type": "tahmin", "category": "Doğa", "difficulty": 4, "content": "Bir zürafanın boyu yaklaşık kaç metre olabilir?", "options": null, "min_value": 2, "max_value": 10, "real_answer": 5, "unit": "metre", "explanation": "Yetişkin zürafalar 5-6 metreye kadar uzayabilir."},
-  {"type": "tahmin", "category": "Coğrafya", "difficulty": 5, "content": "Dünyanın en yüksek noktası Everest yaklaşık kaç metredir?", "options": null, "min_value": 5000, "max_value": 12000, "real_answer": 8849, "unit": "metre", "explanation": "Everest'in zirvesi 8.849 metredir."},
-  {"type": "tahmin", "category": "Bilim", "difficulty": 5, "content": "Suyun donma noktası Celsius cinsinden kaç derecedir?", "options": null, "min_value": -20, "max_value": 20, "real_answer": 0, "unit": "°C", "explanation": "Su, deniz seviyesinde 0°C'de donar."},
-  {"type": "tahmin", "category": "Genel Kültür", "difficulty": 3, "content": "Bir gün kaç saattir?", "options": null, "min_value": 1, "max_value": 48, "real_answer": 24, "unit": "saat", "explanation": "Bir gün 24 saatten oluşur."},
-  {"type": "tahmin", "category": "Tarih", "difficulty": 4, "content": "Osmanlı İmparatorluğu yaklaşık kaç yıl yaşamıştır (1299-1922)?", "options": null, "min_value": 200, "max_value": 900, "real_answer": 623, "unit": "yıl", "explanation": "Osmanlı Devleti yaklaşık 623 yıl (1299-1922) hüküm sürmüştür."},
-  {"type": "tahmin", "category": "Spor", "difficulty": 4, "content": "Bir futbol sahasının uzunluğu (standart) yaklaşık kaç metredir?", "options": null, "min_value": 50, "max_value": 150, "real_answer": 105, "unit": "metre", "explanation": "Standart bir futbol sahası yaklaşık 105 metre uzunluğundadır."},
-
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 2, "content": "Aşağıdaki bayrak hangi ülkeye aittir? (Beyaz zemin üzerinde kırmızı daire)", "options": ["Çin", "Japonya", "Güney Kore", "Endonezya"], "correct_answer": 1, "explanation": "Japonya bayrağı beyaz zemin üzerinde kırmızı bir daireden oluşur.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/320px-Flag_of_Japan.svg.png"},
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 3, "content": "Aşağıdaki ünlü yapı hangi şehirdedir? (Eyfel Kulesi)", "options": ["Londra", "New York", "Paris", "Roma"], "correct_answer": 2, "explanation": "Eyfel Kulesi, Paris'in simgesidir.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/320px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg"},
-  {"type": "gorsel", "category": "Sanat", "difficulty": 3, "content": "Aşağıdaki tablo hangi sanatçıya aittir? (Mona Lisa)", "options": ["Michelangelo", "Leonardo da Vinci", "Raffaello", "Rembrandt"], "correct_answer": 1, "explanation": "Mona Lisa, Leonardo da Vinci'nin eseridir.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/320px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg"},
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 3, "content": "Aşağıdaki yapı hangi ülkededir? (Kolezyum)", "options": ["Yunanistan", "İtalya", "İspanya", "Türkiye"], "correct_answer": 1, "explanation": "Kolezyum, İtalya'nın başkenti Roma'dadır.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/320px-Colosseo_2020.jpg"},
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 2, "content": "Aşağıdaki yapı nerededir? (Özgürlük Heykeli)", "options": ["Londra", "New York", "Paris", "Toronto"], "correct_answer": 1, "explanation": "Özgürlük Heykeli, New York limanındadır.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Statue_of_Liberty_7.jpg/320px-Statue_of_Liberty_7.jpg"},
-  {"type": "gorsel", "category": "Doğa", "difficulty": 2, "content": "Aşağıdaki hayvan hangisidir? (Panda)", "options": ["Ayı", "Dev panda", "Koala", "Rakun"], "correct_answer": 1, "explanation": "Dev panda, Çin'e özgü, bambu ile beslenen bir ayı türüdür.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Grosser_Panda.JPG/320px-Grosser_Panda.JPG"},
-  {"type": "gorsel", "category": "Uzay", "difficulty": 3, "content": "Aşağıdaki gezegen halkalarıyla tanınan hangi gezegendir? (Satürn)", "options": ["Jüpiter", "Satürn", "Uranüs", "Neptün"], "correct_answer": 1, "explanation": "Satürn, belirgin halka sistemiyle tanınır.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/320px-Saturn_during_Equinox.jpg"},
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 4, "content": "Aşağıdaki yapı hangi şehirdedir? (Ayasofya)", "options": ["İzmir", "İstanbul", "Bursa", "Edirne"], "correct_answer": 1, "explanation": "Ayasofya, İstanbul'da yer alır.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Hagia_Sophia_Mars_2013.jpg/320px-Hagia_Sophia_Mars_2013.jpg"},
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 3, "content": "Aşağıdaki yapı hangi ülkededir? (Tac Mahal)", "options": ["Pakistan", "Hindistan", "İran", "Bangladeş"], "correct_answer": 1, "explanation": "Tac Mahal, Hindistan'ın Agra şehrindedir.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Taj-Mahal.jpg/320px-Taj-Mahal.jpg"},
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 4, "content": "Aşağıdaki bayrak hangi ülkeye aittir? (Kırmızı zemin, beyaz ay-yıldız)", "options": ["Tunus", "Türkiye", "Azerbaycan", "Pakistan"], "correct_answer": 1, "explanation": "Türk bayrağı kırmızı zemin üzerinde beyaz ay ve yıldızdan oluşur.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Flag_of_Turkey.svg/320px-Flag_of_Turkey.svg.png"},
-  {"type": "gorsel", "category": "Doğa", "difficulty": 2, "content": "Aşağıdaki hayvan hangisidir? (Zürafa)", "options": ["At", "Zürafa", "Deve", "Antilop"], "correct_answer": 1, "explanation": "Zürafa, uzun boynuyla dünyanın en uzun kara hayvanıdır.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Giraffe_Mikumi_National_Park.jpg/320px-Giraffe_Mikumi_National_Park.jpg"},
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 4, "content": "Aşağıdaki yapı hangi ülkededir? (Çin Seddi)", "options": ["Japonya", "Çin", "Moğolistan", "Kore"], "correct_answer": 1, "explanation": "Çin Seddi, Çin'de bulunan tarihi bir savunma yapısıdır.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/320px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg"},
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 3, "content": "Aşağıdaki yapı hangi şehirdedir? (Big Ben / Westminster Saat Kulesi)", "options": ["Paris", "Londra", "Berlin", "Madrid"], "correct_answer": 1, "explanation": "Big Ben, Londra'da Westminster Sarayı'nın saat kulesidir.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Clock_Tower_-_Palace_of_Westminster%2C_London_-_May_2007.jpg/320px-Clock_Tower_-_Palace_of_Westminster%2C_London_-_May_2007.jpg"},
-  {"type": "gorsel", "category": "Doğa", "difficulty": 2, "content": "Aşağıdaki hayvan hangisidir? (Aslan)", "options": ["Kaplan", "Aslan", "Leopar", "Çita"], "correct_answer": 1, "explanation": "Aslan, yelesiyle tanınan, sürü halinde yaşayan büyük bir kedigildir.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lion_waiting_in_Namibia.jpg/320px-Lion_waiting_in_Namibia.jpg"},
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 4, "content": "Aşağıdaki yapı hangi ülkededir? (Sidney Opera Binası)", "options": ["Yeni Zelanda", "Avustralya", "Güney Afrika", "ABD"], "correct_answer": 1, "explanation": "Sidney Opera Binası, Avustralya'nın simgelerindendir.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sydney_Opera_House_Sails.jpg/320px-Sydney_Opera_House_Sails.jpg"},
-  {"type": "gorsel", "category": "Doğa", "difficulty": 3, "content": "Aşağıdaki hayvan hangisidir? (İmparator pengueni)", "options": ["Martı", "Penguen", "Albatros", "Pelikan"], "correct_answer": 1, "explanation": "Penguenler, çoğunlukla Güney Yarımküre'de yaşayan uçamayan kuşlardır.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Emperor_Penguin_Manchot_empereur.jpg/320px-Emperor_Penguin_Manchot_empereur.jpg"},
-  {"type": "gorsel", "category": "Sanat", "difficulty": 4, "content": "Aşağıdaki tablo hangi sanatçıya aittir? (Yıldızlı Gece)", "options": ["Claude Monet", "Vincent van Gogh", "Edvard Munch", "Paul Cézanne"], "correct_answer": 1, "explanation": "'Yıldızlı Gece' Vincent van Gogh'un 1889 tarihli eseridir.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/320px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg"},
-  {"type": "gorsel", "category": "Coğrafya", "difficulty": 3, "content": "Aşağıdaki yapı hangi şehirdedir? (Pisa Kulesi)", "options": ["Roma", "Floransa", "Pisa", "Milano"], "correct_answer": 2, "explanation": "Eğik Kule, İtalya'nın Pisa şehrindedir.", "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/The_Leaning_Tower_of_Pisa_SB.jpeg/320px-The_Leaning_Tower_of_Pisa_SB.jpeg"},
-
-  {"type": "tahmin", "category": "Doğa", "difficulty": 4, "content": "Bir mavi balinanın boyu yaklaşık kaç metreye ulaşabilir?", "options": null, "min_value": 5, "max_value": 60, "real_answer": 30, "unit": "metre", "explanation": "Mavi balinalar 30 metreye kadar uzayabilir."},
-  {"type": "tahmin", "category": "Bilim", "difficulty": 5, "content": "İnsan beyninde yaklaşık kaç milyar nöron bulunur?", "options": null, "min_value": 10, "max_value": 1000, "real_answer": 86, "unit": "milyar", "explanation": "İnsan beyninde yaklaşık 86 milyar nöron vardır."},
-  {"type": "tahmin", "category": "Coğrafya", "difficulty": 4, "content": "Akdeniz'in en derin noktası yaklaşık kaç bin metredir?", "options": null, "min_value": 1, "max_value": 10, "real_answer": 5, "unit": "bin metre", "explanation": "Akdeniz'in en derin noktası (Calypso Çukuru) yaklaşık 5.267 metredir."},
-  {"type": "tahmin", "category": "Tarih", "difficulty": 4, "content": "Berlin Duvarı hangi yılda yıkılmıştır?", "options": null, "min_value": 1960, "max_value": 2000, "real_answer": 1989, "unit": "yıl", "explanation": "Berlin Duvarı 1989'da yıkılmıştır."},
-  {"type": "tahmin", "category": "Genel Kültür", "difficulty": 3, "content": "Bir yılda kaç gün vardır (artık olmayan yıl)?", "options": null, "min_value": 300, "max_value": 400, "real_answer": 365, "unit": "gün", "explanation": "Normal bir yıl 365 gündür."},
-  {"type": "tahmin", "category": "Spor", "difficulty": 4, "content": "Bir NBA basketbol potasının yerden yüksekliği kaç metredir?", "options": null, "min_value": 1, "max_value": 5, "real_answer": 3.05, "unit": "metre", "explanation": "Basketbol potası yerden 3,05 metre (10 fit) yüksektedir."},
-  {"type": "tahmin", "category": "Uzay", "difficulty": 5, "content": "Güneş Sistemi'nde kaç gezegen vardır?", "options": null, "min_value": 1, "max_value": 20, "real_answer": 8, "unit": "gezegen", "explanation": "Plüton 2006'da cüce gezegen sayıldığından, 8 gezegen vardır."},
-  {"type": "tahmin", "category": "Teknoloji", "difficulty": 5, "content": "World Wide Web (WWW) hangi yılda halka açılmıştır?", "options": null, "min_value": 1970, "max_value": 2005, "real_answer": 1991, "unit": "yıl", "explanation": "WWW 1991'de kamuya açıldı."},
-
-  {"type": "coktan_secmeli", "category": "Genel Kültür", "difficulty": 3, "content": "Olimpik bayraktaki halka sayısı kaçtır?", "options": ["3", "4", "5", "6"], "correct_answer": 2, "explanation": "Olimpiyat bayrağında beş halka vardır; beş kıtayı temsil eder."},
-  {"type": "coktan_secmeli", "category": "Bilim", "difficulty": 3, "content": "İnsan vücudundaki en uzun kemik hangisidir?", "options": ["Kaval kemiği", "Uyluk kemiği (femur)", "Kol kemiği", "Köprücük kemiği"], "correct_answer": 1, "explanation": "Uyluk kemiği (femur) en uzun ve en güçlü kemiktir."},
-  {"type": "coktan_secmeli", "category": "Tarih", "difficulty": 4, "content": "Türkiye'de kadınlara seçme ve seçilme hakkı genel seçimlerde hangi yıl tanındı?", "options": ["1923", "1930", "1934", "1945"], "correct_answer": 2, "explanation": "Kadınlara milletvekili seçme ve seçilme hakkı 1934'te tanındı."},
-  {"type": "coktan_secmeli", "category": "Coğrafya", "difficulty": 3, "content": "Dünyanın en küçük kıtası hangisidir?", "options": ["Avrupa", "Antarktika", "Okyanusya (Avustralya)", "Güney Amerika"], "correct_answer": 2, "explanation": "Avustralya/Okyanusya en küçük kıtadır."},
-  {"type": "coktan_secmeli", "category": "Yemek", "difficulty": 3, "content": "Sushi geleneksel olarak hangi mutfağa aittir?", "options": ["Çin", "Japon", "Tay", "Kore"], "correct_answer": 1, "explanation": "Sushi, geleneksel bir Japon yemeğidir."},
-  {"type": "coktan_secmeli", "category": "Müzik", "difficulty": 3, "content": "'The Beatles' grubu hangi ülkeden çıkmıştır?", "options": ["ABD", "Avustralya", "İngiltere", "Kanada"], "correct_answer": 2, "explanation": "The Beatles, İngiltere'nin Liverpool kentinde kurulmuştur."},
-  {"type": "coktan_secmeli", "category": "Sinema", "difficulty": 4, "content": "'Pulp Fiction' filminin yönetmeni kimdir?", "options": ["Martin Scorsese", "Quentin Tarantino", "Steven Spielberg", "Ridley Scott"], "correct_answer": 1, "explanation": "Pulp Fiction (1994), Quentin Tarantino tarafından yönetilmiştir."},
-  {"type": "coktan_secmeli", "category": "Mitoloji", "difficulty": 4, "content": "Roma mitolojisinde savaş tanrısı kimdir?", "options": ["Jüpiter", "Mars", "Neptün", "Merkür"], "correct_answer": 1, "explanation": "Mars, Roma mitolojisinde savaş tanrısıdır."},
-  {"type": "coktan_secmeli", "category": "Matematik", "difficulty": 3, "content": "Bir karenin kaç kenarı vardır?", "options": ["3", "4", "5", "6"], "correct_answer": 1, "explanation": "Kare dört eşit kenara sahiptir."},
-  {"type": "coktan_secmeli", "category": "Doğa", "difficulty": 3, "content": "Bal yapan canlı aşağıdakilerden hangisidir?", "options": ["Karınca", "Arı", "Kelebek", "Sinek"], "correct_answer": 1, "explanation": "Bal arıları nektardan bal üretir."},
-
-  {"type": "dogru_yanlis", "category": "Coğrafya", "difficulty": 3, "content": "Avustralya hem bir ülke hem de bir kıtadır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Avustralya hem ülke hem kıta olarak kabul edilir."},
-  {"type": "dogru_yanlis", "category": "Bilim", "difficulty": 3, "content": "Örümcekler böcektir.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "Örümcekler 8 bacaklıdır ve böcek değil, örümceğimsidir (arachnida)."},
-  {"type": "dogru_yanlis", "category": "Tarih", "difficulty": 3, "content": "Atatürk'ün soyadı, Soyadı Kanunu ile 1934'te verilmiştir.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "'Atatürk' soyadı 1934'te TBMM tarafından verilmiştir."},
-  {"type": "dogru_yanlis", "category": "Uzay", "difficulty": 3, "content": "Plüton artık bir cüce gezegen olarak sınıflandırılır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Plüton 2006'da cüce gezegen olarak yeniden sınıflandırıldı."},
-  {"type": "dogru_yanlis", "category": "Genel Kültür", "difficulty": 2, "content": "Bir saatte 60 dakika vardır.", "options": ["Doğru", "Yanlış"], "correct_answer": 0, "explanation": "Bir saat 60 dakikadan oluşur."},
-  {"type": "dogru_yanlis", "category": "Doğa", "difficulty": 3, "content": "Penguenler kuzey kutbunda (Arktik) yaşar.", "options": ["Doğru", "Yanlış"], "correct_answer": 1, "explanation": "Penguenler çoğunlukla Güney Yarımküre'de yaşar; Arktik'te değil."}
+  {
+    "type": "dogru_yanlis",
+    "category": "Genel Kültür",
+    "difficulty": 1,
+    "content": "Türkiye'nin başkenti Ankara'dır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Ankara, 1923'ten beri Türkiye Cumhuriyeti'nin başkentidir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Dünya'nın en büyük okyanusu Atlas (Atlantik) Okyanusu'dur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "En büyük okyanus Büyük Okyanus (Pasifik) Okyanusu'dur."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Yetişkin bir insan vücudunda 206 kemik bulunur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Yetişkin insan iskeleti 206 kemikten oluşur."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Albert Einstein, fizik dalında Nobel Ödülü almıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Einstein 1921'de fotoelektrik etki üzerine çalışmasıyla Nobel Fizik Ödülü almıştır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Uzay",
+    "difficulty": 1,
+    "content": "Mars, Güneş'e en yakın gezegendir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Güneş'e en yakın gezegen Merkür'dür."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "DNA molekülü çift sarmal yapıdadır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "DNA'nın çift sarmal yapısı Watson ve Crick tarafından 1953'te tanımlanmıştır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Everest Dağı, Hindistan sınırları içindedir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Everest, Nepal ile Tibet (Çin) sınırında yer alır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 1,
+    "content": "Deniz seviyesinde saf su 100°C'de kaynar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Standart atmosfer basıncında suyun kaynama noktası 100°C'dir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Türkiye Cumhuriyeti 29 Ekim 1923'te ilan edilmiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Cumhuriyet 29 Ekim 1923'te ilan edilmiştir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 2,
+    "content": "Yarasalar kör hayvanlardır ve hiç göremezler.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Yarasaların çoğu görebilir; ek olarak ekolokasyon kullanırlar."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Ses, boşlukta (vakumda) yayılamaz.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Ses bir ortam gerektirir; boşlukta yayılmaz."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Vatikan, dünyanın yüzölçümü en küçük ülkesidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Vatikan yaklaşık 0,49 km² ile en küçük ülkedir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 2,
+    "content": "Balina bir balıktır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Balinalar memeli hayvanlardır, balık değildir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "İstanbul, 1453'te Osmanlılar tarafından fethedilmiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "İstanbul 29 Mayıs 1453'te Fatih Sultan Mehmet tarafından fethedildi."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Altın, suda paslanan bir metaldir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Altın soy metaldir, normal koşullarda paslanmaz/oksitlenmez."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Bir futbol maçı normal süresi toplam 90 dakikadır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Futbolda normal süre iki devre halinde toplam 90 dakikadır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Teknoloji",
+    "difficulty": 3,
+    "content": "İlk programlanabilir elektronik bilgisayarlardan ENIAC 1940'lı yıllarda yapılmıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "ENIAC 1945'te tamamlanmıştır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Sahra Çölü, dünyanın en büyük sıcak çölüdür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Sahra, yaklaşık 9 milyon km² ile en büyük sıcak çöldür."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "Mona Lisa tablosunu Leonardo da Vinci yapmıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Mona Lisa, Leonardo da Vinci'nin eseridir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "İnsan kalbi vücudun sol tarafında, tamamen göğüs kafesinin solunda yer alır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Kalp göğüs ortasında, hafif sola kayık konumdadır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Müzik",
+    "difficulty": 2,
+    "content": "Klasik bir piyanoda 88 tuş bulunur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Standart bir piyanoda 52 beyaz, 36 siyah olmak üzere 88 tuş vardır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Sinema",
+    "difficulty": 3,
+    "content": "Titanic filminin yönetmeni James Cameron'dır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "1997 yapımı Titanic'in yönetmeni James Cameron'dır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 1,
+    "content": "Bukalemunlar bulundukları ortama göre renk değiştirebilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Bukalemunlar iletişim ve sıcaklık düzenleme için renk değiştirebilir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Uzay",
+    "difficulty": 2,
+    "content": "Güneş bir gezegendir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Güneş bir yıldızdır."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Birinci Dünya Savaşı 1914-1918 yılları arasında yaşanmıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "I. Dünya Savaşı 1914'te başlayıp 1918'de sona ermiştir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Genel Kültür",
+    "difficulty": 2,
+    "content": "Bir yılda 12 ay vardır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Gregoryen takviminde bir yıl 12 aydan oluşur."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Bir ışık yılı, bir zaman birimidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Işık yılı bir mesafe birimidir; ışığın bir yılda aldığı yoldur."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Karadeniz, Türkiye'nin kuzeyinde yer alır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Karadeniz, Türkiye'nin kuzey kıyısını oluşturur."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Teknoloji",
+    "difficulty": 3,
+    "content": "HTML bir programlama dilidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "HTML bir işaretleme (markup) dilidir, programlama dili değildir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Olimpiyat Oyunları her 4 yılda bir düzenlenir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Modern Olimpiyatlar dört yılda bir yapılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Periyodik tabloda 'Au' simgesi hangi elementi ifade eder?",
+    "options": [
+      "Gümüş",
+      "Altın",
+      "Alüminyum",
+      "Argon"
+    ],
+    "correct_answer": 1,
+    "explanation": "Au, Latince 'Aurum' (altın) kelimesinden gelir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Teknoloji",
+    "difficulty": 3,
+    "content": "Aşağıdakilerden hangisi bir programlama dili değildir?",
+    "options": [
+      "Python",
+      "Java",
+      "HTML",
+      "Rust"
+    ],
+    "correct_answer": 2,
+    "explanation": "HTML bir işaretleme dilidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "İstanbul'u fetheden Osmanlı padişahı kimdir?",
+    "options": [
+      "Yavuz Sultan Selim",
+      "Kanuni Sultan Süleyman",
+      "Fatih Sultan Mehmet",
+      "II. Bayezid"
+    ],
+    "correct_answer": 2,
+    "explanation": "Fatih Sultan Mehmet 1453'te İstanbul'u fethetti."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Işığın boşluktaki hızı yaklaşık olarak kaç km/s'dir?",
+    "options": [
+      "150.000",
+      "300.000",
+      "450.000",
+      "600.000"
+    ],
+    "correct_answer": 1,
+    "explanation": "Işık hızı yaklaşık 299.792 km/s'dir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 3,
+    "content": "Aşağıdakilerden hangisi bir Nobel Ödülü kategorisi değildir?",
+    "options": [
+      "Fizik",
+      "Matematik",
+      "Edebiyat",
+      "Barış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Nobel Ödülleri arasında Matematik kategorisi yoktur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Teknoloji",
+    "difficulty": 3,
+    "content": "Python programlama dilini kim geliştirmiştir?",
+    "options": [
+      "James Gosling",
+      "Guido van Rossum",
+      "Dennis Ritchie",
+      "Bjarne Stroustrup"
+    ],
+    "correct_answer": 1,
+    "explanation": "Python, Guido van Rossum tarafından 1991'de yayımlanmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Dünya'nın en uzun nehri hangisidir?",
+    "options": [
+      "Amazon",
+      "Nil",
+      "Mississippi",
+      "Yangtze"
+    ],
+    "correct_answer": 1,
+    "explanation": "Nil Nehri yaklaşık 6.650 km uzunluğundadır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Aşağıdakilerden hangisi Türkiye'nin komşusu değildir?",
+    "options": [
+      "Gürcistan",
+      "İran",
+      "Mısır",
+      "Suriye"
+    ],
+    "correct_answer": 2,
+    "explanation": "Mısır'ın Türkiye ile kara sınırı yoktur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "'Yıldızlı Gece' tablosunun ressamı kimdir?",
+    "options": [
+      "Pablo Picasso",
+      "Claude Monet",
+      "Vincent van Gogh",
+      "Salvador Dali"
+    ],
+    "correct_answer": 2,
+    "explanation": "'Yıldızlı Gece' Vincent van Gogh'a aittir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 3,
+    "content": "'Tutunamayanlar' romanının yazarı kimdir?",
+    "options": [
+      "Orhan Pamuk",
+      "Oğuz Atay",
+      "Yaşar Kemal",
+      "Sabahattin Ali"
+    ],
+    "correct_answer": 1,
+    "explanation": "'Tutunamayanlar' Oğuz Atay'ın eseridir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Malazgirt Savaşı hangi yılda yapılmıştır?",
+    "options": [
+      "1071",
+      "1176",
+      "1243",
+      "1402"
+    ],
+    "correct_answer": 0,
+    "explanation": "Malazgirt Savaşı 1071'de Sultan Alparslan komutasında kazanılmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "İnsan vücudundaki en büyük organ hangisidir?",
+    "options": [
+      "Karaciğer",
+      "Beyin",
+      "Deri",
+      "Akciğer"
+    ],
+    "correct_answer": 2,
+    "explanation": "Deri, vücudun en büyük organıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Uzay",
+    "difficulty": 2,
+    "content": "Güneş Sistemi'nin en büyük gezegeni hangisidir?",
+    "options": [
+      "Satürn",
+      "Jüpiter",
+      "Neptün",
+      "Dünya"
+    ],
+    "correct_answer": 1,
+    "explanation": "Jüpiter, Güneş Sistemi'nin en büyük gezegenidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Japonya'nın başkenti neresidir?",
+    "options": [
+      "Osaka",
+      "Kyoto",
+      "Tokyo",
+      "Nagoya"
+    ],
+    "correct_answer": 2,
+    "explanation": "Japonya'nın başkenti Tokyo'dur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 3,
+    "content": "Aşağıdaki filmlerden hangisini Christopher Nolan yönetmemiştir?",
+    "options": [
+      "Inception",
+      "Interstellar",
+      "The Matrix",
+      "Dunkirk"
+    ],
+    "correct_answer": 2,
+    "explanation": "The Matrix, Wachowski kardeşler tarafından yönetilmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 3,
+    "content": "'Bohemian Rhapsody' şarkısı hangi gruba aittir?",
+    "options": [
+      "The Beatles",
+      "Queen",
+      "Led Zeppelin",
+      "Pink Floyd"
+    ],
+    "correct_answer": 1,
+    "explanation": "'Bohemian Rhapsody' 1975'te Queen tarafından yayımlandı."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "FIFA Dünya Kupası ilk kez hangi yıl düzenlenmiştir?",
+    "options": [
+      "1924",
+      "1930",
+      "1950",
+      "1962"
+    ],
+    "correct_answer": 1,
+    "explanation": "İlk Dünya Kupası 1930'da Uruguay'da düzenlendi."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 2,
+    "content": "Bir haftada kaç gün vardır?",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "correct_answer": 2,
+    "explanation": "Bir hafta 7 günden oluşur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Suyun kimyasal formülü nedir?",
+    "options": [
+      "CO2",
+      "H2O",
+      "O2",
+      "NaCl"
+    ],
+    "correct_answer": 1,
+    "explanation": "Su, iki hidrojen ve bir oksijen atomundan oluşur: H2O."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Türkiye'nin en yüksek dağı hangisidir?",
+    "options": [
+      "Erciyes",
+      "Kaçkar",
+      "Ağrı Dağı",
+      "Süphan"
+    ],
+    "correct_answer": 2,
+    "explanation": "Ağrı Dağı 5.137 m ile Türkiye'nin en yüksek dağıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Kurtuluş Savaşı'nın başkomutanı kimdir?",
+    "options": [
+      "İsmet İnönü",
+      "Mustafa Kemal Atatürk",
+      "Fevzi Çakmak",
+      "Kazım Karabekir"
+    ],
+    "correct_answer": 1,
+    "explanation": "Başkomutan Mustafa Kemal Atatürk'tür."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Bir maddenin gaz halinden doğrudan katı hale geçmesine ne denir?",
+    "options": [
+      "Süblimleşme",
+      "Kırağılaşma",
+      "Buharlaşma",
+      "Erime"
+    ],
+    "correct_answer": 1,
+    "explanation": "Gazdan katıya geçiş kırağılaşma (depozisyon) olarak adlandırılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 3,
+    "content": "Avrupa Birliği'nin ortak para birimi nedir?",
+    "options": [
+      "Dolar",
+      "Euro",
+      "Sterlin",
+      "Frank"
+    ],
+    "correct_answer": 1,
+    "explanation": "AB'nin ortak para birimi Euro'dur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Edebiyat",
+    "difficulty": 4,
+    "content": "Nobel Edebiyat Ödülü alan ilk Türk yazar kimdir?",
+    "options": [
+      "Yaşar Kemal",
+      "Nazım Hikmet",
+      "Orhan Pamuk",
+      "Sait Faik"
+    ],
+    "correct_answer": 2,
+    "explanation": "Orhan Pamuk, 2006'da Nobel Edebiyat Ödülü'nü kazanmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Doğa",
+    "difficulty": 2,
+    "content": "Dünyanın en büyük kara hayvanı hangisidir?",
+    "options": [
+      "Zürafa",
+      "Afrika fili",
+      "Su aygırı",
+      "Gergedan"
+    ],
+    "correct_answer": 1,
+    "explanation": "Afrika fili en büyük kara hayvanıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Uzay",
+    "difficulty": 3,
+    "content": "Ay'a ilk ayak basan insan kimdir?",
+    "options": [
+      "Buzz Aldrin",
+      "Yuri Gagarin",
+      "Neil Armstrong",
+      "Michael Collins"
+    ],
+    "correct_answer": 2,
+    "explanation": "Neil Armstrong 1969'da Ay'a ilk ayak basan insandır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 3,
+    "content": "'Esaretin Bedeli' (The Shawshank Redemption) filmi hangi yazarın eserinden uyarlanmıştır?",
+    "options": [
+      "George R. R. Martin",
+      "Stephen King",
+      "J.K. Rowling",
+      "Dan Brown"
+    ],
+    "correct_answer": 1,
+    "explanation": "'Esaretin Bedeli' Stephen King'in 'Rita Hayworth and Shawshank Redemption' adlı öyküsünden uyarlanmıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Matematik",
+    "difficulty": 2,
+    "content": "Bir üçgenin iç açıları toplamı kaç derecedir?",
+    "options": [
+      "90",
+      "180",
+      "270",
+      "360"
+    ],
+    "correct_answer": 1,
+    "explanation": "Düzlemde bir üçgenin iç açıları toplamı 180°'dir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Matematik",
+    "difficulty": 3,
+    "content": "Pi (π) sayısının yaklaşık değeri nedir?",
+    "options": [
+      "2,14",
+      "3,14",
+      "4,14",
+      "1,41"
+    ],
+    "correct_answer": 1,
+    "explanation": "Pi sayısı yaklaşık 3,14159'dur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 2,
+    "content": "Klasik İtalyan pizzasının kökeni hangi şehirdir?",
+    "options": [
+      "Roma",
+      "Milano",
+      "Napoli",
+      "Venedik"
+    ],
+    "correct_answer": 2,
+    "explanation": "Modern pizza Napoli'de doğmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Mitoloji",
+    "difficulty": 3,
+    "content": "Yunan mitolojisinde gök tanrısı ve tanrıların kralı kimdir?",
+    "options": [
+      "Poseidon",
+      "Hades",
+      "Zeus",
+      "Apollon"
+    ],
+    "correct_answer": 2,
+    "explanation": "Zeus, Yunan mitolojisinde tanrıların kralıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 3,
+    "content": "Birleşmiş Milletler'in merkezi hangi şehirdedir?",
+    "options": [
+      "Cenevre",
+      "New York",
+      "Brüksel",
+      "Viyana"
+    ],
+    "correct_answer": 1,
+    "explanation": "BM'nin genel merkezi New York'tadır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Fotosentez sırasında bitkiler hangi gazı havadan alır?",
+    "options": [
+      "Oksijen",
+      "Azot",
+      "Karbondioksit",
+      "Hidrojen"
+    ],
+    "correct_answer": 2,
+    "explanation": "Bitkiler fotosentezde karbondioksit alır, oksijen verir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Aşağıdaki başkent-ülke eşleştirmelerinden hangisi yanlıştır?",
+    "options": [
+      "Kanada - Ottawa",
+      "Avustralya - Sidney",
+      "Brezilya - Brasília",
+      "İsviçre - Bern"
+    ],
+    "correct_answer": 1,
+    "explanation": "Avustralya'nın başkenti Canberra'dır, Sidney değil."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Fransız İhtilali hangi yılda başlamıştır?",
+    "options": [
+      "1776",
+      "1789",
+      "1804",
+      "1815"
+    ],
+    "correct_answer": 1,
+    "explanation": "Fransız İhtilali 1789'da başlamıştır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Spor",
+    "difficulty": 4,
+    "content": "Bir basketbol takımında sahada aynı anda kaç oyuncu bulunur?",
+    "options": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "correct_answer": 1,
+    "explanation": "Basketbolda her takım sahada 5 oyuncu ile oynar."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 4,
+    "content": "'Beşinci Senfoni' eseriyle ünlü besteci kimdir?",
+    "options": [
+      "Mozart",
+      "Bach",
+      "Beethoven",
+      "Chopin"
+    ],
+    "correct_answer": 2,
+    "explanation": "Ünlü 5. Senfoni Ludwig van Beethoven'a aittir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Teknoloji",
+    "difficulty": 4,
+    "content": "Dünyanın ilk web tarayıcısını ve World Wide Web'i kim icat etmiştir?",
+    "options": [
+      "Bill Gates",
+      "Steve Jobs",
+      "Tim Berners-Lee",
+      "Linus Torvalds"
+    ],
+    "correct_answer": 2,
+    "explanation": "World Wide Web'i 1989'da Tim Berners-Lee icat etmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Doğa",
+    "difficulty": 3,
+    "content": "Aşağıdaki hayvanlardan hangisi memeli değildir?",
+    "options": [
+      "Yunus",
+      "Yarasa",
+      "Penguen",
+      "Yarasa balina"
+    ],
+    "correct_answer": 2,
+    "explanation": "Penguen bir kuştur, memeli değildir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 2,
+    "content": "Gökkuşağında kaç temel renk vardır?",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "correct_answer": 2,
+    "explanation": "Gökkuşağında klasik olarak 7 renk sayılır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "İnsan kanında oksijeni taşıyan protein hangisidir?",
+    "options": [
+      "İnsülin",
+      "Hemoglobin",
+      "Keratin",
+      "Kollajen"
+    ],
+    "correct_answer": 1,
+    "explanation": "Hemoglobin, alyuvarlarda oksijeni taşır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Dünyanın en kalabalık nüfuslu ülkesi hangisidir? (2023 itibarıyla)",
+    "options": [
+      "Çin",
+      "Hindistan",
+      "ABD",
+      "Endonezya"
+    ],
+    "correct_answer": 1,
+    "explanation": "2023'te Hindistan, Çin'i geçerek en kalabalık ülke oldu."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 4,
+    "content": "En çok Oscar kazanan filmlerden biri olan 'Yüzüklerin Efendisi: Kralın Dönüşü' kaç Oscar kazanmıştır?",
+    "options": [
+      "7",
+      "9",
+      "11",
+      "13"
+    ],
+    "correct_answer": 2,
+    "explanation": "Film, aday olduğu 11 dalın hepsini kazanmıştır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Hangisi daha yüksektir?",
+    "options": [
+      "Everest Dağı (8.849 m)",
+      "K2 Dağı (8.611 m)"
+    ],
+    "correct_answer": 0,
+    "explanation": "Everest 8.849 m ile dünyanın en yüksek dağıdır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Hangisi tarihsel olarak daha eski bir uygarlıktır?",
+    "options": [
+      "Sümerler",
+      "Roma İmparatorluğu"
+    ],
+    "correct_answer": 0,
+    "explanation": "Sümer uygarlığı MÖ 4. binyıla kadar uzanır; Roma çok daha sonradır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Hangi şehrin nüfusu daha fazladır?",
+    "options": [
+      "İstanbul",
+      "Londra"
+    ],
+    "correct_answer": 0,
+    "explanation": "İstanbul'un nüfusu 15 milyonun üzerindedir, Londra'dan fazladır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Doğa",
+    "difficulty": 3,
+    "content": "Hangisi daha yüksek hıza ulaşabilir?",
+    "options": [
+      "Çita",
+      "Göçmen şahin (dalışta)"
+    ],
+    "correct_answer": 1,
+    "explanation": "Göçmen şahin dalışta 300+ km/s hıza ulaşır; çita ~110 km/s'dir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangi ülkenin yüzölçümü daha büyüktür?",
+    "options": [
+      "Türkiye",
+      "Fransa"
+    ],
+    "correct_answer": 0,
+    "explanation": "Türkiye yaklaşık 783.562 km², Fransa ise daha küçüktür."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Uzay",
+    "difficulty": 2,
+    "content": "Hangi gök cismi daha büyüktür?",
+    "options": [
+      "Dünya",
+      "Ay"
+    ],
+    "correct_answer": 0,
+    "explanation": "Dünya'nın çapı Ay'ınkinin yaklaşık 4 katıdır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Doğa",
+    "difficulty": 2,
+    "content": "Hangi hayvan daha ağırdır?",
+    "options": [
+      "Afrika fili",
+      "Mavi balina"
+    ],
+    "correct_answer": 1,
+    "explanation": "Mavi balina, dünyanın bilinen en büyük ve en ağır hayvanıdır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangi nehir daha uzundur?",
+    "options": [
+      "Nil",
+      "Fırat"
+    ],
+    "correct_answer": 0,
+    "explanation": "Nil ~6.650 km, Fırat ~2.800 km'dir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Hangi gezegen Güneş'e daha yakındır?",
+    "options": [
+      "Venüs",
+      "Mars"
+    ],
+    "correct_answer": 0,
+    "explanation": "Venüs, Mars'a göre Güneş'e daha yakındır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Hangisi daha önce gerçekleşmiştir?",
+    "options": [
+      "İstanbul'un Fethi (1453)",
+      "Amerika'nın Keşfi (1492)"
+    ],
+    "correct_answer": 0,
+    "explanation": "İstanbul 1453'te fethedildi, Amerika 1492'de keşfedildi."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangi göl daha büyüktür?",
+    "options": [
+      "Van Gölü",
+      "Tuz Gölü"
+    ],
+    "correct_answer": 0,
+    "explanation": "Van Gölü, Türkiye'nin en büyük gölüdür ve Tuz Gölü'nden büyüktür."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Spor",
+    "difficulty": 4,
+    "content": "Hangi sporda standart bir maç süresi daha uzundur?",
+    "options": [
+      "Futbol (90 dk)",
+      "Basketbol (NBA, 48 dk)"
+    ],
+    "correct_answer": 0,
+    "explanation": "Futbolda normal süre 90 dakika, NBA basketbolunda 48 dakikadır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Hangisi daha sıcaktır?",
+    "options": [
+      "Güneş'in yüzeyi",
+      "Yıldırım kıvılcımı"
+    ],
+    "correct_answer": 1,
+    "explanation": "Yıldırım kanalı ~30.000°C'ye çıkabilir; Güneş yüzeyi ~5.500°C'dir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Doğa",
+    "difficulty": 2,
+    "content": "Hangisi daha uzun yaşar?",
+    "options": [
+      "Galápagos kaplumbağası",
+      "Ev kedisi"
+    ],
+    "correct_answer": 0,
+    "explanation": "Dev kaplumbağalar 100 yılı aşabilir; kediler genelde 15-20 yıl yaşar."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Teknoloji",
+    "difficulty": 3,
+    "content": "Hangisi daha önce icat edilmiştir?",
+    "options": [
+      "Telefon",
+      "Televizyon"
+    ],
+    "correct_answer": 0,
+    "explanation": "Telefon 1876'da, televizyon 1920'lerde geliştirilmiştir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Hangi kıtanın yüzölçümü daha büyüktür?",
+    "options": [
+      "Afrika",
+      "Avrupa"
+    ],
+    "correct_answer": 0,
+    "explanation": "Afrika, Avrupa'dan çok daha büyük bir kıtadır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Genel Kültür",
+    "difficulty": 2,
+    "content": "Hangisinin değeri daha büyüktür?",
+    "options": [
+      "Bir düzine (12)",
+      "Yarım deste (5)"
+    ],
+    "correct_answer": 0,
+    "explanation": "Bir düzine 12, yarım deste ise 5'tir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Hangi element periyodik tabloda daha hafiftir?",
+    "options": [
+      "Hidrojen",
+      "Helyum"
+    ],
+    "correct_answer": 0,
+    "explanation": "Hidrojen, atom numarası 1 ile en hafif elementtir."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangi ülkenin nüfusu daha fazladır?",
+    "options": [
+      "Almanya",
+      "Türkiye"
+    ],
+    "correct_answer": 1,
+    "explanation": "Türkiye ~85,3 milyon, Almanya ~83,5 milyon nüfusludur; Türkiye daha kalabalıktır."
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Müzik",
+    "difficulty": 4,
+    "content": "Hangi çalgı genellikle daha pes (kalın) seslidir?",
+    "options": [
+      "Kontrbas",
+      "Keman"
+    ],
+    "correct_answer": 0,
+    "explanation": "Kontrbas, yaylı çalgılar arasında en pes sesli olanıdır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kültür",
+    "difficulty": 3,
+    "content": "Türkiye'nin nüfusu yaklaşık kaç milyondur? (2024)",
+    "options": null,
+    "min_value": 50,
+    "max_value": 120,
+    "real_answer": 85.3,
+    "unit": "milyon",
+    "explanation": "2024 itibarıyla Türkiye nüfusu yaklaşık 85 milyondur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "İstanbul'daki Ayasofya hangi yılda (ilk büyük yapı olarak) tamamlanmıştır?",
+    "options": null,
+    "min_value": 300,
+    "max_value": 1000,
+    "real_answer": 537,
+    "unit": "yıl",
+    "explanation": "Justinianus dönemindeki Ayasofya 537'de tamamlanmıştır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "İstanbul Boğazı'nın en dar yeri yaklaşık kaç metredir?",
+    "options": null,
+    "min_value": 100,
+    "max_value": 3000,
+    "real_answer": 700,
+    "unit": "metre",
+    "explanation": "Boğazın en dar yeri yaklaşık 700 metredir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kültür",
+    "difficulty": 3,
+    "content": "Birleşmiş Milletler'in kaç üye devleti vardır?",
+    "options": null,
+    "min_value": 100,
+    "max_value": 250,
+    "real_answer": 193,
+    "unit": "ülke",
+    "explanation": "BM'nin 193 üye devleti bulunmaktadır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Ay'ın Dünya'ya ortalama uzaklığı yaklaşık kaç bin km'dir?",
+    "options": null,
+    "min_value": 100,
+    "max_value": 800,
+    "real_answer": 384,
+    "unit": "bin km",
+    "explanation": "Ay, Dünya'ya ortalama 384.400 km uzaklıktadır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Normal bir yetişkin insanın kalbi dakikada yaklaşık kaç kez atar (dinlenme)?",
+    "options": null,
+    "min_value": 30,
+    "max_value": 150,
+    "real_answer": 72,
+    "unit": "atım",
+    "explanation": "Dinlenme halinde nabız ortalama 60-100, tipik olarak ~72'dir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Türkiye kaç ile (il) sahiptir?",
+    "options": null,
+    "min_value": 50,
+    "max_value": 100,
+    "real_answer": 81,
+    "unit": "il",
+    "explanation": "Türkiye'de 81 il bulunur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Doğa",
+    "difficulty": 4,
+    "content": "Yetişkin bir Afrika filinin ağırlığı yaklaşık kaç tondur?",
+    "options": null,
+    "min_value": 1,
+    "max_value": 12,
+    "real_answer": 6,
+    "unit": "ton",
+    "explanation": "Yetişkin Afrika filleri ortalama 5-6 ton ağırlığındadır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Bir maraton koşusu yaklaşık kaç kilometredir?",
+    "options": null,
+    "min_value": 10,
+    "max_value": 80,
+    "real_answer": 42,
+    "unit": "km",
+    "explanation": "Maraton mesafesi 42,195 km'dir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 5,
+    "content": "Bir yetişkin insan vücudunda yaklaşık yüzde kaç su bulunur?",
+    "options": null,
+    "min_value": 20,
+    "max_value": 90,
+    "real_answer": 60,
+    "unit": "%",
+    "explanation": "Yetişkin insan vücudunun yaklaşık %60'ı sudur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Dünyanın yüzeyinin yaklaşık yüzde kaçı sularla kaplıdır?",
+    "options": null,
+    "min_value": 40,
+    "max_value": 95,
+    "real_answer": 71,
+    "unit": "%",
+    "explanation": "Dünya yüzeyinin yaklaşık %71'i su ile kaplıdır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Mustafa Kemal Atatürk hangi yılda doğmuştur?",
+    "options": null,
+    "min_value": 1850,
+    "max_value": 1900,
+    "real_answer": 1881,
+    "unit": "yıl",
+    "explanation": "Atatürk 1881'de Selanik'te doğmuştur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 5,
+    "content": "Güneş ışığı Dünya'ya yaklaşık kaç dakikada ulaşır?",
+    "options": null,
+    "min_value": 1,
+    "max_value": 30,
+    "real_answer": 8,
+    "unit": "dakika",
+    "explanation": "Güneş ışığı Dünya'ya yaklaşık 8 dakika 20 saniyede ulaşır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Teknoloji",
+    "difficulty": 4,
+    "content": "İlk iPhone hangi yılda piyasaya çıkmıştır?",
+    "options": null,
+    "min_value": 2000,
+    "max_value": 2015,
+    "real_answer": 2007,
+    "unit": "yıl",
+    "explanation": "İlk iPhone 2007'de tanıtıldı."
+  },
+  {
+    "type": "tahmin",
+    "category": "Doğa",
+    "difficulty": 4,
+    "content": "Bir zürafanın boyu yaklaşık kaç metre olabilir?",
+    "options": null,
+    "min_value": 2,
+    "max_value": 10,
+    "real_answer": 5,
+    "unit": "metre",
+    "explanation": "Yetişkin zürafalar 5-6 metreye kadar uzayabilir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 5,
+    "content": "Dünyanın en yüksek noktası Everest yaklaşık kaç metredir?",
+    "options": null,
+    "min_value": 5000,
+    "max_value": 12000,
+    "real_answer": 8849,
+    "unit": "metre",
+    "explanation": "Everest'in zirvesi 8.849 metredir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 5,
+    "content": "Suyun donma noktası Celsius cinsinden kaç derecedir?",
+    "options": null,
+    "min_value": -20,
+    "max_value": 20,
+    "real_answer": 0,
+    "unit": "°C",
+    "explanation": "Su, deniz seviyesinde 0°C'de donar."
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kültür",
+    "difficulty": 3,
+    "content": "Bir gün kaç saattir?",
+    "options": null,
+    "min_value": 1,
+    "max_value": 48,
+    "real_answer": 24,
+    "unit": "saat",
+    "explanation": "Bir gün 24 saatten oluşur."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Osmanlı İmparatorluğu yaklaşık kaç yıl yaşamıştır (1299-1922)?",
+    "options": null,
+    "min_value": 200,
+    "max_value": 900,
+    "real_answer": 623,
+    "unit": "yıl",
+    "explanation": "Osmanlı Devleti yaklaşık 623 yıl (1299-1922) hüküm sürmüştür."
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 4,
+    "content": "Bir futbol sahasının uzunluğu (standart) yaklaşık kaç metredir?",
+    "options": null,
+    "min_value": 50,
+    "max_value": 150,
+    "real_answer": 105,
+    "unit": "metre",
+    "explanation": "Standart bir futbol sahası yaklaşık 105 metre uzunluğundadır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Doğa",
+    "difficulty": 4,
+    "content": "Bir mavi balinanın boyu yaklaşık kaç metreye ulaşabilir?",
+    "options": null,
+    "min_value": 5,
+    "max_value": 60,
+    "real_answer": 30,
+    "unit": "metre",
+    "explanation": "Mavi balinalar 30 metreye kadar uzayabilir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 5,
+    "content": "İnsan beyninde yaklaşık kaç milyar nöron bulunur?",
+    "options": null,
+    "min_value": 10,
+    "max_value": 1000,
+    "real_answer": 86,
+    "unit": "milyar",
+    "explanation": "İnsan beyninde yaklaşık 86 milyar nöron vardır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Akdeniz'in en derin noktası yaklaşık kaç bin metredir?",
+    "options": null,
+    "min_value": 1,
+    "max_value": 10,
+    "real_answer": 5,
+    "unit": "bin metre",
+    "explanation": "Akdeniz'in en derin noktası (Calypso Çukuru) yaklaşık 5.267 metredir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Berlin Duvarı hangi yılda yıkılmıştır?",
+    "options": null,
+    "min_value": 1960,
+    "max_value": 2000,
+    "real_answer": 1989,
+    "unit": "yıl",
+    "explanation": "Berlin Duvarı 1989'da yıkılmıştır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Genel Kültür",
+    "difficulty": 3,
+    "content": "Bir yılda kaç gün vardır (artık olmayan yıl)?",
+    "options": null,
+    "min_value": 300,
+    "max_value": 400,
+    "real_answer": 365,
+    "unit": "gün",
+    "explanation": "Normal bir yıl 365 gündür."
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 4,
+    "content": "Bir NBA basketbol potasının yerden yüksekliği kaç metredir?",
+    "options": null,
+    "min_value": 1,
+    "max_value": 5,
+    "real_answer": 3.05,
+    "unit": "metre",
+    "explanation": "Basketbol potası yerden 3,05 metre (10 fit) yüksektedir."
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 5,
+    "content": "Güneş Sistemi'nde kaç gezegen vardır?",
+    "options": null,
+    "min_value": 1,
+    "max_value": 20,
+    "real_answer": 8,
+    "unit": "gezegen",
+    "explanation": "Plüton 2006'da cüce gezegen sayıldığından, 8 gezegen vardır."
+  },
+  {
+    "type": "tahmin",
+    "category": "Teknoloji",
+    "difficulty": 5,
+    "content": "World Wide Web (WWW) hangi yılda halka açılmıştır?",
+    "options": null,
+    "min_value": 1970,
+    "max_value": 2005,
+    "real_answer": 1991,
+    "unit": "yıl",
+    "explanation": "WWW 1991'de kamuya açıldı."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Genel Kültür",
+    "difficulty": 3,
+    "content": "Olimpik bayraktaki halka sayısı kaçtır?",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correct_answer": 2,
+    "explanation": "Olimpiyat bayrağında beş halka vardır; beş kıtayı temsil eder."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "İnsan vücudundaki en uzun kemik hangisidir?",
+    "options": [
+      "Kaval kemiği",
+      "Uyluk kemiği (femur)",
+      "Kol kemiği",
+      "Köprücük kemiği"
+    ],
+    "correct_answer": 1,
+    "explanation": "Uyluk kemiği (femur) en uzun ve en güçlü kemiktir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Türkiye'de kadınlara seçme ve seçilme hakkı genel seçimlerde hangi yıl tanındı?",
+    "options": [
+      "1923",
+      "1930",
+      "1934",
+      "1945"
+    ],
+    "correct_answer": 2,
+    "explanation": "Kadınlara milletvekili seçme ve seçilme hakkı 1934'te tanındı."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Dünyanın en küçük kıtası hangisidir?",
+    "options": [
+      "Avrupa",
+      "Antarktika",
+      "Okyanusya (Avustralya)",
+      "Güney Amerika"
+    ],
+    "correct_answer": 2,
+    "explanation": "Avustralya/Okyanusya en küçük kıtadır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Yemek",
+    "difficulty": 3,
+    "content": "Sushi geleneksel olarak hangi mutfağa aittir?",
+    "options": [
+      "Çin",
+      "Japon",
+      "Tay",
+      "Kore"
+    ],
+    "correct_answer": 1,
+    "explanation": "Sushi, geleneksel bir Japon yemeğidir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Müzik",
+    "difficulty": 3,
+    "content": "'The Beatles' grubu hangi ülkeden çıkmıştır?",
+    "options": [
+      "ABD",
+      "Avustralya",
+      "İngiltere",
+      "Kanada"
+    ],
+    "correct_answer": 2,
+    "explanation": "The Beatles, İngiltere'nin Liverpool kentinde kurulmuştur."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Sinema",
+    "difficulty": 4,
+    "content": "'Pulp Fiction' filminin yönetmeni kimdir?",
+    "options": [
+      "Martin Scorsese",
+      "Quentin Tarantino",
+      "Steven Spielberg",
+      "Ridley Scott"
+    ],
+    "correct_answer": 1,
+    "explanation": "Pulp Fiction (1994), Quentin Tarantino tarafından yönetilmiştir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Mitoloji",
+    "difficulty": 4,
+    "content": "Roma mitolojisinde savaş tanrısı kimdir?",
+    "options": [
+      "Jüpiter",
+      "Mars",
+      "Neptün",
+      "Merkür"
+    ],
+    "correct_answer": 1,
+    "explanation": "Mars, Roma mitolojisinde savaş tanrısıdır."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Matematik",
+    "difficulty": 3,
+    "content": "Bir karenin kaç kenarı vardır?",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correct_answer": 1,
+    "explanation": "Kare dört eşit kenara sahiptir."
+  },
+  {
+    "type": "coktan_secmeli",
+    "category": "Doğa",
+    "difficulty": 3,
+    "content": "Bal yapan canlı aşağıdakilerden hangisidir?",
+    "options": [
+      "Karınca",
+      "Arı",
+      "Kelebek",
+      "Sinek"
+    ],
+    "correct_answer": 1,
+    "explanation": "Bal arıları nektardan bal üretir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Avustralya hem bir ülke hem de bir kıtadır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Avustralya hem ülke hem kıta olarak kabul edilir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Örümcekler böcektir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Örümcekler 8 bacaklıdır ve böcek değil, örümceğimsidir (arachnida)."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Atatürk'ün soyadı, Soyadı Kanunu ile 1934'te verilmiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "'Atatürk' soyadı 1934'te TBMM tarafından verilmiştir."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Uzay",
+    "difficulty": 3,
+    "content": "Plüton artık bir cüce gezegen olarak sınıflandırılır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Plüton 2006'da cüce gezegen olarak yeniden sınıflandırıldı."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Genel Kültür",
+    "difficulty": 2,
+    "content": "Bir saatte 60 dakika vardır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0,
+    "explanation": "Bir saat 60 dakikadan oluşur."
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "Doğa",
+    "difficulty": 3,
+    "content": "Penguenler kuzey kutbunda (Arktik) yaşar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1,
+    "explanation": "Penguenler çoğunlukla Güney Yarımküre'de yaşar; Arktik'te değil."
+  }
 ]
