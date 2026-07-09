@@ -106,8 +106,8 @@ class InventoryScreen extends ConsumerWidget {
         Text('BAKİYE', style: BiladaText.label(color: AppTheme.cOnSurfaceVariant)),
         const SizedBox(height: 12),
         _balanceTile('🪙', _fmt(state.coins), 'Altın', AppTheme.gold),
-        const SizedBox(height: 12),
-        _premiumTile(state),
+        // İLK LANSMAN: premium üyelik kutusu gizlendi (satış yok) — Aşama 3'te
+        // git geçmişindeki _premiumTile ile geri açılacak.
       ],
     );
   }
@@ -126,47 +126,6 @@ class InventoryScreen extends ConsumerWidget {
               Text(value, style: BiladaText.title(color: accent, size: 18)),
               Text(label, style: BiladaText.label(color: AppTheme.cOutline, size: 11)),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _premiumTile(InventoryState state) {
-    if (state.isPremium) {
-      final until = _formatDate(state.premiumUntil);
-      return GlassCard(
-        color: AppTheme.cSecondaryContainer.withValues(alpha: 0.35),
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            const Text('👑', style: TextStyle(fontSize: 24)),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('PREMIUM', style: BiladaText.title(color: AppTheme.cSecondary, size: 16)),
-                  if (until != null)
-                    Text('Bitiş: $until',
-                        style: BiladaText.label(color: AppTheme.cOnSurfaceVariant, size: 11)),
-                ],
-              ),
-            ),
-            const PillBadge('AKTİF', color: AppTheme.cTertiaryContainer, fg: Colors.white),
-          ],
-        ),
-      );
-    }
-    return GlassCard(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          const Icon(Icons.workspace_premium_outlined, color: AppTheme.cOutline, size: 24),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text('Premium üyeliğin yok',
-                style: BiladaText.body(color: AppTheme.cOnSurfaceVariant, size: 14)),
           ),
         ],
       ),
@@ -428,13 +387,4 @@ class InventoryScreen extends ConsumerWidget {
     return buf.toString();
   }
 
-  /// ISO 8601 tarihi "gg.aa.yyyy" yapar; çözülemezse null.
-  static String? _formatDate(String? iso) {
-    if (iso == null) return null;
-    final d = DateTime.tryParse(iso);
-    if (d == null) return null;
-    final dd = d.day.toString().padLeft(2, '0');
-    final mm = d.month.toString().padLeft(2, '0');
-    return '$dd.$mm.${d.year}';
-  }
 }

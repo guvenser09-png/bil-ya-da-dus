@@ -18,6 +18,17 @@ workflows:
       # ⚠️ Codemagic'teki App Store Connect entegrasyonunun ADIYLA BİREBİR AYNI.
       app_store_connect: BilYaDaDus_ASC
 
+    # main'e her push otomatik build + TestFlight yüklemesi başlatır.
+    # (Elle başlatmaya gerek yok; art arda push'larda öncekini iptal eder.)
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
+      cancel_previous_builds: true
+
     environment:
       flutter: stable
       xcode: latest

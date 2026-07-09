@@ -1,8 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
-import 'package:quizroyale/features/store/services/purchase_service.dart';
 import 'package:quizroyale/features/store/services/store_api.dart';
 import 'package:quizroyale/shared/characters.dart';
+
+// İLK LANSMAN — TAMAMEN ÜCRETSİZ: gerçek-para (IAP) akışı rafa kaldırıldı.
+// purchase_service.dart dosyası yerinde duruyor ama buradan ÇAĞRILMIYOR
+// (registerCatalog / fetchLocalizedPrices / buy / restore devre dışı).
+// Aşama 3'te geri açmak için git geçmişindeki bu dosyaya bakınız.
 
 /// Karakter nadirliği. Backend `rarity` alanı ile birebir aynı (free → legendary).
 /// Sıralama, nadirlik arttıkça daha gösterişli stil için kullanılır.
@@ -74,12 +78,13 @@ class StoreCharacter {
   }
 }
 
-/// Mağaza durumu: altın bakiyesi, karakter kataloğu (sahiplik + kuşanılı),
-/// gerçek-para ürün kataloğu (altın paketleri + premium).
+/// Mağaza durumu: altın bakiyesi, karakter kataloğu (sahiplik + kuşanılı).
 ///
-/// Geriye dönük uyumluluk: [coins], [isPremium], [isPackUnlocked],
-/// [isCharacterUnlocked], [ownedCharacterIds], [productsOfType], [buyProduct]
-/// alan/metotları korunur (profil/sezon ekranları bunları kullanır).
+/// İLK LANSMAN: gerçek-para ürün kataloğu ([products], [livePrices],
+/// [productsOfType], [priceFor]) doldurulmuyor — alanlar Aşama 3'te geri
+/// açılış için yerinde bekliyor. [coins], [isPremium], [isPackUnlocked],
+/// [isCharacterUnlocked], [ownedCharacterIds] korunur (profil ekranları
+/// bunları kullanır).
 class StoreState {
   const StoreState({
     this.coins = 0,
@@ -201,32 +206,20 @@ class StoreNotifier extends StateNotifier<StoreState> {
 
   final Ref _ref;
   final StoreApi _api = StoreApi.instance;
-  final PurchaseService _purchase = PurchaseService.instance;
 
-  /// Karakter kataloğunu + gerçek-para kataloğunu yükler.
+  /// Karakter kataloğunu yükler.
+  ///
+  /// İLK LANSMAN: gerçek-para katalog (getCatalog) + StoreKit/Play başlatma
+  /// (registerCatalog / fetchLocalizedPrices) ÇAĞRILMIYOR — mağazada yalnızca
+  /// altınla açılan karakterler var. Aşama 3'te git geçmişinden geri alınacak.
   Future<void> load() async {
     state = state.copyWith(loading: true, error: null);
     try {
-      // Gerçek-para katalog (altın paketleri + premium) — auth opsiyonel.
-      final products = await _api.getCatalog();
-      _purchase.registerCatalog(products);
-      var next = state.copyWith(products: products, loading: false);
-
-      // StoreKit/Play yerel fiyatları (cihazda). Web/dev'de boş döner → UI
-      // katalog price_display'e düşer. App Store ile fiyat tutarlılığı için.
-      try {
-        final prices = await _purchase.fetchLocalizedPrices(products);
-        if (prices.isNotEmpty) next = next.copyWith(livePrices: prices);
-      } catch (_) {}
-
       // Karakter kataloğu (altın fiyatları + sahiplik) — auth gerekir.
-      try {
-        next = _applyCharacters(next, await _api.getCharacters());
-      } catch (_) {
-        // Giriş yapılmamış olabilir; katalog yine de gösterilir.
-      }
+      var next = _applyCharacters(
+          state.copyWith(loading: false), await _api.getCharacters());
 
-      // Premium durumu için envanter — başarısız olursa sessizce geç.
+      // Altın bakiyesi için envanter — başarısız olursa sessizce geç.
       try {
         next = _applyInventory(next, await _api.getInventory());
       } catch (_) {}
@@ -304,39 +297,9 @@ class StoreNotifier extends StateNotifier<StoreState> {
     }
   }
 
-  /// Gerçek-para ürün (altın paketi / premium) satın alır.
-  Future<bool> buyProduct(Map<String, dynamic> product) async {
-    state = state.copyWith(loading: true, error: null);
-    final result = await _purchase.buy(product);
-    if (result.success) {
-      var next = state.copyWith(loading: false);
-      if (result.inventory != null) {
-        next = _applyInventory(next, result.inventory!);
-      }
-      state = next;
-      // Altın bakiyesi değişmiş olabilir; karakter kataloğundaki coins'i tazele.
-      await loadCharacters();
-      return true;
-    }
-    state = state.copyWith(loading: false, error: result.error);
-    return false;
-  }
-
-  /// Satın alımları geri yükler (premium aboneliği). Başarıda envanteri günceller.
-  Future<bool> restore() async {
-    state = state.copyWith(loading: true, error: null);
-    final result = await _purchase.restore();
-    if (result.success) {
-      var next = state.copyWith(loading: false);
-      if (result.inventory != null) {
-        next = _applyInventory(next, result.inventory!);
-      }
-      state = next;
-      return true;
-    }
-    state = state.copyWith(loading: false, error: result.error);
-    return false;
-  }
+  // NOT (İLK LANSMAN): gerçek-para satın alma (buyProduct) ve geri yükleme
+  // (restore) metotları rafa kaldırıldı — Aşama 3'te git geçmişinden geri
+  // alınacak. Altınla karakter satın alma (buyCharacter) aynen çalışır.
 
   /// `GET /api/store/characters` cevabını state'e uygular.
   StoreState _applyCharacters(StoreState base, Map<String, dynamic> res) {

@@ -1,17 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/store/providers/store_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 
 /// Mağaza ekranı — tek para birimi ALTIN üzerine kurulu.
 ///
-/// Akış (yukarıdan aşağıya):
-/// 1. KARAKTERLER  — bireysel, altın fiyatlı, ucuzdan pahalıya, nadirlik kodlu.
-/// 2. ALTIN PAKETLERİ — gerçek parayla (gold_*), bonus rozetleri.
-/// 3. PREMIUM ÜYELİK  — gerçek parayla (premium_monthly/yearly) + yasal not.
+/// İlk lansman TAMAMEN ÜCRETSİZ: gerçek-para bölümleri (ALTIN PAKETLERİ ve
+/// PREMIUM ÜYELİK) rafa kaldırıldı — Aşama 3'te geri açılacak (git geçmişine
+/// bakınız). Ekranda yalnızca altınla açılan KARAKTERLER listelenir.
 class StoreScreen extends ConsumerWidget {
   const StoreScreen({super.key});
 
@@ -32,19 +30,12 @@ class StoreScreen extends ConsumerWidget {
   }
 
   Widget _body(BuildContext context, WidgetRef ref, StoreState state) {
-    if (state.loading &&
-        state.characters.isEmpty &&
-        state.products.isEmpty) {
+    if (state.loading && state.characters.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (state.characters.isEmpty &&
-        state.products.isEmpty &&
-        state.error != null) {
+    if (state.characters.isEmpty && state.error != null) {
       return _errorView(context, ref, state.error!);
     }
-
-    final goldProducts = state.productsOfType('coins');
-    final premiumProducts = state.productsOfType('premium');
 
     return RefreshIndicator(
       onRefresh: () => ref.read(storeProvider.notifier).load(),
@@ -54,27 +45,11 @@ class StoreScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── 1) KARAKTERLER (mağazanın yıldızı) ──
+            // ── KARAKTERLER (mağazanın yıldızı — altınla açılır) ──
             if (state.characters.isNotEmpty) ...[
               _sectionHeader('Karakterler', 'Altınla aç, lobide gösteriş yap'),
               const SizedBox(height: 14),
               _CharacterGrid(characters: state.characters),
-              const SizedBox(height: 28),
-            ],
-
-            // ── 2) ALTIN PAKETLERİ ──
-            if (goldProducts.isNotEmpty) ...[
-              _sectionHeader('Altın Paketleri', 'Daha fazla karakter aç'),
-              const SizedBox(height: 14),
-              _GoldGrid(products: goldProducts),
-              const SizedBox(height: 28),
-            ],
-
-            // ── 3) PREMIUM ÜYELİK ──
-            if (premiumProducts.isNotEmpty) ...[
-              _sectionHeader('Premium Üyelik', 'Her gün altın + ekstra avantaj'),
-              const SizedBox(height: 14),
-              _PremiumSection(products: premiumProducts),
             ],
           ],
         ),
@@ -463,10 +438,11 @@ class _BuyCharacterSheet extends ConsumerWidget {
           Text(
             canAfford
                 ? 'Bakiyen: $coins altın'
-                : 'Yetersiz altın (bakiye: $coins)',
+                : 'Yetersiz altın (bakiye: $coins) — Maç kazanarak altın topla!',
             style: BiladaText.body(
                 color: canAfford ? AppTheme.cOnSurfaceVariant : AppTheme.cError,
                 size: 13),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
           SizedBox(
@@ -509,458 +485,5 @@ class _BuyCharacterSheet extends ConsumerWidget {
           ? '${character.name} alındı! 🎉 Profilinden kuşanabilirsin.'
           : (ref.read(storeProvider).error ?? 'Satın alma başarısız.')),
     ));
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────
-//  ALTIN PAKETLERİ
-// ─────────────────────────────────────────────────────────────────────────
-
-class _GoldGrid extends StatelessWidget {
-  const _GoldGrid({required this.products});
-  final List<Map<String, dynamic>> products;
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: products.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 14,
-        crossAxisSpacing: 14,
-        childAspectRatio: 0.92,
-      ),
-      itemBuilder: (_, i) => _GoldCard(product: products[i]),
-    );
-  }
-}
-
-class _GoldCard extends ConsumerWidget {
-  const _GoldCard({required this.product});
-  final Map<String, dynamic> product;
-
-  static String _title(Map<String, dynamic> p) => p['title']?.toString() ?? '';
-  static int? _grantCoins(Map<String, dynamic> p) {
-    final g = p['grants'];
-    if (g is Map && g['coins'] is num) return (g['coins'] as num).toInt();
-    return null;
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final p = product;
-    final coins = _grantCoins(p);
-    final bonus = p['bonus_label']?.toString();
-    final store = ref.watch(storeProvider);
-    final loading = store.loading;
-    final priceStr = store.priceFor(p);
-
-    return GlassCard(
-      padding: const EdgeInsets.all(14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              const Text('🪙', style: TextStyle(fontSize: 30)),
-              const Spacer(),
-              if (bonus != null && bonus.isNotEmpty)
-                PillBadge(bonus,
-                    color: AppTheme.gold, fg: AppTheme.cOnPrimaryContainer),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            coins != null ? '$coins' : _title(p),
-            style: BiladaText.displayXl(color: AppTheme.gold, size: 26),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text('altın',
-              style:
-                  BiladaText.body(color: AppTheme.cOnSurfaceVariant, size: 13)),
-          const Spacer(),
-          ChunkyButton(
-            height: 42,
-            depth: 4,
-            borderRadius: 14,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            onPressed:
-                loading ? null : () => _confirm(context, ref),
-            child: Text(priceStr, style: const TextStyle(fontSize: 14)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _confirm(BuildContext context, WidgetRef ref) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => _ConfirmProductSheet(product: product),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────
-//  PREMIUM ÜYELİK
-// ─────────────────────────────────────────────────────────────────────────
-
-class _PremiumSection extends ConsumerWidget {
-  const _PremiumSection({required this.products});
-  final List<Map<String, dynamic>> products;
-
-  /// Apple Guideline 3.1.2 — abonelik satın alma noktasında zorunlu açıklama.
-  static const String subscriptionDisclosureText =
-      'Premium aylık (premium_monthly) ve yıllık (premium_yearly) otomatik '
-      'yenilenen aboneliklerdir. Ödeme, satın alma onaylandığında Apple ID '
-      'hesabınızdan tahsil edilir. Abonelik, mevcut dönemin bitiminden en az '
-      '24 saat önce iptal edilmediği sürece otomatik olarak yenilenir. '
-      'Aboneliğinizi App Store hesap ayarlarınızdan yönetebilirsiniz.';
-
-  static const _benefits = [
-    'Her gün +100 altın',
-    '2x sezon puanı',
-    'Özel kozmetikler',
-    'Reklamsız deneyim',
-  ];
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(storeProvider);
-    final monthly = products.firstWhere(
-        (p) => p['product_id'] == 'premium_monthly',
-        orElse: () => const <String, dynamic>{});
-    final yearly = products.firstWhere(
-        (p) => p['product_id'] == 'premium_yearly',
-        orElse: () => const <String, dynamic>{});
-
-    return GlassCard(
-      padding: EdgeInsets.zero,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppTheme.gold.withValues(alpha: 0.40),
-                    AppTheme.cSecondaryContainer.withValues(alpha: 0.35),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Icon(Icons.workspace_premium_rounded,
-                        color: AppTheme.gold, size: 26),
-                    const SizedBox(width: 8),
-                    Text('Premium', style: BiladaText.title(color: Colors.white)),
-                    const Spacer(),
-                    if (state.isPremium)
-                      const PillBadge('AKTİF',
-                          color: AppTheme.cTertiary, fg: AppTheme.cOnTertiary),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                for (final t in _benefits)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.check_circle_rounded,
-                            color: AppTheme.gold, size: 16),
-                        const SizedBox(width: 8),
-                        Text(t,
-                            style: BiladaText.body(
-                                color: AppTheme.cOnSurface, size: 13)),
-                      ],
-                    ),
-                  ),
-                const SizedBox(height: 16),
-                if (monthly.isNotEmpty && yearly.isNotEmpty)
-                  IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(child: _planCard(context, ref, monthly, state)),
-                        const SizedBox(width: 12),
-                        Expanded(
-                            child: _planCard(context, ref, yearly, state,
-                                badge: 'EN AVANTAJLI')),
-                      ],
-                    ),
-                  )
-                else
-                  for (final p in products)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: _planCard(context, ref, p, state),
-                    ),
-                const SizedBox(height: 14),
-                Text(subscriptionDisclosureText,
-                    style: BiladaText.body(
-                        color: AppTheme.cOnSurfaceVariant, size: 11)),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 16,
-                  runSpacing: 4,
-                  children: [
-                    _legalLink(context, 'Kullanım Şartları', '/legal/terms'),
-                    _legalLink(context, 'Gizlilik Politikası', '/legal/privacy'),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                // Aboneliği geri yükle.
-                SizedBox(
-                  width: double.infinity,
-                  child: ChunkyButton(
-                    height: 46,
-                    depth: 4,
-                    color: AppTheme.cSurfaceVariant,
-                    foreground: AppTheme.cOnSurface,
-                    shadowColor: AppTheme.cOutlineVariant,
-                    onPressed:
-                        state.loading ? null : () => _restore(context, ref),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.restore_rounded, size: 18),
-                        SizedBox(width: 8),
-                        Text('SATIN ALIMLARI GERİ YÜKLE',
-                            style: TextStyle(fontSize: 13)),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _planCard(BuildContext context, WidgetRef ref,
-      Map<String, dynamic> p, StoreState state,
-      {String? badge}) {
-    final owned = state.isPremium || (p['owned'] == true);
-    final title = p['title']?.toString() ?? '';
-    final price = state.priceFor(p);
-    return GlassCard(
-      padding: const EdgeInsets.all(14),
-      color: AppTheme.cSurfaceContainerHigh.withValues(alpha: 0.55),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (badge != null) ...[
-                PillBadge(badge,
-                    color: AppTheme.gold, fg: AppTheme.cOnPrimaryContainer),
-                const SizedBox(height: 8),
-              ],
-              Text(title, style: BiladaText.title(size: 15)),
-              const SizedBox(height: 4),
-              Text(price,
-                  style: BiladaText.displayXl(color: AppTheme.gold, size: 20)),
-            ],
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: ChunkyButton(
-              height: 42,
-              depth: 4,
-              borderRadius: 14,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              onPressed: owned || state.loading
-                  ? null
-                  : () => _confirm(context, ref, p),
-              child: Text(owned ? 'AKTİF' : 'ABONE OL',
-                  style: const TextStyle(fontSize: 14)),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _legalLink(BuildContext context, String label, String route) {
-    return GestureDetector(
-      onTap: () => context.push(route),
-      child: Text(
-        label,
-        style: BiladaText.label(color: AppTheme.cPrimary, size: 11).copyWith(
-          decoration: TextDecoration.underline,
-          decorationColor: AppTheme.cPrimary,
-        ),
-      ),
-    );
-  }
-
-  void _confirm(BuildContext context, WidgetRef ref, Map<String, dynamic> p) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => _ConfirmProductSheet(product: p),
-    );
-  }
-
-  Future<void> _restore(BuildContext context, WidgetRef ref) async {
-    final messenger = ScaffoldMessenger.of(context);
-    final ok = await ref.read(storeProvider.notifier).restore();
-    if (!context.mounted) return;
-    messenger.showSnackBar(SnackBar(
-      content: Text(ok
-          ? 'Satın alımların geri yüklendi.'
-          : 'Geri yüklenecek satın alım bulunamadı.'),
-    ));
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────
-//  GERÇEK-PARA ÜRÜN ONAY SAYFASI (altın paketi / premium)
-// ─────────────────────────────────────────────────────────────────────────
-
-class _ConfirmProductSheet extends ConsumerStatefulWidget {
-  const _ConfirmProductSheet({required this.product});
-  final Map<String, dynamic> product;
-
-  @override
-  ConsumerState<_ConfirmProductSheet> createState() =>
-      _ConfirmProductSheetState();
-}
-
-class _ConfirmProductSheetState extends ConsumerState<_ConfirmProductSheet> {
-  bool _busy = false;
-
-  Future<void> _run() async {
-    setState(() => _busy = true);
-    final notifier = ref.read(storeProvider.notifier);
-    final messenger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
-    final ok = await notifier.buyProduct(widget.product);
-    if (!mounted) return;
-    setState(() => _busy = false);
-    navigator.pop();
-    messenger.showSnackBar(SnackBar(
-      content: Text(ok
-          ? 'Satın alma tamamlandı! 🎉'
-          : (ref.read(storeProvider).error ?? 'Satın alma başarısız.')),
-    ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final p = widget.product;
-    final title = p['title']?.toString() ?? '';
-    final desc = p['description']?.toString() ?? '';
-    final price = ref.watch(storeProvider).priceFor(p);
-    final productId = p['product_id']?.toString() ?? '';
-    final isSubscription = productId.startsWith('premium_');
-
-    return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        color: AppTheme.cSurfaceContainerLow,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      padding: EdgeInsets.fromLTRB(
-          24, 16, 24, 24 + MediaQuery.of(context).padding.bottom),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                  color: AppTheme.cOutlineVariant,
-                  borderRadius: BorderRadius.circular(2))),
-          const SizedBox(height: 22),
-          Text(title,
-              style: BiladaText.headline(size: 22), textAlign: TextAlign.center),
-          if (desc.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(desc,
-                style: BiladaText.body(color: AppTheme.cOnSurfaceVariant),
-                textAlign: TextAlign.center),
-          ],
-          const SizedBox(height: 18),
-          Text(price,
-              style: BiladaText.displayXl(color: AppTheme.gold, size: 34)),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: ChunkyButton(
-              onPressed: _busy ? null : _run,
-              child: _busy
-                  ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(strokeWidth: 2.5))
-                  : const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.shopping_cart_rounded),
-                        SizedBox(width: 8),
-                        Text('SATIN AL'),
-                      ],
-                    ),
-            ),
-          ),
-          if (isSubscription) ...[
-            const SizedBox(height: 16),
-            Text(
-              _PremiumSection.subscriptionDisclosureText,
-              style:
-                  BiladaText.body(color: AppTheme.cOnSurfaceVariant, size: 11),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _legal(context, 'Kullanım Şartları', '/legal/terms'),
-                const SizedBox(width: 16),
-                _legal(context, 'Gizlilik Politikası', '/legal/privacy'),
-              ],
-            ),
-          ],
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('VAZGEÇ',
-                style: BiladaText.label(color: AppTheme.cOnSurfaceVariant)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _legal(BuildContext context, String label, String route) {
-    return GestureDetector(
-      onTap: () => context.push(route),
-      child: Text(label,
-          style: BiladaText.label(color: AppTheme.cPrimary, size: 11).copyWith(
-            decoration: TextDecoration.underline,
-            decorationColor: AppTheme.cPrimary,
-          )),
-    );
   }
 }

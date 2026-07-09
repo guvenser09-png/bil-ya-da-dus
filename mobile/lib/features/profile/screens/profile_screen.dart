@@ -318,7 +318,7 @@ class _ProfileBody extends ConsumerWidget {
                   children: [
                     Text('Envanterim', style: BiladaText.title(size: 16)),
                     const SizedBox(height: 4),
-                    Text('Karakterler, kozmetikler, bakiye ve premium',
+                    Text('Karakterler, kozmetikler ve altın bakiyen',
                         style: BiladaText.label(color: AppTheme.cOutline, size: 11)),
                   ],
                 ),
