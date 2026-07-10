@@ -247,20 +247,35 @@ class _RoundRevealWidgetState extends State<RoundRevealWidget>
                 const SizedBox(height: 12),
               ],
 
-              // ── Survivor summary: kalan + bu turda elenen ──────────────
+              // ── Survivor summary: bilen + kalan + bu turda elenen ───────
+              // "BİLDİ" çipi, "bilen" ile "hayatta kalan" ayrımını netleştirir
+              // (kalkanla kurtulan hayatta kalır ama puansızdır — kullanıcı
+              // "bilen çok, puan alan az" diye karıştırıyordu).
               _SurvivorSummary(
+                correctCount: results.values
+                    .where((v) => (v as Map)['correct'] == true)
+                    .length,
                 aliveCount: widget.aliveCount,
                 eliminatedCount: eliminated.length,
               ),
               const SizedBox(height: 16),
 
               // Player results — sadece tam-örtü fazında (results fazında
-              // alttaki şıkların görünmesi için gizli).
+              // alttaki şıkların görünmesi için gizli). PUANA GÖRE SIRALI ve
+              // TÜM oyuncular listelenir (eski take(10), 12 kişilik maçta 2
+              // satırı sessizce yutuyordu; liste zaten kaydırılabilir).
               if (!resultsPhase)
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    children: results.entries.take(10).map((e) {
+                    children: (results.entries.toList()
+                          ..sort((a, b) =>
+                              (((b.value as Map)['score'] as num?)?.toInt() ?? 0)
+                                  .compareTo(
+                                      ((a.value as Map)['score'] as num?)
+                                              ?.toInt() ??
+                                          0)))
+                        .map((e) {
                       final data = e.value as Map<String, dynamic>;
                       final correct = data['correct'] == true;
                       final score = data['score'] as int? ?? 0;
@@ -667,7 +682,13 @@ class _FallingAvatar extends StatelessWidget {
 
 class _SurvivorSummary extends StatelessWidget {
   const _SurvivorSummary(
-      {required this.aliveCount, required this.eliminatedCount});
+      {this.correctCount,
+      required this.aliveCount,
+      required this.eliminatedCount});
+
+  /// Bu turda DOĞRU cevaplayan sayısı (hayatta kalandan farklı olabilir:
+  /// kalkanla kurtulan hayatta ama puansız). null → çip gösterilmez.
+  final int? correctCount;
   final int? aliveCount;
   final int eliminatedCount;
 
@@ -676,6 +697,16 @@ class _SurvivorSummary extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        if (correctCount != null) ...[
+          _StatChip(
+            emoji: '🧠',
+            value: '$correctCount',
+            label: 'BİLDİ',
+            color: AppTheme.cSecondary,
+          ),
+          if (aliveCount != null || eliminatedCount > 0)
+            const SizedBox(width: 12),
+        ],
         if (aliveCount != null)
           _StatChip(
             emoji: '👥',

@@ -15,6 +15,9 @@ enum GameSound {
 
   /// Kalkan kırılma efekti — UI tetiği sonraki dalgada bağlanacak, ses hazır.
   shieldBreak,
+
+  /// 👏 Alkış — kazananın sonuç ekranında fanfarın ÜSTÜNE bindirilir.
+  applause,
 }
 
 class SoundService {
@@ -27,6 +30,11 @@ class SoundService {
   final AudioPlayer _sfxPlayer = AudioPlayer();
   final AudioPlayer _musicPlayer = AudioPlayer();
 
+  // Alkış için AYRI player: playSound() her çağrıda _sfxPlayer'ı durdurur;
+  // alkışın fanfarı (GameSound.win) kesmeden üstüne binebilmesi için kendi
+  // kanalından çalması gerekir.
+  final AudioPlayer _applausePlayer = AudioPlayer();
+
   // Sentezlenmiş WAV varlıkları (assets/audio/ altında, pubspec'e kayıtlı).
   static const _assetMap = {
     GameSound.correct: 'audio/correct.wav',
@@ -38,6 +46,7 @@ class SoundService {
     GameSound.roundStart: 'audio/round_start.wav',
     GameSound.click: 'audio/click.wav',
     GameSound.shieldBreak: 'audio/shield_break.wav',
+    GameSound.applause: 'audio/applause.wav',
   };
 
   static const String _prefKeySound = 'sound_enabled';
@@ -104,6 +113,17 @@ class SoundService {
     } catch (_) {}
   }
 
+  /// 👏 Alkışı fanfarın ÜSTÜNE bindirerek çal (kazananın sonuç ekranı).
+  /// _sfxPlayer'a dokunmaz → çalan şampiyon fanfarı kesilmez.
+  Future<void> playApplause() async {
+    await init();
+    if (!_soundEnabled) return;
+    try {
+      await _applausePlayer.stop();
+      await _applausePlayer.play(AssetSource(_assetMap[GameSound.applause]!));
+    } catch (_) {}
+  }
+
   Future<void> startLobbyMusic() async {
     await init();
     if (!_musicEnabled) return;
@@ -137,6 +157,7 @@ class SoundService {
       await prefs.setBool(_prefKeySound, value);
       if (!value) {
         await _sfxPlayer.stop();
+        await _applausePlayer.stop();
       }
     } catch (_) {}
   }
@@ -156,6 +177,7 @@ class SoundService {
     try {
       await _sfxPlayer.dispose();
       await _musicPlayer.dispose();
+      await _applausePlayer.dispose();
     } catch (_) {}
   }
 }

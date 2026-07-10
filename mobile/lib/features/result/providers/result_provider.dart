@@ -111,6 +111,68 @@ class ResultNotifier extends StateNotifier<ResultState> {
     }
   }
 
+  /// Sonuç ekranından "arkadaş ekle" — elimizde user_id YOK.
+  ///
+  /// WS game_finished'in final_standings satırları yalnızca username/
+  /// display_name taşır (user_id yok). Bu yüzden önce arama ucundan
+  /// (`/api/friends/search`) tam eşleşen kullanıcıyı bulup user_id'sini
+  /// çözer, sonra isteği göndeririz. Botlar zaten UI'da elenmiş olur
+  /// (is_bot == false şartı) — arama yine de bulamazsa sessizce geri alınır.
+  ///
+  /// [friendRequestsSent] bu akışta USERNAME anahtarıyla kullanılır
+  /// (sonuç verisindeki tek kararlı kimlik).
+  Future<void> addFriendByUsername(String username) async {
+    final key = username.trim();
+    if (key.isEmpty || state.friendRequestsSent.contains(key)) return;
+
+    // İyimser işaretle → buton anında "✓ İstek gönderildi"ye döner.
+    state = state.copyWith(
+      friendRequestsSent: {...state.friendRequestsSent, key},
+    );
+
+    try {
+      final resp = await ApiClient.instance
+          .get('/api/friends/search', query: {'q': key});
+      final users = (resp['users'] as List?) ?? const [];
+      Map<String, dynamic>? match;
+      final lower = key.toLowerCase();
+      for (final u in users) {
+        if (u is! Map) continue;
+        // Sonuç ekranındaki isim username DE display_name DE olabilir
+        // (REST top_players display_name'i tercih eder) → ikisine de bak.
+        final uname = u['username']?.toString().toLowerCase();
+        final dname = u['display_name']?.toString().toLowerCase();
+        if (uname == lower || dname == lower) {
+          match = Map<String, dynamic>.from(u);
+          break;
+        }
+      }
+      final userId = match?['user_id']?.toString();
+      if (userId == null || userId.isEmpty) {
+        throw Exception('kullanıcı bulunamadı');
+      }
+      // Zaten arkadaş / istek beklemede ise tekrar POST etmeyiz; buton
+      // "gönderildi"de kalır (kullanıcı açısından hedefe ulaşıldı).
+      final status = match?['status']?.toString() ?? 'none';
+      if (status == 'none' || status == 'incoming') {
+        await ApiClient.instance.post(
+          '/api/friends/request',
+          body: {'user_id': userId},
+        );
+      }
+    } on DioException catch (e) {
+      state = state.copyWith(
+        friendRequestsSent: {...state.friendRequestsSent}..remove(key),
+        error: ApiClient.friendlyError(e),
+      );
+    } catch (_) {
+      state = state.copyWith(
+        friendRequestsSent: {...state.friendRequestsSent}..remove(key),
+        error: 'Arkadaşlık isteği gönderilemedi.',
+      );
+    }
+  }
+
   void clearError() => state = state.copyWith(clearError: true);
 }
 

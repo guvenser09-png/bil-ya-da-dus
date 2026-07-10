@@ -98,48 +98,54 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
                       ],
                     ),
                   ),
+                  // TEK SAYFA: içerik kompakt (küçük ekranlarda yine de
+                  // scrollable kalır); İPTAL butonu aşağıda SABİT — 12 oyuncu
+                  // beklerken iptal için kaydırma gerekmez.
                   Expanded(
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         children: [
-                          const SizedBox(height: 8),
-                          Text('Maç başlıyor...', style: BiladaText.headline(color: AppTheme.cPrimary, size: 26)),
                           const SizedBox(height: 4),
+                          Text('Maç başlıyor...', style: BiladaText.headline(color: AppTheme.cPrimary, size: 24)),
+                          const SizedBox(height: 2),
                           Text(
                             '${state.players.length.clamp(0, AppConstants.maxPlayers)} yarışmacı kapışmaya hazır',
                             style: BiladaText.label(color: AppTheme.cOnSurfaceVariant, size: 12),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 12),
                           CountdownRing(
                             progress: progress,
                             label: '${state.countdown}',
                             sublabel: 'Saniye',
                             color: ringColor,
-                            size: 176,
-                            stroke: 12,
+                            size: 132,
+                            stroke: 10,
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 12),
                           _playerBar(
                             state.players.length.clamp(0, AppConstants.maxPlayers),
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 12),
                           _playerGrid(state.players),
-                          const SizedBox(height: 28),
-                          SizedBox(
-                            width: 180,
-                            child: ChunkyButton(
-                              height: 52,
-                              depth: 4,
-                              color: AppTheme.cSurfaceContainerHigh,
-                              foreground: AppTheme.cOnSurface,
-                              shadowColor: AppTheme.cSurfaceContainerLowest,
-                              onPressed: _leave,
-                              child: const Text('İPTAL', style: TextStyle(fontSize: 18)),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 12),
                         ],
+                      ),
+                    ),
+                  ),
+                  // ── Alt bar: İPTAL her zaman görünür (kaydırmasız) ──
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                    child: SizedBox(
+                      width: 180,
+                      child: ChunkyButton(
+                        height: 52,
+                        depth: 4,
+                        color: AppTheme.cSurfaceContainerHigh,
+                        foreground: AppTheme.cOnSurface,
+                        shadowColor: AppTheme.cSurfaceContainerLowest,
+                        onPressed: _leave,
+                        child: const Text('İPTAL', style: TextStyle(fontSize: 18)),
                       ),
                     ),
                   ),
@@ -195,11 +201,12 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       // 12 oyunculu lobi: 4 sütun x 3 satır ızgara (slot sayısı = maxPlayers).
+      // Kompakt oran (0.72→0.82): 3 satır + sayaç + İPTAL tek ekrana sığar.
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
-        mainAxisSpacing: 12,
+        mainAxisSpacing: 8,
         crossAxisSpacing: 12,
-        childAspectRatio: 0.72,
+        childAspectRatio: 0.82,
       ),
       itemCount: AppConstants.maxPlayers,
       itemBuilder: (_, i) {
@@ -265,7 +272,7 @@ class _PlayerSlotState extends State<_PlayerSlot> with SingleTickerProviderState
                 child: PlayerAvatar(
                   avatarId: widget.avatarId,
                   username: widget.username,
-                  size: 44,
+                  size: 40,
                   frame: widget.frame,
                 ),
               ),
@@ -309,14 +316,14 @@ class _EmptySlot extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            width: 48,
-            height: 48,
+            width: 44,
+            height: 44,
             decoration: BoxDecoration(
               color: AppTheme.cSurfaceContainerLow,
               shape: BoxShape.circle,
               border: Border.all(color: AppTheme.cOutlineVariant, width: 1.5, style: BorderStyle.solid),
             ),
-            child: const Icon(Icons.person_outline, color: AppTheme.cOutline, size: 22),
+            child: const Icon(Icons.person_outline, color: AppTheme.cOutline, size: 20),
           ),
           const SizedBox(height: 6),
           Text('...', style: BiladaText.label(color: AppTheme.cOutline, size: 10)),

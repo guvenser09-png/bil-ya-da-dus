@@ -2,9 +2,11 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quizroyale/core/services/sound_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/result/providers/result_provider.dart';
+import 'package:quizroyale/features/result/widgets/fireworks_overlay.dart';
 import 'package:quizroyale/features/store/providers/store_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
@@ -24,6 +26,10 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
   late final Animation<double> _podiumAnimation =
       CurvedAnimation(parent: _podiumController, curve: Curves.elasticOut);
 
+  // Kutlama (konfeti + havai fişek + alkış) yalnızca BİR kez tetiklenir.
+  bool _celebrated = false;
+  bool _showFireworks = false;
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +41,31 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
       // taze yüklensin diye invalidate edilir.
       ref.read(authProvider.notifier).refreshUser();
       ref.invalidate(storeProvider);
+      // WS hızlı yolu: sonuç ekran açılmadan ÖNCE setResult ile dolmuş
+      // olabilir — bu durumda ref.listen hiç tetiklenmez, kutlamayı ve
+      // podyum animasyonunu burada başlatırız.
+      final state = ref.read(resultProvider(widget.gameId));
+      if (state.result != null) {
+        _podiumController.forward();
+        if (state.isWinner) _celebrate();
+      }
+    });
+  }
+
+  /// 🎉 Kazanan kutlaması: konfeti + tam ekran havai fişek + (fanfarın
+  /// üstüne binen) alkış. Fanfar (GameSound.win) maç bittiği anda
+  /// GameScreen'de çalmaya başladı; alkış ayrı player'dan üstüne gelir.
+  void _celebrate() {
+    if (_celebrated || !mounted) return;
+    _celebrated = true;
+    setState(() => _showFireworks = true);
+    _confetti.play();
+    Future.delayed(const Duration(milliseconds: 350), () {
+      if (mounted) SoundService().playApplause();
+    });
+    // Havai fişek ~4.5 sn'de biter; overlay'i ağaçtan tamamen kaldır.
+    Future.delayed(const Duration(milliseconds: 5200), () {
+      if (mounted) setState(() => _showFireworks = false);
     });
   }
 
@@ -51,8 +82,15 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
 
     ref.listen(resultProvider(widget.gameId), (prev, next) {
       if (prev?.isLoading == true && next.isLoading == false && next.result != null) {
-        if (next.isWinner) _confetti.play();
+        if (next.isWinner) _celebrate();
         _podiumController.forward();
+      }
+      // Arkadaşlık isteği geri bildirimi: hata oluştuysa kısa bilgi ver
+      // (buton zaten iyimser durumdan geri döner).
+      if (next.result != null && next.error != null && prev?.error != next.error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.error!), backgroundColor: AppTheme.danger),
+        );
       }
     });
 
@@ -75,32 +113,38 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
             _ErrorView(onRetry: () => ref.read(resultProvider(widget.gameId).notifier).fetchResult(widget.gameId))
           else
             _ResultBody(
+              gameId: widget.gameId,
               state: state,
               podiumAnimation: _podiumAnimation,
               onPlayAgain: () => context.go('/lobby'),
               onHome: () => context.go('/home'),
             ),
+          // 🎆 Havai fişek — SADECE kazananda, ~4.5 sn sürer ve biter.
+          // IgnorePointer içerir → alttaki butonlar tıklanabilir kalır.
+          if (_showFireworks) const Positioned.fill(child: FireworksOverlay()),
         ],
       ),
     );
   }
 }
 
-class _ResultBody extends StatelessWidget {
+class _ResultBody extends ConsumerWidget {
   const _ResultBody({
+    required this.gameId,
     required this.state,
     required this.podiumAnimation,
     required this.onPlayAgain,
     required this.onHome,
   });
 
+  final String gameId;
   final ResultState state;
   final Animation<double> podiumAnimation;
   final VoidCallback onPlayAgain;
   final VoidCallback onHome;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final result = state.result!;
     final top3 = result['top_players'] as List? ?? const [];
     final my = result['my_result'] as Map<String, dynamic>? ?? const {};
@@ -141,96 +185,124 @@ class _ResultBody extends StatelessWidget {
         );
     final winnerAvatarId = (winnerEntry?['avatar_id'] as String?) ?? 'default_01';
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            if (isWinner) ...[
-              Text('KAZANAN!', style: BiladaText.displayXl(size: 36)),
-              const SizedBox(height: 6),
-              const PillBadge('ŞAMPİYON — SENSİN!', color: AppTheme.cTertiaryContainer, fg: AppTheme.cOnTertiary),
-            ] else if (survived) ...[
-              // Son tura dek dayandı ama şampiyon olamadı — ELENMEDİ. Bu oyuncuya
-              // "elendin" demek yanlıştı (asıl bug). Pozitif "hayatta kaldın" mesajı.
-              Text('HAYATTA KALDIN!', style: BiladaText.displayXl(color: AppTheme.cTertiary, size: 32)),
-              const SizedBox(height: 4),
-              Text('Sona kadar dayandın — şampiyonluk kıl payı! 🔥',
-                  style: BiladaText.body(color: AppTheme.cOnSurfaceVariant)),
-            ] else ...[
-              Text('ELENDİN', style: BiladaText.displayXl(color: AppTheme.cPrimary, size: 30)),
-              const SizedBox(height: 4),
-              Text('$finalRound. turda elendin 💪', style: BiladaText.body(color: AppTheme.cOnSurfaceVariant)),
-            ],
-            const SizedBox(height: 12),
+    final myUsername = ref.watch(authProvider).user?['username'] as String? ?? '';
 
-            // ── Champion banner — herkese kazananı net göster ────────────
-            if (winnerName != null)
-              _ChampionBanner(winnerName: winnerName, avatarId: winnerAvatarId, isMe: isWinner),
-            if (top3.isNotEmpty) ...[
-              const SizedBox(height: 14),
-              ScaleTransition(scale: podiumAnimation, child: _Podium(top3: top3)),
-            ],
-            const SizedBox(height: 18),
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 2.0,
-              children: [
-                _rewardCard(
-                    'Sıralaman',
-                    isWinner
-                        ? '#1'
-                        // Hayatta kalan/elenen için: gerçek sıra (rank) varsa onu,
-                        // yoksa elenenler için ulaşılan turu göster.
-                        : rank > 0
-                            ? '#$rank'
-                            : (survived ? 'Hayatta' : 'Tur $finalRound'),
-                    AppTheme.cPrimary),
-                _rewardCard('Kazanılan Puan', '+$score', AppTheme.cTertiary),
-                _rewardCard('Doğru', '$correct/$total', AppTheme.gold),
-                _rewardCard('XP Artışı', '+$xp', AppTheme.cSecondary),
-              ],
+    // TEK SAYFA DÜZENİ: içerik üstte (küçük ekranlarda scrollable),
+    // TEKRAR OYNA + ANA MENÜ alt barda SABİT → butonlara kaydırmasız erişim.
+    return SafeArea(
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 8),
+                  if (isWinner)
+                    // Kazanan BENİM: büyük "🏆 ŞAMPİYON!" + adım (abartılı
+                    // "şampiyonun görünümü" söylemleri kaldırıldı).
+                    _ChampionBanner(
+                      winnerName: winnerName ?? myUsername,
+                      avatarId: winnerAvatarId,
+                    )
+                  else ...[
+                    if (survived) ...[
+                      Text('HAYATTA KALDIN!',
+                          style: BiladaText.displayXl(color: AppTheme.cTertiary, size: 26)),
+                      const SizedBox(height: 2),
+                      Text('Sona kadar dayandın — şampiyonluk kıl payı! 🔥',
+                          style: BiladaText.body(color: AppTheme.cOnSurfaceVariant, size: 13)),
+                    ] else ...[
+                      Text('ELENDİN', style: BiladaText.displayXl(color: AppTheme.cPrimary, size: 24)),
+                      const SizedBox(height: 2),
+                      Text('$finalRound. turda elendin 💪',
+                          style: BiladaText.body(color: AppTheme.cOnSurfaceVariant, size: 13)),
+                    ],
+                    // Kazanan başkası: küçük, sade "Şampiyon: <isim>" satırı.
+                    if (winnerName != null) ...[
+                      const SizedBox(height: 10),
+                      _ChampionLine(winnerName: winnerName),
+                    ],
+                  ],
+                  if (top3.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    ScaleTransition(
+                      scale: podiumAnimation,
+                      child: _Podium(top3: top3, gameId: gameId, myUsername: myUsername),
+                    ),
+                  ],
+                  const SizedBox(height: 10),
+                  // İstatistikler: 2x2 büyük kart yerine TEK SATIR mini rozet
+                  // şeridi (kompakt — tek sayfa hedefi).
+                  _StatsStrip(stats: [
+                    (
+                      'SIRA',
+                      isWinner
+                          ? '#1'
+                          // Gerçek sıra (rank) varsa onu, yoksa elenenler için
+                          // ulaşılan turu göster.
+                          : rank > 0
+                              ? '#$rank'
+                              : (survived ? 'Hayatta' : 'Tur $finalRound'),
+                      AppTheme.cPrimary
+                    ),
+                    ('PUAN', '+$score', AppTheme.cTertiary),
+                    ('DOĞRU', '$correct/$total', AppTheme.gold),
+                    ('XP', '+$xp', AppTheme.cSecondary),
+                  ]),
+                  // Ödül/bedel bilgileri: tek satırlık kompakt şeritler.
+                  // Coin — yalnızca pozitifse (0 ise günlük limit dolmuş olabilir).
+                  if (coinsEarned > 0) ...[
+                    const SizedBox(height: 8),
+                    _MiniStrip(emoji: '🪙', text: '+$coinsEarned Altın kazandın!', color: AppTheme.gold),
+                  ],
+                  // 👻 Hayalet modu — elenmişken bilinen doğrular altın oldu.
+                  if (ghostCorrect > 0) ...[
+                    const SizedBox(height: 8),
+                    _MiniStrip(
+                        emoji: '👻',
+                        text: 'Hayalet modunda $ghostCorrect doğru — +$ghostReward altın!',
+                        color: AppTheme.cSecondary),
+                  ],
+                  // 🎯 Şampiyon bahsi sonucu.
+                  if (betOn != null) ...[
+                    const SizedBox(height: 8),
+                    _MiniStrip(
+                        emoji: '🎯',
+                        text: betWon
+                            ? 'Bahsin tuttu: $betOn — +$betReward altın!'
+                            : 'Bahsin tutmadı ($betOn) — bir dahaki sefere!',
+                        color: betWon ? AppTheme.gold : AppTheme.cOnSurfaceVariant),
+                  ],
+                  // 🛡️ Kalkan bedeli — tahsil edildi ya da hediye sayıldı.
+                  if (shieldCost > 0 || shieldGift) ...[
+                    const SizedBox(height: 8),
+                    _MiniStrip(
+                        emoji: '🛡️',
+                        text: shieldGift
+                            ? 'Kalkan hediye — bu sefer bizden 🎁'
+                            : 'Kalkan bedeli: −$shieldCost altın',
+                        color: shieldGift ? AppTheme.cTertiary : AppTheme.accent),
+                  ],
+                  // ── Maç özeti — soruları & doğru cevapları gör ──────────
+                  // Yalnızca gerçek soru verisi varsa göster (eski maçlarda boş).
+                  if (state.questions.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    _MatchSummaryButton(questions: state.questions),
+                  ],
+                  const SizedBox(height: 8),
+                ],
+              ),
             ),
-            // Coin ödülü — yalnızca pozitifse göster (0 ise günlük limit dolmuş
-            // olabilir; gereksiz "0 coin" göstermeyiz).
-            if (coinsEarned > 0) ...[
-              const SizedBox(height: 14),
-              _CoinsEarnedBanner(coins: coinsEarned),
-            ],
-            // 👻 Hayalet modu ödülü — elenmişken bilinen doğrular altın oldu.
-            if (ghostCorrect > 0) ...[
-              const SizedBox(height: 14),
-              _GhostRewardBanner(
-                  correctCount: ghostCorrect, reward: ghostReward),
-            ],
-            // 🎯 Şampiyon bahsi sonucu — tuttu mu, kaç altın?
-            if (betOn != null) ...[
-              const SizedBox(height: 14),
-              _BetResultBanner(betOn: betOn, won: betWon, reward: betReward),
-            ],
-            // 🛡️ Kalkan bedeli — tahsil edildi ya da hediye sayıldı.
-            if (shieldCost > 0 || shieldGift) ...[
-              const SizedBox(height: 14),
-              _ShieldBillingBanner(cost: shieldCost, gift: shieldGift),
-            ],
-            // ── Maç özeti — soruları & doğru cevapları gör ──────────────
-            // Yalnızca gerçek soru verisi varsa göster (eski maçlarda boş).
-            if (state.questions.isNotEmpty) ...[
-              const SizedBox(height: 14),
-              _MatchSummaryButton(questions: state.questions),
-            ],
-            const SizedBox(height: 18),
-            // İki aksiyon butonu YAN YANA → tek ekrana sığar, kaydırma gerekmez.
-            Row(
+          ),
+          // ── Alt bar: HER ZAMAN görünür aksiyonlar (kaydırma gerektirmez) ──
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+            child: Row(
               children: [
                 Expanded(
                   child: ChunkyButton(
-                    height: 58,
+                    height: 54,
                     onPressed: onPlayAgain,
                     child: const Row(
                       mainAxisSize: MainAxisSize.min,
@@ -245,7 +317,7 @@ class _ResultBody extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: ChunkyButton(
-                    height: 58,
+                    height: 54,
                     color: AppTheme.cSecondaryContainer,
                     foreground: Colors.white,
                     shadowColor: AppTheme.cSecondaryShadow,
@@ -262,70 +334,69 @@ class _ResultBody extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _rewardCard(String label, String value, Color color) {
-    return GlassCard(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(label.toUpperCase(), style: BiladaText.label(color: color, size: 11), textAlign: TextAlign.center),
-          const SizedBox(height: 6),
-          FittedBox(child: Text(value, style: BiladaText.displayXl(color: color, size: 36))),
+          ),
         ],
       ),
     );
   }
 }
 
-/// Maç sonu coin ödülü banner'ı — "+N coin kazandın".
-class _CoinsEarnedBanner extends StatelessWidget {
-  const _CoinsEarnedBanner({required this.coins});
-  final int coins;
+/// Tek satırlık istatistik şeridi: 4 mini rozet (etiket + değer) yan yana.
+/// Eski 2x2 büyük kart ızgarasının kompakt hâli (tek sayfa hedefi).
+class _StatsStrip extends StatelessWidget {
+  const _StatsStrip({required this.stats});
+  final List<(String, String, Color)> stats;
 
   @override
   Widget build(BuildContext context) {
     return GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('🪙', style: TextStyle(fontSize: 26)),
-          const SizedBox(width: 12),
-          Text('+$coins Altın kazandın!',
-              style: BiladaText.title(color: AppTheme.gold, size: 18)),
+          for (final (label, value, color) in stats)
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(label, style: BiladaText.label(color: color, size: 9), textAlign: TextAlign.center),
+                  const SizedBox(height: 3),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(value, style: BiladaText.displayXl(color: color, size: 18)),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
   }
 }
 
-/// 👻 Hayalet modu ödül banner'ı — elenmişken bilinen doğrular mini altın oldu.
-class _GhostRewardBanner extends StatelessWidget {
-  const _GhostRewardBanner({required this.correctCount, required this.reward});
-  final int correctCount;
-  final int reward;
+/// Tek satırlık kompakt bilgi şeridi (coin/hayalet/bahis/kalkan).
+/// Eski büyük banner'ların yerini alır — tek sayfa hedefi.
+class _MiniStrip extends StatelessWidget {
+  const _MiniStrip({required this.emoji, required this.text, required this.color});
+  final String emoji;
+  final String text;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('👻', style: TextStyle(fontSize: 24)),
-          const SizedBox(width: 12),
+          Text(emoji, style: const TextStyle(fontSize: 15)),
+          const SizedBox(width: 8),
           Flexible(
             child: Text(
-              'Hayalet modunda $correctCount doğru bildin — +$reward altın!',
+              text,
               textAlign: TextAlign.center,
-              style: BiladaText.title(color: AppTheme.cSecondary, size: 15),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: BiladaText.title(color: color, size: 13),
             ),
           ),
         ],
@@ -334,109 +405,24 @@ class _GhostRewardBanner extends StatelessWidget {
   }
 }
 
-/// 🎯 Şampiyon bahsi sonucu banner'ı — tuttuysa altın, tutmadıysa teselli.
-class _BetResultBanner extends StatelessWidget {
-  const _BetResultBanner({
-    required this.betOn,
-    required this.won,
-    required this.reward,
-  });
-  final String betOn;
-  final bool won;
-  final int reward;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = won ? AppTheme.gold : AppTheme.cOnSurfaceVariant;
-    return GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('🎯', style: TextStyle(fontSize: 24)),
-          const SizedBox(width: 12),
-          Flexible(
-            child: Text(
-              won
-                  ? 'Bahsin tuttu: $betOn şampiyon oldu — +$reward altın!'
-                  : 'Bahsin tutmadı ($betOn) — bir dahaki sefere!',
-              textAlign: TextAlign.center,
-              style: BiladaText.title(color: color, size: 15),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// 🛡️ Kalkan bedeli banner'ı — kalkan bu maçta kırıldıysa gösterilir:
-/// bedel tahsil edildiyse "−50 altın", bakiye yetmediyse "hediye" satırı.
-/// (_GhostRewardBanner/_BetResultBanner ile aynı desen.)
-class _ShieldBillingBanner extends StatelessWidget {
-  const _ShieldBillingBanner({required this.cost, required this.gift});
-
-  /// Tahsil edilen bedel (0 → tahsilat yok, [gift] geçerli).
-  final int cost;
-
-  /// Bakiye yetmedi → kalkan bu seferlik ücretsiz sayıldı.
-  final bool gift;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = gift ? AppTheme.cTertiary : AppTheme.accent;
-    return GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('🛡️', style: TextStyle(fontSize: 24)),
-          const SizedBox(width: 12),
-          Flexible(
-            child: Text(
-              gift
-                  ? 'Kalkan hediye — bu sefer bizden 🎁'
-                  : 'Kalkan bedeli: −$cost altın',
-              textAlign: TextAlign.center,
-              style: BiladaText.title(color: color, size: 15),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Kazananı sahneye çıkaran "şampiyon" kartı. Kozmetiği (3D karakter + altın
-/// çerçeve + parıltı) DAHA BÜYÜK gösterir — görünürlük = kozmetik cazibesi.
+/// Kazanan BENSEM gösterilen sade şampiyon kartı: büyük "🏆 ŞAMPİYON!" +
+/// altın çerçeveli avatar + adım. (Eski "ŞAMPİYON SENSİN / BU GÖRÜNÜM
+/// ŞAMPİYONUN" söylemleri kullanıcıya saçma geldiği için kaldırıldı.)
 class _ChampionBanner extends StatelessWidget {
-  const _ChampionBanner({required this.winnerName, required this.avatarId, required this.isMe});
+  const _ChampionBanner({required this.winnerName, required this.avatarId});
   final String winnerName;
   final String avatarId;
-  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
     return GlassCard(
-      padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.emoji_events_rounded, color: AppTheme.gold, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                isMe ? 'ŞAMPİYON SENSİN' : 'TURUN ŞAMPİYONU',
-                style: BiladaText.label(color: AppTheme.gold, size: 13),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Icons.emoji_events_rounded, color: AppTheme.gold, size: 20),
-            ],
-          ),
-          const SizedBox(height: 16),
-          // Büyük şampiyon avatarı — kuşandığı kozmetik öne çıkar.
+          Text('🏆 ŞAMPİYON!', style: BiladaText.displayXl(color: AppTheme.gold, size: 30)),
+          const SizedBox(height: 10),
+          // Şampiyon avatarı — altın halka + parıltı.
           Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
@@ -447,32 +433,25 @@ class _ChampionBanner extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: AppTheme.gold.withValues(alpha: 0.55),
-                  blurRadius: 28,
-                  spreadRadius: 4,
+                  blurRadius: 24,
+                  spreadRadius: 3,
                 ),
               ],
             ),
             child: PlayerAvatar(
               avatarId: avatarId,
               username: winnerName,
-              size: 104,
+              size: 84,
               isWinner: true,
             ),
           ),
-          const SizedBox(height: 14),
-          // İsim — altın renkle vurgulu (isim rengi = kozmetik hissi).
+          const SizedBox(height: 10),
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
               winnerName,
-              style: BiladaText.displayXl(color: AppTheme.gold, size: 34),
+              style: BiladaText.displayXl(color: AppTheme.gold, size: 26),
             ),
-          ),
-          const SizedBox(height: 6),
-          PillBadge(
-            isMe ? '#1 — HARİKAYDIN!' : 'BU GÖRÜNÜM ŞAMPİYONUN',
-            color: AppTheme.cTertiaryContainer,
-            fg: AppTheme.cOnTertiary,
           ),
         ],
       ),
@@ -480,33 +459,68 @@ class _ChampionBanner extends StatelessWidget {
   }
 }
 
-class _Podium extends StatelessWidget {
-  const _Podium({required this.top3});
+/// Kazanan BAŞKASIYSA gösterilen küçük, sade satır: "Şampiyon: <isim>".
+class _ChampionLine extends StatelessWidget {
+  const _ChampionLine({required this.winnerName});
+  final String winnerName;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.emoji_events_rounded, color: AppTheme.gold, size: 18),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              'Şampiyon: $winnerName',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: BiladaText.title(color: AppTheme.cOnSurfaceVariant, size: 14),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Podium extends ConsumerWidget {
+  const _Podium({required this.top3, required this.gameId, required this.myUsername});
   final List top3;
+  final String gameId;
+  final String myUsername;
 
   static const _gold = Color(0xFFFFD700);
   static const _silver = Color(0xFFC0C0C0);
   static const _bronze = Color(0xFFCD7F32);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Map? at(int i) => i < top3.length ? top3[i] as Map : null;
+    // Kompakt podyum (168→150): avatar/kule boyutları tek sayfa hedefine göre
+    // küçültüldü — sıralama hâlâ net okunur.
     return SizedBox(
-      height: 168,
+      height: 150,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Expanded(child: _slot(at(1), 2, _silver, 70, 52)),
+          Expanded(child: _slot(context, ref, at(1), 2, _silver, 44, 44)),
           const SizedBox(width: 10),
-          Expanded(flex: 12, child: _slot(at(0), 1, _gold, 96, 72, crown: true)),
+          Expanded(flex: 12, child: _slot(context, ref, at(0), 1, _gold, 58, 56, crown: true)),
           const SizedBox(width: 10),
-          Expanded(child: _slot(at(2), 3, _bronze, 48, 46)),
+          Expanded(child: _slot(context, ref, at(2), 3, _bronze, 30, 40)),
         ],
       ),
     );
   }
 
-  Widget _slot(Map? p, int rank, Color color, double h, double avatar, {bool crown = false}) {
+  Widget _slot(BuildContext context, WidgetRef ref, Map? p, int rank, Color color,
+      double h, double avatar,
+      {bool crown = false}) {
     if (p == null) return const SizedBox.shrink();
     final username = (p['username'] ?? '').toString();
     final score = p['score'] as int? ?? 0;
@@ -514,17 +528,24 @@ class _Podium extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (crown) Icon(Icons.emoji_events_rounded, color: color, size: 40),
-        Container(
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: color, width: 3)),
-          child: PlayerAvatar(avatarId: avatarId, username: username, size: avatar, isWinner: rank == 1),
+        if (crown) Icon(Icons.emoji_events_rounded, color: color, size: 24),
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: color, width: 3)),
+              child: PlayerAvatar(avatarId: avatarId, username: username, size: avatar, isWinner: rank == 1),
+            ),
+            // ➕ Arkadaş ekle — yalnızca GERÇEK oyuncularda (bot değil, ben değil).
+            _AddFriendBadge(gameId: gameId, player: p, myUsername: myUsername),
+          ],
         ),
-        const SizedBox(height: 6),
-        Text(username.length > 8 ? '${username.substring(0, 8)}…' : username,
-            style: BiladaText.label(color: AppTheme.cOnSurface, size: 11)),
-        Text('$score', style: BiladaText.title(color: color, size: 14)),
         const SizedBox(height: 4),
+        Text(username.length > 8 ? '${username.substring(0, 8)}…' : username,
+            style: BiladaText.label(color: AppTheme.cOnSurface, size: 10)),
+        Text('$score', style: BiladaText.title(color: color, size: 12)),
+        const SizedBox(height: 3),
         Container(
           height: h,
           width: double.infinity,
@@ -534,10 +555,73 @@ class _Podium extends StatelessWidget {
             border: Border(top: BorderSide(color: color.withValues(alpha: 0.5), width: 2)),
           ),
           alignment: Alignment.topCenter,
-          padding: const EdgeInsets.only(top: 8),
-          child: Text('$rank', style: BiladaText.displayXl(color: color.withValues(alpha: 0.6), size: rank == 1 ? 40 : 28)),
+          padding: const EdgeInsets.only(top: 4),
+          child: Text('$rank',
+              style: BiladaText.displayXl(
+                  color: color.withValues(alpha: 0.6), size: rank == 1 ? 26 : 18)),
         ),
       ],
+    );
+  }
+}
+
+/// Podyumdaki GERÇEK oyuncuların avatarına iliştirilen "➕ arkadaş ekle"
+/// rozeti; istek gönderilince "✓"ya döner.
+///
+/// BOT AYRIMI: yalnızca payload'da AÇIKÇA `is_bot == false` gelen oyuncularda
+/// gösterilir (WS final_standings bu alanı taşır). Alan hiç yoksa (eski REST
+/// fallback) güvenli tarafta kalıp GÖSTERMEYİZ — bota istek atma riski sıfır.
+/// Kendi satırımızda da buton yok.
+class _AddFriendBadge extends ConsumerWidget {
+  const _AddFriendBadge({required this.gameId, required this.player, required this.myUsername});
+  final String gameId;
+  final Map player;
+  final String myUsername;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final username = (player['username'] ?? '').toString();
+    final isRealPlayer = player.containsKey('is_bot') && player['is_bot'] == false;
+    if (!isRealPlayer || username.isEmpty || username == myUsername) {
+      return const SizedBox.shrink();
+    }
+
+    final sent = ref.watch(resultProvider(gameId)
+        .select((s) => s.friendRequestsSent.contains(username)));
+
+    return Positioned(
+      bottom: -4,
+      right: -6,
+      child: GestureDetector(
+        onTap: sent
+            ? null
+            : () {
+                ref
+                    .read(resultProvider(gameId).notifier)
+                    .addFriendByUsername(username);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('✓ İstek gönderildi: $username'),
+                    duration: const Duration(seconds: 2),
+                    backgroundColor: AppTheme.cTertiaryContainer,
+                  ),
+                );
+              },
+        child: Container(
+          width: 24,
+          height: 24,
+          decoration: BoxDecoration(
+            color: sent ? AppTheme.cTertiaryContainer : AppTheme.cPrimaryContainer,
+            shape: BoxShape.circle,
+            border: Border.all(color: AppTheme.cSurfaceContainerHigh, width: 2),
+          ),
+          child: Icon(
+            sent ? Icons.check_rounded : Icons.person_add_alt_1_rounded,
+            size: 13,
+            color: Colors.white,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -552,7 +636,8 @@ class _MatchSummaryButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ChunkyButton(
-        height: 54,
+        height: 46,
+        depth: 4,
         color: AppTheme.cSurfaceContainerHigh,
         foreground: AppTheme.cOnSurface,
         shadowColor: AppTheme.cSurfaceContainerLowest,
@@ -560,10 +645,10 @@ class _MatchSummaryButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.fact_check_rounded, size: 20, color: AppTheme.cTertiary),
+            const Icon(Icons.fact_check_rounded, size: 18, color: AppTheme.cTertiary),
             const SizedBox(width: 8),
             Text('SORULARI GÖR (${questions.length})',
-                style: BiladaText.label(color: AppTheme.cOnSurface, size: 13)),
+                style: BiladaText.label(color: AppTheme.cOnSurface, size: 12)),
           ],
         ),
       ),

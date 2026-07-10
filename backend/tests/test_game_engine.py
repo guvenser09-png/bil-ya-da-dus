@@ -588,3 +588,130 @@ class TestGameFinish:
         assert "winner" in result
         assert "leaderboard" in result
         assert "duration_seconds" in result
+
+
+class TestRoundRevealPayloadInvariants:
+    """Reveal payload'ının 'bilen çok ama puan alan az' algısına karşı
+    değişmezleri (invariant) — regresyon kilidi.
+
+    Kullanıcı gözlemi araştırması sonucu: skorlama tutarlı; bu test o
+    tutarlılığı kalıcı kılar:
+      * results'ta correct=True olan HERKESİN (bot dahil) score'u > 0,
+      * yanlış / kalkanla kurtulan / cevapsız oyuncunun score'u 0,
+      * results.score = TUR puanı (total_score'dan ayrı alan),
+      * hayalet (ghost) cevaplar results map'ine ASLA karışmaz.
+    """
+
+    def _twelve_player_engine(self) -> GameEngine:
+        players = [
+            {"user_id": "u1", "username": "gercek", "display_name": "Gerçek",
+             "avatar_id": "default_01"},
+        ]
+        bots = [
+            {"bot_name": f"bot{i}", "difficulty": "medium",
+             "avatar_id": "default_02"}
+            for i in range(11)
+        ]
+        return GameEngine("test-reveal-12p", players, bots)
+
+    def test_correct_players_always_have_positive_round_score(self):
+        engine = self._twelve_player_engine()
+        question = {"content": "Q?", "options": ["A", "B", "C", "D"],
+                    "type": "coktan_secmeli"}
+        engine.start_round(question)
+
+        # 8 doğru (bot dahil, farklı kalan sürelerle), 3 yanlış, 1 cevapsız.
+        names = list(engine.players)
+        for i, name in enumerate(names[:8]):
+            engine.submit_answer(name, 1, 8.0 - i * 0.7)
+        for name in names[8:11]:
+            engine.submit_answer(name, 0, 3.0)
+        # names[11] hiç cevap vermedi → yanlış sayılır.
+
+        result = engine.end_round(correct_answer=1, question=question)
+        msg = engine.get_round_end_message(result)
+        results = msg["results"]
+
+        # 12 oyuncunun TAMAMI results'ta (görünürlük kaybı yok).
+        assert len(results) == 12
+
+        # Doğru bilen HERKES (bot dahil) puan aldı; yanlışların puanı 0.
+        for name, entry in results.items():
+            if entry["correct"]:
+                assert entry["score"] > 0, f"{name} doğru bildi ama puan 0"
+            else:
+                assert entry["score"] == 0, f"{name} yanlış ama puan almış"
+
+        # "Bilen sayısı" == "puan alan sayısı" — algılanan tutarsızlık YOK.
+        n_correct = sum(1 for e in results.values() if e["correct"])
+        n_scored = sum(1 for e in results.values() if e["score"] > 0)
+        assert n_correct == 8
+        assert n_correct == n_scored
+
+    def test_score_field_is_round_score_not_total(self):
+        engine = self._twelve_player_engine()
+        # Tur 2'ye önceden birikmiş puan koy → score alanı TUR puanı mı,
+        # TOPLAM mı ayrışsın.
+        engine.players["gercek"].score = 100
+        question = {"content": "Q?", "options": ["A", "B"],
+                    "type": "dogru_yanlis"}
+        engine.start_round(question)
+        for name in engine.players:
+            engine.submit_answer(name, 0, 4.0)
+
+        result = engine.end_round(correct_answer=0, question=question)
+        msg = engine.get_round_end_message(result)
+        entry = msg["results"]["gercek"]
+
+        # score = SADECE bu turun puanı; total_score = birikmiş toplam.
+        assert 0 < entry["score"] < 100
+        assert entry["total_score"] == 100 + entry["score"]
+
+    def test_shield_saved_players_get_zero_score_but_survive(self):
+        engine = self._twelve_player_engine()
+        question = {"content": "Q?", "options": ["A", "B", "C", "D"],
+                    "type": "coktan_secmeli"}
+        engine.start_round(question)
+
+        names = list(engine.players)
+        for name in names[:6]:
+            engine.submit_answer(name, 2, 5.0)
+        for name in names[6:]:
+            engine.submit_answer(name, 0, 5.0)
+
+        result = engine.end_round(correct_answer=2, question=question)
+        msg = engine.get_round_end_message(result)
+
+        # Yanlışlar kalkanla kurtuldu: hayatta ama correct=False ve score=0.
+        for name in names[6:]:
+            entry = msg["results"][name]
+            assert entry["shield_saved"] is True
+            assert entry["correct"] is False
+            assert entry["score"] == 0
+        # Kalkanla kurtulan "bilen" DEĞİLDİR → alive_count (12) doğru bilen
+        # sayısından (6) fazla olabilir; bu bir skor hatası değildir.
+        assert msg["alive_count"] == 12
+        assert sum(1 for e in msg["results"].values() if e["correct"]) == 6
+
+    def test_ghost_answers_never_leak_into_results(self):
+        engine = self._twelve_player_engine()
+        # gercek oyuncu elenmiş olsun → hayalet cevap verebilsin.
+        engine.players["gercek"].is_alive = False
+        engine.players["gercek"].eliminated_at_round = 1
+
+        question = {"content": "Q?", "options": ["A", "B"],
+                    "type": "dogru_yanlis"}
+        engine.start_round(question)
+        assert engine.submit_ghost_answer("gercek", 0, 3.0) is True
+        for name in engine.players:
+            if name != "gercek":
+                engine.submit_answer(name, 0, 4.0)
+
+        result = engine.end_round(correct_answer=0, question=question)
+        msg = engine.get_round_end_message(result)
+
+        # Hayalet, results map'inde YOK (bilen sayacını şişirmez)…
+        assert "gercek" not in msg["results"]
+        # …ama ghost_results'ta doğru işaretli; skoru DEĞİŞMEZ.
+        assert msg["ghost_results"]["gercek"]["correct"] is True
+        assert engine.players["gercek"].score == 0
