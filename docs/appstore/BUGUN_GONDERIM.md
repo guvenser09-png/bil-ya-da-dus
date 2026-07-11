@@ -10,9 +10,10 @@ Her şey hazır. Aşağıdaki adımları sırayla yap; metinleri olduğu gibi ko
 - (İstersen önce telefonda bu son sürümü 5 dk test et — yeni ikon, sonuç ekranı, sesler.)
 
 ## 1) Ekran görüntülerini yükle
-App Store sekmesi → sol menü **1.0 Prepare for Submission** → **App Previews and Screenshots** → **iPhone 6.5" Display**:
-- `docs/appstore/screenshots_6.5inch/` klasöründeki 8 PNG'yi SIRAYLA sürükle (01→08).
-- Başka boyut istemezse başka şey yükleme (6.5" seti tüm küçük boyutları kapsar).
+App Store sekmesi → sol menü **1.0 Prepare for Submission** → **App Previews and Screenshots**:
+- **iPhone 6.5" Display:** `docs/appstore/screenshots_6.5inch/` içindeki 8 PNG'yi SIRAYLA sürükle (01→08). (İndirilenler → BilYaDaDus_AppStore klasöründe de kopyası var.)
+- **iPad 13" Display:** `docs/appstore/screenshots_ipad_13inch/` içindeki PNG'leri SIRAYLA sürükle. (Uygulama artık iPad destekli — Apple bu seti zorunlu tutar.)
+- Başka boyut istemezse başka şey yükleme (bu iki set kalanları kapsar).
 
 ## 2) Metin alanları (kopyala-yapıştır)
 

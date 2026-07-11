@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:quizroyale/core/services/haptic_service.dart';
 import 'package:quizroyale/core/services/sound_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
+import 'package:quizroyale/shared/widgets/adaptive_stage.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
 class RoundRevealWidget extends StatefulWidget {
@@ -342,13 +343,17 @@ class _RoundRevealWidgetState extends State<RoundRevealWidget>
         ),
 
         // ── Trapdoor fall overlay ──────────────────────────────────────
+        // StageFx: iPad'de kırmızı vinyet + sarsıntı + düşüş kuşağa
+        // hapsolmaz, TÜM ekranı kaplar.
         if (_phase == _RevealPhase.falling && _hasEliminated)
-          _FallOverlay(
-            controller: _fallCtrl,
-            eliminatedPlayers: widget.eliminatedPlayers,
-            amIEliminated: _amIEliminated,
-            myUsername: widget.myUsername,
-            myFrame: widget.myFrame,
+          StageFx(
+            child: _FallOverlay(
+              controller: _fallCtrl,
+              eliminatedPlayers: widget.eliminatedPlayers,
+              amIEliminated: _amIEliminated,
+              myUsername: widget.myUsername,
+              myFrame: widget.myFrame,
+            ),
           ),
       ],
     );

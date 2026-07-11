@@ -46,6 +46,16 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<!-- iPad: dikey kilitli oyun. UIRequiresFullScreen=true çoklu görevden
+	     (Split View) muaf tutar; böylece 4-yönelim zorunluluğu (90474 reddi)
+	     doğmaz ve iPad'de de sadece dikey oynanır. -->
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>

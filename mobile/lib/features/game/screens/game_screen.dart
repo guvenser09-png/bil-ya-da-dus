@@ -18,6 +18,7 @@ import 'package:quizroyale/features/game/widgets/tutorial_hint.dart';
 import 'package:quizroyale/features/game/providers/tutorial_provider.dart';
 import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
 import 'package:quizroyale/features/result/providers/result_provider.dart';
+import 'package:quizroyale/shared/widgets/adaptive_stage.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
@@ -365,11 +366,14 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             ),
 
           // ── 🏆 FİNAL duyurusu — kısa tam ekran overlay (1.8sn) ──────────
+          // StageFx: iPad'de içerik kuşağına hapsolmaz, TÜM ekranı karartır.
           if (_showFinalAnnounce)
-            _FinalAnnounceOverlay(
-              onDone: () {
-                if (mounted) setState(() => _showFinalAnnounce = false);
-              },
+            StageFx(
+              child: _FinalAnnounceOverlay(
+                onDone: () {
+                  if (mounted) setState(() => _showFinalAnnounce = false);
+                },
+              ),
             ),
 
           // ── İlk-maç tutorial ipucu (non-blocking, kendi kapanır) ───────

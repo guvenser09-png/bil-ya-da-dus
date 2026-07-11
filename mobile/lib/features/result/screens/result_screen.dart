@@ -8,6 +8,7 @@ import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/result/providers/result_provider.dart';
 import 'package:quizroyale/features/result/widgets/fireworks_overlay.dart';
 import 'package:quizroyale/features/store/providers/store_provider.dart';
+import 'package:quizroyale/shared/widgets/adaptive_stage.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
@@ -121,7 +122,9 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
             ),
           // 🎆 Havai fişek — SADECE kazananda, ~4.5 sn sürer ve biter.
           // IgnorePointer içerir → alttaki butonlar tıklanabilir kalır.
-          if (_showFireworks) const Positioned.fill(child: FireworksOverlay()),
+          // StageFx: iPad'de içerik kuşağına hapsolmaz, TÜM ekranı kaplar.
+          if (_showFireworks)
+            const StageFx(child: Positioned.fill(child: FireworksOverlay())),
         ],
       ),
     );

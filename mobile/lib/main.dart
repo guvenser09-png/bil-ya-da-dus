@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:quizroyale/core/network/api_client.dart';
 import 'package:quizroyale/core/router/app_router.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
+import 'package:quizroyale/shared/widgets/adaptive_stage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +45,11 @@ class BiladaApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
       routerConfig: router,
+      // iPad/geniş ekran: içerik ortalanmış ~500pt kuşağa alınır, arkasını
+      // tam ekran tema gradyanı doldurur (bkz. AdaptiveStage). Telefonda
+      // sarmalayıcı tamamen şeffaftır.
+      builder: (context, child) =>
+          AdaptiveStage(child: child ?? const SizedBox.shrink()),
     );
   }
 }
