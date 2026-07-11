@@ -103,6 +103,10 @@ _PRIVACY_BODY = f"""
       (ID).</li>
       <li><strong>Oyun verileri:</strong> Oyun istatistikleri, skorlar, liderlik
       tablosu sıralaması, oynanan maçlar ve eşleşme geçmişi.</li>
+      <li><strong>Cihaz kimliği (misafir girişi):</strong> "Misafir olarak
+      oyna" seçeneğinde, hesabınızı cihazınıza bağlamak için uygulamanın
+      ürettiği rastgele bir cihaz kimliği saklanır. Bu kimlik reklam veya
+      izleme amacıyla kullanılmaz.</li>
       <li><strong>Satın alma kayıtları:</strong> Uygulamanın güncel sürümünde
       <strong>uygulama içi satın alım yoktur</strong>; uygulama tamamen
       ücretsizdir. İleride uygulama içi satın alım sunulursa yalnızca işlem

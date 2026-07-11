@@ -24,6 +24,9 @@ Uygulamayı kullanırken yalnızca aşağıdaki verileri toplarız:
   görünen ad, seçtiğiniz karakter (avatar).
 - **Oyun verileri:** Oyun istatistikleri, skorlar, sıralama (liderlik tablosu)
   bilgileri, oynanan maçlar ve eşleşme geçmişi.
+- **Cihaz kimliği (misafir girişi):** "Misafir olarak oyna" seçeneğinde,
+  hesabınızı cihazınıza bağlamak için uygulamanın ürettiği rastgele bir cihaz
+  kimliği saklanır. Bu kimlik reklam veya izleme amacıyla kullanılmaz.
 - **Satın alma kayıtları:** Uygulamanın güncel sürümünde **uygulama içi satın
   alım yoktur**; uygulama tamamen ücretsizdir. İleride uygulama içi satın alım
   sunulursa yalnızca işlem doğrulama kayıtları tutulur. **Kredi kartı / ödeme

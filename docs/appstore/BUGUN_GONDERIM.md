@@ -61,13 +61,37 @@ bilgi,yarışma,quiz,trivia,genel kültür,canlı,arkadaş,eğlence,soru,oyun,ba
 - **Age Rating** anketi: hepsine **None** işaretle; "Unrestricted Web Access" = No; "Gambling" = No → sonuç **4+** çıkar (hazır mesajlar sabit listeden olduğu için "user-generated content" saymana gerek yok; profil adları için istersen 'Infrequent/Mild' yerine None kalabilir — sorun olursa Apple anketi güncelletir).
 - **Price:** Free. **In-App Purchases:** HİÇBİR ürün ekleme (yok).
 
-## 4) App Privacy (veri anketi) — Data Collection
-"Data Types" bölümünde şunları işaretle:
-- **Contact Info → Email Address**: Collected, Linked to user, App Functionality (yalnız kayıtlı hesaplar için)
-- **Identifiers → User ID**: Collected, Linked, App Functionality
-- **Identifiers → Device ID**: Collected, Linked, App Functionality (misafir girişi)
-- **User Content → Other User Content**: Collected, Linked, App Functionality (kullanıcı adı/profil)
-- Tracking: **No** (izleme yok). Analytics/Advertising: hiçbirini işaretleme.
+## 4) App Privacy (veri anketi) — ADIM ADIM DOĞRU DOLDURMA
+
+Yer: App Store Connect → uygulaman → sol menüde **App Privacy** → **Get Started** (veya Edit).
+
+**Soru 1 — "Do you or your third-party partners collect data from this app?"**
+→ **Yes, we collect data from this app** (evet — hesap/skor tutuyoruz).
+
+**Soru 2 — Veri türleri (checklist).** SADECE şu 5 kutuyu işaretle:
+| Bölüm | İşaretlenecek |
+|---|---|
+| Contact Info | ☑ **Email Address** |
+| Identifiers | ☑ **User ID** |
+| Identifiers | ☑ **Device ID** |
+| User Content | ☑ **Gameplay Content** |
+| User Content | ☑ **Other User Content** |
+Başka HİÇBİR kutu işaretlenmeyecek (Location yok, Contacts yok, Purchases yok, Diagnostics yok, Browsing yok...).
+
+**Soru 3 — Her veri türü için 3 soru sorulur. Cevaplar HEPSİNDE AYNI:**
+1. "How is this data used?" → yalnız **App Functionality** işaretle (Analytics / Advertising / Product Personalization / Other → HAYIR, boş).
+2. "Is this data linked to the user's identity?" → **Yes, linked to the user's identity** (hesaba bağlı tutuluyor).
+3. "Is this data used for tracking purposes?" → **No** (izleme/reklam takibi YOK).
+
+**Neden bunlar (Apple sorarsa / kendin bilesin):**
+- Email → kayıtlı hesap girişi (misafirde toplanmaz ama kayıt seçeneği var).
+- User ID → sunucudaki hesap kimliği.
+- Device ID → misafir girişindeki cihaz kimliği (uygulamanın ürettiği kalıcı kimlik).
+- Gameplay Content → maç skorları/istatistikler (liderlik tablosunda görünür).
+- Other User Content → kullanıcı adı, profil bilgileri, ilgi alanları.
+
+**Bittiğinde:** "Publish" düğmesine bas — anket yayınlanmadan gönderim tamamlanamaz.
+Bu beyan, canlı gizlilik politikamızla birebir uyumlu: https://bil-ya-da-dus-production.up.railway.app/legal/privacy
 
 ## 5) Build seç + Review bilgileri
 - **Build** bölümü → (+) → en son TestFlight build'ini seç.
