@@ -103,10 +103,12 @@ _PRIVACY_BODY = f"""
       (ID).</li>
       <li><strong>Oyun verileri:</strong> Oyun istatistikleri, skorlar, liderlik
       tablosu sıralaması, oynanan maçlar ve eşleşme geçmişi.</li>
-      <li><strong>Satın alma kayıtları:</strong> Uygulama içi satın alımlara
-      (altın paketleri ve Premium abonelik) ilişkin işlem doğrulama kayıtları.
-      <strong>Kredi kartı / ödeme aracı bilgilerinizi biz saklamayız</strong>;
-      tüm ödemeler Apple App Store veya Google Play üzerinden işlenir.</li>
+      <li><strong>Satın alma kayıtları:</strong> Uygulamanın güncel sürümünde
+      <strong>uygulama içi satın alım yoktur</strong>; uygulama tamamen
+      ücretsizdir. İleride uygulama içi satın alım sunulursa yalnızca işlem
+      doğrulama kayıtları tutulur. <strong>Kredi kartı / ödeme aracı
+      bilgilerinizi hiçbir durumda biz saklamayız</strong>; olası ödemeler
+      Apple App Store veya Google Play üzerinden işlenir.</li>
     </ul>
 
     <h2>3. İzleme ve Reklam Yok</h2>
@@ -121,16 +123,17 @@ _PRIVACY_BODY = f"""
       doğrulamak.</li>
       <li>Oyun deneyimini sunmak: eşleştirme yapmak, skor ve liderlik
       tablolarını yönetmek.</li>
-      <li>Uygulama içi satın alımları (altın paketleri ve Premium abonelik)
-      işlemek ve doğrulamak.</li>
+      <li>(Sunulması halinde) uygulama içi satın alımları işlemek ve
+      doğrulamak.</li>
       <li>Hizmetin güvenliğini sağlamak, kötüye kullanımı ve hileyi önlemek.</li>
       <li>Yasal yükümlülüklerimizi yerine getirmek.</li>
     </ul>
 
     <h2>5. Üçüncü Taraflar ve Veri Paylaşımı</h2>
-    <p>Verileriniz yalnızca hizmetin sunulması için gerekli ölçüde, uygulama içi
-    satın alımların işlenmesi ve doğrulanması amacıyla <strong>Apple App
-    Store</strong> ve <strong>Google Play</strong> ile paylaşılabilir. Bunun
+    <p>Verileriniz yalnızca hizmetin sunulması için gerekli ölçüde paylaşılır
+    (ör. sunucu barındırma sağlayıcısı). Uygulama içi satın alım sunulması
+    halinde, satın alımların işlenmesi ve doğrulanması amacıyla <strong>Apple
+    App Store</strong> ve <strong>Google Play</strong> ile paylaşılabilir. Bunun
     dışında verilerinizi reklam veya pazarlama amacıyla üçüncü taraflarla
     paylaşmayız.</p>
 
@@ -184,8 +187,7 @@ _TERMS_BODY = f"""
     <h2>1. Hizmetin Tanımı</h2>
     <p>Uygulama; gerçek zamanlı, çok oyunculu bir bilgi yarışması (trivia)
     deneyimidir. Maçlara katılabilir, skorlarınızı ve liderlik tablosundaki
-    sıralamanızı görebilir, isteğe bağlı olarak uygulama içi satın alımlardan
-    yararlanabilirsiniz.</p>
+    sıralamanızı görebilirsiniz. Uygulamanın güncel sürümü tamamen ücretsizdir.</p>
 
     <h2>2. Hesap Kuralları</h2>
     <ul>
@@ -212,13 +214,16 @@ _TERMS_BODY = f"""
 
     <h2>4. Uygulama İçi Satın Almalar, Abonelik ve Otomatik Yenileme</h2>
     <ul>
-      <li>Uygulama, sanal para (altın) paketleri ve <strong>Premium
-      abonelik</strong> gibi uygulama içi satın alımlar sunar. Tüm satın alımlar
-      Apple App Store veya Google Play üzerinden işlenir ve ilgili mağazanın
-      kurallarına tabidir.</li>
-      <li><strong>Otomatik yenileme:</strong> Premium abonelik, geçerli dönem
-      sonunda otomatik olarak yenilenir. Mevcut dönem bitmeden en az 24 saat önce
-      iptal etmediğiniz sürece ücret bir sonraki dönem için tahsil edilir.</li>
+      <li>Uygulamanın güncel sürümü <strong>tamamen ücretsizdir</strong> ve
+      gerçek parayla uygulama içi satın alım içermez. Uygulama ileride sanal
+      para (altın) paketleri ve <strong>Premium abonelik</strong> gibi uygulama
+      içi satın alımlar sunabilir; aşağıdaki koşullar bu durumda geçerli olur.
+      Tüm satın alımlar Apple App Store veya Google Play üzerinden işlenir ve
+      ilgili mağazanın kurallarına tabidir.</li>
+      <li><strong>Otomatik yenileme:</strong> Sunulması halinde Premium
+      abonelik, geçerli dönem sonunda otomatik olarak yenilenir. Mevcut dönem
+      bitmeden en az 24 saat önce iptal etmediğiniz sürece ücret bir sonraki
+      dönem için tahsil edilir.</li>
       <li><strong>İptal:</strong> Aboneliğinizi istediğiniz zaman cihazınızdaki
       App Store veya Google Play hesap ayarlarından yönetebilir ve iptal
       edebilirsiniz. İptal, mevcut faturalandırma döneminin sonunda yürürlüğe girer.</li>

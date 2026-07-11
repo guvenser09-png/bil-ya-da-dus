@@ -41,13 +41,15 @@ class SettingsScreen extends ConsumerWidget {
                       _toggle(Icons.volume_up_outlined, 'Ses Efektleri', settings.soundEnabled, notifier.setSoundEnabled),
                       _toggle(Icons.music_note_outlined, 'Arka Plan Müziği', settings.musicEnabled, notifier.setMusicEnabled),
                       _toggle(Icons.vibration_rounded, 'Titreşim (Haptic)', settings.hapticEnabled, notifier.setHapticEnabled),
-                      _header('BİLDİRİMLER'),
-                      _toggle(Icons.notifications_outlined, 'Oyun Bildirimleri', settings.notificationsEnabled, notifier.setNotificationsEnabled),
-                      _toggle(Icons.person_add_alt_1_outlined, 'Arkadaşlık İstekleri', settings.friendRequestNotifs, notifier.setFriendRequestNotifs),
-                      _header('GİZLİLİK'),
-                      _toggle(Icons.explore_outlined, 'Profil Keşfine İzin Ver', settings.discoverable, notifier.setDiscoverable),
+                      // NOT (İLK LANSMAN): "Oyun Bildirimleri", "Arkadaşlık
+                      // İstekleri" ve "Profil Keşfine İzin Ver" anahtarları
+                      // kaldırıldı — uygulamada push bildirimi ve profil keşfi
+                      // davranışı YOK; hiçbir şeyi kontrol etmeyen anahtar
+                      // Apple 2.1 (tamamlanmışlık) riski. Bu özellikler
+                      // gerçekten eklendiğinde settings_provider'daki alanlarla
+                      // birlikte geri getirilebilir.
                       _header('HAKKINDA'),
-                      _info(Icons.info_outline_rounded, 'Versiyon', '1.0.0 (build 1)'),
+                      _info(Icons.info_outline_rounded, 'Versiyon', '1.0.0'),
                       _link(Icons.description_outlined, 'Kullanım Koşulları',
                           () => context.push('/legal/terms')),
                       _link(Icons.privacy_tip_outlined, 'Gizlilik Politikası',
@@ -128,7 +130,7 @@ class SettingsScreen extends ConsumerWidget {
         title: const Text('Hata Bildir'),
         content: const Text(
           'Karşılaştığınız hata veya önerilerinizi şu adrese iletebilirsiniz:\n\n'
-          'destek@bilyadadus.com',
+          'guvenser09@gmail.com',
         ),
         actions: [
           TextButton(

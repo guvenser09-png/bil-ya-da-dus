@@ -19,7 +19,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _OnboardingPage(
       icon: Icons.groups_rounded,
       color: AppTheme.cPrimaryContainer,
-      title: '20 Oyuncu, 5 Tur!',
+      title: '12 Oyuncu, 5 Tur!',
       subtitle: 'Her turda yanlış cevap verenler elenir. Son ayakta kalan şampiyon olur!',
     ),
     _OnboardingPage(

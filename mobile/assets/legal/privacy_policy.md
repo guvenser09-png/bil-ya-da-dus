@@ -24,10 +24,11 @@ Uygulamayı kullanırken yalnızca aşağıdaki verileri toplarız:
   görünen ad, seçtiğiniz karakter (avatar).
 - **Oyun verileri:** Oyun istatistikleri, skorlar, sıralama (liderlik tablosu)
   bilgileri, oynanan maçlar ve eşleşme geçmişi.
-- **Satın alma kayıtları:** Uygulama içi satın alımlara (altın paketleri,
-  Premium abonelik) ilişkin işlem kayıtları. **Kredi kartı / ödeme aracı
-  bilgilerinizi biz görmez ve saklamayız**; tüm ödemeler Apple App Store veya
-  Google Play üzerinden işlenir.
+- **Satın alma kayıtları:** Uygulamanın güncel sürümünde **uygulama içi satın
+  alım yoktur**; uygulama tamamen ücretsizdir. İleride uygulama içi satın alım
+  sunulursa yalnızca işlem doğrulama kayıtları tutulur. **Kredi kartı / ödeme
+  aracı bilgilerinizi hiçbir durumda biz görmez ve saklamayız**; olası ödemeler
+  Apple App Store veya Google Play üzerinden işlenir.
 
 **Yapmadıklarımız:** Uygulamada **reklam yoktur**, sizi **takip etmeyiz**
 (no tracking), reklam/analiz amaçlı **üçüncü taraf izleyici (SDK) kullanmayız**,
@@ -40,7 +41,7 @@ Topladığımız verileri yalnızca şu amaçlarla kullanırız:
 - Hesabınızı oluşturmak, oturum açmanızı sağlamak ve kimliğinizi doğrulamak.
 - Oyun deneyimini sunmak, eşleştirme yapmak, skor ve liderlik tablolarını
   yönetmek.
-- Uygulama içi satın alımları işlemek ve doğrulamak.
+- (Sunulması halinde) uygulama içi satın alımları işlemek ve doğrulamak.
 - Uygulamayı çalıştırmak, hataları gidermek, güvenliği ve kötüye kullanımı
   önlemek.
 - Yasal yükümlülüklerimizi yerine getirmek.
@@ -50,8 +51,8 @@ Topladığımız verileri yalnızca şu amaçlarla kullanırız:
 Verileriniz yalnızca hizmetin sunulması için gerekli ölçüde şu taraflarla
 paylaşılabilir:
 
-- **Apple App Store / Google Play:** Uygulama içi satın alımların işlenmesi ve
-  makbuz doğrulaması için.
+- **Apple App Store / Google Play:** Uygulama içi satın alım sunulması halinde,
+  satın alımların işlenmesi ve makbuz doğrulaması için.
 - **Sunucu altyapısı (hosting):** Hesap ve oyun verilerinin barındırıldığı
   sunucu sağlayıcısı.
 

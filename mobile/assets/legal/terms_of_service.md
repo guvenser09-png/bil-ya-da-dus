@@ -31,8 +31,10 @@ sonuçlanabilir.
 
 ## 3. Sanal Para ve Uygulama İçi Satın Almalar
 
-- Uygulama, sanal para birimleri (ör. **coin**, **gem**) ve **premium**
-  içerikler/abonelikler gibi uygulama içi satın alımlar sunabilir.
+- Uygulamanın güncel sürümü **tamamen ücretsizdir** ve gerçek parayla uygulama
+  içi satın alım içermez. Uygulama ileride sanal para birimleri (ör. **coin**,
+  **gem**) ve **premium** içerikler/abonelikler gibi uygulama içi satın alımlar
+  sunabilir; aşağıdaki koşullar bu durumda geçerli olur.
 - Tüm satın alımlar Apple App Store veya Google Play üzerinden işlenir ve ilgili
   mağazanın kurallarına tabidir.
 - **Sanal para ve eşyaların gerçek bir para değeri yoktur**, gerçek paraya veya
@@ -78,9 +80,9 @@ güncel Şartları kabul ettiğiniz anlamına gelir.
 ## 8. Uyuşmazlıkların Çözümü ve Geçerli Hukuk
 
 Bu Şartlar Türkiye Cumhuriyeti hukukuna tabidir. Bu Şartlardan doğan
-uyuşmazlıklarda [yetkili mahkeme ve icra daireleri / il] mahkemeleri yetkilidir.
-Tüketici mevzuatından doğan haklarınız saklıdır.
+uyuşmazlıklarda Türkiye Cumhuriyeti'nin yetkili mahkemeleri ve icra daireleri
+yetkilidir. Tüketici mevzuatından doğan haklarınız saklıdır.
 
 ## 9. İletişim
 
-Sorularınız için: **destek@bilyadadus.com**
+Sorularınız için: **guvenser09@gmail.com**
