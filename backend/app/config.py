@@ -51,6 +51,10 @@ class Settings(BaseSettings):
     # Anthropic AI
     ANTHROPIC_API_KEY: str = ""
 
+    # Admin analitik ucu paylaşılan anahtarı (JWT değil). Boşsa /api/admin/metrics
+    # tamamen kapalıdır (403). Production'da güçlü rastgele bir değer set edin.
+    ADMIN_METRICS_KEY: str = ""
+
     # Game Settings
     LOBBY_TIMEOUT_SECONDS: int = 15
     MIN_PLAYERS: int = 5

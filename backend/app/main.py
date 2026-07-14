@@ -13,6 +13,7 @@ from app.middleware.rate_limit import RateLimitMiddleware
 from app.redis_client import close_redis, get_redis
 from app.api.router import api_router
 from app.api.legal import router as legal_router
+from app.api.admin_metrics import router as admin_metrics_router
 from app.ws.lobby import router as ws_lobby_router
 from app.ws.game import router as ws_game_router
 from app.ws.room import router as ws_room_router
@@ -154,6 +155,10 @@ app.add_middleware(RateLimitMiddleware)
 
 # Include API routes
 app.include_router(api_router, prefix="/api")
+
+# Admin analitik ucu (paylaşılan-anahtar korumalı; JWT değil). Tam yol:
+# /api/admin/metrics?key=<ADMIN_METRICS_KEY>. Hafif, SDK'sız DAU/retention.
+app.include_router(admin_metrics_router, prefix="/api/admin", tags=["Admin"])
 
 # Herkese açık (auth'suz) yasal sayfalar. App Store Connect "Privacy Policy URL"
 # zorunlu + abonelik (3.1.2) için EULA gerekir. /api altında DEĞİL: deploy edilince

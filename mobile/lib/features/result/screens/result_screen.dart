@@ -2,6 +2,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quizroyale/core/services/review_service.dart';
 import 'package:quizroyale/core/services/sound_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
@@ -30,6 +31,8 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
   // Kutlama (konfeti + havai fişek + alkış) yalnızca BİR kez tetiklenir.
   bool _celebrated = false;
   bool _showFireworks = false;
+  // Puan istemi maç sayacı bu ekran örneğinde yalnızca BİR kez artsın.
+  bool _matchRecorded = false;
 
   @override
   void initState() {
@@ -47,10 +50,19 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
       // giriş animasyonunu burada başlatırız.
       final state = ref.read(resultProvider(widget.gameId));
       if (state.result != null) {
+        _recordMatchPlayed();
         _introController.forward();
         if (state.isWinner) _celebrate();
       }
     });
+  }
+
+  /// Puan istemi için: bu maç bittiğinde toplam maç sayacını (bir kez) artır.
+  /// Kazansın kaybetsin her maçta sayılır ki "en az 2 maç" koşulu doğru işlesin.
+  void _recordMatchPlayed() {
+    if (_matchRecorded) return;
+    _matchRecorded = true;
+    ReviewService().recordMatchPlayed();
   }
 
   /// 🎉 Kazanan kutlaması: konfeti + tam ekran havai fişek + (fanfarın
@@ -68,6 +80,14 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
     Future.delayed(const Duration(milliseconds: 5200), () {
       if (mounted) setState(() => _showFireworks = false);
     });
+    // 🌟 NATIVE "uygulamaya puan ver" istemi — SADECE KAZANANDA (en mutlu an =
+    // en yüksek dönüşüm), kutlama oturduktan ~2.5 sn sonra. maybeAskForReview
+    // kendi içinde koşulları (en az 2 maç, 60 gün throttle, oturumda tek sefer)
+    // ve iOS kotasını yönetir; istem çıkmayabilir — bu normaldir.
+    // KURAL: puan karşılığı ödül (altın vb.) VERİLMEZ — Apple bunu yasaklar.
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      if (mounted) ReviewService().maybeAskForReview();
+    });
   }
 
   @override
@@ -83,6 +103,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
 
     ref.listen(resultProvider(widget.gameId), (prev, next) {
       if (prev?.isLoading == true && next.isLoading == false && next.result != null) {
+        _recordMatchPlayed();
         if (next.isWinner) _celebrate();
         _introController.forward();
       }

@@ -27,6 +27,7 @@ dependencies:
   audioplayers: ^6.0.0
   haptic_feedback: ^0.5.1+1
   qr_flutter: ^4.1.0
+  in_app_review: ^2.0.10
 
 dev_dependencies:
   flutter_test:

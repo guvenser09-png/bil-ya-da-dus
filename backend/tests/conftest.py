@@ -90,6 +90,18 @@ class MockRedis:
     async def exists(self, key):
         return 1 if key in _mock_redis_store else 0
 
+    async def incr(self, key):
+        # Gerçek Redis INCR: değeri int'e çevirip 1 artır, string olarak sakla
+        # (decode_responses=True → GET string döner). Analitik maç sayacı buna dayanır.
+        current = int(_mock_redis_store.get(key, 0) or 0)
+        current += 1
+        _mock_redis_store[key] = str(current)
+        return current
+
+    async def scard(self, key):
+        val = _mock_redis_store.get(key)
+        return len(val) if isinstance(val, set) else 0
+
     async def sadd(self, key, *values):
         if key not in _mock_redis_store:
             _mock_redis_store[key] = set()

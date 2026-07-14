@@ -177,4 +177,9 @@ async def get_current_user_id(
             detail="Token iptal edilmiş.",
         )
 
+    # Hafif analitik: kullanıcıyı bugünün DAU setine işaretle. Best-effort —
+    # Redis hatası tamamen yutulur, auth akışını ASLA bozmaz. (SADD çok ucuz.)
+    from app.services import analytics_service
+    await analytics_service.mark_daily_active(user_id)
+
     return user_id

@@ -520,6 +520,12 @@ async def _persist_game_results(
 
             # --- Maç sonu COIN ödülü (cap'li, idempotent, sadece coin) ---
             if not rewards_already_granted:
+                # Hafif analitik: biten maçı günlük sayaca ekle (maç başına TEK
+                # kez, idempotent blok içinde). Best-effort — Redis hatası yutulur,
+                # ödül/XP kancalarıyla çakışmaz.
+                from app.services import analytics_service
+                await analytics_service.increment_match_count()
+
                 try:
                     ranked = sorted(
                         real_players, key=lambda pl: pl.score, reverse=True
