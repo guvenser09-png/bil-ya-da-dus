@@ -74,12 +74,21 @@ def _normalise(text: str) -> str:
     return re.sub(r"\s+", " ", text.strip().lower())
 
 
-def deterministic_id(q_type: str, content: str) -> str:
+def deterministic_id(q_type: str, content: str, image_url: str | None = None) -> str:
     """Stable, collision-resistant id for idempotency.
 
     Format: ``q_<10-hex>`` (fits the String(20) primary key column).
+
+    GÖRSEL sorularda ``image_url`` da hash'e girer: bayrak sorularının METNİ
+    hep aynıdır ("Bu bayrak hangi ülkeye aittir?") — sadece tip+içerik hash'i
+    kullanılsaydı TÜM bayrak soruları AYNI id'ye çöker ve yalnızca biri
+    eklenirdi. Görsel olmayan sorularda davranış DEĞİŞMEZ (image_url yok →
+    eski hash girdisiyle birebir aynı id üretilir, mevcut kayıtlar korunur).
     """
-    digest = hashlib.sha1(f"{q_type}|{_normalise(content)}".encode()).hexdigest()
+    key = f"{q_type}|{_normalise(content)}"
+    if image_url:
+        key += f"|{image_url.strip()}"
+    digest = hashlib.sha1(key.encode()).hexdigest()
     return f"q_{digest[:14]}"
 
 
@@ -114,7 +123,7 @@ def validate(raw: dict, idx: int) -> None:
 
 def build_question(raw: dict) -> Question:
     q_type = TYPE_MAP[raw["type"]]
-    q_id = deterministic_id(raw["type"], raw["content"])
+    q_id = deterministic_id(raw["type"], raw["content"], raw.get("image_url"))
     return Question(
         id=q_id,
         type=q_type,
@@ -166,7 +175,7 @@ def validate_only(path: Path) -> None:
     seen: dict[str, int] = {}
     dupes = 0
     for i, raw in enumerate(questions):
-        qid = deterministic_id(raw["type"], raw["content"])
+        qid = deterministic_id(raw["type"], raw["content"], raw.get("image_url"))
         if qid in seen:
             print(f"  DUPE: #{i} aynı içerik #{seen[qid]} ile (id={qid})")
             dupes += 1

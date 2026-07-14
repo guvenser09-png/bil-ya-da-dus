@@ -19,6 +19,7 @@
 | **Contact Info > Email Address** | Evet | App Functionality (hesap/giriş) | Linked to identity | Hayır |
 | **Contact Info > Phone Number** (telefonla giriş kullanılıyorsa) | Evet | App Functionality (hesap/giriş) | Linked to identity | Hayır |
 | **Identifiers > User ID** | Evet | App Functionality (oyun ilerlemesi, eşleşme, liderlik) | Linked to identity | Hayır |
+| **Identifiers > Device ID** | Evet | App Functionality (misafir girişi cihaz kimliği + **push bildirim token'ı**) | Linked to identity | Hayır |
 | **User Content > Other (kullanıcı adı/profil)** | Evet | App Functionality | Linked to identity | Hayır |
 | **Purchases > Purchase History** | Evet | App Functionality (IAP/abonelik durumu) | Linked to identity | Hayır |
 | **Usage Data > Product Interaction** | Evet (uygulama içi olay/oyun istatistiği) | App Functionality (ve Analytics — yalnızca dahili kullanıyorsanız) | Linked to identity | Hayır |

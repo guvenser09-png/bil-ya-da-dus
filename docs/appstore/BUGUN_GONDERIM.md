@@ -86,7 +86,8 @@ Başka HİÇBİR kutu işaretlenmeyecek (Location yok, Contacts yok, Purchases y
 **Neden bunlar (Apple sorarsa / kendin bilesin):**
 - Email → kayıtlı hesap girişi (misafirde toplanmaz ama kayıt seçeneği var).
 - User ID → sunucudaki hesap kimliği.
-- Device ID → misafir girişindeki cihaz kimliği (uygulamanın ürettiği kalıcı kimlik).
+- Device ID → misafir girişindeki cihaz kimliği (uygulamanın ürettiği kalıcı kimlik)
+  **ve** bildirim (push) token'ı. İkisi de yalnızca uygulama işlevi için; reklam/izleme YOK.
 - Gameplay Content → maç skorları/istatistikler (liderlik tablosunda görünür).
 - Other User Content → kullanıcı adı, profil bilgileri, ilgi alanları.
 

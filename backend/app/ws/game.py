@@ -561,6 +561,25 @@ async def _persist_game_results(
                         "Game %s: maç XP'si verilemedi: %s", game_id, exc
                     )
 
+                # --- Günlük görev ilerlemesi (retention omurgası) ---
+                # "3 maç oyna", "bir maçta 3 doğru bil", "finale kal", "bir maç
+                # kazan". Redis'te tutulur; ödül oyuncu "AL" deyince verilir.
+                # Best-effort: hata yutulur, coin/XP/kalkan akışını ETKİLEMEZ.
+                try:
+                    from app.services import quest_service
+                    for pl in real_players:
+                        await quest_service.record_match_end(
+                            pl.user_id,
+                            won=(pl.username == winner_username),
+                            correct_answers=int(getattr(pl, "correct_answers", 0)),
+                            # eliminated_at_round None → hiç elenmedi → finale kaldı.
+                            reached_final=(pl.eliminated_at_round is None),
+                        )
+                except Exception as exc:
+                    logger.warning(
+                        "Game %s: görev ilerlemesi güncellenemedi: %s", game_id, exc
+                    )
+
                 # --- Kalkan bedeli (🛡️💰): ödüllerden SONRA tahsil et ---
                 # Kırılan kalkan başına SHIELD_COST altın; bakiye yetmezse
                 # HİÇ düşülmez (hediye). Botlar zaten real_players dışında.

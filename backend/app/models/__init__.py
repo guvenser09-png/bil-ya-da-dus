@@ -1,6 +1,7 @@
 """SQLAlchemy models package — import all models here for Alembic auto-detection."""
 
 from app.models.user import User
+from app.models.device_token import DeviceToken
 from app.models.game import Game, GameParticipant
 from app.models.question import Question, QuestionHistory
 from app.models.leaderboard import LeaderboardDaily, LeaderboardWeekly, LeaderboardSeasonal
@@ -12,6 +13,7 @@ from app.models.tournament import SeasonScore, SeasonSettlement
 
 __all__ = [
     "User",
+    "DeviceToken",
     "Game",
     "GameParticipant",
     "Question",

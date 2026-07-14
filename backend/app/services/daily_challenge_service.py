@@ -4,10 +4,22 @@ Each day at midnight TRT (UTC+3), a new set of 5 questions is selected.
 Players can play the daily challenge once per day.
 Scores go to a separate leaderboard, not the main one.
 
+COIN ÖDÜLÜ (retention omurgası): tamamlayınca taban 100 altın + her doğru için
+20 altın → 5/5 doğru = 200 altın. Günde BİR kez (Redis SET NX ile idempotent).
+
+Ödül havuzu kararı — maç ödülünün günlük cap'inden (MATCH_REWARD_DAILY_CAP=500)
+AYRIDIR. Gerekçe: o cap tekrar tekrar oynanabilen maçlar için bir anti-farm
+önlemidir; Günün 5 Sorusu doğası gereği günde bir kez oynanır ve üst sınırı
+zaten yapısal olarak 200 altındır — farm edilemez. Aynı havuza konsaydı, cap'i
+dolduran EN AKTİF oyuncular günlük sorudan hiç altın alamaz, yani geri dönüş
+teşviki tam da en sadık kullanıcıda çalışmazdı. Bu yüzden ayrı havuz.
+
 Redis keys:
 - daily_challenge:{YYYY-MM-DD}           → JSON list of 5 question dicts (TTL 48h)
 - daily_challenge_played:{user_id}:{YYYY-MM-DD} → "1" (TTL 48h, marks as played)
 - daily_challenge_score:{YYYY-MM-DD}     → Sorted Set {user_id: score} (TTL 8 days)
+- daily_challenge_result:{user_id}:{YYYY-MM-DD} → JSON sonuç (paylaşım kartı, TTL 48h)
+- daily_challenge_streak:{user_id}       → JSON {streak, last_date} (TTL 60 gün)
 """
 
 import json
@@ -22,7 +34,22 @@ logger = logging.getLogger(__name__)
 _TRT_ZONE = ZoneInfo("Europe/Istanbul")  # UTC+3
 _QUESTIONS_TTL = 172800   # 48 hours
 _PLAYED_TTL = 172800      # 48 hours
+_RESULT_TTL = 172800      # 48 hours
+_STREAK_TTL = 5184000     # 60 gün (seri kopunca zaten sıfırlanır)
 _LEADERBOARD_TTL = 691200  # 8 days
+
+# --- Coin ödülü (ayrı havuz; bkz. modül başlığı) ---
+DAILY_CHALLENGE_BASE_REWARD = 100   # tamamlama tabanı
+DAILY_CHALLENGE_PER_CORRECT = 20    # her doğru için ek
+DAILY_CHALLENGE_MAX_REWARD = (
+    DAILY_CHALLENGE_BASE_REWARD + 5 * DAILY_CHALLENGE_PER_CORRECT
+)  # 200
+
+
+def reward_for_correct_count(correct_count: int) -> int:
+    """Doğru sayısını coin ödülüne çevir (taban 100 + doğru başına 20, maks 200)."""
+    safe = max(0, min(5, int(correct_count)))
+    return DAILY_CHALLENGE_BASE_REWARD + safe * DAILY_CHALLENGE_PER_CORRECT
 
 
 # ---------------------------------------------------------------------------
@@ -189,6 +216,206 @@ async def submit_score(user_id: str, score: int) -> int:
     except Exception as exc:
         logger.warning("daily_challenge submit_score failed for %s: %s", user_id, exc)
         return 0
+
+
+async def try_mark_played(user_id: str) -> bool:
+    """Bugünün oynama hakkını ATOMİK olarak rezerve et (SET NX).
+
+    İdempotency'nin kalbi: aynı kullanıcı aynı gün iki kez skor gönderirse
+    (çift dokunuş, ağ tekrarı) İKİNCİ çağrı False döner → coin bir kez verilir.
+
+    Returns:
+        True  — hak bu çağrıda alındı (ödül verilebilir).
+        False — bugün zaten oynanmış (ödül YOK).
+    """
+    date_key = await get_today_key()
+    redis_key = f"daily_challenge_played:{user_id}:{date_key}"
+    try:
+        client = await get_redis()
+        first = await client.set(redis_key, "1", ex=_PLAYED_TTL, nx=True)
+        return first is not None
+    except Exception as exc:
+        logger.warning("daily_challenge try_mark_played failed for %s: %s", user_id, exc)
+        # Redis yoksa oyuncuyu cezalandırma: oynasın (ödül best-effort verilir).
+        return True
+
+
+# ---------------------------------------------------------------------------
+# Cevap değerlendirme (paylaşım kartının 🟩🟥 ızgarası buradan çıkar)
+# ---------------------------------------------------------------------------
+
+def _tolerance_for(question: dict) -> float:
+    """Tahmin (slider) sorusu için tolerans bandı — maç motoruyla AYNI kural.
+
+    Aralığın %10'u; aralık yoksa |doğru cevap|'ın %10'u; o da yoksa 1.0 taban.
+    """
+    real = float(question.get("real_answer", question.get("correct_answer", 0)) or 0)
+    min_val = question.get("min_value")
+    max_val = question.get("max_value")
+    if min_val is not None and max_val is not None and float(max_val) > float(min_val):
+        return 0.10 * (float(max_val) - float(min_val))
+    return max(0.10 * abs(real), 1.0)
+
+
+def grade_answers(questions: list[dict], answers: list) -> list[bool]:
+    """Oyuncunun cevaplarını SUNUCUDA değerlendir → [True, False, ...] dizisi.
+
+    Doğru cevaplar istemciye HİÇ gönderilmez (games.py onları soyar); bu yüzden
+    doğru/yanlış kararı yalnızca burada verilir — istemci "5/5 yaptım" diyemez.
+
+    Args:
+        questions: Günün soruları (correct_answer/real_answer DAHİL).
+        answers:   Soru sırasıyla cevaplar. Şıklı tiplerde index (int),
+                   'tahmin' tipinde sayı. Cevapsız/geçersiz → yanlış.
+
+    Returns:
+        Soru sayısı kadar bool listesi (eksik cevap = False).
+    """
+    results: list[bool] = []
+    for i, q in enumerate(questions):
+        given = answers[i] if i < len(answers) else None
+        if given is None:
+            results.append(False)
+            continue
+        try:
+            if q.get("type") == "tahmin":
+                real = float(q.get("real_answer", q.get("correct_answer", 0)) or 0)
+                results.append(abs(float(given) - real) <= _tolerance_for(q))
+            else:
+                results.append(int(given) == int(q.get("correct_answer", -1)))
+        except (TypeError, ValueError):
+            results.append(False)
+    return results
+
+
+# ---------------------------------------------------------------------------
+# Seri (streak) — "kaç gün üst üste Günün 5 Sorusu'nu oynadın"
+# ---------------------------------------------------------------------------
+
+async def get_streak(user_id: str) -> int:
+    """Kullanıcının güncel Günün 5 Sorusu serisi (bugün oynamadıysa da geçerli).
+
+    Dün ya da bugün oynanmışsa seri canlıdır; daha eskiyse KOPMUŞTUR → 0.
+    """
+    try:
+        client = await get_redis()
+        raw = await client.get(f"daily_challenge_streak:{user_id}")
+        if not raw:
+            return 0
+        data = json.loads(raw)
+        last = data.get("last_date")
+        streak = int(data.get("streak", 0))
+        today = await get_today_key()
+        yesterday = (
+            datetime.now(tz=_TRT_ZONE) - timedelta(days=1)
+        ).strftime("%Y-%m-%d")
+        if last in (today, yesterday):
+            return streak
+        return 0  # seri kopmuş
+    except Exception as exc:
+        logger.warning("daily_challenge get_streak failed for %s: %s", user_id, exc)
+        return 0
+
+
+async def bump_streak(user_id: str) -> int:
+    """Bugün oynandığında seriyi güncelle ve YENİ seri değerini döndür.
+
+    Dün oynanmışsa +1, bugün zaten işlenmişse aynı kalır, aksi halde 1'e döner.
+    """
+    today = await get_today_key()
+    yesterday = (datetime.now(tz=_TRT_ZONE) - timedelta(days=1)).strftime("%Y-%m-%d")
+    try:
+        client = await get_redis()
+        key = f"daily_challenge_streak:{user_id}"
+        raw = await client.get(key)
+        data = json.loads(raw) if raw else {}
+        last = data.get("last_date")
+        streak = int(data.get("streak", 0))
+
+        if last == today:
+            new_streak = max(1, streak)  # bugün zaten sayılmış
+        elif last == yesterday:
+            new_streak = streak + 1
+        else:
+            new_streak = 1
+
+        await client.set(
+            key,
+            json.dumps({"streak": new_streak, "last_date": today}),
+            ex=_STREAK_TTL,
+        )
+        return new_streak
+    except Exception as exc:
+        logger.warning("daily_challenge bump_streak failed for %s: %s", user_id, exc)
+        return 1
+
+
+# ---------------------------------------------------------------------------
+# Sonuç anlık görüntüsü — ana ekran kartı + paylaşım kartı bunu okur
+# ---------------------------------------------------------------------------
+
+async def save_result(user_id: str, result: dict) -> None:
+    """Bugünün sonucunu sakla (48h) — oyuncu uygulamayı kapatsa da kart dolu kalır."""
+    date_key = await get_today_key()
+    try:
+        client = await get_redis()
+        await client.set(
+            f"daily_challenge_result:{user_id}:{date_key}",
+            json.dumps(result),
+            ex=_RESULT_TTL,
+        )
+    except Exception as exc:
+        logger.warning("daily_challenge save_result failed for %s: %s", user_id, exc)
+
+
+async def get_result(user_id: str) -> dict | None:
+    """Bugünün kayıtlı sonucunu döndür; oynanmadıysa/bulunamazsa None."""
+    date_key = await get_today_key()
+    try:
+        client = await get_redis()
+        raw = await client.get(f"daily_challenge_result:{user_id}:{date_key}")
+        return json.loads(raw) if raw else None
+    except Exception as exc:
+        logger.warning("daily_challenge get_result failed for %s: %s", user_id, exc)
+        return None
+
+
+async def get_rank_and_total(user_id: str) -> tuple[int, int]:
+    """Bugünün sıralamasında (sıra, toplam oyuncu) ikilisi. Bulunamazsa (0, 0)."""
+    date_key = await get_today_key()
+    leaderboard_key = f"daily_challenge_score:{date_key}"
+    try:
+        client = await get_redis()
+        rank_zero = await client.zrevrank(leaderboard_key, user_id)
+        total = await client.zcard(leaderboard_key)
+        rank = (rank_zero + 1) if rank_zero is not None else 0
+        return rank, int(total or 0)
+    except Exception as exc:
+        logger.warning("daily_challenge get_rank_and_total failed for %s: %s", user_id, exc)
+        return 0, 0
+
+
+def percentile_for(rank: int, total: int) -> int:
+    """"En iyi %X" değeri — 1. sıra → 1, sonuncu → 100. Veri yoksa 0."""
+    if rank <= 0 or total <= 0:
+        return 0
+    return max(1, min(100, round(100 * rank / total)))
+
+
+def build_share_text(results: list[bool], correct_count: int) -> str:
+    """Wordle tarzı paylaşım metni — CEVAPLARI SIZDIRMAZ, sadece emoji ızgarası.
+
+    Örnek:
+        Bil ya da Düş — Günün 5 Sorusu
+        🟩🟩🟥🟩🟥 4/5
+        Sen kaç yaparsın?
+    """
+    grid = "".join("🟩" if ok else "🟥" for ok in results)
+    return (
+        "Bil ya da Düş — Günün 5 Sorusu\n"
+        f"{grid} {correct_count}/{len(results)}\n"
+        "Sen kaç yaparsın?"
+    )
 
 
 async def get_daily_leaderboard(limit: int = 100) -> list[dict]:

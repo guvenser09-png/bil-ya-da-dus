@@ -55,6 +55,21 @@ class Settings(BaseSettings):
     # tamamen kapalıdır (403). Production'da güçlü rastgele bir değer set edin.
     ADMIN_METRICS_KEY: str = ""
 
+    # Push bildirimleri (Firebase Cloud Messaging HTTP v1).
+    #
+    # Firebase Console → Proje ayarları → Hizmet hesapları → "Yeni özel anahtar
+    # oluştur" ile inilen service account JSON'unun TAMAMI (tek satır) buraya
+    # konur. Railway'de Variables'a `FIREBASE_SERVICE_ACCOUNT_JSON` olarak
+    # yapıştırılır (bkz. docs/FIREBASE_KURULUM.md).
+    #
+    # BOŞSA: push tamamen DEVRE DIŞIDIR — PushService fonksiyonları no-op olur
+    # (log + sessiz dönüş). Uygulama ASLA patlamaz; token kaydı ucu yine çalışır
+    # (token'lar toplanır, gönderim yapılmaz).
+    #
+    # Kolaylık: hem düz JSON hem base64-kodlanmış JSON kabul edilir (bazı
+    # panellerde çok satırlı JSON yapıştırmak sorun çıkarır).
+    FIREBASE_SERVICE_ACCOUNT_JSON: str = ""
+
     # Game Settings
     LOBBY_TIMEOUT_SECONDS: int = 15
     MIN_PLAYERS: int = 5

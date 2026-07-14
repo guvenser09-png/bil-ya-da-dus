@@ -2,10 +2,13 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quizroyale/core/services/claim_prompt_service.dart';
 import 'package:quizroyale/core/services/review_service.dart';
 import 'package:quizroyale/core/services/sound_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
+import 'package:quizroyale/features/auth/widgets/claim_account_sheet.dart';
+import 'package:quizroyale/features/leaderboard/providers/rank_projection_provider.dart';
 import 'package:quizroyale/features/result/providers/result_provider.dart';
 import 'package:quizroyale/features/result/widgets/fireworks_overlay.dart';
 import 'package:quizroyale/features/store/providers/store_provider.dart';
@@ -33,6 +36,9 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
   bool _showFireworks = false;
   // Puan istemi maç sayacı bu ekran örneğinde yalnızca BİR kez artsın.
   bool _matchRecorded = false;
+  // Misafir daveti kararı (sayaç + sıklık kuralı) bir kez değerlendirilir.
+  bool _claimEvaluated = false;
+  bool _showClaimInvite = false;
 
   @override
   void initState() {
@@ -51,6 +57,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
       final state = ref.read(resultProvider(widget.gameId));
       if (state.result != null) {
         _recordMatchPlayed();
+        _maybeOfferClaim(state.isWinner);
         _introController.forward();
         if (state.isWinner) _celebrate();
       }
@@ -63,6 +70,25 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
     if (_matchRecorded) return;
     _matchRecorded = true;
     ReviewService().recordMatchPlayed();
+  }
+
+  /// 🏅 MİSAFİR DAVETİ — dönüşümün en yüksek olduğu an (maç sonu).
+  ///
+  /// Yalnızca MİSAFİR oyuncuya, ClaimPromptService kurallarıyla gösterilir:
+  /// şampiyonlukta her zaman (kayıp aversiyonunun zirvesi), aksi hâlde her 3
+  /// maçta bir; oyuncu bugün "şimdi değil" dediyse o gün hiç sorulmaz.
+  /// Kayıt ZORUNLU DEĞİL — davet kapatılabilir, oyun akışı hiç kesilmez.
+  Future<void> _maybeOfferClaim(bool isWinner) async {
+    if (_claimEvaluated) return;
+    _claimEvaluated = true;
+    // Misafir mi? (backend UserMeResponse.is_guest)
+    if (ref.read(authProvider).user?['is_guest'] != true) return;
+
+    final prompts = ClaimPromptService();
+    final matchCount = await prompts.recordGuestMatch();
+    final show = await prompts.shouldPrompt(isWinner: isWinner, matchCount: matchCount);
+    if (!mounted || !show) return;
+    setState(() => _showClaimInvite = true);
   }
 
   /// 🎉 Kazanan kutlaması: konfeti + tam ekran havai fişek + (fanfarın
@@ -104,6 +130,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
     ref.listen(resultProvider(widget.gameId), (prev, next) {
       if (prev?.isLoading == true && next.isLoading == false && next.result != null) {
         _recordMatchPlayed();
+        _maybeOfferClaim(next.isWinner);
         if (next.isWinner) _celebrate();
         _introController.forward();
       }
@@ -140,6 +167,14 @@ class _ResultScreenState extends ConsumerState<ResultScreen> with TickerProvider
               intro: _introController,
               onPlayAgain: () => context.go('/lobby'),
               onHome: () => context.go('/home'),
+              // 🏅 Misafir daveti: gösterme kararı ClaimPromptService'te.
+              showClaimInvite: _showClaimInvite,
+              onClaimDismissed: () {
+                // "Şimdi değil" → bugün bir daha sorma (tercih cihazda saklanır).
+                ClaimPromptService().dismissForToday();
+                setState(() => _showClaimInvite = false);
+              },
+              onClaimed: () => setState(() => _showClaimInvite = false),
             ),
           // 🎆 Havai fişek — SADECE kazananda, ~4.5 sn sürer ve biter.
           // IgnorePointer içerir → alttaki butonlar tıklanabilir kalır.
@@ -166,6 +201,9 @@ class _ResultBody extends ConsumerWidget {
     required this.intro,
     required this.onPlayAgain,
     required this.onHome,
+    required this.showClaimInvite,
+    required this.onClaimDismissed,
+    required this.onClaimed,
   });
 
   final String gameId;
@@ -173,6 +211,11 @@ class _ResultBody extends ConsumerWidget {
   final Animation<double> intro;
   final VoidCallback onPlayAgain;
   final VoidCallback onHome;
+
+  /// Misafir kayıt daveti gösterilsin mi (sıklık kuralı ekran state'inde).
+  final bool showClaimInvite;
+  final VoidCallback onClaimDismissed;
+  final VoidCallback onClaimed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -250,6 +293,17 @@ class _ResultBody extends ConsumerWidget {
                             ('DOĞRU', '$correct/$total', AppTheme.gold),
                             ('XP', '+$xp', AppTheme.cSecondary),
                           ]),
+                          // 🏅 MİSAFİR DAVETİ — bilinçli olarak PUAN şeridinin
+                          // hemen ALTINDA: oyuncu skorunu yeni okudu, kaybı tam
+                          // o anda somutlaştırıyoruz ("bu puanla 7. olurdun").
+                          if (showClaimInvite) ...[
+                            const SizedBox(height: 12),
+                            _GuestClaimInvite(
+                              isWinner: isWinner,
+                              onDismiss: onClaimDismissed,
+                              onClaimed: onClaimed,
+                            ),
+                          ],
                           // Esnek boşluk: ödüller + SORULARI GÖR sayfanın ALTINA,
                           // sabit butonların hemen üstüne yaslanır.
                           const Spacer(),
@@ -670,6 +724,126 @@ class _StatsStrip extends StatelessWidget {
                 ],
               ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 🏅 Misafir → kayıtlı dönüşüm daveti (maç sonu).
+///
+/// DEĞER ODAKLI: "kayıt ol" demez; oyuncunun bu maçta ne KAYBETTİĞİNİ söyler.
+/// Sıra tahmini (GET /api/leaderboard/projection) gelirse kayıp somut bir
+/// sayıya döner ("Bugün 7. sıradaydın"); gelmezse sade metne düşer — davet her
+/// hâlükârda anlamlı kalır.
+///
+/// ŞAMPİYONLUK ANI ayrı ve daha güçlü konuşur: kazanmışken tabloda görünmemek
+/// en yüksek kayıp aversiyonu anıdır.
+///
+/// RAHATSIZ ETMEZ: "Şimdi değil" ile kapatılır (o gün tekrar sorulmaz) ve
+/// TEKRAR OYNA akışını hiçbir şekilde engellemez.
+class _GuestClaimInvite extends ConsumerWidget {
+  const _GuestClaimInvite({
+    required this.isWinner,
+    required this.onDismiss,
+    required this.onClaimed,
+  });
+
+  final bool isWinner;
+  final VoidCallback onDismiss;
+  final VoidCallback onClaimed;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Günlük tahmin: oyuncunun BUGÜN biriken puanı (bu maç dâhil) sıralamada
+    // nereye denk gelirdi. Yüklenirken/hata olduğunda null → sade metin.
+    final projection = ref.watch(rankProjectionProvider('daily')).valueOrNull;
+    final rank = projection?.hasRank == true ? projection!.wouldBeRank : null;
+
+    final String title;
+    final String body;
+    if (isWinner) {
+      title = '🏆 Şampiyon oldun ama sıralamada yoksun!';
+      body = rank != null
+          ? 'Bugünkü puanınla $rank. sıradaydın — hesabını kaydet, adını tabloya yaz.'
+          : 'Misafir oynuyorsun: puanların birikiyor ama tabloda görünmüyorsun.';
+    } else if (rank != null) {
+      title = '🏅 Bugün $rank. sıradaydın';
+      body = 'Ama misafirsin — puanların tabloda görünmüyor. '
+          'Hesabını kaydet, sıralamaya gir.';
+    } else {
+      title = '🏅 Sıralamada görünmüyorsun';
+      body = 'Puanların kaydediliyor ama misafir olduğun için tabloda yoksun. '
+          'Hesabını kaydet, sıralamaya gir.';
+    }
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: [
+            AppTheme.gold.withValues(alpha: 0.18),
+            AppTheme.gold.withValues(alpha: 0.05),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        border: Border.all(color: AppTheme.gold.withValues(alpha: 0.55), width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: BiladaText.title(color: AppTheme.gold, size: 14)),
+          const SizedBox(height: 3),
+          Text(body,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: BiladaText.label(color: AppTheme.cOnSurfaceVariant, size: 11)),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              // "Şimdi değil" — davet ASLA zorlayıcı değil (Apple 5.1.1 + tasarım
+              // kararımız: misafir oyun sonsuza kadar oynanabilir).
+              TextButton(
+                onPressed: onDismiss,
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text('Şimdi değil',
+                    style: BiladaText.label(color: AppTheme.cOnSurfaceVariant, size: 12)),
+              ),
+              const Spacer(),
+              ChunkyButton(
+                height: 40,
+                depth: 4,
+                expand: false,
+                color: AppTheme.gold,
+                foreground: AppTheme.cOnPrimaryContainer,
+                shadowColor: const Color(0xFF8A6A00),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                onPressed: () async {
+                  final claimed = await showClaimAccountSheet(
+                    context,
+                    currentUsername:
+                        (ref.read(authProvider).user?['username'] ?? '').toString(),
+                    title: rank != null ? '$rank. sıraya adını yaz' : 'Sıralamaya gir',
+                    subtitle: rank != null
+                        ? 'E-posta ve şifre yeter — biriken puanların anında '
+                            'sıralamada görünsün.'
+                        : null,
+                  );
+                  if (claimed) onClaimed();
+                },
+                child: const Text('SIRALAMAYA GİR', style: TextStyle(fontSize: 13)),
+              ),
+            ],
+          ),
         ],
       ),
     );

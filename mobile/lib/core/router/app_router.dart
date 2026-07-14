@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:quizroyale/core/services/push_service.dart';
 import 'package:quizroyale/core/storage/secure_storage.dart';
 import 'package:quizroyale/features/auth/screens/splash_screen.dart';
 import 'package:quizroyale/features/auth/screens/onboarding_screen.dart';
@@ -11,6 +12,7 @@ import 'package:quizroyale/features/auth/screens/reset_password_screen.dart';
 import 'package:quizroyale/features/account/screens/account_settings_screen.dart';
 import 'package:quizroyale/features/legal/screens/legal_viewer_screen.dart';
 import 'package:quizroyale/features/cosmetics/screens/cosmetics_screen.dart';
+import 'package:quizroyale/features/daily/screens/daily_challenge_screen.dart';
 import 'package:quizroyale/features/room/screens/room_entry_screen.dart';
 import 'package:quizroyale/features/room/screens/room_screen.dart';
 import 'package:quizroyale/features/season/screens/season_screen.dart';
@@ -28,12 +30,15 @@ import 'package:quizroyale/features/settings/screens/settings_screen.dart';
 import 'package:quizroyale/features/store/screens/store_screen.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+/// Kök navigator anahtarı. PUBLIC: push bildirimine dokunulunca (uygulama
+/// arka planda ya da kapalıyken) PushService buradan bir BuildContext bulup
+/// deep-link yönlendirmesi yapar (bkz. core/services/push_service.dart).
+final rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    navigatorKey: _rootNavigatorKey,
+    navigatorKey: rootNavigatorKey,
     initialLocation: '/',
     redirect: (context, state) async {
       bool isLoggedIn = false;
@@ -86,7 +91,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/result/:gameId',
-        builder: (_, state) => ResultScreen(gameId: state.pathParameters['gameId']!),
+        // PushPermissionGate: sonuç ekranı dosyasına dokunmadan "maç bitti"
+        // anını yakalar. İLK maçtan sonra bildirim izni burada istenir —
+        // oyuncu değeri görmüşken kabul oranı çok daha yüksek olur
+        // (bkz. core/services/push_service.dart). Görünüm etkilenmez.
+        builder: (_, state) => PushPermissionGate(
+          child: ResultScreen(gameId: state.pathParameters['gameId']!),
+        ),
       ),
       GoRoute(path: '/edit-profile', builder: (_, __) => const EditProfileScreen()),
       GoRoute(path: '/settings', builder: (_, __) => const SettingsScreen()),
@@ -94,6 +105,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/cosmetics', builder: (_, __) => const CosmeticsScreen()),
       GoRoute(path: '/room', builder: (_, __) => const RoomEntryScreen()),
       GoRoute(path: '/room/lobby', builder: (_, __) => const RoomScreen()),
+      // Günün 5 Sorusu — shell DIŞINDA tam ekran (soruya odak, alt nav yok).
+      GoRoute(path: '/daily', builder: (_, __) => const DailyChallengeScreen()),
       GoRoute(path: '/season', builder: (_, __) => const SeasonScreen()),
       GoRoute(path: '/tournament', builder: (_, __) => const TournamentScreen()),
       GoRoute(path: '/inventory', builder: (_, __) => const InventoryScreen()),

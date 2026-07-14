@@ -3,8 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
+import 'package:quizroyale/features/daily/providers/daily_challenge_provider.dart';
 import 'package:quizroyale/features/daily/providers/daily_provider.dart';
+import 'package:quizroyale/features/daily/widgets/daily_challenge_card.dart';
 import 'package:quizroyale/features/daily/widgets/daily_reward_dialog.dart';
+import 'package:quizroyale/features/quests/providers/quests_provider.dart';
+import 'package:quizroyale/features/quests/widgets/quests_card.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
@@ -20,8 +24,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     // Açılışta günlük ödül durumunu çek (otomatik dialog AÇMA — sadece rozet).
+    // Yanına GÜNÜN 5 SORUSU ve GÜNLÜK GÖREVLER durumu da gelir: ana ekran
+    // "yarın neden geri geleyim?" sorusunun cevabını ilk saniyede göstermeli.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(dailyProvider.notifier).load();
+      ref.read(dailyChallengeProvider.notifier).load();
+      ref.read(questsProvider.notifier).load();
     });
   }
 
@@ -54,11 +62,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     const SizedBox(height: 16),
                     _hero(user),
                     const SizedBox(height: 18),
+                    // BİRİNCİL AKSİYON — en büyük, en parlak buton. Aşağıdaki
+                    // günlük kartlar bunu GÖLGELEMEZ: biri mint gradyanlı ince
+                    // bir şerit, diğeri sessiz cam kart.
                     ChunkyButton(
                       height: 64,
                       onPressed: () => context.go('/lobby'),
                       child: const Text('HIZLI MAÇ'),
                     ),
+                    const SizedBox(height: 12),
+                    // GÜNLÜK DÖNÜŞ OMURGASI — birincil butonun hemen altında,
+                    // katlamanın üstünde. Bugün oynanmadıysa vurgulu "OYNA",
+                    // oynandıysa 🟩🟥 ızgarası + paylaş.
+                    const DailyChallengeCard(),
                     const SizedBox(height: 12),
                     ChunkyButton(
                       height: 56,
@@ -78,6 +94,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     // İLK LANSMAN: Turnuva (3x) kartı rafa kaldırıldı — Aşama
                     // 3'te geri açılacak (tournament_screen.dart durur, UI'dan
                     // giriş yok).
+                    const SizedBox(height: 12),
+                    // İkinci geri dönüş kancası: 3 küçük görev, ödül hazırsa
+                    // altın rozet çeker. Dokununca detay sheet açılır.
+                    const QuestsCard(),
                     const SizedBox(height: 18),
                     Row(
                       children: [

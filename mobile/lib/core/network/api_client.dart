@@ -40,8 +40,10 @@ class ApiClient {
     return res.data as Map<String, dynamic>;
   }
 
-  Future<Map<String, dynamic>> delete(String path) async {
-    final res = await _dio.delete(path);
+  /// [body]: DELETE isteği gövdesi (ör. silinecek push token'ı). Dio gövdeli
+  /// DELETE'i destekler; mevcut çağrılar gövde vermediği için geriye dönük uyumlu.
+  Future<Map<String, dynamic>> delete(String path, {dynamic body}) async {
+    final res = await _dio.delete(path, data: body);
     return res.data as Map<String, dynamic>;
   }
 

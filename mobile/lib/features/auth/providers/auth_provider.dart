@@ -1,14 +1,19 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quizroyale/core/network/api_client.dart';
+import 'package:quizroyale/core/services/push_service.dart';
 import 'package:quizroyale/core/storage/device_id_store.dart';
 import 'package:quizroyale/core/storage/secure_storage.dart';
 import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
+import 'package:quizroyale/features/daily/providers/daily_challenge_provider.dart';
 import 'package:quizroyale/features/daily/providers/daily_provider.dart';
 import 'package:quizroyale/features/friends/providers/friends_provider.dart';
 import 'package:quizroyale/features/inventory/providers/inventory_provider.dart';
 import 'package:quizroyale/features/leaderboard/providers/leaderboard_provider.dart';
 import 'package:quizroyale/features/profile/providers/profile_provider.dart';
+import 'package:quizroyale/features/quests/providers/quests_provider.dart';
 import 'package:quizroyale/features/season/providers/season_provider.dart';
 import 'package:quizroyale/features/store/providers/store_provider.dart';
 
@@ -63,6 +68,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     _ref.invalidate(seasonProvider);
     _ref.invalidate(leaderboardProvider);
     _ref.invalidate(dailyProvider);
+    // Günün 5 Sorusu + günlük görevler de kullanıcı-kapsamlı: hesap değişince
+    // önceki oyuncunun serisi/ilerlemesi ekranda kalmasın.
+    _ref.invalidate(dailyChallengeProvider);
+    _ref.invalidate(questsProvider);
     _ref.invalidate(cosmeticsProvider);
     _ref.invalidate(inventoryProvider);
     _ref.invalidate(friendsProvider);
@@ -103,6 +112,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       // Yeni oturum: önceki kullanıcının cache'lenmiş state'i sızmasın.
       _resetUserScopedProviders();
+      // Bildirim izni zaten verilmişse push token'ını YENİ hesaba bağla
+      // (izin İSTEMEZ; izin ilk maç sonunda istenir). Girişi yavaşlatmasın.
+      unawaited(PushService.instance.syncTokenAfterLogin());
       return true;
     } on DioException catch (e) {
       state = state.copyWith(
@@ -144,6 +156,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       // Yeni oturum: önceki kullanıcının cache'lenmiş state'i sızmasın.
       _resetUserScopedProviders();
+      // Bildirim izni zaten verilmişse push token'ını YENİ hesaba bağla
+      // (izin İSTEMEZ; izin ilk maç sonunda istenir). Girişi yavaşlatmasın.
+      unawaited(PushService.instance.syncTokenAfterLogin());
       return true;
     } on DioException catch (e) {
       state = state.copyWith(
@@ -187,6 +202,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
       // Yeni (misafir) oturum: önceki kullanıcının verisi ekranda kalmasın.
       _resetUserScopedProviders();
+      // Bildirim izni zaten verilmişse push token'ını bu hesaba bağla.
+      unawaited(PushService.instance.syncTokenAfterLogin());
       return true;
     } on DioException catch (e) {
       state = state.copyWith(
@@ -244,6 +261,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
+    // Push token'ını ÖNCE sil (auth token hâlâ geçerliyken): cihazı devralan
+    // bir sonraki kullanıcıya eski hesabın bildirimi gitmesin.
+    await PushService.instance.clearToken();
     try {
       await ApiClient.instance.post('/api/auth/logout');
     } catch (_) {}

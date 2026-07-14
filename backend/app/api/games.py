@@ -312,8 +312,41 @@ async def get_active_games(
 # Daily Challenge
 # ---------------------------------------------------------------------------
 
+# İstemciden gelen hız bonusunun tavanı (5 soru × 15 sn × 2 puan).
+_DAILY_SPEED_BONUS_CAP = 150
+
+
 class DailyChallengeScoreRequest(BaseModel):
-    score: int
+    """Günün 5 Sorusu gönderimi.
+
+    answers: soru sırasıyla cevaplar (şıklı tiplerde index, 'tahmin'de sayı).
+    Doğru/yanlış kararını SUNUCU verir (istemci "5/5 yaptım" diyemez); score
+    yalnızca HIZ BONUSUDUR, tavanlanır ve sıralamada eşitlik bozmaya yarar.
+    """
+
+    score: int = 0
+    answers: list | None = None
+
+
+@router.get("/daily-challenge/status")
+async def get_daily_challenge_status(
+    user_id: str = Depends(get_current_user_id),
+):
+    """Ana ekran kartının beslendiği uç — bugün oynandı mı, seri kaç, sonuç ne?
+
+    {played_today, streak, result: {correct_count, results, coins_earned,
+    score, rank, total_players, percentile, share_text} | null}
+    """
+    from app.services import daily_challenge_service as dcs
+
+    played = await dcs.has_played_today(user_id)
+    return {
+        "played_today": played,
+        "streak": await dcs.get_streak(user_id),
+        "question_count": 5,
+        "max_reward": dcs.DAILY_CHALLENGE_MAX_REWARD,
+        "result": await dcs.get_result(user_id) if played else None,
+    }
 
 
 @router.get("/daily-challenge")
@@ -349,34 +382,84 @@ async def get_daily_challenge(
 async def submit_daily_challenge_score(
     body: DailyChallengeScoreRequest,
     user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db),
 ):
-    """Submit the player's score for today's daily challenge.
+    """Günün 5 Sorusu'nu tamamla: değerlendir, COIN ver, sırala, paylaşım kartı üret.
 
-    Marks the player as having played today and records the score on the
-    daily leaderboard. Returns the player's rank.
+    - Cevaplar SUNUCUDA değerlendirilir → 🟩/🟥 dizisi (paylaşım kartı buradan).
+    - Ödül: taban 100 + her doğru 20 → maks 200 altın. Günde BİR kez (Redis SET
+      NX ile idempotent); maç ödülünün 500'lük günlük cap'inden AYRI havuz
+      (gerekçe: daily_challenge_service modül başlığı).
+    - Seri (streak) güncellenir, "Günün 5 Sorusu'nu oyna" görevi işaretlenir.
 
-    Returns 403 if already played today.
+    Bugün zaten oynandıysa 403 döner (coin tekrar verilmez).
     """
+    from app.services import quest_service
     from app.services.daily_challenge_service import (
-        has_played_today,
-        mark_as_played,
+        build_share_text,
+        get_rank_and_total,
+        get_today_questions,
+        grade_answers,
+        percentile_for,
+        reward_for_correct_count,
+        bump_streak,
+        save_result,
         submit_score,
+        try_mark_played,
     )
+    from app.services.user_service import UserService
 
-    if await has_played_today(user_id):
+    # ATOMİK hak rezervasyonu — çift gönderim ikinci kez ödül ALAMAZ.
+    if not await try_mark_played(user_id):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Bugünkü günlük meydan okumayı zaten oynadınız.",
         )
 
-    await mark_as_played(user_id)
-    rank = await submit_score(user_id, body.score)
+    questions = await get_today_questions()
+    results = grade_answers(questions, body.answers or [])
+    correct_count = sum(1 for ok in results if ok)
 
-    return {
-        "score": body.score,
+    # Skor SUNUCUDA belirlenir: sıralamayı DOĞRU SAYISI yönetir (soru başına 100),
+    # istemciden gelen hız bonusu yalnızca eşitlik bozar ve TAVANLIDIR (maks 150 =
+    # 5 soru × 15 sn × 2). Böylece istemci "score: 999999" gönderip günlük
+    # sıralamanın tepesine oturamaz.
+    speed_bonus = min(max(0, int(body.score)), _DAILY_SPEED_BONUS_CAP)
+    score = correct_count * 100 + speed_bonus
+    rank = await submit_score(user_id, score)
+    _, total_players = await get_rank_and_total(user_id)
+
+    coins_earned = reward_for_correct_count(correct_count)
+    coins_total = 0
+    try:
+        user = await UserService.get_user_by_id(db, user_id)
+        if user:
+            user.coins = (user.coins or 0) + coins_earned
+            await db.flush()
+            await db.refresh(user)
+            coins_total = user.coins
+    except Exception:  # coin verilemezse bile sonuç ekranı çalışsın
+        coins_earned = 0
+
+    streak = await bump_streak(user_id)
+    await quest_service.record_daily_challenge(user_id)
+
+    result = {
+        "score": score,
+        "correct_count": correct_count,
+        "question_count": len(results),
+        "results": results,
+        "coins_earned": coins_earned,
+        "coins": coins_total,
         "rank": rank,
+        "total_players": total_players,
+        "percentile": percentile_for(rank, total_players),
+        "streak": streak,
+        "share_text": build_share_text(results, correct_count),
         "message": "Skor kaydedildi.",
     }
+    await save_result(user_id, result)
+    return result
 
 
 @router.get("/daily-challenge/leaderboard")

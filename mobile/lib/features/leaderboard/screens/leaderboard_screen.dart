@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
+import 'package:quizroyale/features/auth/widgets/claim_account_sheet.dart';
 import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
 import 'package:quizroyale/features/leaderboard/providers/leaderboard_provider.dart';
+import 'package:quizroyale/features/leaderboard/providers/rank_projection_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 import 'package:quizroyale/shared/widgets/profile_bottom_sheet.dart';
@@ -97,7 +98,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             if (state.myEntry != null)
               _MyRankBar(entry: state.myEntry!)
             else if (state.guestHidden)
-              const _GuestInviteCard(),
+              _GuestInviteCard(tab: state.tab),
           ],
         ),
       ],
@@ -355,48 +356,105 @@ class _SeasonHowItWorksCard extends StatelessWidget {
   }
 }
 
+/// Sekmeye karşılık gelen tahmin dönemi ('daily'|'weekly'|'all_time').
+/// Sezon/arkadaşlar için tahmin yok → null (kart sade metne düşer).
+String? _projectionPeriod(LeaderboardTab tab) => switch (tab) {
+      LeaderboardTab.daily => 'daily',
+      LeaderboardTab.weekly => 'weekly',
+      LeaderboardTab.allTime => 'all_time',
+      LeaderboardTab.season || LeaderboardTab.friends => null,
+    };
+
 /// Misafir daveti — guest_hidden=true iken kendi-sıram barının yerine geçer.
-/// Buton, claim (hesabı kalıcılaştırma) akışının yaşadığı profil sekmesine
-/// götürür (oradaki "Hesabını kaydet" bandı tek dokunuşla formu açar).
-class _GuestInviteCard extends StatelessWidget {
-  const _GuestInviteCard();
+///
+/// KAYBI SOMUTLAŞTIRIR: oyuncunun puanı sıralamada NEREYE denk gelirdi onu
+/// söyler ("Bugün 7. sıradaydın") — soyut "kayıt ol" çağrısından çok daha
+/// ikna edici. Buton doğrudan claim formunu açar (profile yönlendirme YOK —
+/// sürtünme en aza iner).
+class _GuestInviteCard extends ConsumerWidget {
+  const _GuestInviteCard({required this.tab});
+  final LeaderboardTab tab;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final period = _projectionPeriod(tab);
+    // Tahmin bir SÜS: yüklenirken/hata olduğunda kart sade metinle görünür.
+    final projection = period == null
+        ? null
+        : ref.watch(rankProjectionProvider(period)).valueOrNull;
+
+    final rank = projection?.hasRank == true ? projection!.wouldBeRank : null;
+    final title = rank != null
+        ? '${_periodPrefix(tab)} $rank. sıradaydın'
+        : 'Sıralamada görünmüyorsun';
+    final subtitle = rank != null
+        ? 'Ama misafirsin — puanların tabloda görünmüyor'
+        : 'Misafir oynuyorsun — puanların birikiyor ama tabloda yoksun';
+
     return Container(
       margin: EdgeInsets.fromLTRB(20, 0, 20, 92 + MediaQuery.of(context).padding.bottom),
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       decoration: BoxDecoration(
         color: AppTheme.cSurfaceContainerHigh.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: AppTheme.gold.withValues(alpha: 0.5), width: 1.5),
       ),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('🏅', style: TextStyle(fontSize: 26)),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              'Misafir oynuyorsun — sıralamaya girmek için hesabını kaydet',
-              style: BiladaText.label(color: AppTheme.cOnSurface, size: 12),
-            ),
+          Row(
+            children: [
+              const Text('🏅', style: TextStyle(fontSize: 26)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: BiladaText.title(color: AppTheme.gold, size: 15)),
+                    const SizedBox(height: 2),
+                    Text(subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: BiladaText.label(color: AppTheme.cOnSurfaceVariant, size: 11)),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 10),
+          const SizedBox(height: 10),
           ChunkyButton(
-            height: 40,
+            height: 44,
             depth: 4,
-            expand: false,
             color: AppTheme.gold,
             foreground: AppTheme.cOnPrimaryContainer,
             shadowColor: const Color(0xFF8A6A00),
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            onPressed: () => context.go('/profile'),
-            child: const Text('KAYDET', style: TextStyle(fontSize: 13)),
+            onPressed: () => showClaimAccountSheet(
+              context,
+              currentUsername:
+                  (ref.read(authProvider).user?['username'] ?? '').toString(),
+              title: rank != null ? '$rank. sıraya adını yaz' : 'Sıralamaya gir',
+              subtitle: rank != null
+                  ? 'E-posta ve şifre ekle — biriken puanların anında tabloda '
+                      'görünsün, ilerlemenin hiçbiri kaybolmasın.'
+                  : null,
+            ),
+            child: const Text('SIRALAMAYA GİR', style: TextStyle(fontSize: 14)),
           ),
         ],
       ),
     );
   }
+
+  /// "Bugün 7. sıradaydın" / "Bu hafta ..." / "Tüm zamanlarda ..."
+  String _periodPrefix(LeaderboardTab tab) => switch (tab) {
+        LeaderboardTab.daily => 'Bugün',
+        LeaderboardTab.weekly => 'Bu hafta',
+        LeaderboardTab.allTime => 'Tüm zamanlarda',
+        _ => '',
+      };
 }
 
 /// "SEN" rozeti — kullanıcının kendi satırını işaretler.

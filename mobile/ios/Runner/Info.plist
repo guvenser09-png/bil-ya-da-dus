@@ -38,6 +38,18 @@
 			<true/>
 		</dict>
 	-->
+	<!-- Push bildirimleri (FCM/APNs).
+	     remote-notification: Firebase Cloud Messaging'in bildirimi uygulama
+	     arka plandayken teslim edebilmesi ve arka plan mesaj işleyicisinin
+	     (push_service.dart → _firebaseBackgroundHandler) çalışabilmesi için
+	     gereklidir. Xcode'da ayrıca "Push Notifications" capability'si
+	     eklenmelidir (Firebase kurulumu sırasında — bkz. docs/FIREBASE_KURULUM.md).
+	     NOT: GoogleService-Info.plist yoksa uygulama yine sorunsuz açılır;
+	     Firebase init Dart tarafında yutulur ve push sessizce devre dışı kalır. -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

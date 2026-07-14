@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
+import 'package:quizroyale/features/auth/widgets/claim_account_sheet.dart';
 import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
 import 'package:quizroyale/features/profile/providers/profile_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
@@ -90,21 +91,22 @@ class _ProfileBody extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         // Misafir kullanıcıya kalıcılaştırma bandı: tek dokunuşla claim formu.
+        // Vaat DEĞER odaklı ("sıralamaya gir") — kuru "kayıt ol" değil.
         if (isGuest) ...[
           GlassCard(
             padding: const EdgeInsets.all(16),
-            onTap: () => _showClaimSheet(context, ref, username),
+            onTap: () => showClaimAccountSheet(context, currentUsername: username),
             child: Row(
               children: [
-                const Icon(Icons.shield_rounded, color: AppTheme.gold, size: 26),
+                const Text('🏅', style: TextStyle(fontSize: 24)),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Hesabını kaydet', style: BiladaText.title(size: 15)),
+                      Text('Sıralamada görünmüyorsun', style: BiladaText.title(size: 15)),
                       const SizedBox(height: 3),
-                      Text('İlerlemen kaybolmasın — e-posta ve şifre ekle',
+                      Text('Misafir oynuyorsun — hesabını kaydet, puanların tabloya girsin',
                           style: BiladaText.label(color: AppTheme.cOnSurfaceVariant, size: 11)),
                     ],
                   ),
@@ -393,16 +395,6 @@ class _ProfileBody extends ConsumerWidget {
     );
   }
 
-  /// Misafir hesabı kalıcılaştırma formunu (claim) alttan açar.
-  void _showClaimSheet(BuildContext context, WidgetRef ref, String username) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => _ClaimAccountSheet(currentUsername: username),
-    );
-  }
-
   Widget _statsGrid(Map<String, dynamic> stats) {
     final winRate = (stats['win_rate'] as num?)?.round() ?? 0;
     final bestRank = stats['best_rank'];
@@ -438,186 +430,6 @@ class _ProfileBody extends ConsumerWidget {
                 ),
               ))
           .toList(),
-    );
-  }
-}
-
-/// Misafir hesabı kalıcılaştırma formu (basit claim akışı).
-///
-/// E-posta + şifre (ve isteğe bağlı yeni kullanıcı adı) alır,
-/// POST /api/auth/claim çağırır. Başarıda profil tazelenir ve
-/// "Hesabını kaydet" bandı kaybolur (is_guest=false).
-class _ClaimAccountSheet extends ConsumerStatefulWidget {
-  const _ClaimAccountSheet({required this.currentUsername});
-  final String currentUsername;
-
-  @override
-  ConsumerState<_ClaimAccountSheet> createState() => _ClaimAccountSheetState();
-}
-
-class _ClaimAccountSheetState extends ConsumerState<_ClaimAccountSheet> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _usernameController = TextEditingController();
-  bool _obscurePassword = true;
-  bool _saving = false;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _usernameController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
-    setState(() => _saving = true);
-    final ok = await ref.read(authProvider.notifier).claimAccount(
-          email: _emailController.text,
-          password: _passwordController.text,
-          username: _usernameController.text.trim().isEmpty
-              ? null
-              : _usernameController.text,
-        );
-    if (!mounted) return;
-    setState(() => _saving = false);
-    if (ok) {
-      // Profili tazele ki is_guest=false olsun ve bant kaybolsun.
-      await ref.read(profileProvider.notifier).load();
-      if (!mounted) return;
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Hesabın kaydedildi! Artık ilerlemen güvende.'),
-          backgroundColor: AppTheme.success,
-        ),
-      );
-    } else {
-      final error = ref.read(authProvider).error ?? 'Kaydedilemedi, tekrar dene';
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error), backgroundColor: AppTheme.danger),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-    return Padding(
-      padding: EdgeInsets.only(bottom: bottomInset),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: AppTheme.cSurfaceContainerLow,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-        ),
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: AppTheme.cOutlineVariant,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text('Hesabını kaydet', style: BiladaText.headline(size: 20)),
-              const SizedBox(height: 6),
-              Text(
-                'E-posta ve şifre ekle; seviyen, altınların ve istatistiklerin '
-                'bu hesapta kalıcı olsun.',
-                style: BiladaText.body(color: AppTheme.cOnSurfaceVariant, size: 13),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _emailController,
-                enabled: !_saving,
-                keyboardType: TextInputType.emailAddress,
-                style: BiladaText.body(),
-                decoration: const InputDecoration(
-                  labelText: 'E-posta',
-                  prefixIcon: Icon(Icons.mail_rounded),
-                ),
-                validator: (v) {
-                  final val = v?.trim() ?? '';
-                  if (val.isEmpty) return 'E-posta zorunludur';
-                  if (!val.contains('@') || !val.contains('.')) {
-                    return 'Geçerli bir e-posta gir';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 14),
-              TextFormField(
-                controller: _passwordController,
-                enabled: !_saving,
-                obscureText: _obscurePassword,
-                style: BiladaText.body(),
-                decoration: InputDecoration(
-                  labelText: 'Şifre (en az 6 karakter)',
-                  prefixIcon: const Icon(Icons.lock_rounded),
-                  suffixIcon: IconButton(
-                    icon: Icon(_obscurePassword
-                        ? Icons.visibility_off_rounded
-                        : Icons.visibility_rounded),
-                    onPressed: () =>
-                        setState(() => _obscurePassword = !_obscurePassword),
-                  ),
-                ),
-                validator: (v) {
-                  if (v == null || v.length < 6) return 'En az 6 karakter olmalı';
-                  if (RegExp(r'^\d+$').hasMatch(v)) {
-                    return 'Şifre sadece rakamlardan oluşamaz';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 14),
-              TextFormField(
-                controller: _usernameController,
-                enabled: !_saving,
-                style: BiladaText.body(),
-                decoration: InputDecoration(
-                  labelText: 'Kullanıcı adı (opsiyonel)',
-                  hintText: widget.currentUsername,
-                  prefixIcon: const Icon(Icons.person_rounded),
-                ),
-                validator: (v) {
-                  final val = v?.trim() ?? '';
-                  if (val.isEmpty) return null; // opsiyonel
-                  if (val.length < 3) return 'En az 3 karakter olmalı';
-                  if (!RegExp(r'^[a-zA-Z0-9_.]+$').hasMatch(val)) {
-                    return 'Sadece harf, rakam, _ ve . kullanılabilir';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 24),
-              ChunkyButton(
-                height: 56,
-                onPressed: _saving ? null : _submit,
-                child: _saving
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2, color: AppTheme.cOnPrimaryContainer),
-                      )
-                    : const Text('HESABIMI KAYDET'),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

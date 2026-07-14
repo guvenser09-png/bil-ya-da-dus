@@ -14,6 +14,7 @@ from app.api.friends import router as friends_router
 from app.api.season import router as season_router
 from app.api.ads import router as ads_router
 from app.api.tournament import router as tournament_router
+from app.api.quests import router as quests_router
 
 api_router = APIRouter()
 
@@ -29,3 +30,4 @@ api_router.include_router(friends_router, prefix="/friends", tags=["Friends"])
 api_router.include_router(season_router, prefix="/season", tags=["Season"])
 api_router.include_router(ads_router, prefix="/ads", tags=["Ads"])
 api_router.include_router(tournament_router, prefix="/tournament", tags=["Tournament"])
+api_router.include_router(quests_router, prefix="/quests", tags=["Quests"])

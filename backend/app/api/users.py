@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.schemas.push import PushTokenRequest, PushTokenResponse
 from app.schemas.user import (
     MessageResponse,
     UserMeResponse,
@@ -11,6 +12,7 @@ from app.schemas.user import (
     UserStatsResponse,
     UserUpdateRequest,
 )
+from app.services import push_service
 from app.services.user_service import UserService
 from app.utils.security import get_current_user_id
 
@@ -93,6 +95,44 @@ async def delete_my_account(
     return MessageResponse(
         message="Hesabınız ve kişisel verileriniz silindi. Bizi tercih ettiğiniz için teşekkürler."
     )
+
+
+@router.post("/me/push-token", response_model=PushTokenResponse)
+async def register_push_token(
+    request: PushTokenRequest,
+    user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db),
+):
+    """Cihazın push (FCM) token'ını kaydeder — aynı token için upsert.
+
+    Mobil taraf bu ucu şu anlarda çağırır: bildirim izni verildiğinde, uygulama
+    açılışında (izin zaten varsa) ve FCM token yenilendiğinde.
+
+    Sunucuda Firebase kimlik bilgisi olmasa bile token SAKLANIR (`push_enabled:
+    false` döner) — kurulum tamamlanınca birikmiş token'lara gönderim yapılabilir.
+    """
+    await push_service.register_token(
+        db=db,
+        user_id=user_id,
+        token=request.token,
+        platform=request.platform,
+    )
+    return PushTokenResponse(push_enabled=push_service.is_configured())
+
+
+@router.delete("/me/push-token", response_model=MessageResponse)
+async def delete_push_token(
+    request: PushTokenRequest,
+    user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db),
+):
+    """Cihaz token'ını siler (çıkış yapma / bildirimleri kapatma).
+
+    Token küresel tekil olduğu için sahiplik kontrolüne gerek yoktur: silinen
+    token yalnızca o cihaza aittir. Zaten yoksa da başarı döner (idempotent).
+    """
+    await push_service.remove_token(db=db, token=request.token)
+    return MessageResponse(message="Bildirim token'ı silindi.")
 
 
 @router.get("/me/stats", response_model=UserStatsResponse)

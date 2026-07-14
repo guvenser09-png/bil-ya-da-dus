@@ -178,6 +178,48 @@ async def _redis_period_entries(db: AsyncSession, key: str, limit: int) -> list[
     return entries
 
 
+# Sıra tahmini (projection) taramasında okunacak azami üye sayısı. Tablo bundan
+# uzunsa alttaki oyuncular için tahmin bir üst sınıra yaklaşır — dönüşüm daveti
+# için bu doğruluk fazlasıyla yeterli, maliyet sabit kalır.
+_PROJECTION_SCAN = 500
+
+
+async def _raw_period_rows(key: str) -> list[tuple[str, float]]:
+    """Dönem sorted set'inin ham (misafir dâhil) ilk _PROJECTION_SCAN satırı.
+
+    Redis erişilemezse boş liste döner (tahmin üretilmez, mobil sade metne düşer).
+    """
+    try:
+        redis = await get_redis()
+        rows = await redis.zrevrange(key, 0, _PROJECTION_SCAN - 1, withscores=True)
+    except Exception:
+        return []
+    return [(str(member), float(s)) for member, s in (rows or [])]
+
+
+async def _visible_members(db: AsyncSession, members: list[str]) -> set[str]:
+    """Verilen user_id'lerden sıralamada GÖRÜNENLER (misafir/pasif/silinmiş hariç)."""
+    uuids: list[uuid.UUID] = []
+    for m in members:
+        try:
+            uuids.append(uuid.UUID(m))
+        except (ValueError, AttributeError):
+            continue
+    if not uuids:
+        return set()
+    rows = (
+        await db.execute(
+            select(User.id).where(
+                User.id.in_(uuids),
+                User.is_active == True,  # noqa: E712
+                User.deleted_at.is_(None),
+                User.is_guest == False,  # noqa: E712
+            )
+        )
+    ).scalars().all()
+    return {str(r) for r in rows}
+
+
 async def _my_alltime_entry(db: AsyncSession, user_id: str) -> dict | None:
     try:
         uid = uuid.UUID(user_id)
@@ -420,6 +462,93 @@ async def get_season(
     # filtrelenir; burada mobilin CTA'sı için guest_hidden bayrağı EKLENİR.
     resp["guest_hidden"] = bool(uid) and await _is_guest(db, uid)
     return resp
+
+
+@router.get("/projection")
+async def get_projection(
+    request: Request,
+    period: str = Query("daily", pattern="^(daily|weekly|all_time)$"),
+    score: int | None = Query(None, ge=0, le=1_000_000),
+    db: AsyncSession = Depends(get_db),
+):
+    """"Bu puanla kaçıncı olurdun?" — sıralamaya GİRMEYEN oyuncu için tahmin.
+
+    MİSAFİR DÖNÜŞÜMÜ: misafirler tablolarda gizli olduğundan (bkz. _is_guest)
+    puanları birikir ama hiçbir yerde görünmez. Bu uç, kaybı SOMUTLAŞTIRIR:
+    "bu puanla bugün 7. sıradaydın" → maç sonu ve sıralama ekranındaki kayıt
+    daveti bunu gösterir.
+
+    score verilmezse oyuncunun KENDİ dönem puanı kullanılır (günlük/haftalık:
+    Redis'teki birikmiş puanı — misafirin puanı da yazılır; all_time:
+    User.total_score). Böylece tahmin "gerçekte nereye düşerdin"i söyler.
+
+    would_be_rank = (o dönemde benden YÜKSEK puanlı GÖRÜNEN oyuncu sayısı) + 1.
+    Görünen = misafir olmayan, aktif, silinmemiş. Kendisi sayımdan düşülür
+    (kayıtlı bir oyuncu kendi puanını sorarsa kendini geçmiş sayılmasın).
+
+    Puan 0/yoksa would_be_rank=null döner (mobil sade metne düşer).
+    """
+    uid = _optional_user_id(request)
+    my_score = score
+    ranked_total = 0
+    would_be_rank: int | None = None
+
+    if period == "all_time":
+        if my_score is None and uid:
+            try:
+                my_score = int(
+                    await db.scalar(select(User.total_score).where(User.id == uuid.UUID(uid)))
+                    or 0
+                )
+            except (ValueError, AttributeError):
+                my_score = None
+        # Listeyle AYNI görünürlük ölçütü (_alltime_entries ile birebir).
+        visible_filter = (
+            User.is_active == True,  # noqa: E712
+            User.games_played > 0,
+            User.deleted_at.is_(None),
+            User.is_guest == False,  # noqa: E712
+        )
+        ranked_total = int(
+            await db.scalar(select(func.count()).select_from(User).where(*visible_filter)) or 0
+        )
+        if my_score and my_score > 0:
+            higher = int(
+                await db.scalar(
+                    select(func.count())
+                    .select_from(User)
+                    .where(*visible_filter, User.total_score > my_score)
+                )
+                or 0
+            )
+            would_be_rank = higher + 1
+    else:
+        key = _today_key() if period == "daily" else _week_key()
+        # TEK Redis okuması: hem görünen rakipler hem kendi puanım aynı taramadan.
+        raw = await _raw_period_rows(key)
+        visible = await _visible_members(db, [m for m, _ in raw])
+        ranked_total = sum(1 for m, _ in raw if m in visible)
+        if my_score is None and uid:
+            # Kendi dönem puanım — misafir olduğum için görünenler kümesinde
+            # DEĞİLİM; ham taramadan kendi üyeliğimi okurum (puanlar misafir
+            # için de Redis'e yazılır).
+            mine = next((s for m, s in raw if m == uid), None)
+            my_score = int(mine) if mine is not None else None
+        if my_score and my_score > 0:
+            higher = sum(
+                1 for m, s in raw if m in visible and m != uid and s > my_score
+            )
+            would_be_rank = higher + 1
+
+    return {
+        "period": period,
+        "score": int(my_score or 0),
+        # Sıralamaya girseydin kaçıncı olurdun (puan yoksa null).
+        "would_be_rank": would_be_rank,
+        # O dönemde sıralamada GÖRÜNEN oyuncu sayısı (bağlam: "31 kişi arasında").
+        "ranked_total": ranked_total,
+        "is_guest": bool(uid) and await _is_guest(db, uid),
+    }
 
 
 @router.get("/friends")

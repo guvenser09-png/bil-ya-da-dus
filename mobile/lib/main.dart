@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:quizroyale/core/network/api_client.dart';
 import 'package:quizroyale/core/router/app_router.dart';
+import 'package:quizroyale/core/services/push_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/shared/widgets/adaptive_stage.dart';
 
@@ -30,6 +33,12 @@ void main() async {
   try {
     ApiClient.instance.init();
   } catch (_) {}
+
+  // Push bildirimleri (FCM). AWAIT EDİLMEZ → açılışı yavaşlatmaz.
+  // Firebase yapılandırması (GoogleService-Info.plist) yoksa servis sessizce
+  // devre dışı kalır; hata yutulur. İZİN BURADA İSTENMEZ — ilk maç bitince
+  // istenir (bkz. core/services/push_service.dart).
+  unawaited(PushService.instance.init());
 
   runApp(const ProviderScope(child: BiladaApp()));
 }

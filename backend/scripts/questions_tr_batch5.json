@@ -1,0 +1,4298 @@
+[
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Beyaz zemin üzerindeki mavi İskandinav haçı Finlandiya bayrağıdır.",
+    "options": [
+      "İsveç",
+      "İzlanda",
+      "Finlandiya",
+      "Norveç"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/fi.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Siyah-sarı-kırmızı dikey şeritler Belçika bayrağını oluşturur.",
+    "options": [
+      "Almanya",
+      "Romanya",
+      "Belçika",
+      "Litvanya"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/be.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Kırmızı-beyaz-yeşil yatay şeritli bayrak Macaristan'ındır.",
+    "options": [
+      "Macaristan",
+      "Bulgaristan",
+      "İtalya",
+      "Tacikistan"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/hu.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Mavi-sarı-kırmızı dikey şeritli bayrak Romanya'ya aittir.",
+    "options": [
+      "İtalya",
+      "Belçika",
+      "Romanya",
+      "Fransa"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/ro.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Beyaz-mavi-kırmızı yatay şeritli bayrak Rusya'ya aittir.",
+    "options": [
+      "Slovakya",
+      "Hollanda",
+      "Rusya",
+      "Sırbistan"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/ru.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Kırmızı-mavi-beyaz şeritler ve çift başlı kartallı arma Sırbistan bayrağıdır.",
+    "options": [
+      "Sırbistan",
+      "Rusya",
+      "Slovakya",
+      "Slovenya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/rs.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Beyaz-mavi-kırmızı şeritler üzerinde çift haçlı kalkan arması Slovakya'yı gösterir.",
+    "options": [
+      "Slovenya",
+      "Slovakya",
+      "Rusya",
+      "Çekya"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/sk.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Kırmızı zemin üzerindeki siyah çift başlı kartal Arnavutluk bayrağıdır.",
+    "options": [
+      "Arnavutluk",
+      "Karadağ",
+      "Kuzey Makedonya",
+      "Sırbistan"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/al.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Mavi-siyah-beyaz yatay şeritli bayrak Estonya'ya aittir.",
+    "options": [
+      "Estonya",
+      "Letonya",
+      "Litvanya",
+      "Slovenya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/ee.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Koyu yeşil zemin üzerindeki kırmızı daire Bangladeş bayrağıdır.",
+    "options": [
+      "Japonya",
+      "Palau",
+      "Hindistan",
+      "Bangladeş"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/bd.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Kırmızı-beyaz şeritler ve mavi köşede sarı hilal-yıldız Malezya bayrağıdır.",
+    "options": [
+      "ABD",
+      "Liberya",
+      "Malezya",
+      "Endonezya"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/my.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Üstte kırmızı, altta beyaz iki şeritten oluşan bayrak Endonezya'ya aittir.",
+    "options": [
+      "Polonya",
+      "Avusturya",
+      "Malta",
+      "Endonezya"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/id.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Kırmızı zemin üzerindeki tek büyük sarı yıldız Vietnam bayrağıdır.",
+    "options": [
+      "Çin",
+      "Fas",
+      "Vietnam",
+      "Türkiye"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/vn.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Kılıç tutan altın aslan figürü Sri Lanka bayrağının simgesidir.",
+    "options": [
+      "Sri Lanka",
+      "Myanmar",
+      "Nepal",
+      "Bangladeş"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/lk.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Ortasında Angkor Vat tapınağı bulunan bayrak Kamboçya'ya aittir.",
+    "options": [
+      "Tayland",
+      "Laos",
+      "Kamboçya",
+      "Vietnam"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/kh.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Açık mavi zemin üzerinde altın güneş ve bozkır kartalı Kazakistan bayrağıdır.",
+    "options": [
+      "Özbekistan",
+      "Kazakistan",
+      "Moğolistan",
+      "Azerbaycan"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/kz.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Yeşil zemin üzerinde beyaz kelime-i şehadet ve kılıç Suudi Arabistan bayrağıdır.",
+    "options": [
+      "Pakistan",
+      "Suudi Arabistan",
+      "Libya",
+      "Cezayir"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/sa.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Beyaz ve bordo renkleri testere dişli hatla ayıran bayrak Katar'a aittir.",
+    "options": [
+      "Umman",
+      "Yemen",
+      "Ürdün",
+      "Katar"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/qa.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Yeşil-beyaz-kırmızı şeritler ve ortadaki kırmızı amblem İran bayrağıdır.",
+    "options": [
+      "Tacikistan",
+      "İran",
+      "Hindistan",
+      "Macaristan"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/ir.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Kırmızı-beyaz-kırmızı şeritler ve ortadaki yeşil sedir ağacı Lübnan bayrağıdır.",
+    "options": [
+      "Kanada",
+      "Peru",
+      "Lübnan",
+      "Malta"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/lb.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Yeşil-beyaz-yeşil dikey şeritli bayrak Nijerya'ya aittir.",
+    "options": [
+      "Nijerya",
+      "Pakistan",
+      "Gana",
+      "Kamerun"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/ng.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Kırmızı-sarı-yeşil şeritler ve ortadaki siyah yıldız Gana bayrağıdır.",
+    "options": [
+      "Etiyopya",
+      "Gana",
+      "Bolivya",
+      "Kamerun"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/gh.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Yeşil-beyaz dikey zemin üzerinde kırmızı hilal ve yıldız Cezayir bayrağıdır.",
+    "options": [
+      "Cezayir",
+      "Tunus",
+      "Pakistan",
+      "Fas"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/dz.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Beyaz-kırmızı şeritler ve mavi karede tek beyaz yıldız Şili bayrağıdır.",
+    "options": [
+      "Küba",
+      "Şili",
+      "Porto Riko",
+      "Panama"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/cl.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Sarı-mavi-kırmızı eşit şeritler ve mavi şeritteki beyaz yıldız yayı Venezuela bayrağıdır.",
+    "options": [
+      "Kolombiya",
+      "Venezuela",
+      "Ekvador",
+      "Arjantin"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/ve.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Sarı-mavi-kırmızı şeritler ve ortadaki kondorlu arma Ekvador bayrağıdır.",
+    "options": [
+      "Ekvador",
+      "Kolombiya",
+      "Venezuela",
+      "Bolivya"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/ec.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Beyaz-mavi şeritler ve köşedeki Mayıs Güneşi Uruguay bayrağıdır.",
+    "options": [
+      "Arjantin",
+      "Şili",
+      "Uruguay",
+      "Yunanistan"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/uy.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkeye aittir?",
+    "explanation": "Union Jack, büyük Commonwealth yıldızı ve beyaz Güney Haçı yıldızları Avustralya bayrağıdır.",
+    "options": [
+      "Yeni Zelanda",
+      "Avustralya",
+      "Fiji",
+      "Birleşik Krallık"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/au.png"
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 2,
+    "content": "Deve hörgücünde su depolar.",
+    "explanation": "Hörgüçte su değil yağ depolanır; bu yağ hem enerji hem de metabolik su kaynağıdır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 2,
+    "content": "Devekuşları korktuklarında kafalarını kuma gömer.",
+    "explanation": "Bu bir efsanedir; yere yatıp boyunlarını uzatarak gizlenmeleri kafalarını gömüyorlarmış gibi görünür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 1,
+    "content": "Denizyıldızı bir balık türüdür.",
+    "explanation": "Denizyıldızı balık değil, derisidikenliler grubunda yer alan omurgasız bir canlıdır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 4,
+    "content": "Timsahlar dillerini ağızlarından dışarı çıkaramaz.",
+    "explanation": "Timsahın dili ağız tabanına zarla bağlı olduğu için dışarı uzatılamaz.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Zürafanın boynunda insandakinden çok daha fazla sayıda omur bulunur.",
+    "explanation": "Zürafanın da insan gibi yedi boyun omuru vardır; omurlar sadece çok daha uzundur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Boğalar kırmızı rengi gördükleri için saldırıya geçer.",
+    "explanation": "Boğalar kırmızıyı ayırt edemez; onları tahrik eden pelerinin hareketidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 2,
+    "content": "Köpekbalıklarının iskeleti kemikten oluşur.",
+    "explanation": "Köpekbalıkları kıkırdaklı balıklardır; iskeletleri kemik değil kıkırdaktır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Kelebekler tat almak için ayaklarını kullanır.",
+    "explanation": "Kelebeklerin ayaklarında tat algılayan duyu organları bulunur, konduğu bitkiyi böyle tanır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Yunuslar uyurken beyinlerinin bir yarısı uyanık kalır.",
+    "explanation": "Nefes almayı sürdürebilmek için yunuslar beynin yarısını uyutup diğer yarısını uyanık tutar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 2,
+    "content": "Tavus kuşlarının uzun ve renkli kuyruk tüyleri dişilere aittir.",
+    "explanation": "Gösterişli kuyruk tüyleri erkeklerde bulunur; dişiler daha sade renklidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Kutup ayılarının derisi siyahtır.",
+    "explanation": "Tüyleri saydam ve içi boş olsa da altındaki deri siyahtır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Oklu kirpiler dikenlerini düşmanlarına fırlatabilir.",
+    "explanation": "Dikenler havada fırlatılmaz; yalnızca temas sırasında gevşek biçimde saplanıp koparlar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 2,
+    "content": "Kaplumbağalar kabuklarından çıkıp kabuksuz yaşayabilir.",
+    "explanation": "Kabuk, omurga ve kaburgalarla kaynaşmış canlı bir yapıdır; ayrılması mümkün değildir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 4,
+    "content": "Karıncaların akciğerleri yoktur.",
+    "explanation": "Karıncalar oksijeni vücutlarındaki küçük deliklerden trake borularıyla alır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Örümceklerin tamamı ağ örerek avlanır.",
+    "explanation": "Sıçrayan örümcek ve kurt örümceği gibi birçok tür ağ kurmadan avını kovalayarak yakalar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 2,
+    "content": "Yıldırım aynı yere ikinci kez asla düşmez.",
+    "explanation": "Yüksek yapılar ve kuleler yılda defalarca yıldırım alabilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 3,
+    "content": "Muz bitkisi botanik olarak bir ağaç değil, otsu bir bitkidir.",
+    "explanation": "Muzun gövdesi odunsu değil, sıkışmış yaprak kınlarından oluşan sahte bir gövdedir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 3,
+    "content": "Kaktüslerin dikenleri, değişime uğramış yapraklardır.",
+    "explanation": "Su kaybını azaltmak için yapraklar evrimle dikene dönüşmüştür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 3,
+    "content": "Gökkuşağı aslında tam bir dairedir; yerden yalnızca bir kısmı görülür.",
+    "explanation": "Ufuk alt kısmını kestiği için yay görünür; uçaktan bakıldığında tam daire gözlenebilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 4,
+    "content": "Bukalemunlar renk değiştirmeyi öncelikle çevreye kamufle olmak için kullanır.",
+    "explanation": "Renk değişimi ağırlıklı olarak iletişim, ruh hâli ve sıcaklık düzenlemesi içindir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 3,
+    "content": "Antarktika bir çöl olarak kabul edilir.",
+    "explanation": "Yağış miktarı çok düşük olduğu için Antarktika soğuk bir çöldür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 3,
+    "content": "Işık, suda havadakinden daha yavaş ilerler.",
+    "explanation": "Suyun kırılma indisi daha büyük olduğu için ışık suda yavaşlar; kırılma da bundan kaynaklanır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 3,
+    "content": "Cıva, oda sıcaklığında sıvı hâlde bulunan tek metaldir.",
+    "explanation": "Cıva oda sıcaklığında sıvı olan tek metaldir; galyum ise ancak avuç içinde erir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 4,
+    "content": "Sesin havadaki hızı, hava sıcaklığı arttıkça artar.",
+    "explanation": "Sıcak havada moleküller daha hızlı hareket ettiği için ses daha hızlı yayılır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 4,
+    "content": "Radyoaktif bir maddenin bozunma hızı ısıtılarak artırılabilir.",
+    "explanation": "Radyoaktif bozunma çekirdek kaynaklıdır ve sıcaklık, basınç gibi etkenlerden pratikte etkilenmez.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 3,
+    "content": "Bir çubuk mıknatıs ikiye bölünürse, biri yalnızca kuzey diğeri yalnızca güney kutbu olan iki parça elde edilir.",
+    "explanation": "Her parça yine iki kutuplu bir mıknatıs olur; tek kutuplu mıknatıs gözlenmemiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 3,
+    "content": "Yükseklere çıkıldıkça suyun kaynama sıcaklığı düşer.",
+    "explanation": "Atmosfer basıncı azaldığı için su daha düşük sıcaklıkta kaynar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 2,
+    "content": "Ay'ın Dünya'ya bakan yüzü hep aynıdır.",
+    "explanation": "Ay kendi ekseni etrafındaki dönüşünü Dünya çevresindeki turuyla aynı sürede tamamladığı için hep aynı yüzünü gösterir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 3,
+    "content": "Astronotların boyu uzayda geçici olarak birkaç santimetre uzar.",
+    "explanation": "Yerçekimi baskısı azalınca omurlar arası diskler genişler ve boy geçici olarak uzar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 5,
+    "content": "Venüs'te bir gün, Venüs'ün bir yılından uzun sürer.",
+    "explanation": "Venüs kendi ekseni etrafında çok yavaş döndüğü için bir tam dönüşü (243 gün), Güneş çevresindeki turundan (225 gün) uzundur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 3,
+    "content": "Neptün, çıplak gözle görülebilen bir gezegendir.",
+    "explanation": "Neptün çıplak gözle görülemez; teleskopla keşfedilmiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 3,
+    "content": "Kuzey Yıldızı, gece gökyüzündeki en parlak yıldızdır.",
+    "explanation": "En parlak yıldız Sirius'tur; Kuzey Yıldızı yön bulmada işe yarar ama parlaklıkta ilk sırada değildir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 2,
+    "content": "Güneş'in üzerine basılabilecek katı bir yüzeyi vardır.",
+    "explanation": "Güneş plazma hâlinde bir gaz küresidir; katı yüzeyi yoktur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 3,
+    "content": "Ay, Dünya'dan her yıl birkaç santimetre uzaklaşmaktadır.",
+    "explanation": "Gelgit etkileşimi nedeniyle Ay yılda yaklaşık 3,8 cm uzaklaşır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 3,
+    "content": "Dilin farklı bölgeleri yalnızca belirli tatları algılar.",
+    "explanation": "'Tat haritası' yanlıştır; tat tomurcukları dilin her yerinde tüm temel tatları algılayabilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 2,
+    "content": "Saç ve tırnaklar ölümden sonra da uzamaya devam eder.",
+    "explanation": "Deri kuruyup çekildiği için tırnak ve saç uzamış gibi görünür; gerçek bir büyüme yoktur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 3,
+    "content": "Parmak eklemlerini çıtlatmak eklem kireçlenmesine yol açar.",
+    "explanation": "Çalışmalar çıtlatma ile artrit arasında bir bağ bulamamıştır; ses eklem sıvısındaki gaz kabarcığından gelir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 2,
+    "content": "Soğuk havada üşümek, doğrudan soğuk algınlığı virüsünü oluşturur.",
+    "explanation": "Hastalığa virüsler yol açar; soğuk hava yalnızca bulaşmayı kolaylaştıran koşullar yaratabilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 1,
+    "content": "Apandisi ameliyatla alınan bir insan yaşamını sürdüremez.",
+    "explanation": "Apandis alınsa da insan sağlıkla yaşamına devam edebilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 3,
+    "content": "Tek yumurta ikizlerinin parmak izleri birbirinden farklıdır.",
+    "explanation": "Genler aynı olsa da parmak izi deseni ana rahmindeki koşullara göre şekillenir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 2,
+    "content": "Yutulan sakız midede yedi yıl boyunca kalır.",
+    "explanation": "Sakız sindirilmese de birkaç gün içinde sindirim sisteminden atılır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 3,
+    "content": "Mide asidinin pH değeri 2'nin altına inebilir.",
+    "explanation": "Mide sıvısı hidroklorik asit içerir ve pH'ı 1,5-2 civarına kadar düşebilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 4,
+    "content": "Orta Çağ Avrupa'sında eğitimli kesim Dünya'nın yuvarlak olduğunu biliyordu.",
+    "explanation": "Dünya'nın küresel olduğu Antik Yunan'dan beri biliniyordu; 'düz dünyaya inanılıyordu' fikri sonradan uydurulmuş bir efsanedir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 1,
+    "content": "Osmanlı Devleti'nin kurucusu Osman Bey'dir.",
+    "explanation": "Devlete adını veren kurucu Osman Bey'dir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 3,
+    "content": "Türkiye'de kadınlara milletvekili seçme ve seçilme hakkı 1934 yılında tanınmıştır.",
+    "explanation": "1934'te yapılan anayasa değişikliğiyle kadınlar milletvekili seçme ve seçilme hakkı kazandı.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 4,
+    "content": "Ankara'nın başkent ilan edilmesi, Cumhuriyet'in ilanından sonra gerçekleşmiştir.",
+    "explanation": "Ankara 13 Ekim 1923'te başkent oldu; Cumhuriyet ise 29 Ekim 1923'te ilan edildi.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 4,
+    "content": "Roma yanarken İmparator Neron keman çalıyordu.",
+    "explanation": "Keman o dönemde henüz icat edilmemişti; hikâye sonradan uydurulmuştur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 4,
+    "content": "Eski Mısırlılar mumyalama sırasında beyni burun yoluyla çıkarırdı.",
+    "explanation": "Beyin, burun deliğinden sokulan çengelli aletlerle parçalanıp çıkarılırdı.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 2,
+    "content": "Amerika Birleşik Devletleri'nin ilk başkanı Abraham Lincoln'dür.",
+    "explanation": "İlk ABD başkanı George Washington'dır; Lincoln 16. başkandır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 4,
+    "content": "İstanbul'u fetheden II. Mehmed, fetih sırasında yirmili yaşlarının başındaydı.",
+    "explanation": "1432 doğumlu II. Mehmed, 1453'teki fetih sırasında 21 yaşındaydı.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 3,
+    "content": "Osmanlı Devleti'nin son padişahı VI. Mehmed (Vahdettin)'dir.",
+    "explanation": "Saltanatın kaldırılmasıyla tahttan inen VI. Mehmed Vahdettin son Osmanlı padişahıdır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "coğrafya",
+    "difficulty": 2,
+    "content": "Lut Gölü'nde (Ölüdeniz) balıklar yaşar.",
+    "explanation": "Aşırı tuzluluk nedeniyle burada balık ve benzeri canlılar yaşayamaz.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "coğrafya",
+    "difficulty": 3,
+    "content": "Kanada, dünyanın en uzun kıyı şeridine sahip ülkesidir.",
+    "explanation": "Sayısız adası nedeniyle Kanada'nın kıyı şeridi diğer tüm ülkelerden uzundur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "coğrafya",
+    "difficulty": 3,
+    "content": "Karadeniz'in tuzluluk oranı Akdeniz'e göre daha düşüktür.",
+    "explanation": "Bol akarsu girdisi ve az buharlaşma nedeniyle Karadeniz daha az tuzludur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "coğrafya",
+    "difficulty": 4,
+    "content": "Grönland adası, Avustralya kıtasından daha büyüktür.",
+    "explanation": "Haritalardaki izdüşüm yanıltır; Avustralya, Grönland'ın yaklaşık üç katından da büyüktür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "coğrafya",
+    "difficulty": 4,
+    "content": "Sahra Çölü geçmişte yeşil bitki örtüsü ve göllerle kaplı dönemler yaşamıştır.",
+    "explanation": "Kaya resimleri ve fosiller birkaç bin yıl önce Sahra'nın nemli ve yeşil olduğunu gösterir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "türk kültürü",
+    "difficulty": 3,
+    "content": "Türk kahvesi kültürü UNESCO Somut Olmayan Kültürel Miras listesindedir.",
+    "explanation": "Türk kahvesi kültürü ve geleneği 2013'te UNESCO listesine alınmıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "türk kültürü",
+    "difficulty": 2,
+    "content": "Nasreddin Hoca'nın türbesi Akşehir'dedir.",
+    "explanation": "Nasreddin Hoca'nın türbesi Konya'nın Akşehir ilçesindedir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "türk kültürü",
+    "difficulty": 1,
+    "content": "Türk bayrağındaki yıldız altı köşelidir.",
+    "explanation": "Türk bayrağındaki yıldız beş köşelidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "türk kültürü",
+    "difficulty": 3,
+    "content": "Hıdırellez her yıl 6 Mayıs'ta kutlanır.",
+    "explanation": "Baharın gelişini simgeleyen Hıdırellez 6 Mayıs'ta kutlanır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "türk kültürü",
+    "difficulty": 3,
+    "content": "Türkçe, Hint-Avrupa dil ailesine mensup bir dildir.",
+    "explanation": "Türkçe Hint-Avrupa değil, Türk dilleri ailesinde yer alır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 3,
+    "content": "Yer fıstığı botanik olarak bir kuruyemiş değil, baklagildir.",
+    "explanation": "Yer fıstığı toprak altında olgunlaşır ve fasulye-mercimekle aynı baklagiller ailesindedir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 4,
+    "content": "Restoranlarda servis edilen wasabinin çoğu aslında bayır turpu ve boyayla yapılır.",
+    "explanation": "Gerçek wasabi pahalı ve çabuk tazeliğini kaybettiği için piyasadaki ürünlerin çoğu bayır turpu esaslıdır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 2,
+    "content": "Yumurta kabuğunun rengi, yumurtanın besin değerini belirler.",
+    "explanation": "Kabuk rengi tavuğun cinsine bağlıdır; besin değeriyle ilgisi yoktur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 3,
+    "content": "Bir yaşından küçük bebeklere bal vermek sakıncalıdır.",
+    "explanation": "Baldaki botulizm sporları bebeklerde ciddi hastalığa yol açabildiği için 1 yaş altına verilmez.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 3,
+    "content": "Acı biberin yakıcılığını su yerine süt daha etkili biçimde dindirir.",
+    "explanation": "Acılığı veren kapsaisin yağda çözünür; sütteki yağ ve kazein onu daha iyi uzaklaştırır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 4,
+    "content": "Yemek pişirirken eklenen alkolün tamamı buharlaşıp uçar.",
+    "explanation": "Pişirme süresine bağlı olarak alkolün önemli bir kısmı yemekte kalabilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 4,
+    "content": "Bluetooth teknolojisi adını bir Viking kralından alır.",
+    "explanation": "İsim, Danimarka kralı Harald 'Bluetooth' Gormsson'dan gelir; logo da onun rün harflerinden oluşur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 2,
+    "content": "Java ile JavaScript aynı programlama dilinin iki farklı adıdır.",
+    "explanation": "İki ayrı dildir; benzerlik yalnızca isimden kaynaklanan bir pazarlama tercihidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 5,
+    "content": "GPS uydularının saatleri, görelilik etkileri nedeniyle düzeltme gerektirir.",
+    "explanation": "Hız ve zayıf yerçekimi saatleri farklı yönde etkiler; düzeltme yapılmazsa konum hataları hızla büyür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 3,
+    "content": "Emoji, Japonya'da ortaya çıkmıştır.",
+    "explanation": "İlk emoji setleri 1990'larda Japon mobil operatörleri için tasarlanmıştır; 'emoji' de Japonca bir kelimedir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 3,
+    "content": "Tarayıcının gizli (gizli sekme) modu, internet servis sağlayıcısından da gezinti geçmişini gizler.",
+    "explanation": "Gizli mod yalnızca cihazda yerel iz bırakmaz; servis sağlayıcı ve ziyaret edilen siteler trafiği yine görebilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 3,
+    "content": "İlk cep telefonu görüşmesi 1970'li yıllarda gerçekleştirilmiştir.",
+    "explanation": "1973'te Motorola'dan Martin Cooper elde taşınan bir prototiple ilk cep telefonu görüşmesini yapmıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 1,
+    "content": "Hangi şehir daha kalabalıktır?",
+    "explanation": "İstanbul 15 milyonu aşan nüfusuyla Ankara'dan (yaklaşık 5,7 milyon) çok daha kalabalıktır.",
+    "options": [
+      "Ankara",
+      "İstanbul"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Hangi ilin nüfusu daha fazladır?",
+    "explanation": "Bursa'nın nüfusu 3 milyonu aşarken Balıkesir'inki yaklaşık 1,2 milyondur.",
+    "options": [
+      "Bursa",
+      "Balıkesir"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangi su kütlesi daha büyüktür?",
+    "explanation": "Hazar Denizi yaklaşık 371 bin km² ile dünyanın en büyük gölüdür; Van Gölü yaklaşık 3700 km²'dir.",
+    "options": [
+      "Van Gölü",
+      "Hazar Denizi"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Hangi gölün yüzey alanı daha büyüktür?",
+    "explanation": "Victoria Gölü yaklaşık 68.800 km² ile Tanganyika'dan (yaklaşık 32.900 km²) geniştir.",
+    "options": [
+      "Victoria Gölü",
+      "Tanganyika Gölü"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangi şehir Türkiye'nin daha doğusunda yer alır?",
+    "explanation": "Kars Türkiye'nin doğu ucuna yakınken İzmir batı kıyısındadır.",
+    "options": [
+      "İzmir",
+      "Kars"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 3,
+    "content": "Hangisi daha yüksek hıza ulaşır?",
+    "explanation": "Gökdoğan dalışta saatte 300 km'yi aşarak çitanın çok üzerine çıkar.",
+    "options": [
+      "Gökdoğan (dalış sırasında)",
+      "Çita"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 2,
+    "content": "Hangi hayvan daha uzun yaşar?",
+    "explanation": "Galapagos dev kaplumbağası 100 yılı aşabilirken kedilerin ömrü ortalama 15 yıldır.",
+    "options": [
+      "Ev kedisi",
+      "Galapagos dev kaplumbağası"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 2,
+    "content": "Hangi hayvan daha büyüktür?",
+    "explanation": "Kırmızı kanguru 1,5 metreyi aşarken koala yaklaşık 70 santimetre boyundadır.",
+    "options": [
+      "Kanguru",
+      "Koala"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 4,
+    "content": "Hangi kuş daha büyüktür?",
+    "explanation": "Devekuşu 2,5 metre boy ve 150 kiloya ulaşarak emuyu (yaklaşık 1,8 m) geçer.",
+    "options": [
+      "Devekuşu",
+      "Emu"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 4,
+    "content": "Hangisinin daha fazla kolu/kolsu uzantısı vardır?",
+    "explanation": "Kalamarın 8 kolu ve 2 dokunacı yani toplam 10 uzantısı varken ahtapotun 8 kolu vardır.",
+    "options": [
+      "Ahtapot",
+      "Kalamar"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 4,
+    "content": "Hangisinin daha fazla kalbi vardır?",
+    "explanation": "Ahtapotun üç kalbi varken insanın tek kalbi vardır.",
+    "options": [
+      "Ahtapot",
+      "İnsan"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 1,
+    "content": "Hangisi daha eskidir?",
+    "explanation": "Giza Piramitleri yaklaşık MÖ 2500'e, Kolezyum ise MS 80'e tarihlenir.",
+    "options": [
+      "Giza Piramitleri",
+      "Roma Kolezyumu"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Hangi uygarlık daha eskidir?",
+    "explanation": "Antik Mısır MÖ 3000'lerde başlarken Antik Yunan uygarlığı çok daha sonra gelişmiştir.",
+    "options": [
+      "Antik Yunan uygarlığı",
+      "Antik Mısır uygarlığı"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Hangi yapı daha eskidir?",
+    "explanation": "Göbeklitepe yaklaşık 12 bin yıllıkken Stonehenge yaklaşık 5 bin yıllıktır.",
+    "options": [
+      "Stonehenge",
+      "Göbeklitepe"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 1,
+    "content": "Hangisi daha önce başlamıştır?",
+    "explanation": "I. Dünya Savaşı 1914'te, II. Dünya Savaşı ise 1939'da başlamıştır.",
+    "options": [
+      "I. Dünya Savaşı",
+      "II. Dünya Savaşı"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Sanat",
+    "difficulty": 2,
+    "content": "Hangi sanatçı daha önce yaşamıştır?",
+    "explanation": "Leonardo 1452-1519 arasında, Picasso ise 1881-1973 arasında yaşamıştır.",
+    "options": [
+      "Leonardo da Vinci",
+      "Pablo Picasso"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "Hangi yazar daha önce yaşamıştır?",
+    "explanation": "Shakespeare 1564-1616 arasında, Tolstoy ise 1828-1910 arasında yaşamıştır.",
+    "options": [
+      "William Shakespeare",
+      "Lev Tolstoy"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Hangi filozof daha önce yaşamıştır?",
+    "explanation": "Sokrates MÖ 470 civarında doğmuş, Aristoteles ise MÖ 384'te doğmuştur.",
+    "options": [
+      "Aristoteles",
+      "Sokrates"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "Hangisinin yoğunluğu daha yüksektir?",
+    "explanation": "Altının yoğunluğu yaklaşık 19,3 g/cm³, alüminyumunki ise 2,7 g/cm³'tür.",
+    "options": [
+      "Altın",
+      "Alüminyum"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Hangisinin erime noktası daha yüksektir?",
+    "explanation": "Demir yaklaşık 1538 °C'de, kurşun ise yaklaşık 327 °C'de erir.",
+    "options": [
+      "Kurşun",
+      "Demir"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Hangisi daha asidiktir (pH değeri daha düşüktür)?",
+    "explanation": "Limon suyunun pH'ı yaklaşık 2 iken deniz suyu hafif bazik olup pH'ı 8 civarındadır.",
+    "options": [
+      "Deniz suyu",
+      "Limon suyu"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Hangisinin vücudunda daha fazla kemik bulunur?",
+    "explanation": "Bebekler yaklaşık 300 kemikle doğar; büyürken bazıları kaynaşır ve yetişkinde 206 kemik kalır.",
+    "options": [
+      "Yeni doğmuş bebek",
+      "Yetişkin insan"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Hangisinin donma noktası daha yüksektir?",
+    "explanation": "Su 0 °C'de donarken cıva yaklaşık -39 °C'de donar.",
+    "options": [
+      "Su",
+      "Cıva"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Uzay",
+    "difficulty": 3,
+    "content": "Hangi gezegenin yüzey sıcaklığı daha yüksektir?",
+    "explanation": "Venüs'ün yüzeyi yaklaşık 460 °C iken Mars'ın yüzeyi genellikle donma noktasının altındadır.",
+    "options": [
+      "Venüs",
+      "Mars"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Hangisinin çapı daha büyüktür?",
+    "explanation": "Mars'ın çapı yaklaşık 6.780 km, Merkür'ünki ise yaklaşık 4.880 km'dir.",
+    "options": [
+      "Mars",
+      "Merkür"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Spor",
+    "difficulty": 1,
+    "content": "Hangi yarış mesafesi daha uzundur?",
+    "explanation": "Maraton 42,195 km, yarı maraton ise yaklaşık 21,1 km'dir.",
+    "options": [
+      "Maraton",
+      "Yarı maraton"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Spor",
+    "difficulty": 2,
+    "content": "Hangi takımda sahada aynı anda daha fazla oyuncu bulunur?",
+    "explanation": "Futbolda her takım sahada 11, basketbolda ise 5 oyuncuyla oynar.",
+    "options": [
+      "Futbol",
+      "Basketbol"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Spor",
+    "difficulty": 4,
+    "content": "Hangisi daha önce düzenlenmeye başlanmıştır?",
+    "explanation": "İlk modern Olimpiyatlar 1896'da, ilk Dünya Kupası ise 1930'da yapılmıştır.",
+    "options": [
+      "Modern Olimpiyat Oyunları",
+      "FIFA Dünya Kupası"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 3,
+    "content": "Ay'ın Dünya'ya ortalama uzaklığı kaç kilometredir?",
+    "explanation": "Ay, Dünya'ya ortalama 384.400 km uzaklıktadır.",
+    "options": null,
+    "min_value": 50000.0,
+    "max_value": 2000000.0,
+    "real_answer": 384400.0,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Venüs kendi ekseni etrafındaki bir turunu kaç Dünya gününde tamamlar?",
+    "explanation": "Venüs'te bir gün 243 Dünya günü sürer; yani günü, yılından (225 gün) daha uzundur.",
+    "options": null,
+    "min_value": 5.0,
+    "max_value": 1500.0,
+    "real_answer": 243.0,
+    "unit": "gün"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 5,
+    "content": "Neptün, Güneş etrafındaki bir turunu kaç Dünya yılında tamamlar?",
+    "explanation": "Neptün'ün bir yılı yaklaşık 165 Dünya yılıdır.",
+    "options": null,
+    "min_value": 5.0,
+    "max_value": 900.0,
+    "real_answer": 165.0,
+    "unit": "yıl"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 5,
+    "content": "Güneş'in kütlesi, Dünya'nın kütlesinin kaç katıdır?",
+    "explanation": "Güneş, Dünya'dan yaklaşık 333.000 kat daha ağırdır.",
+    "options": null,
+    "min_value": 1000.0,
+    "max_value": 3000000.0,
+    "real_answer": 333000.0,
+    "unit": "kat"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Bir ışık yılı kaç trilyon kilometredir?",
+    "explanation": "Işığın bir yılda aldığı yol yaklaşık 9,46 trilyon kilometredir.",
+    "options": null,
+    "min_value": 0.5,
+    "max_value": 100.0,
+    "real_answer": 9.46,
+    "unit": "trilyon km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 5,
+    "content": "Ekvator üzerindeki bir nokta, Dünya'nın kendi ekseni etrafındaki dönüşü nedeniyle saatte kaç km hızla hareket eder?",
+    "explanation": "Ekvatorda dönme hızı yaklaşık 1.670 km/saattir.",
+    "options": null,
+    "min_value": 100.0,
+    "max_value": 20000.0,
+    "real_answer": 1670.0,
+    "unit": "km/saat"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 3,
+    "content": "Bugüne kadar toplam kaç insan Ay'ın yüzeyine ayak bastı?",
+    "explanation": "Apollo programı kapsamında altı görevde toplam 12 astronot Ay'a ayak bastı.",
+    "options": null,
+    "min_value": 2.0,
+    "max_value": 60.0,
+    "real_answer": 12.0,
+    "unit": "kişi"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 5,
+    "content": "Valeri Polyakov'un uzayda kesintisiz kalış süresi kaç gündür?",
+    "explanation": "Polyakov, Mir istasyonunda tek seferde 437 gün kalarak insanlık tarihinin en uzun kesintisiz uzay uçuşunu yaptı.",
+    "options": null,
+    "min_value": 30.0,
+    "max_value": 1500.0,
+    "real_answer": 437.0,
+    "unit": "gün"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Güneş'in yüzey sıcaklığı yaklaşık kaç santigrat derecedir?",
+    "explanation": "Güneş'in görünen yüzeyi (fotosfer) yaklaşık 5.500 °C'dir.",
+    "options": null,
+    "min_value": 500.0,
+    "max_value": 50000.0,
+    "real_answer": 5500.0,
+    "unit": "°C"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Ses, 20 °C havada saniyede kaç metre yol alır?",
+    "explanation": "Sesin 20 °C havadaki hızı saniyede yaklaşık 343 metredir.",
+    "options": null,
+    "min_value": 50.0,
+    "max_value": 2000.0,
+    "real_answer": 343.0,
+    "unit": "m/s"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Altın kaç santigrat derecede erir?",
+    "explanation": "Altının erime noktası 1.064 °C'dir.",
+    "options": null,
+    "min_value": 100.0,
+    "max_value": 4000.0,
+    "real_answer": 1064.0,
+    "unit": "°C"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 5,
+    "content": "Cıva kaç santigrat derecede donar?",
+    "explanation": "Cıva yaklaşık -39 °C'de katılaşır; oda sıcaklığında sıvı olan tek metaldir.",
+    "options": null,
+    "min_value": -200.0,
+    "max_value": 30.0,
+    "real_answer": -39.0,
+    "unit": "°C"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Periyodik tabloda bugün kaç element bulunur?",
+    "explanation": "Periyodik tabloda 118 element yer alır.",
+    "options": null,
+    "min_value": 30.0,
+    "max_value": 400.0,
+    "real_answer": 118.0,
+    "unit": "element"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 5,
+    "content": "Uranyum-238'in yarılanma ömrü kaç milyar yıldır?",
+    "explanation": "Uranyum-238'in yarılanma ömrü yaklaşık 4,5 milyar yıldır; neredeyse Dünya'nın yaşı kadar.",
+    "options": null,
+    "min_value": 0.1,
+    "max_value": 50.0,
+    "real_answer": 4.5,
+    "unit": "milyar yıl"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Işık bir saniyede Dünya'nın çevresini kaç kez dolaşabilir?",
+    "explanation": "Işık saniyede yaklaşık 300.000 km yol aldığı için Dünya çevresini 7,5 kez dolaşabilir.",
+    "options": null,
+    "min_value": 1.0,
+    "max_value": 60.0,
+    "real_answer": 7.5,
+    "unit": "tur"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Nil Nehri'nin uzunluğu kaç kilometredir?",
+    "explanation": "Nil Nehri yaklaşık 6.650 km uzunluğundadır.",
+    "options": null,
+    "min_value": 500.0,
+    "max_value": 20000.0,
+    "real_answer": 6650.0,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Sahra Çölü'nün yüzölçümü kaç milyon kilometrekaredir?",
+    "explanation": "Sahra Çölü yaklaşık 9,2 milyon km² ile ABD büyüklüğündedir.",
+    "options": null,
+    "min_value": 0.5,
+    "max_value": 40.0,
+    "real_answer": 9.2,
+    "unit": "milyon km²"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 5,
+    "content": "Grönland'ın yüzölçümü kaç milyon kilometrekaredir?",
+    "explanation": "Grönland yaklaşık 2,16 milyon km² ile dünyanın en büyük adasıdır.",
+    "options": null,
+    "min_value": 0.2,
+    "max_value": 15.0,
+    "real_answer": 2.16,
+    "unit": "milyon km²"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Dünyanın en yüksek şelalesi olan Angel Şelalesi kaç metre yüksekten dökülür?",
+    "explanation": "Venezuela'daki Angel Şelalesi 979 metre yüksekliktedir.",
+    "options": null,
+    "min_value": 50.0,
+    "max_value": 4000.0,
+    "real_answer": 979.0,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Dünyada yüksekliği 8.000 metreyi aşan kaç zirve vardır?",
+    "explanation": "Tümü Asya'da olmak üzere 8.000 metreyi aşan 14 zirve bulunur.",
+    "options": null,
+    "min_value": 2.0,
+    "max_value": 100.0,
+    "real_answer": 14.0,
+    "unit": "zirve"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 5,
+    "content": "Panama Kanalı'nın uzunluğu kaç kilometredir?",
+    "explanation": "Panama Kanalı yaklaşık 82 km uzunluğundadır.",
+    "options": null,
+    "min_value": 10.0,
+    "max_value": 600.0,
+    "real_answer": 82.0,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Türkiye",
+    "difficulty": 4,
+    "content": "Türkiye'nin kıyı şeridi (adalar dâhil) toplam kaç kilometredir?",
+    "explanation": "Türkiye'nin kıyı uzunluğu adalarla birlikte yaklaşık 8.333 km'dir.",
+    "options": null,
+    "min_value": 1000.0,
+    "max_value": 40000.0,
+    "real_answer": 8333.0,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Türkiye",
+    "difficulty": 4,
+    "content": "Türkiye'nin en uzun nehri Kızılırmak kaç kilometredir?",
+    "explanation": "Kızılırmak yaklaşık 1.355 km ile Türkiye'nin en uzun nehridir.",
+    "options": null,
+    "min_value": 200.0,
+    "max_value": 6000.0,
+    "real_answer": 1355.0,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Türkiye",
+    "difficulty": 5,
+    "content": "Marmara Denizi'nin yüzölçümü kaç kilometrekaredir?",
+    "explanation": "Marmara Denizi yaklaşık 11.350 km² yüzölçümüne sahiptir.",
+    "options": null,
+    "min_value": 1000.0,
+    "max_value": 60000.0,
+    "real_answer": 11350.0,
+    "unit": "km²"
+  },
+  {
+    "type": "tahmin",
+    "category": "Türkiye",
+    "difficulty": 4,
+    "content": "1915 Çanakkale Köprüsü'nün iki kule arasındaki orta açıklığı kaç metredir?",
+    "explanation": "Köprünün orta açıklığı, Cumhuriyet'in 100. yılına gönderme yapacak şekilde 2.023 metredir.",
+    "options": null,
+    "min_value": 300.0,
+    "max_value": 6000.0,
+    "real_answer": 2023.0,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "İnsan Vücudu",
+    "difficulty": 5,
+    "content": "İnsan genomunda yaklaşık kaç milyar baz çifti vardır?",
+    "explanation": "İnsan genomu yaklaşık 3,1 milyar baz çiftinden oluşur.",
+    "options": null,
+    "min_value": 0.1,
+    "max_value": 40.0,
+    "real_answer": 3.1,
+    "unit": "milyar"
+  },
+  {
+    "type": "tahmin",
+    "category": "İnsan Vücudu",
+    "difficulty": 5,
+    "content": "Bir insan vücudunda yaklaşık kaç trilyon hücre vardır?",
+    "explanation": "Yetişkin bir insan yaklaşık 37 trilyon hücreden oluşur.",
+    "options": null,
+    "min_value": 1.0,
+    "max_value": 400.0,
+    "real_answer": 37.0,
+    "unit": "trilyon"
+  },
+  {
+    "type": "tahmin",
+    "category": "İnsan Vücudu",
+    "difficulty": 3,
+    "content": "Yetişkin bir insan beyni yaklaşık kaç gram ağırlığındadır?",
+    "explanation": "Yetişkin insan beyni ortalama 1.400 gram gelir.",
+    "options": null,
+    "min_value": 200.0,
+    "max_value": 6000.0,
+    "real_answer": 1400.0,
+    "unit": "gram"
+  },
+  {
+    "type": "tahmin",
+    "category": "Hayvanlar",
+    "difficulty": 3,
+    "content": "Fillerde gebelik süresi kaç aydır?",
+    "explanation": "Fillerin gebeliği yaklaşık 22 ay sürer; memeliler arasındaki en uzun gebeliktir.",
+    "options": null,
+    "min_value": 2.0,
+    "max_value": 48.0,
+    "real_answer": 22.0,
+    "unit": "ay"
+  },
+  {
+    "type": "tahmin",
+    "category": "Hayvanlar",
+    "difficulty": 3,
+    "content": "Zürafanın boynunda kaç omur bulunur?",
+    "explanation": "Zürafanın boynunda, insanla aynı sayıda yani 7 omur vardır; ama her biri çok uzundur.",
+    "options": null,
+    "min_value": 2.0,
+    "max_value": 40.0,
+    "real_answer": 7.0,
+    "unit": "omur"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 5,
+    "content": "Keops Piramidi'nde yaklaşık kaç milyon blok taş kullanılmıştır?",
+    "explanation": "Piramitte yaklaşık 2,3 milyon taş blok kullanıldığı tahmin edilir.",
+    "options": null,
+    "min_value": 0.1,
+    "max_value": 25.0,
+    "real_answer": 2.3,
+    "unit": "milyon blok"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Batı Roma İmparatorluğu hangi yılda yıkıldı?",
+    "explanation": "Batı Roma İmparatorluğu MS 476'da son imparatorun tahttan indirilmesiyle yıkıldı.",
+    "options": null,
+    "min_value": 100.0,
+    "max_value": 1300.0,
+    "real_answer": 476.0,
+    "unit": "yıl (MS)"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 5,
+    "content": "Yüz Yıl Savaşları gerçekte kaç yıl sürdü?",
+    "explanation": "1337-1453 arasındaki savaşlar aslında 116 yıl sürdü.",
+    "options": null,
+    "min_value": 40.0,
+    "max_value": 300.0,
+    "real_answer": 116.0,
+    "unit": "yıl"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Osmanlı Devleti kuruluşundan yıkılışına kadar kaç yıl ayakta kaldı?",
+    "explanation": "1299'da kurulan Osmanlı Devleti 1922'de sona erdi; yani 623 yıl sürdü.",
+    "options": null,
+    "min_value": 100.0,
+    "max_value": 1300.0,
+    "real_answer": 623.0,
+    "unit": "yıl"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Büyük İskender kaç yaşında öldü?",
+    "explanation": "Büyük İskender 32 yaşında, Babil'de öldü.",
+    "options": null,
+    "min_value": 15.0,
+    "max_value": 85.0,
+    "real_answer": 32.0,
+    "unit": "yaş"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Titanic buzdağına çarptıktan sonra tamamen batması kaç dakika sürdü?",
+    "explanation": "Gemi çarpmadan yaklaşık 2 saat 40 dakika (160 dakika) sonra tamamen battı.",
+    "options": null,
+    "min_value": 10.0,
+    "max_value": 900.0,
+    "real_answer": 160.0,
+    "unit": "dakika"
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 4,
+    "content": "Resmî bir tenis topu kaç gram ağırlığındadır?",
+    "explanation": "Bir tenis topu yaklaşık 57 gramdır.",
+    "options": null,
+    "min_value": 5.0,
+    "max_value": 300.0,
+    "real_answer": 57.0,
+    "unit": "gram"
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 4,
+    "content": "Erkekler voleybolunda file yüksekliği kaç metredir?",
+    "explanation": "Erkeklerde voleybol filesi 2,43 metre yüksekliktedir.",
+    "options": null,
+    "min_value": 1.0,
+    "max_value": 6.0,
+    "real_answer": 2.43,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 5,
+    "content": "Tekler tenis kortunun uzunluğu kaç metredir?",
+    "explanation": "Tenis kortu 23,77 metre uzunluğundadır.",
+    "options": null,
+    "min_value": 8.0,
+    "max_value": 70.0,
+    "real_answer": 23.77,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 5,
+    "content": "FIFA Dünya Kupası kupası kaç kilogram ağırlığındadır?",
+    "explanation": "Dünya Kupası kupası yaklaşık 6,1 kilogramdır.",
+    "options": null,
+    "min_value": 1.0,
+    "max_value": 35.0,
+    "real_answer": 6.1,
+    "unit": "kg"
+  },
+  {
+    "type": "tahmin",
+    "category": "Kültür",
+    "difficulty": 5,
+    "content": "Oscar heykelciği kaç kilogram ağırlığındadır?",
+    "explanation": "Oscar heykelciği yaklaşık 3,85 kilogramdır.",
+    "options": null,
+    "min_value": 0.5,
+    "max_value": 25.0,
+    "real_answer": 3.85,
+    "unit": "kg"
+  },
+  {
+    "type": "tahmin",
+    "category": "Kültür",
+    "difficulty": 4,
+    "content": "Mona Lisa tablosunun yüksekliği kaç santimetredir?",
+    "explanation": "Mona Lisa yalnızca 77 x 53 cm boyutlarındadır.",
+    "options": null,
+    "min_value": 20.0,
+    "max_value": 400.0,
+    "real_answer": 77.0,
+    "unit": "cm"
+  },
+  {
+    "type": "tahmin",
+    "category": "Teknoloji",
+    "difficulty": 5,
+    "content": "İlk elektronik bilgisayar ENIAC kaç ton ağırlığındaydı?",
+    "explanation": "1945'te tamamlanan ENIAC yaklaşık 27 ton ağırlığındaydı.",
+    "options": null,
+    "min_value": 0.5,
+    "max_value": 200.0,
+    "real_answer": 27.0,
+    "unit": "ton"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Üstte beyaz, altta kırmızı iki yatay şeritten oluşan bayrak Polonya'ya aittir.",
+    "options": [
+      "Endonezya",
+      "Avusturya",
+      "Polonya",
+      "Malta"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/pl.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı zemin üzerindeki beyaz haç, Dannebrog adıyla bilinen Danimarka bayrağıdır.",
+    "options": [
+      "Danimarka",
+      "Norveç",
+      "İsviçre",
+      "İzlanda"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/dk.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı-beyaz-kırmızı yatay şeritli bu bayrak Avusturya'ya aittir.",
+    "options": [
+      "Letonya",
+      "Avusturya",
+      "Polonya",
+      "Peru"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/at.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Yeşil-beyaz-turuncu dikey şeritli bayrak İrlanda'ya aittir.",
+    "options": [
+      "İtalya",
+      "Fildişi Sahili",
+      "Hindistan",
+      "İrlanda"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/ie.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Beyaz-kırmızı şeritler ve direk tarafındaki mavi üçgen Çekya bayrağıdır.",
+    "options": [
+      "Filipinler",
+      "Çekya",
+      "Slovenya",
+      "Hırvatistan"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/cz.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı-beyaz-mavi şeritlerin ortasındaki kırmızı-beyaz damalı arma Hırvatistan'ı simgeler.",
+    "options": [
+      "Slovakya",
+      "Slovenya",
+      "Hırvatistan",
+      "Sırbistan"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/hr.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Mavi zemin üzerindeki sarı üçgen ve beyaz yıldız dizisi Bosna-Hersek bayrağıdır.",
+    "options": [
+      "Kosova",
+      "Karadağ",
+      "Kuzey Makedonya",
+      "Bosna-Hersek"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/ba.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Beyaz-yeşil-kırmızı yatay şeritli bayrak Bulgaristan'ındır.",
+    "options": [
+      "Macaristan",
+      "İtalya",
+      "Rusya",
+      "Bulgaristan"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/bg.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Mavi zemin üzerinde beyaz kenarlıklı kırmızı haç İzlanda bayrağıdır.",
+    "options": [
+      "Norveç",
+      "Danimarka",
+      "İzlanda",
+      "Finlandiya"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/is.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı zemin üzerinde ışınları yayılan sarı güneş Kuzey Makedonya bayrağıdır.",
+    "options": [
+      "Arnavutluk",
+      "Kuzey Makedonya",
+      "Kırgızistan",
+      "Tunus"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/mk.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Yeşil zemin, beyaz hilal-yıldız ve direk tarafındaki beyaz şerit Pakistan bayrağıdır.",
+    "options": [
+      "Türkiye",
+      "Pakistan",
+      "Cezayir",
+      "Tunus"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/pk.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Mavi-kırmızı şeritler ve beyaz üçgen içindeki güneş ile üç yıldız Filipinler bayrağıdır.",
+    "options": [
+      "Filipinler",
+      "Çekya",
+      "Küba",
+      "Porto Riko"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/ph.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı-beyaz zemin üzerinde hilal ve beş yıldız Singapur bayrağıdır.",
+    "options": [
+      "Endonezya",
+      "Singapur",
+      "Polonya",
+      "Tayland"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/sg.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Dikdörtgen olmayan, iki üçgenden oluşan tek ulusal bayrak Nepal'e aittir.",
+    "options": [
+      "Butan",
+      "Nepal",
+      "Sri Lanka",
+      "Maldivler"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/np.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Sarı-yeşil-kırmızı şeritler ve ortadaki büyük beyaz yıldız Myanmar bayrağıdır.",
+    "options": [
+      "Litvanya",
+      "Etiyopya",
+      "Myanmar",
+      "Bolivya"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/mm.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı-mavi-kırmızı dikey şeritler ve sarı Soyombo sembolü Moğolistan bayrağıdır.",
+    "options": [
+      "Kırgızistan",
+      "Kazakistan",
+      "Özbekistan",
+      "Moğolistan"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/mn.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Mavi-beyaz-yeşil şeritler, hilal ve on iki yıldız Özbekistan bayrağını oluşturur.",
+    "options": [
+      "Özbekistan",
+      "Tacikistan",
+      "Türkmenistan",
+      "Kırgızistan"
+    ],
+    "correct_answer": 0,
+    "image_url": "https://flagcdn.com/w320/uz.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Beyaz zemin üzerinde bir büyük ve dört küçük kırmızı haç Gürcistan bayrağıdır.",
+    "options": [
+      "Ermenistan",
+      "Malta",
+      "Gürcistan",
+      "İsviçre"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/ge.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Direk tarafında dikey kırmızı şerit, yanında yeşil-beyaz-siyah yatay şeritler Birleşik Arap Emirlikleri bayrağıdır.",
+    "options": [
+      "Kuveyt",
+      "Ürdün",
+      "Birleşik Arap Emirlikleri",
+      "Filistin"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/ae.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Beyaz zemin üzerinde iki mavi şerit ve Davud yıldızı İsrail bayrağıdır.",
+    "options": [
+      "Yunanistan",
+      "İsrail",
+      "Finlandiya",
+      "Arjantin"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/il.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı-beyaz-siyah şeritler ve beyaz şeritteki yeşil yazı Irak bayrağıdır.",
+    "options": [
+      "Suriye",
+      "Irak",
+      "Yemen",
+      "Mısır"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/iq.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Siyah-beyaz-yeşil şeritler ve kırmızı üçgen içindeki yedi köşeli beyaz yıldız Ürdün bayrağıdır.",
+    "options": [
+      "Sudan",
+      "Ürdün",
+      "Kuveyt",
+      "Birleşik Arap Emirlikleri"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/jo.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı zemin üzerindeki yeşil beş köşeli yıldız Fas bayrağıdır.",
+    "options": [
+      "Tunus",
+      "Vietnam",
+      "Fas",
+      "Türkiye"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/ma.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Siyah-kırmızı-yeşil şeritler ve ortadaki Maasai kalkanı ile mızraklar Kenya bayrağıdır.",
+    "options": [
+      "Malawi",
+      "Uganda",
+      "Tanzanya",
+      "Kenya"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/ke.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Yeşil-sarı-kırmızı şeritler ve ortadaki mavi daire içinde sarı yıldız Etiyopya bayrağıdır.",
+    "options": [
+      "Gana",
+      "Bolivya",
+      "Senegal",
+      "Etiyopya"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/et.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Yeşil-sarı-kırmızı dikey şeritler ve ortadaki yeşil yıldız Senegal bayrağıdır.",
+    "options": [
+      "Mali",
+      "Kamerun",
+      "Senegal",
+      "Gine"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/sn.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı zemin ortasındaki beyaz daire içinde kırmızı hilal ve yıldız Tunus bayrağıdır.",
+    "options": [
+      "Türkiye",
+      "Fas",
+      "Cezayir",
+      "Tunus"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/tn.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Üstte kalın sarı şerit, altında mavi ve kırmızı şeritler Kolombiya bayrağıdır.",
+    "options": [
+      "Ekvador",
+      "Venezuela",
+      "Kolombiya",
+      "Romanya"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/co.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı-beyaz-kırmızı dikey şeritli bayrak Peru'ya aittir.",
+    "options": [
+      "Kanada",
+      "Avusturya",
+      "Lübnan",
+      "Peru"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/pe.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Kırmızı-sarı-yeşil yatay şeritli bayrak Bolivya'ya aittir.",
+    "options": [
+      "Gana",
+      "Bolivya",
+      "Etiyopya",
+      "Litvanya"
+    ],
+    "correct_answer": 1,
+    "image_url": "https://flagcdn.com/w320/bo.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Mavi-beyaz şeritler ve kırmızı üçgen içindeki beyaz yıldız Küba bayrağıdır.",
+    "options": [
+      "Porto Riko",
+      "Filipinler",
+      "Şili",
+      "Küba"
+    ],
+    "correct_answer": 3,
+    "image_url": "https://flagcdn.com/w320/cu.png"
+  },
+  {
+    "type": "gorsel",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Bu bayrak hangi ülkenindir?",
+    "explanation": "Union Jack ve dört kırmızı Güney Haçı yıldızı taşıyan bayrak Yeni Zelanda'ya aittir.",
+    "options": [
+      "Avustralya",
+      "Fiji",
+      "Yeni Zelanda",
+      "Tuvalu"
+    ],
+    "correct_answer": 2,
+    "image_url": "https://flagcdn.com/w320/nz.png"
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Ahtapotun kanı mavi renktedir.",
+    "explanation": "Oksijeni demir yerine bakır içeren hemosiyanin taşıdığı için ahtapot kanı mavimsi görünür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Kanguru yavrusu doğduğunda yalnızca birkaç santimetre boyundadır.",
+    "explanation": "Yavru kanguru fasulye büyüklüğünde doğar ve gelişimini annenin kesesinde tamamlar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 4,
+    "content": "Kediler tatlı tadını algılayamaz.",
+    "explanation": "Kedilerde tatlı algısını sağlayan reseptör geni işlevsizdir, bu yüzden şekeri tat olarak algılamazlar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Filler zıplayamayan hayvanlardır.",
+    "explanation": "Ağırlıkları ve bacak yapıları nedeniyle filler dört ayağını aynı anda yerden kesemez.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 2,
+    "content": "Köpekler dünyayı yalnızca siyah-beyaz görür.",
+    "explanation": "Köpekler sınırlı da olsa renk görür; özellikle mavi ve sarı tonlarını ayırt edebilirler.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 4,
+    "content": "Bir bal arısı ömrü boyunca ortalama bir çay kaşığından az bal üretir.",
+    "explanation": "Tek bir işçi arının ömrü boyunca ürettiği bal miktarı bir çay kaşığının küçük bir kısmı kadardır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 2,
+    "content": "Deniz atlarında yavruları erkek birey taşır.",
+    "explanation": "Dişi yumurtaları erkeğin karnındaki keseye bırakır ve yavrular orada gelişip doğar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 5,
+    "content": "Fareler kusabilen hayvanlardır.",
+    "explanation": "Farelerin kusma refleksi yoktur; bu nedenle zehirli maddeleri geri çıkaramazlar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 2,
+    "content": "Guguk kuşu yumurtalarını başka kuş türlerinin yuvasına bırakır.",
+    "explanation": "Guguk kuşu kuluçka asalağıdır; yavrusunu başka kuşlara büyüttürür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Kaplanların tüyleri tıraş edilse bile derilerinde çizgiler görülür.",
+    "explanation": "Çizgi deseni yalnızca tüyde değil, derinin kendisinde de bulunur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 2,
+    "content": "Balıkların hafızası yalnızca üç saniyedir.",
+    "explanation": "Deneyler balıkların aylarca sürebilen öğrenme ve hatırlama becerisi olduğunu göstermiştir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 1,
+    "content": "Bütün kuş türleri uçabilir.",
+    "explanation": "Penguen, devekuşu ve kivi gibi birçok kuş türü uçamaz.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 5,
+    "content": "Bir devekuşunun gözü beyninden büyüktür.",
+    "explanation": "Devekuşunun yaklaşık 5 cm çapındaki gözü, beyninden daha büyüktür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 1,
+    "content": "Yunusların solungaçları vardır.",
+    "explanation": "Yunuslar memelidir; akciğerleriyle nefes alır ve hava için yüzeye çıkarlar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "hayvanlar",
+    "difficulty": 3,
+    "content": "Fillerin farelerden korktuğu bilimsel olarak kanıtlanmıştır.",
+    "explanation": "Bu yaygın inanışın bilimsel bir dayanağı yoktur; filler ani hareketlerden ürker.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 4,
+    "content": "Bir ağacın kütlesinin büyük bölümü topraktan değil, havadaki karbondioksitten gelir.",
+    "explanation": "Fotosentezle havadan alınan karbon, ağacın odun kütlesinin temel yapıtaşıdır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 3,
+    "content": "Yosunlar çiçek açarak çoğalır.",
+    "explanation": "Yosunlarda çiçek ve tohum yoktur; sporlarla çoğalırlar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 3,
+    "content": "Mantarlar bitkiler âlemine dahildir.",
+    "explanation": "Mantarlar fotosentez yapmaz ve bitkilerden ayrı, kendi âlemlerinde sınıflandırılır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 1,
+    "content": "Buz, suyun içinde batar.",
+    "explanation": "Buzun yoğunluğu sudan düşük olduğu için yüzer.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "doğa",
+    "difficulty": 2,
+    "content": "Bir ağacın gövdesinde her yıl iki halka oluşur.",
+    "explanation": "Ilıman iklimlerde ağaç genellikle yılda tek bir büyüme halkası oluşturur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 2,
+    "content": "Su donarken hacmi genişler.",
+    "explanation": "Buz kristalindeki boşluklu yapı nedeniyle su donunca hacmi artar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 2,
+    "content": "Bir madde yandığında kütlesi tamamen yok olur.",
+    "explanation": "Kütle korunur; yanma ürünlerinin bir kısmı gaz olarak havaya karışır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 3,
+    "content": "Mutlak sıfır yaklaşık -273 santigrat dereceye karşılık gelir.",
+    "explanation": "0 Kelvin, -273,15 °C değerine eşittir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 4,
+    "content": "Devrelerde kabul edilen akım yönü, elektronların gerçek hareket yönüyle aynıdır.",
+    "explanation": "Geleneksel akım artıdan eksiye kabul edilir; elektronlar ise tam tersi yönde hareket eder.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 2,
+    "content": "Hava direnci olmasaydı bir tüy ile bir çekiç aynı anda yere düşerdi.",
+    "explanation": "Boşlukta tüm cisimler kütlesinden bağımsız olarak aynı ivmeyle düşer.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 4,
+    "content": "Alüminyum, tarihte bir dönem altından daha değerli kabul edilmiştir.",
+    "explanation": "19. yüzyılda saf alüminyum üretimi çok zor olduğundan altından pahalıydı.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "bilim",
+    "difficulty": 4,
+    "content": "Kuru buz eridiğinde önce suya dönüşür.",
+    "explanation": "Kuru buz katı karbondioksittir ve sıvı hâle geçmeden doğrudan gaza dönüşür (süblimleşir).",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 3,
+    "content": "Satürn'ün ortalama yoğunluğu sudan düşüktür.",
+    "explanation": "Büyük ölçüde hidrojen ve helyumdan oluştuğu için ortalama yoğunluğu suyunkinden azdır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 4,
+    "content": "Kuyruklu yıldızın kuyruğu her zaman hareket yönünün tersine bakar.",
+    "explanation": "Kuyruk, güneş rüzgârı nedeniyle daima Güneş'in ters yönüne bakar; kuyruklu yıldız Güneş'ten uzaklaşırken kuyruğu önde olabilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 3,
+    "content": "Güneş aslında beyaz ışık yayar; sarı görünmesinin nedeni atmosferdir.",
+    "explanation": "Atmosfer mavi ışığı daha çok saçtığı için Güneş bize sarımsı görünür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 3,
+    "content": "Uluslararası Uzay İstasyonu, Dünya çevresindeki bir turunu yaklaşık 90 dakikada tamamlar.",
+    "explanation": "İstasyon saatte yaklaşık 28 bin km hızla ilerler ve günde 15'ten fazla tur atar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 3,
+    "content": "Ay'ın 'karanlık yüzü' denen tarafı hiç güneş ışığı almaz.",
+    "explanation": "O yüz de düzenli olarak güneş ışığı alır; sadece Dünya'dan görünmediği için 'karanlık' denir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "uzay",
+    "difficulty": 3,
+    "content": "Yıldızların gökyüzünde titreşiyormuş gibi görünmesinin nedeni Dünya atmosferidir.",
+    "explanation": "Atmosferdeki hava katmanları ışığı kırdığı için yıldızlar titrek görünür.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 2,
+    "content": "İnsanlar beyinlerinin yalnızca yüzde onunu kullanır.",
+    "explanation": "Görüntüleme çalışmaları beynin neredeyse tamamının gün içinde etkin olduğunu gösterir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 3,
+    "content": "İnsan vücudunun en güçlü kası dildir.",
+    "explanation": "Dil güçlü ve dayanıklıdır ama ölçütlere göre en güçlü kas değildir; çene ve bacak kasları çok daha fazla kuvvet üretir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 2,
+    "content": "Bebekler yetişkinlerden daha fazla sayıda kemikle doğar.",
+    "explanation": "Bebeklerdeki yaklaşık 300 kemik büyüme sırasında kaynaşarak 206'ya iner.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 3,
+    "content": "İnsan gözünde görüntü oluşmayan bir 'kör nokta' bulunur.",
+    "explanation": "Görme sinirinin retinadan çıktığı noktada ışık algılayıcı hücre yoktur; beyin bu boşluğu tamamlar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 3,
+    "content": "Hapşırırken kalp bir anlığına durur.",
+    "explanation": "Kalp durmaz; göğüs içi basıncı değiştiği için ritim kısa süre farklı hissedilebilir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 4,
+    "content": "Antrenmandan bir iki gün sonra gelen kas ağrısının nedeni kaslarda kalan laktik asittir.",
+    "explanation": "Laktik asit egzersizden kısa süre sonra temizlenir; gecikmiş ağrı kas liflerindeki mikro hasardan kaynaklanır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 3,
+    "content": "Damarlarımızdaki oksijeni azalmış kan mavi renktedir.",
+    "explanation": "Kan her zaman kırmızıdır; damarların mavi görünmesi ışığın deriden geçiş biçiminden kaynaklanır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 3,
+    "content": "Şeker tüketimi çocuklarda hiperaktiviteye yol açar.",
+    "explanation": "Kontrollü çalışmalar şeker ile hiperaktivite arasında nedensel bir bağ bulamamıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "vücut",
+    "difficulty": 4,
+    "content": "Alkol almak vücudu gerçekten ısıtır.",
+    "explanation": "Alkol deri damarlarını genişletip sıcaklık hissi verir ama vücut ısısının daha hızlı kaybedilmesine yol açar.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 3,
+    "content": "Vikingler savaşta boynuzlu miğferler takardı.",
+    "explanation": "Boynuzlu miğfer imajı 19. yüzyıl opera ve resimlerinden gelir; arkeolojik dayanağı yoktur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 4,
+    "content": "Mısır piramitleri tamamen köleler tarafından inşa edilmiştir.",
+    "explanation": "Bulgular piramitleri barındırılan, beslenen ve ücretlendirilen işçilerin inşa ettiğini gösteriyor.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 1,
+    "content": "İstiklal Marşı'nın şairi Mehmet Akif Ersoy'dur.",
+    "explanation": "İstiklal Marşı'nın sözleri Mehmet Akif Ersoy'a aittir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 2,
+    "content": "Yeni Türk harfleri (Latin alfabesi) 1928'de kabul edilmiştir.",
+    "explanation": "Harf Devrimi 1 Kasım 1928'de kabul edilen yasayla gerçekleşti.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 2,
+    "content": "Antik Troya kenti bugünkü Çanakkale sınırları içindedir.",
+    "explanation": "Troya ören yeri Çanakkale'nin Tevfikiye köyü yakınlarındadır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 3,
+    "content": "Kristof Kolomb, Amerika kıtasına ayak basan ilk Avrupalıdır.",
+    "explanation": "Vikingler, Leif Erikson önderliğinde Kolomb'dan yaklaşık beş yüzyıl önce Kuzey Amerika'ya ulaşmıştı.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 3,
+    "content": "Albert Einstein okulda matematik dersinden sınıfta kalmıştır.",
+    "explanation": "Einstein matematikte küçük yaşlardan itibaren çok başarılıydı; bu yaygın bir efsanedir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 1,
+    "content": "Mustafa Kemal Atatürk İstanbul'da doğmuştur.",
+    "explanation": "Atatürk 1881'de Selanik'te doğmuştur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 4,
+    "content": "Roma'daki gladyatör dövüşlerinin neredeyse tamamı ölümle sonuçlanırdı.",
+    "explanation": "Gladyatör yetiştirmek pahalıydı; birçok dövüş ölümle değil teslim olma veya beraberlikle biterdi.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "tarih",
+    "difficulty": 3,
+    "content": "İbrahim Müteferrika, Osmanlı'da ilk Türkçe kitap basan matbaayı kurmuştur.",
+    "explanation": "18. yüzyılda kurulan Müteferrika matbaası, Osmanlı'da Türkçe basılan ilk kitapları üretti.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "coğrafya",
+    "difficulty": 5,
+    "content": "Dünyanın en uzun dağ sırası okyanus tabanında bulunur.",
+    "explanation": "Okyanus ortası sırtları on binlerce kilometre uzunluğunda, sualtındaki en uzun dağ sistemidir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "coğrafya",
+    "difficulty": 3,
+    "content": "Kapadokya'daki peribacaları volkanik tüf kayaların aşınmasıyla oluşmuştur.",
+    "explanation": "Yumuşak tüf tabakası rüzgâr ve suyla aşınırken sert kaya başlıklar altındaki sütunları korumuştur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "coğrafya",
+    "difficulty": 4,
+    "content": "Karadeniz'e kıyısı olan ülke sayısı üçtür.",
+    "explanation": "Karadeniz'e kıyısı olan ülke sayısı altıdır: Türkiye, Bulgaristan, Romanya, Ukrayna, Rusya ve Gürcistan.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "türk kültürü",
+    "difficulty": 1,
+    "content": "Karagöz ve Hacivat bir gölge oyunu geleneğidir.",
+    "explanation": "Deri figürlerin perdeye yansıtılmasıyla oynanan geleneksel bir gölge oyunudur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "türk kültürü",
+    "difficulty": 1,
+    "content": "Türk alfabesinde 29 harf bulunur.",
+    "explanation": "Türk alfabesi 8 ünlü ve 21 ünsüz olmak üzere 29 harften oluşur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "türk kültürü",
+    "difficulty": 2,
+    "content": "Simide İzmir'de 'gevrek' denir.",
+    "explanation": "İzmir yöresinde simit için yaygın olarak 'gevrek' adı kullanılır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "türk kültürü",
+    "difficulty": 1,
+    "content": "Ayran, sütün doğrudan sulandırılmasıyla yapılır.",
+    "explanation": "Ayran süt değil, yoğurdun su ve tuzla çırpılmasıyla hazırlanır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 3,
+    "content": "Beyaz çikolata kakao kütlesi içermez.",
+    "explanation": "Beyaz çikolatada kakao yağı, süt ve şeker vardır; kakao kütlesi (kakao katısı) bulunmaz.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 3,
+    "content": "Havuç yemek insanın gece görüşünü olağanüstü hâle getirir.",
+    "explanation": "A vitamini göz sağlığı için gereklidir ama fazlası süper bir gece görüşü sağlamaz; bu inanış savaş dönemi propagandasıyla yayılmıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 3,
+    "content": "Domates ve patates Avrupa'ya Amerika kıtasından getirilmiştir.",
+    "explanation": "Her iki bitki de Güney Amerika kökenlidir ve Avrupa'ya 16. yüzyıldan sonra ulaşmıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 3,
+    "content": "Suya tuz eklemek, suyun kaynama süresini belirgin biçimde kısaltır.",
+    "explanation": "Mutfaktaki miktarlarda tuz kaynama noktasını çok az yükseltir; kayda değer bir hızlanma sağlamaz.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 2,
+    "content": "Yere düşen yiyecek beş saniye içinde alınırsa üzerine bakteri bulaşmaz.",
+    "explanation": "Bakteri bulaşması neredeyse anında gerçekleşir; 'beş saniye kuralı' bilimsel değildir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "yemek",
+    "difficulty": 3,
+    "content": "Kahve içmek çocukların boy uzamasını durdurur.",
+    "explanation": "Kafeinin boy uzamasını engellediğine dair bilimsel bir kanıt yoktur.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 4,
+    "content": "E-posta, World Wide Web'den daha önce ortaya çıkmıştır.",
+    "explanation": "E-posta 1970'lerde kullanılmaya başlamıştı; Web ise 1989-1991 arasında geliştirildi.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 3,
+    "content": "İnternet ile World Wide Web aynı şeydir.",
+    "explanation": "İnternet küresel ağ altyapısıdır; Web ise bu ağ üzerinde çalışan servislerden yalnızca biridir.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 3,
+    "content": "Elektrikli otomobiller ilk kez 21. yüzyılda üretilmiştir.",
+    "explanation": "Elektrikli otomobiller 19. yüzyılın sonlarında yaygındı; sonradan benzinli araçlara yenildiler.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 3,
+    "content": "Linux çekirdeğini ilk geliştiren kişi Linus Torvalds'tır.",
+    "explanation": "Torvalds 1991'de Linux çekirdeğinin ilk sürümünü yayımlamıştır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 3,
+    "content": "Bir telefonun kamerasındaki megapiksel sayısı arttıkça fotoğraf kalitesi her koşulda artar.",
+    "explanation": "Sensör boyutu, lens ve yazılım kaliteyi en az megapiksel kadar belirler.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "dogru_yanlis",
+    "category": "teknoloji",
+    "difficulty": 2,
+    "content": "Wi-Fi sinyalleri ses dalgalarıyla taşınır.",
+    "explanation": "Wi-Fi, ses değil radyo frekansındaki elektromanyetik dalgaları kullanır.",
+    "options": [
+      "Doğru",
+      "Yanlış"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangi ilin yüzölçümü daha büyüktür?",
+    "explanation": "Sivas yaklaşık 28 bin km² ile Türkiye'nin en büyük illerindendir; Yalova ise en küçüklerindendir.",
+    "options": [
+      "Yalova",
+      "Sivas"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 2,
+    "content": "Hangi ülke daha kuzeyde yer alır?",
+    "explanation": "Norveç Kuzey Kutup Dairesi'ne uzanırken İtalya Akdeniz kuşağındadır.",
+    "options": [
+      "Norveç",
+      "İtalya"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Hangisinin tuzluluk oranı daha yüksektir?",
+    "explanation": "Ölü Deniz'in tuzluluğu okyanus ortalamasının yaklaşık 10 katıdır.",
+    "options": [
+      "Akdeniz",
+      "Ölü Deniz"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 1,
+    "content": "Hangi hayvan daha hızlı koşar?",
+    "explanation": "Çita saatte 100 km'nin üzerine çıkarak kara hayvanları arasında en hızlısıdır.",
+    "options": [
+      "Aslan",
+      "Çita"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 1,
+    "content": "Hangi hayvan daha uzundur (boy olarak)?",
+    "explanation": "Zürafa 5 metreye ulaşan boyuyla kara hayvanları içinde en uzunudur.",
+    "options": [
+      "Zürafa",
+      "Deve"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 4,
+    "content": "Hangi yılan daha uzundur?",
+    "explanation": "Yeşil anakonda 6 metreyi aşabilirken kral kobra genellikle 3-4 metre uzunluğundadır.",
+    "options": [
+      "Yeşil anakonda",
+      "Kral kobra"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 3,
+    "content": "Hangi hayvanın kalbi daha hızlı atar?",
+    "explanation": "Sinek kuşunun kalbi dakikada 1000 atışa yaklaşarak çok daha hızlı çalışır.",
+    "options": [
+      "Karga",
+      "Sinek kuşu"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 3,
+    "content": "Hangi hayvanın kalbi daha büyüktür?",
+    "explanation": "Mavi balinanın kalbi birkaç yüz kilogram gelir ve fil kalbinden çok daha ağırdır.",
+    "options": [
+      "Afrika fili",
+      "Mavi balina"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 3,
+    "content": "Hangisinin kanat açıklığı daha fazladır?",
+    "explanation": "Gezgin albatrosun kanat açıklığı 3 metreyi aşar ve kuşlar arasında en genişidir.",
+    "options": [
+      "Penguen",
+      "Gezgin albatros"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 3,
+    "content": "Hangi balık daha büyüktür?",
+    "explanation": "Balina köpekbalığı 12 metreye ulaşarak dünyanın en büyük balığıdır.",
+    "options": [
+      "Beyaz köpekbalığı",
+      "Balina köpekbalığı"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 2,
+    "content": "Hangisinin daha fazla bacağı vardır?",
+    "explanation": "Örümceklerin 8, karınca gibi böceklerin ise 6 bacağı vardır.",
+    "options": [
+      "Karınca",
+      "Örümcek"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Hayvanlar",
+    "difficulty": 3,
+    "content": "Hangisinin gebelik süresi daha uzundur?",
+    "explanation": "Fillerde gebelik yaklaşık 22 ay sürerken insanda 9 aydır.",
+    "options": [
+      "İnsan",
+      "Fil"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Hangisi daha önce kurulmuştur?",
+    "explanation": "Roma İmparatorluğu MÖ 1. yüzyılda doğmuş, Osmanlı Devleti ise 1299'da kurulmuştur.",
+    "options": [
+      "Roma İmparatorluğu",
+      "Osmanlı İmparatorluğu"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Sanat",
+    "difficulty": 3,
+    "content": "Hangi besteci daha önce doğmuştur?",
+    "explanation": "Mozart 1756'da, Beethoven ise 1770'te doğmuştur.",
+    "options": [
+      "Beethoven",
+      "Mozart"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 2,
+    "content": "Hangisi daha önce yaşamıştır?",
+    "explanation": "Fatih Sultan Mehmet 15. yüzyılda, Atatürk ise 19-20. yüzyılda yaşamıştır.",
+    "options": [
+      "Fatih Sultan Mehmet",
+      "Mustafa Kemal Atatürk"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "Hangi bilim insanı daha önce yaşamıştır?",
+    "explanation": "Newton 1643-1727 arasında, Einstein ise 1879-1955 arasında yaşamıştır.",
+    "options": [
+      "Isaac Newton",
+      "Albert Einstein"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Hangi element daha hafiftir?",
+    "explanation": "Hidrojen 1 atom numarasıyla evrenin en hafif elementidir; helyumun atom numarası 2'dir.",
+    "options": [
+      "Hidrojen",
+      "Helyum"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Hangisinin kaynama noktası (deniz seviyesinde) daha yüksektir?",
+    "explanation": "Su 100 °C'de, etil alkol ise yaklaşık 78 °C'de kaynar.",
+    "options": [
+      "Su",
+      "Etil alkol"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 1,
+    "content": "Hangisi daha serttir?",
+    "explanation": "Elmas Mohs sertlik ölçeğinde 10 ile bilinen en sert doğal maddedir; kuvars 7'dir.",
+    "options": [
+      "Elmas",
+      "Kuvars"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 2,
+    "content": "İnsan vücudunda hangi kemik daha uzundur?",
+    "explanation": "Femur insan vücudundaki en uzun kemiktir.",
+    "options": [
+      "Femur (uyluk kemiği)",
+      "Kaburga"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Hangisinin kütlesi daha büyüktür?",
+    "explanation": "Proton, elektrondan yaklaşık 1836 kat daha ağırdır.",
+    "options": [
+      "Elektron",
+      "Proton"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Yetişkin bir insanda hangisi daha ağırdır?",
+    "explanation": "İnsan beyni ortalama 1,4 kilogram, kalp ise yaklaşık 300 gramdır.",
+    "options": [
+      "Beyin",
+      "Kalp"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Hangisi daha büyük bir sayıdır?",
+    "explanation": "2 üzeri 10 = 1024, 10 üzeri 3 = 1000'dir.",
+    "options": [
+      "2 üzeri 10",
+      "10 üzeri 3"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Hangi gezegen Güneş'ten daha uzaktır?",
+    "explanation": "Neptün Güneş Sistemi'nin Güneş'ten en uzak gezegenidir; Uranüs ondan öncedir.",
+    "options": [
+      "Uranüs",
+      "Neptün"
+    ],
+    "correct_answer": 1
+  },
+  {
+    "type": "karsilastirma",
+    "category": "Bilim",
+    "difficulty": 3,
+    "content": "Hangi sayı daha büyüktür?",
+    "explanation": "Pi yaklaşık 3,14 iken e yaklaşık 2,72'dir.",
+    "options": [
+      "Pi sayısı",
+      "e sayısı"
+    ],
+    "correct_answer": 0
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Uluslararası Uzay İstasyonu, Dünya'nın çevresindeki bir turunu kaç dakikada tamamlar?",
+    "explanation": "ISS yaklaşık 93 dakikada bir Dünya turunu tamamlar, yani günde 16 kez gün doğumu görür.",
+    "options": null,
+    "min_value": 15.0,
+    "max_value": 600.0,
+    "real_answer": 93.0,
+    "unit": "dakika"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Merkür, Güneş etrafındaki turunu kaç Dünya gününde tamamlar?",
+    "explanation": "Merkür'ün yılı yalnızca 88 Dünya günüdür.",
+    "options": null,
+    "min_value": 10.0,
+    "max_value": 900.0,
+    "real_answer": 88.0,
+    "unit": "gün"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Satürn'ün Güneş etrafındaki bir turu kaç Dünya yılı sürer?",
+    "explanation": "Satürn Güneş çevresindeki turunu yaklaşık 29,5 yılda tamamlar.",
+    "options": null,
+    "min_value": 2.0,
+    "max_value": 200.0,
+    "real_answer": 29.5,
+    "unit": "yıl"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 5,
+    "content": "Jüpiter'in hacmine yaklaşık kaç tane Dünya sığar?",
+    "explanation": "Jüpiter'in hacmine yaklaşık 1.321 Dünya sığar.",
+    "options": null,
+    "min_value": 20.0,
+    "max_value": 10000.0,
+    "real_answer": 1321.0,
+    "unit": "adet"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 5,
+    "content": "Dünya, Güneş'in etrafında saatte kaç kilometre hızla hareket eder?",
+    "explanation": "Dünya yörüngesinde saniyede yaklaşık 30 km, yani saatte yaklaşık 107.000 km hızla ilerler.",
+    "options": null,
+    "min_value": 1000.0,
+    "max_value": 900000.0,
+    "real_answer": 107000.0,
+    "unit": "km/saat"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Ay'ın çapı kaç kilometredir?",
+    "explanation": "Ay'ın çapı yaklaşık 3.475 km'dir, yani Dünya'nın çapının dörtte birinden biraz fazladır.",
+    "options": null,
+    "min_value": 500.0,
+    "max_value": 20000.0,
+    "real_answer": 3475.0,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Uzay",
+    "difficulty": 4,
+    "content": "Mars'ta bir gün, Dünya gününden yaklaşık kaç dakika daha uzundur?",
+    "explanation": "Mars günü 24 saat 39 dakika sürer, yani Dünya gününden yaklaşık 40 dakika uzundur.",
+    "options": null,
+    "min_value": 2.0,
+    "max_value": 400.0,
+    "real_answer": 40.0,
+    "unit": "dakika"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Bir yıldırım kanalının sıcaklığı yaklaşık kaç santigrat dereceye ulaşır?",
+    "explanation": "Yıldırım kanalı yaklaşık 30.000 °C'ye ulaşır; bu Güneş yüzeyinden yaklaşık beş kat daha sıcaktır.",
+    "options": null,
+    "min_value": 500.0,
+    "max_value": 100000.0,
+    "real_answer": 30000.0,
+    "unit": "°C"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Güneş'in çekirdek sıcaklığı yaklaşık kaç milyon santigrat derecedir?",
+    "explanation": "Güneş'in çekirdeğinde sıcaklık yaklaşık 15 milyon °C'dir.",
+    "options": null,
+    "min_value": 1.0,
+    "max_value": 200.0,
+    "real_answer": 15.0,
+    "unit": "milyon °C"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Ses suyun içinde saniyede kaç metre yol alır?",
+    "explanation": "Ses suda saniyede yaklaşık 1.480 metre ilerler, yani havadakinin dört katından hızlıdır.",
+    "options": null,
+    "min_value": 200.0,
+    "max_value": 8000.0,
+    "real_answer": 1480.0,
+    "unit": "m/s"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Demir kaç santigrat derecede erir?",
+    "explanation": "Demirin erime noktası 1.538 °C'dir.",
+    "options": null,
+    "min_value": 200.0,
+    "max_value": 5000.0,
+    "real_answer": 1538.0,
+    "unit": "°C"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 5,
+    "content": "Kuru buz (katı karbondioksit) kaç santigrat derecede doğrudan gaza dönüşür?",
+    "explanation": "Kuru buz -78,5 °C'de süblimleşerek doğrudan gaz hâline geçer.",
+    "options": null,
+    "min_value": -250.0,
+    "max_value": 10.0,
+    "real_answer": -78.5,
+    "unit": "°C"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 4,
+    "content": "Karbon-14'ün yarılanma ömrü kaç yıldır?",
+    "explanation": "Karbon-14'ün yarılanma ömrü 5.730 yıldır; bu yüzden arkeolojik tarihlemede kullanılır.",
+    "options": null,
+    "min_value": 100.0,
+    "max_value": 50000.0,
+    "real_answer": 5730.0,
+    "unit": "yıl"
+  },
+  {
+    "type": "tahmin",
+    "category": "Bilim",
+    "difficulty": 5,
+    "content": "Avogadro sayısı 10 üzeri 23'ün kaç katıdır?",
+    "explanation": "Avogadro sayısı yaklaşık 6,02 × 10^23'tür.",
+    "options": null,
+    "min_value": 1.0,
+    "max_value": 40.0,
+    "real_answer": 6.02,
+    "unit": "× 10^23"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Dünya'nın ekvator çevresi kaç kilometredir?",
+    "explanation": "Dünya'nın ekvator çevresi yaklaşık 40.075 km'dir.",
+    "options": null,
+    "min_value": 5000.0,
+    "max_value": 200000.0,
+    "real_answer": 40075.0,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Dünyanın en derin gölü olan Baykal Gölü'nün en derin noktası kaç metredir?",
+    "explanation": "Baykal Gölü'nün en derin noktası 1.642 metredir.",
+    "options": null,
+    "min_value": 100.0,
+    "max_value": 6000.0,
+    "real_answer": 1642.0,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Rusya'nın yüzölçümü kaç milyon kilometrekaredir?",
+    "explanation": "Rusya yaklaşık 17,1 milyon km² ile dünyanın en büyük ülkesidir.",
+    "options": null,
+    "min_value": 2.0,
+    "max_value": 60.0,
+    "real_answer": 17.1,
+    "unit": "milyon km²"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 5,
+    "content": "Büyük Okyanus'un (Pasifik) yüzölçümü kaç milyon kilometrekaredir?",
+    "explanation": "Pasifik Okyanusu yaklaşık 165 milyon km² ile tüm karaların toplamından geniştir.",
+    "options": null,
+    "min_value": 20.0,
+    "max_value": 700.0,
+    "real_answer": 165.0,
+    "unit": "milyon km²"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 3,
+    "content": "Kilimanjaro Dağı'nın yüksekliği kaç metredir?",
+    "explanation": "Afrika'nın en yüksek noktası olan Kilimanjaro 5.895 metredir.",
+    "options": null,
+    "min_value": 1000.0,
+    "max_value": 12000.0,
+    "real_answer": 5895.0,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Süveyş Kanalı'nın uzunluğu kaç kilometredir?",
+    "explanation": "Süveyş Kanalı yaklaşık 193 km uzunluğundadır.",
+    "options": null,
+    "min_value": 20.0,
+    "max_value": 900.0,
+    "real_answer": 193.0,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Coğrafya",
+    "difficulty": 4,
+    "content": "Dünyadaki suyun yüzde kaçı tatlı sudur?",
+    "explanation": "Yeryüzündeki suyun yalnızca yaklaşık %2,5'i tatlı sudur ve bunun büyük kısmı buzullarda hapsolmuştur.",
+    "options": null,
+    "min_value": 0.1,
+    "max_value": 40.0,
+    "real_answer": 2.5,
+    "unit": "%"
+  },
+  {
+    "type": "tahmin",
+    "category": "Türkiye",
+    "difficulty": 3,
+    "content": "Türkiye'nin yüzölçümü kaç kilometrekaredir?",
+    "explanation": "Türkiye'nin yüzölçümü yaklaşık 783.562 km²'dir.",
+    "options": null,
+    "min_value": 100000.0,
+    "max_value": 3000000.0,
+    "real_answer": 783562.0,
+    "unit": "km²"
+  },
+  {
+    "type": "tahmin",
+    "category": "Türkiye",
+    "difficulty": 5,
+    "content": "Van Gölü'nün yüzölçümü kaç kilometrekaredir?",
+    "explanation": "Van Gölü yaklaşık 3.713 km² ile Türkiye'nin en büyük gölüdür.",
+    "options": null,
+    "min_value": 200.0,
+    "max_value": 20000.0,
+    "real_answer": 3713.0,
+    "unit": "km²"
+  },
+  {
+    "type": "tahmin",
+    "category": "Türkiye",
+    "difficulty": 5,
+    "content": "Karadeniz'in en derin noktası kaç metredir?",
+    "explanation": "Karadeniz'in en derin noktası yaklaşık 2.212 metredir.",
+    "options": null,
+    "min_value": 200.0,
+    "max_value": 9000.0,
+    "real_answer": 2212.0,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "İnsan Vücudu",
+    "difficulty": 5,
+    "content": "Bir yetişkinin tüm kan damarları uç uca eklenirse yaklaşık kaç kilometre eder?",
+    "explanation": "İnsan vücudundaki damarların toplam uzunluğu yaklaşık 100.000 km'dir; Dünya'nın çevresini iki buçuk kez sarar.",
+    "options": null,
+    "min_value": 500.0,
+    "max_value": 600000.0,
+    "real_answer": 100000.0,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "İnsan Vücudu",
+    "difficulty": 5,
+    "content": "Tek bir insan hücresindeki DNA uç uca uzatılsa yaklaşık kaç metre olur?",
+    "explanation": "Bir hücredeki DNA açıldığında yaklaşık 2 metre uzunluğundadır.",
+    "options": null,
+    "min_value": 0.05,
+    "max_value": 30.0,
+    "real_answer": 2.0,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "İnsan Vücudu",
+    "difficulty": 5,
+    "content": "İnsan genomunda yaklaşık kaç protein kodlayan gen bulunur?",
+    "explanation": "İnsanda protein kodlayan gen sayısı yaklaşık 20.000'dir.",
+    "options": null,
+    "min_value": 1000.0,
+    "max_value": 250000.0,
+    "real_answer": 20000.0,
+    "unit": "gen"
+  },
+  {
+    "type": "tahmin",
+    "category": "İnsan Vücudu",
+    "difficulty": 4,
+    "content": "Yetişkin bir insanın kalbi bir günde yaklaşık kaç litre kan pompalar?",
+    "explanation": "Kalp günde yaklaşık 7.500 litre kan pompalar.",
+    "options": null,
+    "min_value": 100.0,
+    "max_value": 40000.0,
+    "real_answer": 7500.0,
+    "unit": "litre"
+  },
+  {
+    "type": "tahmin",
+    "category": "İnsan Vücudu",
+    "difficulty": 3,
+    "content": "Beyin, vücudun harcadığı toplam enerjinin yüzde kaçını tüketir?",
+    "explanation": "Beyin, vücut ağırlığının %2'si olmasına rağmen enerjinin yaklaşık %20'sini tüketir.",
+    "options": null,
+    "min_value": 2.0,
+    "max_value": 80.0,
+    "real_answer": 20.0,
+    "unit": "%"
+  },
+  {
+    "type": "tahmin",
+    "category": "Hayvanlar",
+    "difficulty": 3,
+    "content": "Çita en yüksek hızına ulaştığında saatte kaç kilometre yapar?",
+    "explanation": "Çita kısa mesafede saatte yaklaşık 120 km hıza ulaşır.",
+    "options": null,
+    "min_value": 30.0,
+    "max_value": 400.0,
+    "real_answer": 120.0,
+    "unit": "km/saat"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Keops Piramidi ilk yapıldığında kaç metre yüksekliğindeydi?",
+    "explanation": "Keops Piramidi inşa edildiğinde yaklaşık 147 metre yüksekliğindeydi ve binlerce yıl boyunca dünyanın en yüksek yapısı olarak kaldı.",
+    "options": null,
+    "min_value": 20.0,
+    "max_value": 600.0,
+    "real_answer": 147.0,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 5,
+    "content": "Çin Seddi'nin resmî ölçümlere göre tüm kolları dâhil toplam uzunluğu kaç kilometredir?",
+    "explanation": "Çin'in resmî arkeolojik ölçümüne göre Sedd'in toplam uzunluğu 21.196 km'dir.",
+    "options": null,
+    "min_value": 1000.0,
+    "max_value": 80000.0,
+    "real_answer": 21196.0,
+    "unit": "km"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Vezüv Yanardağı'nın Pompeii'yi küller altında bırakan patlaması hangi yılda gerçekleşti?",
+    "explanation": "Vezüv MS 79'da patlayarak Pompeii ve Herculaneum'u yok etti.",
+    "options": null,
+    "min_value": 10.0,
+    "max_value": 700.0,
+    "real_answer": 79.0,
+    "unit": "yıl (MS)"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Magna Carta hangi yılda imzalandı?",
+    "explanation": "Magna Carta 1215 yılında İngiltere Kralı John tarafından imzalandı.",
+    "options": null,
+    "min_value": 800.0,
+    "max_value": 1750.0,
+    "real_answer": 1215.0,
+    "unit": "yıl"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Ayasofya'nın ilk inşası hangi yılda tamamlandı?",
+    "explanation": "Ayasofya, İmparator Justinianus döneminde 537 yılında tamamlandı.",
+    "options": null,
+    "min_value": 100.0,
+    "max_value": 1500.0,
+    "real_answer": 537.0,
+    "unit": "yıl (MS)"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 3,
+    "content": "İlk modern Olimpiyat Oyunları hangi yılda düzenlendi?",
+    "explanation": "İlk modern Olimpiyatlar 1896'da Atina'da yapıldı.",
+    "options": null,
+    "min_value": 1700.0,
+    "max_value": 1970.0,
+    "real_answer": 1896.0,
+    "unit": "yıl"
+  },
+  {
+    "type": "tahmin",
+    "category": "Tarih",
+    "difficulty": 4,
+    "content": "Titanic'in enkazı deniz yüzeyinden kaç metre derinliktedir?",
+    "explanation": "Titanic enkazı yaklaşık 3.800 metre derinlikte bulunur.",
+    "options": null,
+    "min_value": 200.0,
+    "max_value": 12000.0,
+    "real_answer": 3800.0,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 4,
+    "content": "Resmî bir futbol kalesinin iki direk arasındaki genişliği kaç metredir?",
+    "explanation": "Futbol kalesinin genişliği 7,32 metredir (8 yarda).",
+    "options": null,
+    "min_value": 2.0,
+    "max_value": 20.0,
+    "real_answer": 7.32,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 5,
+    "content": "Bir NBA basketbol sahasının uzunluğu kaç metredir?",
+    "explanation": "NBA sahası 94 fit, yani 28,65 metre uzunluğundadır.",
+    "options": null,
+    "min_value": 10.0,
+    "max_value": 70.0,
+    "real_answer": 28.65,
+    "unit": "metre"
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 3,
+    "content": "Usain Bolt'un 2009'da kırdığı 100 metre dünya rekoru kaç saniyedir?",
+    "explanation": "Bolt 2009 Berlin'de 100 metreyi 9,58 saniyede koştu.",
+    "options": null,
+    "min_value": 7.0,
+    "max_value": 16.0,
+    "real_answer": 9.58,
+    "unit": "saniye"
+  },
+  {
+    "type": "tahmin",
+    "category": "Spor",
+    "difficulty": 5,
+    "content": "Olimpiyat altın madalyasında kurallara göre en az kaç gram saf altın bulunmalıdır?",
+    "explanation": "Olimpiyat altın madalyası aslında gümüştür ve üzerinde en az 6 gram saf altın kaplama bulunur.",
+    "options": null,
+    "min_value": 1.0,
+    "max_value": 250.0,
+    "real_answer": 6.0,
+    "unit": "gram"
+  },
+  {
+    "type": "tahmin",
+    "category": "Kültür",
+    "difficulty": 5,
+    "content": "Bir Rubik küpünün kaç kentilyon (10^18) farklı olası dizilişi vardır?",
+    "explanation": "Rubik küpünün yaklaşık 43 kentilyon (43 × 10^18) farklı dizilişi vardır.",
+    "options": null,
+    "min_value": 1.0,
+    "max_value": 600.0,
+    "real_answer": 43.0,
+    "unit": "kentilyon"
+  },
+  {
+    "type": "tahmin",
+    "category": "Kültür",
+    "difficulty": 4,
+    "content": "Özgürlük Anıtı, kaidesiyle birlikte kaç metre yüksekliktedir?",
+    "explanation": "Özgürlük Anıtı kaidesiyle birlikte yaklaşık 93 metredir.",
+    "options": null,
+    "min_value": 20.0,
+    "max_value": 400.0,
+    "real_answer": 93.0,
+    "unit": "metre"
+  }
+]

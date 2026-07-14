@@ -452,6 +452,12 @@ class UserService:
         user.is_active = False
         user.deleted_at = datetime.now(timezone.utc)
 
+        # Push bildirim token'larını sil (KVKK: cihaz kimliği niteliğinde veri;
+        # hesap silinince saklanmaz + silinmiş hesaba bildirim gitmez).
+        # Geç import: push_service → models → user_service döngüsünü kırar.
+        from app.services import push_service
+        await push_service.remove_user_tokens(db, user_id)
+
         await db.flush()
 
         # Tüm oturumları (refresh token) geçersiz kıl

@@ -1,7 +1,7 @@
 # Gizlilik Politikası
 
 **Yürürlük Tarihi:** 16.06.2026
-**Son Güncelleme:** 16.06.2026
+**Son Güncelleme:** 14.07.2026
 
 Bu Gizlilik Politikası, "Bil ya da Düş" mobil uygulamasını ("Uygulama")
 kullandığınızda kişisel verilerinizin nasıl toplandığını, kullanıldığını ve
@@ -32,10 +32,15 @@ Uygulamayı kullanırken yalnızca aşağıdaki verileri toplarız:
   sunulursa yalnızca işlem doğrulama kayıtları tutulur. **Kredi kartı / ödeme
   aracı bilgilerinizi hiçbir durumda biz görmez ve saklamayız**; olası ödemeler
   Apple App Store veya Google Play üzerinden işlenir.
+- **Bildirim (push) token'ı:** Bildirimlere izin verirseniz, cihazınıza
+  bildirim ulaştırabilmek için Firebase Cloud Messaging (Google) tarafından
+  üretilen bir bildirim token'ı saklanır. Bu token yalnızca size oyun
+  bildirimi göndermek için kullanılır; **reklam veya izleme amacıyla
+  kullanılmaz** (bkz. Bölüm 4).
 
 **Yapmadıklarımız:** Uygulamada **reklam yoktur**, sizi **takip etmeyiz**
-(no tracking), reklam/analiz amaçlı **üçüncü taraf izleyici (SDK) kullanmayız**,
-**anlık bildirim (push)** göndermeyiz ve reklam tanımlayıcısı (IDFA) toplamayız.
+(no tracking), reklam/analiz amaçlı **üçüncü taraf izleyici (SDK) kullanmayız**
+ve reklam tanımlayıcısı (IDFA) toplamayız.
 
 ## 3. Verileri Kullanım Amaçlarımız
 
@@ -44,12 +49,34 @@ Topladığımız verileri yalnızca şu amaçlarla kullanırız:
 - Hesabınızı oluşturmak, oturum açmanızı sağlamak ve kimliğinizi doğrulamak.
 - Oyun deneyimini sunmak, eşleştirme yapmak, skor ve liderlik tablolarını
   yönetmek.
+- Size oyunla ilgili bildirimler göndermek (bkz. Bölüm 4).
 - (Sunulması halinde) uygulama içi satın alımları işlemek ve doğrulamak.
 - Uygulamayı çalıştırmak, hataları gidermek, güvenliği ve kötüye kullanımı
   önlemek.
 - Yasal yükümlülüklerimizi yerine getirmek.
 
-## 4. Üçüncü Taraflar ve Veri Paylaşımı
+## 4. Anlık Bildirimler (Push)
+
+Uygulama, **izniniz olduğu takdirde** cihazınıza anlık bildirim (push) gönderir.
+Bildirim izni işletim sistemi tarafından sorulur ve **tamamen isteğe bağlıdır**;
+izin vermezseniz uygulamanın tüm özellikleri normal şekilde çalışmaya devam eder.
+
+- **Ne saklarız:** Yalnızca cihazınıza bildirim ulaştırmak için gereken bildirim
+  token'ı (Firebase Cloud Messaging tarafından üretilen rastgele bir kimlik),
+  cihaz platformu (iOS/Android) ve son güncelleme zamanı.
+- **Ne için kullanırız:** Yalnızca **oyunla ilgili bildirimler** için — örneğin
+  günlük ödül serinizin bozulmak üzere olduğunu hatırlatmak, günün sorusunu
+  duyurmak veya sizi tekrar oyuna davet etmek.
+- **Ne için KULLANMAYIZ:** Bildirim token'ı **reklam, profilleme veya sizi
+  başka uygulama/sitelerde izleme amacıyla kullanılmaz**, üçüncü taraflara
+  **satılmaz**.
+- **Sınırlar:** Rahatsız etmemek için gece bildirim göndermeyiz (23:00–10:00
+  arası sessiz saat) ve **kişi başına günde en fazla bir bildirim** göndeririz.
+- **Nasıl kapatırım:** Bildirimleri istediğiniz zaman cihazınızın
+  **Ayarlar → Bildirimler → Bil ya da Düş** bölümünden kapatabilirsiniz. Ayrıca
+  hesabınızı sildiğinizde bildirim token'ınız da silinir.
+
+## 5. Üçüncü Taraflar ve Veri Paylaşımı
 
 Verileriniz yalnızca hizmetin sunulması için gerekli ölçüde şu taraflarla
 paylaşılabilir:
@@ -58,23 +85,27 @@ paylaşılabilir:
   satın alımların işlenmesi ve makbuz doğrulaması için.
 - **Sunucu altyapısı (hosting):** Hesap ve oyun verilerinin barındırıldığı
   sunucu sağlayıcısı.
+- **Google (Firebase Cloud Messaging) ve Apple (APNs):** Yalnızca anlık
+  bildirimlerin cihazınıza ulaştırılması için; bildirim token'ı ve bildirim
+  içeriği bu servisler üzerinden iletilir.
 
 Verilerinizi pazarlama amacıyla üçüncü taraflara **satmayız** ve reklam
 ortaklarıyla **paylaşmayız**.
 
-## 5. Veri Saklama ve Silme
+## 6. Veri Saklama ve Silme
 
 Kişisel verilerinizi, hesabınız aktif olduğu sürece veya yasal yükümlülükler
 gerektirdiği ölçüde saklarız.
 
 - **Hesap silme hakkı:** Uygulama içindeki "Hesap Ayarları" bölümünden hesabınızı
   ve ilişkili kişisel verilerinizi **doğrudan uygulama içinden** silebilirsiniz.
-  Hesap silindiğinde kişisel verileriniz, yasal saklama yükümlülükleri saklı
-  kalmak kaydıyla, makul bir süre içinde silinir veya anonim hale getirilir.
+  Hesap silindiğinde kişisel verileriniz — **bildirim (push) token'ınız dâhil** —
+  yasal saklama yükümlülükleri saklı kalmak kaydıyla, makul bir süre içinde
+  silinir veya anonim hale getirilir.
 - Bazı işlem kayıtları (ör. satın alma kayıtları) yasal nedenlerle daha uzun
   süre saklanabilir.
 
-## 6. Çocukların Gizliliği
+## 7. Çocukların Gizliliği
 
 Uygulama 13 yaşın altındaki çocuklara yönelik değildir. Bilerek 13 yaşın
 altındaki çocuklardan kişisel veri toplamayız. Böyle bir verinin toplandığını
@@ -82,7 +113,7 @@ fark edersek en kısa sürede sileriz. Ebeveyn veya vasiyseniz ve çocuğunuzun 
 veri sağladığını düşünüyorsanız **guvenser09@gmail.com** adresinden iletişime
 geçin.
 
-## 7. KVKK / GDPR Kapsamındaki Haklarınız
+## 8. KVKK / GDPR Kapsamındaki Haklarınız
 
 İlgili mevzuat uyarınca aşağıdaki haklara sahipsiniz:
 
@@ -96,18 +127,18 @@ geçin.
 
 Bu haklarınızı kullanmak için **guvenser09@gmail.com** adresine başvurabilirsiniz.
 
-## 8. Veri Güvenliği
+## 9. Veri Güvenliği
 
 Verilerinizi yetkisiz erişime, kayba ve kötüye kullanıma karşı korumak için makul
 teknik ve idari önlemler alıyoruz (ör. şifreli iletişim, erişim kontrolü). Ancak
 internet üzerinden hiçbir iletim yönteminin %100 güvenli olmadığını hatırlatırız.
 
-## 9. Bu Politikadaki Değişiklikler
+## 10. Bu Politikadaki Değişiklikler
 
 Bu Gizlilik Politikasını zaman zaman güncelleyebiliriz. Önemli değişikliklerde
 sizi uygulama içinde veya başka uygun yollarla bilgilendiririz. Güncel sürüm her
 zaman bu sayfada yayınlanır.
 
-## 10. İletişim
+## 11. İletişim
 
 Sorularınız için: **guvenser09@gmail.com**
