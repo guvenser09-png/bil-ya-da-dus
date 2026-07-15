@@ -49,7 +49,15 @@ class PushService {
   PushService._();
   static final PushService instance = PushService._();
 
-  final _messaging = FirebaseMessaging.instance;
+  // LAZY getter — ASLA alan başlatıcısı OLARAK erişme! `FirebaseMessaging.instance`
+  // içeride `Firebase.app()` çağırır; Firebase.initializeApp() ÇALIŞMADAN önce
+  // erişilirse istisna fırlatır. Alan başlatıcısı singleton kurulurken (main.dart
+  // `PushService.instance` erişiminde) çalıştığından, bu istisna init()'in
+  // try/catch'ine YAKALANMADAN main()'e sızıp runApp'tan önce uygulamayı ÇÖKERTİR
+  // (BEYAZ EKRAN). Getter'la erişim ertelenir: tüm kullanım noktaları zaten
+  // Firebase.initializeApp() başarıyla döndükten SONRA (init() içinde) veya
+  // `_enabled` kontrolünün ardından çalışır.
+  FirebaseMessaging get _messaging => FirebaseMessaging.instance;
 
   /// Firebase başarıyla başlatıldı mı? (plist yoksa false → her şey no-op)
   bool _enabled = false;

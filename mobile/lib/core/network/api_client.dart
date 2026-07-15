@@ -121,6 +121,15 @@ class ApiClient {
 }
 
 class _AuthInterceptor extends Interceptor {
+  // TEK-UÇUŞ (single-flight) refresh. Uzun süre sonra uygulama açılınca access
+  // token (30 dk) süresi dolmuş olur; açılışta ~10 provider AYNI ANDA istek atıp
+  // hepsi 401 alır. Eskiden her biri AYRI refresh deniyordu; backend refresh
+  // token'ı rotasyona soktuğu için ilki başarılı olup token'ı yeniliyor, kalanı
+  // ARTIK GEÇERSİZ eski token'la başarısız olup clearAll() ile kullanıcıyı GİRİŞ
+  // EKRANINA ATIYORDU. Bu bayrak sayesinde eşzamanlı 401'ler TEK yenilemeyi
+  // paylaşır; yenileme başarılıysa herkes taze token'la yeniden dener.
+  static Future<bool>? _refreshing;
+
   @override
   Future<void> onRequest(
     RequestOptions options,
@@ -138,32 +147,83 @@ class _AuthInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    if (err.response?.statusCode == 401) {
-      // Try to refresh token
-      final refreshToken = await SecureStorage.instance.getRefreshToken();
-      if (refreshToken != null) {
-        try {
-          final dio = Dio(BaseOptions(baseUrl: AppConstants.baseUrl));
-          final res = await dio.post(
-            '/api/auth/refresh',
-            data: {'refresh_token': refreshToken},
-          );
-          final newAccess = res.data['access_token'] as String;
-          final newRefresh = res.data['refresh_token'] as String;
-          await SecureStorage.instance.saveTokens(
-            accessToken: newAccess,
-            refreshToken: newRefresh,
-          );
-          // Retry original request
-          err.requestOptions.headers['Authorization'] = 'Bearer $newAccess';
-          final retryRes = await dio.fetch(err.requestOptions);
-          handler.resolve(retryRes);
-          return;
-        } catch (_) {
-          await SecureStorage.instance.clearAll();
-        }
-      }
+    // Yalnız 401'i ele al. Refresh çağrısının KENDİSİ 401 verdiyse döngüye
+    // girme (sonsuz refresh koruması).
+    if (err.response?.statusCode != 401 ||
+        err.requestOptions.path.contains('/api/auth/refresh')) {
+      handler.next(err);
+      return;
     }
+
+    final usedToken = _bearerOf(err.requestOptions);
+
+    // Başka bir istek bu arada zaten yenilemiş olabilir → token değiştiyse
+    // refresh'e hiç gitmeden doğrudan taze token'la yeniden dene.
+    final current = await SecureStorage.instance.getAccessToken();
+    if (current != null && current.isNotEmpty && current != usedToken) {
+      if (await _retry(err, current, handler)) return;
+    }
+
+    // Tek-uçuş yenileme: eşzamanlı 401'ler aynı Future'ı bekler.
+    final ok = await (_refreshing ??=
+        _doRefresh().whenComplete(() => _refreshing = null));
+    if (ok) {
+      final fresh = await SecureStorage.instance.getAccessToken();
+      if (fresh != null && await _retry(err, fresh, handler)) return;
+    }
+
     handler.next(err);
+  }
+
+  /// Refresh token ile access token'ı yeniler. Başarılı → true.
+  /// clearAll() YALNIZCA refresh token gerçekten geçersizse (401/403) çağrılır;
+  /// ağ/parse hatasında token'lar KORUNUR (geçici sorun kullanıcıyı atmasın).
+  Future<bool> _doRefresh() async {
+    final refresh = await SecureStorage.instance.getRefreshToken();
+    if (refresh == null || refresh.isEmpty) return false;
+    try {
+      final dio = Dio(BaseOptions(baseUrl: AppConstants.baseUrl));
+      final res = await dio.post(
+        '/api/auth/refresh',
+        data: {'refresh_token': refresh},
+      );
+      await SecureStorage.instance.saveTokens(
+        accessToken: res.data['access_token'] as String,
+        refreshToken: res.data['refresh_token'] as String,
+      );
+      return true;
+    } on DioException catch (e) {
+      final code = e.response?.statusCode;
+      if (code == 401 || code == 403) {
+        await SecureStorage.instance.clearAll(); // refresh token gerçekten öldü
+      }
+      return false;
+    } catch (_) {
+      return false; // ağ/parse hatası → token'ları koru
+    }
+  }
+
+  /// Orijinal isteği verilen token'la yeniden dener; başarılıysa handler'ı
+  /// çözer ve true döner. Başarısızsa handler'a DOKUNMAZ (çağıran devam eder).
+  Future<bool> _retry(
+    DioException err,
+    String token,
+    ErrorInterceptorHandler handler,
+  ) async {
+    try {
+      final dio = Dio(BaseOptions(baseUrl: AppConstants.baseUrl));
+      err.requestOptions.headers['Authorization'] = 'Bearer $token';
+      final res = await dio.fetch(err.requestOptions);
+      handler.resolve(res);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  String? _bearerOf(RequestOptions o) {
+    final h = o.headers['Authorization'];
+    if (h is String && h.startsWith('Bearer ')) return h.substring(7);
+    return null;
   }
 }
