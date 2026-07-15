@@ -46,7 +46,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         const Positioned.fill(child: BiladaBackground()),
         Column(
           children: [
-            BiladaTopBar(username: username, coins: coins, avatarSeed: username.hashCode),
+            // Üst barda logo GİZLİ: hemen altında büyük hero "Bil ya da Düş"
+            // başlığı var; ikisi birden çıkınca isim alt alta iki kez görünüp
+            // göz tırmalıyordu. Hero başlık kalsın, üst bar sade olsun.
+            BiladaTopBar(
+              username: username,
+              coins: coins,
+              avatarSeed: username.hashCode,
+              showLogo: false,
+            ),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(20, 4, 20, 100),
