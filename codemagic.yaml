@@ -30,9 +30,15 @@ workflows:
       cancel_previous_builds: true
 
     environment:
-      flutter: stable
+      # Sürümler yerelde google_mobile_ads + webview_flutter_wkwebview'in
+      # sorunsuz kurulduğu KANITLI ortama sabitlendi. `stable` ile CI daha yeni
+      # bir Flutter çekince transitif shared_darwin_source eklentisi (webview,
+      # google_mobile_ads bağımlılığı) iOS pod'u olarak kaydedilmiyor ve
+      # 'Unable to find a specification for webview_flutter_wkwebview' hatası
+      # veriyordu. Yeni sürüme geçmeden önce yerelde doğrula, sonra buradan yükselt.
+      flutter: 3.41.9
       xcode: latest
-      cocoapods: default
+      cocoapods: 1.16.2
       groups:
         - appstore            # CERT_KEY_PASSPHRASE burada (Codemagic env var)
       vars:
