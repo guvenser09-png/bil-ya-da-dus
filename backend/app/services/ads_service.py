@@ -25,16 +25,29 @@ from app.services.user_service import UserService
 
 logger = logging.getLogger("app.ads_service")
 
-# Günlük toplam ödüllü reklam limiti (tüm yerleşimler toplamı).
+# Günlük toplam ödüllü reklam limiti (COIN veren yerleşimler toplamı).
+# NOT: Kalkan reklamı (placement="shield") altın VERMEZ → bu toplama DAHİL
+# DEĞİLDİR; kendi ayrı günlük cap'i (SHIELD_AD_DAILY_CAP) vardır.
 ADS_DAILY_LIMIT = 5
 
 # Yerleşim (placement) tanımları: ödül + placement başına günlük cap.
 # reward: {"coins": int}. SADECE coin (pay-to-win YOK).
+# "gold": ekonomi kıtlaştırmasının telafisi — oyuncu reklam izleyerek +200 altın
+# alır (kalkan/karakter için ana kazanç yolu). Günlük cap ile kötüye kullanım
+# engellenir (mevcut cap deseni korunur).
 PLACEMENTS: dict[str, dict] = {
     "daily_coins": {"reward": {"coins": 50}, "daily_cap": 3},
     "double_match": {"reward": {"coins": 30}, "daily_cap": 3},
     "shop_bonus": {"reward": {"coins": 40}, "daily_cap": 2},
+    "gold": {"reward": {"coins": 200}, "daily_cap": 3},
 }
+
+# --- Kalkan reklamı (ödüllü reklamla "bedava kalkan kredisi") ---
+# Altın VERMEZ; yalnızca prepare-shield akışında shield_ready bayrağını haklı
+# kılacak ANTI-FRAUD doğrulaması sağlar. Coin toplam limitinden (ADS_DAILY_LIMIT)
+# bağımsız kendi günlük cap'i vardır (para vektörü olmadığı için ayrı tutulur).
+SHIELD_AD_PLACEMENT = "shield"
+SHIELD_AD_DAILY_CAP = 10
 
 _NONCE_TTL = 24 * 3600
 
@@ -136,3 +149,70 @@ class AdsService:
             "coins": user.coins,
             "daily_remaining": max(0, ADS_DAILY_LIMIT - (user.ad_reward_count_today or 0)),
         }
+
+    @staticmethod
+    async def verify_shield_ad(
+        user_id: str,
+        nonce: str | None = None,
+        *,
+        now: datetime | None = None,
+    ) -> dict:
+        """Kalkan reklamının izlendiğini doğrula (altın VERMEZ; yalnızca anti-fraud).
+
+        prepare_shield(source="ad") buradan geçer; başarılıysa çağıran taraf
+        shield_ready bayrağını set eder. Coin akışından bağımsızdır: ne altın
+        ekler ne ad_reward_count_today sayacına dokunur. Sadece:
+          - nonce idempotency (Redis SET NX) — aynı reklam iki kez sayılmasın,
+          - kalkan reklamı için AYRI günlük cap (SHIELD_AD_DAILY_CAP).
+
+        Redis erişilemezse fail-open (reklamı izleyen oyuncu cezalandırılmaz);
+        bu, mevcut ads best-effort desenidir.
+
+        Raises:
+            ValueError: Aynı nonce tekrar geldi veya günlük kalkan reklamı cap'i aşıldı.
+        """
+        now = now or datetime.now(timezone.utc)
+        today = _utc_day(now)
+
+        # Deferred import: conftest testlerinde `app.redis_client.get_redis`
+        # patch'lenir; yerel import patch'li mock'u yakalar (modül-üstü import
+        # bunu kaçırırdı → gerçek Redis'e gidip test'i yavaşlatırdı).
+        from app.redis_client import get_redis
+
+        # --- Idempotency (nonce) ---
+        if nonce:
+            try:
+                redis = await get_redis()
+                first = await redis.set(
+                    f"ad:nonce:shield:{user_id}:{nonce}", "1", nx=True, ex=_NONCE_TTL
+                )
+                if first is None:
+                    raise ValueError("Bu kalkan reklamı zaten kullanıldı.")
+            except ValueError:
+                raise
+            except Exception as exc:
+                logger.warning("Kalkan reklamı nonce kontrolü atlandı: %s", exc)
+
+        # --- Kalkan reklamı için ayrı günlük cap (Redis sayaç) ---
+        pkey = f"ad:placement:{user_id}:{today}:{SHIELD_AD_PLACEMENT}"
+        redis_ok = False
+        try:
+            redis = await get_redis()
+            count = int(await redis.get(pkey) or 0)
+            redis_ok = True
+            if count >= SHIELD_AD_DAILY_CAP:
+                raise ValueError("Günlük kalkan reklamı limitine ulaştınız.")
+        except ValueError:
+            raise
+        except Exception as exc:
+            logger.warning("Kalkan reklamı cap kontrolü atlandı: %s", exc)
+
+        if redis_ok:
+            try:
+                redis = await get_redis()
+                await redis.incr(pkey)
+                await redis.expire(pkey, _NONCE_TTL)
+            except Exception as exc:
+                logger.warning("Kalkan reklamı sayacı artırılamadı: %s", exc)
+
+        return {"verified": True, "placement": SHIELD_AD_PLACEMENT}

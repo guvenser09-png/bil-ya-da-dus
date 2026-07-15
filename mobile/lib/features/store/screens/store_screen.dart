@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quizroyale/core/services/ad_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
+import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/store/providers/store_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 
@@ -45,6 +48,12 @@ class StoreScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ── ÖDÜLLÜ REKLAM → ALTIN (ekonominin valfi) ──
+            // Web'de google_mobile_ads no-op → kartı hiç gösterme.
+            if (!kIsWeb) ...[
+              const _WatchAdForGoldButton(),
+              const SizedBox(height: 20),
+            ],
             // ── KARAKTERLER (mağazanın yıldızı — altınla açılır) ──
             if (state.characters.isNotEmpty) ...[
               _sectionHeader('Karakterler', 'Altınla aç, lobide gösteriş yap'),
@@ -92,6 +101,103 @@ class StoreScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+//  ÖDÜLLÜ REKLAM → ALTIN
+// ─────────────────────────────────────────────────────────────────────────
+
+/// "Altının mı az? 📺 Reklam izle → +200 altın" kartı. Ödüllü reklam izlenip
+/// ödül hak edilince backend +200 altın ekler; bakiye tazelenir. Web'de hiç
+/// gösterilmez (bkz. StoreScreen._body → kIsWeb guard).
+class _WatchAdForGoldButton extends ConsumerStatefulWidget {
+  const _WatchAdForGoldButton();
+
+  @override
+  ConsumerState<_WatchAdForGoldButton> createState() =>
+      _WatchAdForGoldButtonState();
+}
+
+class _WatchAdForGoldButtonState extends ConsumerState<_WatchAdForGoldButton> {
+  bool _busy = false;
+
+  Future<void> _watch() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final status = await AdService.instance.showRewarded(placement: 'gold');
+      if (!mounted) return;
+      if (status == AdRewardStatus.earned) {
+        // Backend +200 altın ekledi → hem global kullanıcıyı hem mağaza
+        // bakiyesini (üst bar) tazele.
+        await ref.read(authProvider.notifier).refreshUser();
+        await ref.read(storeProvider.notifier).load();
+        if (!mounted) return;
+        messenger.showSnackBar(const SnackBar(
+            content: Text('+200 altın hesabına eklendi! 🪙')));
+      } else if (status == AdRewardStatus.unavailable) {
+        messenger.showSnackBar(const SnackBar(
+            content: Text('Reklam şu an yok, birazdan tekrar dene.')));
+      }
+      // dismissed → kullanıcı erken kapattı; sessizce geç.
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      borderRadius: 20,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Text('🪙', style: TextStyle(fontSize: 26)),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Altının mı az?', style: BiladaText.title(size: 16)),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Kısa bir reklam izle, anında +200 altın kazan.',
+                      style: BiladaText.body(
+                          color: AppTheme.cOnSurfaceVariant, size: 12),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          SizedBox(
+            width: double.infinity,
+            child: ChunkyButton(
+              height: 48,
+              color: AppTheme.cTertiary,
+              foreground: AppTheme.cOnTertiary,
+              shadowColor: AppTheme.cSurfaceContainerLowest,
+              onPressed: _busy ? null : _watch,
+              child: _busy
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2.5, color: Colors.white),
+                    )
+                  : const Text('📺 Reklam izle → +200 altın',
+                      style: TextStyle(fontSize: 15)),
+            ),
+          ),
+        ],
       ),
     );
   }

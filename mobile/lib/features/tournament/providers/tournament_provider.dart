@@ -1,6 +1,7 @@
-// İLK LANSMAN: rafa kaldırıldı, Aşama 3'te geri açılacak.
-// Turnuva (3x) modu UI'dan erişilemez; bu provider yalnızca rafa kalkan
-// tournament_screen.dart tarafından kullanılır ve kod bilerek silinmedi.
+// ZOR MOD (v1.2): Rafta duran turnuva "ZOR MOD" olarak geri açıldı.
+// Ana ekrandan giriş noktası var; bu provider ZOR MOD ekranını besler.
+// Giriş 100 altın; lobi/maç/sonuç payload'larına ÖDÜL HAVUZU alanları
+// (prize_pool + prize_top3) eklendi (backend sözleşmesi).
 
 import 'dart:async';
 
@@ -71,6 +72,8 @@ class TournamentState {
     this.hardMode = true,
     this.description,
     this.entryOptions = const [],
+    this.prizePool = 0,
+    this.prizeTop3 = const [],
     this.gold = 0,
     this.myRank,
     this.myScore,
@@ -92,6 +95,12 @@ class TournamentState {
   final bool hardMode;
   final String? description;
   final List<TournamentEntryOption> entryOptions;
+
+  /// ZOR MOD ödül havuzu — toplam altın (payload: prize_pool).
+  final int prizePool;
+
+  /// İlk üç sıraya düşen paylar [şampiyon, 2., 3.] (payload: prize_top3).
+  final List<int> prizeTop3;
 
   final int gold;
 
@@ -118,6 +127,8 @@ class TournamentState {
     bool? hardMode,
     Object? description = _s,
     List<TournamentEntryOption>? entryOptions,
+    int? prizePool,
+    List<int>? prizeTop3,
     int? gold,
     Object? myRank = _s,
     Object? myScore = _s,
@@ -137,6 +148,8 @@ class TournamentState {
         description:
             identical(description, _s) ? this.description : description as String?,
         entryOptions: entryOptions ?? this.entryOptions,
+        prizePool: prizePool ?? this.prizePool,
+        prizeTop3: prizeTop3 ?? this.prizeTop3,
         gold: gold ?? this.gold,
         myRank: identical(myRank, _s) ? this.myRank : myRank as int?,
         myScore: identical(myScore, _s) ? this.myScore : myScore as int?,
@@ -229,6 +242,11 @@ class TournamentNotifier extends StateNotifier<TournamentState> {
     final balances = r['balances'] as Map<String, dynamic>? ?? const {};
     final myEntry = r['my_entry'] as Map<String, dynamic>?;
 
+    // ÖDÜL HAVUZU (backend sözleşmesi): prize_pool toplam altın havuzu,
+    // prize_top3 ilk üç sıranın altın payları [şampiyon, 2., 3.].
+    final top3Raw = r['prize_top3'] as List? ?? const [];
+    final prizeTop3 = top3Raw.map((e) => (e as num?)?.toInt() ?? 0).toList();
+
     return state.copyWith(
       seasonId: r['season_id']?.toString(),
       secondsLeft: (r['seconds_left'] as num?)?.toInt() ?? 0,
@@ -236,6 +254,8 @@ class TournamentNotifier extends StateNotifier<TournamentState> {
       hardMode: r['hard_mode'] as bool? ?? true,
       description: r['description']?.toString(),
       entryOptions: options,
+      prizePool: (r['prize_pool'] as num?)?.toInt() ?? 0,
+      prizeTop3: prizeTop3,
       gold: (balances['gold'] as num?)?.toInt() ?? 0,
       myRank: (myEntry?['rank'] as num?)?.toInt(),
       myScore: (myEntry?['score'] as num?)?.toInt(),

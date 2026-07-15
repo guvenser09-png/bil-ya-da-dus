@@ -54,8 +54,6 @@ from app.services.game_service import (
 )
 from app.services.match_reward_service import (
     BET_REWARD,
-    SHIELD_COST,
-    charge_shield_costs,
     ghost_reward_for,
     grant_match_rewards,
     grant_match_xp,
@@ -374,7 +372,7 @@ def _build_state_snapshot(engine: GameEngine) -> dict:
         }
         players_list.append(entry)
         players_by_id[p.user_id or username] = entry
-    return {
+    snapshot = {
         "game_id": engine.game_id,
         "status": engine.status,
         "current_round": engine.current_round,
@@ -385,6 +383,12 @@ def _build_state_snapshot(engine: GameEngine) -> dict:
         "players_by_id": players_by_id,
         "started_at": engine.started_at.isoformat(),
     }
+    # Zor Mod havuz bilgisi (mobil maç ekranında gösterir; normal maçta yok).
+    if getattr(engine, "is_tournament", False):
+        snapshot["is_tournament"] = True
+        snapshot["prize_pool"] = int(getattr(engine, "prize_pool", 0))
+        snapshot["prize_top3"] = list(getattr(engine, "prize_top3", []))
+    return snapshot
 
 
 # ---------------------------------------------------------------------------
@@ -422,25 +426,27 @@ def _bonus_coins_for(player, winner_username: str | None) -> int:
 
 async def _persist_game_results(
     game_id: str, engine: GameEngine, final: dict
-) -> tuple[dict[str, int], dict[str, bool]]:
+) -> tuple[dict[str, int], dict[str, int]]:
     """Oyun bitince GERÇEK oyuncuların istatistiklerini KALICI olarak kaydet.
 
     - User tablosu: games_played, games_won, total_score (BİRİKİMLİ), win_rate,
       doğru cevap sayaçları → "çok oynayan çok puan toplar" sistemi.
-    - Maç sonu COIN ödülü (pay-to-win YOK): kazanan +50, ilk 3 +25, herkes +10;
+    - Maç sonu COIN ödülü (pay-to-win YOK): kazanan +30, ilk 3 +15, herkes +5;
       günlük 500 coin cap'i ile. Sadece gerçek oyunculara, idempotent.
-    - KALKAN BEDELİ: kalkanı kırılan gerçek oyuncudan SHIELD_COST altın
-      düşülür (bakiye yetmezse hediye). Ödüller EKLENDİKTEN SONRA, aynı
-      idempotent blokta tahsil edilir — oyuncu bedeli maç kazancıyla ödeyebilir.
+    - ZOR MOD ÖDÜL HAVUZU: turnuva maçında ilk 3 gerçek oyuncuya havuz payı
+      (engine.prize_top3) altın olarak verilir — günlük cap'ten BAĞIMSIZ,
+      ödüllerden sonra aynı idempotent blokta.
     - Redis günlük/haftalık sıralama: o oyunda kazanılan puan kadar artırılır.
+
+    NOT: Eski "kalkan bedeli" tahsilatı KALDIRILDI (kalkan artık peşin alınır).
 
     Hatalar oyun akışını ASLA bozmasın diye tüm gövde try/except ile sarılı.
 
     Returns:
-        (coins_earned, shield_billing) ikilisi:
-        coins_earned  — {user_id: bu maçta kazanılan coin}.
-        shield_billing — {user_id: True (bedel tahsil edildi) | False (hediye)};
-        kalkanı kırılmayanlar haritada YER ALMAZ.
+        (coins_earned, zor_mod_prizes) ikilisi:
+        coins_earned   — {user_id: bu maçta kazanılan (cap'li) maç ödülü coin'i}.
+        zor_mod_prizes — {user_id: Zor Mod havuz payı altını} (yalnızca turnuva
+        maçında ilk 3; normal maçta boş).
     """
     winner = final.get("winner") or {}
     winner_username = winner.get("username") if isinstance(winner, dict) else winner
@@ -449,9 +455,9 @@ async def _persist_game_results(
         p for p in engine.players.values() if not p.is_bot and p.user_id
     ]
     coins_earned: dict[str, int] = {}
-    shield_billing: dict[str, bool] = {}
+    zor_mod_prizes: dict[str, int] = {}
     if not real_players:
-        return coins_earned, shield_billing
+        return coins_earned, zor_mod_prizes
 
     # --- İdempotency: bu maç daha önce ödüllendirildiyse coin tekrar verme ---
     rewards_already_granted = False
@@ -580,23 +586,35 @@ async def _persist_game_results(
                         "Game %s: görev ilerlemesi güncellenemedi: %s", game_id, exc
                     )
 
-                # --- Kalkan bedeli (🛡️💰): ödüllerden SONRA tahsil et ---
-                # Kırılan kalkan başına SHIELD_COST altın; bakiye yetmezse
-                # HİÇ düşülmez (hediye). Botlar zaten real_players dışında.
-                # Ödül cap'inden bağımsız bir GİDER; aynı idempotent blokta
-                # (match:rewarded anahtarı) olduğundan çift tahsilat olmaz.
+                # --- Zor Mod ödül havuzu: ödüllerden SONRA dağıt ---
+                # Turnuva maçında ilk 3 gerçek oyuncuya havuz payı (prize_top3)
+                # altın olarak verilir. Günlük maç-ödülü cap'inden BAĞIMSIZ
+                # (turnuva payoutu). Aynı idempotent blokta (match:rewarded
+                # anahtarı) olduğundan çift dağıtım olmaz.
                 try:
-                    shield_user_ids = [
-                        pl.user_id for pl in real_players
-                        if getattr(pl, "shield_broken", False)
-                    ]
-                    if shield_user_ids:
-                        shield_billing = await charge_shield_costs(
-                            db, shield_user_ids
+                    if (
+                        getattr(engine, "is_tournament", False)
+                        and getattr(engine, "prize_top3", None)
+                    ):
+                        from app.services.tournament_service import (
+                            TournamentService,
+                        )
+
+                        # Havuz payları skora göre azalan sıralı gerçek oyunculara
+                        # gider (şampiyon = en yüksek skor = 0. indeks). grant_match_
+                        # rewards ile AYNI sıralama ölçütü (tutarlılık).
+                        prize_rank = [
+                            pl.user_id for pl in sorted(
+                                real_players, key=lambda x: x.score, reverse=True
+                            )
+                        ]
+                        zor_mod_prizes = await TournamentService.grant_prize_pool(
+                            db, prize_rank, engine.prize_top3
                         )
                 except Exception as exc:
                     logger.warning(
-                        "Game %s: kalkan bedeli tahsil edilemedi: %s", game_id, exc
+                        "Game %s: Zor Mod ödül havuzu dağıtılamadı: %s",
+                        game_id, exc,
                     )
             await db.commit()
     except Exception as exc:
@@ -689,7 +707,7 @@ async def _persist_game_results(
     except Exception as exc:
         logger.warning("Game %s: sonuç anlık görüntüsü kaydedilemedi: %s", game_id, exc)
 
-    return coins_earned, shield_billing
+    return coins_earned, zor_mod_prizes
 
 
 def _build_questions_summary(engine: GameEngine) -> list[dict]:
@@ -997,17 +1015,32 @@ async def _run_game_inner(
     await asyncio.sleep(0.75)
 
     # Maç GERÇEKTEN başlıyor (en az bir gerçek oyuncu bağlı). Turnuva ise
-    # giriş biletlerini TÜKET → artık iade edilmez (sink olarak yandı).
+    # giriş biletlerini TÜKET → artık iade edilmez (havuza girdi).
     if getattr(engine, "is_tournament", False):
         await _consume_tournament_tickets(engine)
 
+    # KALKAN KURULUMU (yeni ekonomi): gerçek oyuncuların kalkanı burada belirlenir
+    # — yeni oyuncu (games<5) bedava; diğerleri shield_ready kredisi varsa. Botlar
+    # 1 kalkanda kalır. Maç GERÇEKTEN başladığı an uygulanır (round_start'tan önce,
+    # shields alanı doğru yayınlansın). Hata olsa bile oyunu bozmaz.
+    try:
+        await engine.apply_shield_setup()
+    except Exception:
+        logger.exception("Game %s: kalkan kurulumu başarısız", game_id)
+
     # Notify everyone: game is live
-    await game_manager.broadcast_to_game(game_id, {
+    game_started_msg = {
         "type": "game_started",
         "game_id": game_id,
         "total_rounds": 5,
         "alive_count": engine.alive_count,
-    })
+    }
+    # Zor Mod havuz bilgisi (mobil maç ekranında gösterir).
+    if getattr(engine, "is_tournament", False):
+        game_started_msg["is_tournament"] = True
+        game_started_msg["prize_pool"] = int(getattr(engine, "prize_pool", 0))
+        game_started_msg["prize_top3"] = list(getattr(engine, "prize_top3", []))
+    await game_manager.broadcast_to_game(game_id, game_started_msg)
 
     # ----------------------------------------------------------------
     # ROUND LOOP
@@ -1254,11 +1287,11 @@ async def _run_game_inner(
                     "winner": ans_data.get("winner", False),
                 })
 
-    # Birikimli puan + sıralama + maç COIN ödülü (cap'li, idempotent) + kalkan
-    # bedeli önce işlenir ki kazanılan coin (coins_earned) ve kalkan tahsilat
-    # sonucu (shield_billing) kişisel game_finished mesajına eklenebilsin.
+    # Birikimli puan + sıralama + maç COIN ödülü (cap'li, idempotent) + Zor Mod
+    # havuz payları önce işlenir ki kazanılan coin (coins_earned) ve havuz payı
+    # (zor_mod_prizes) kişisel game_finished mesajına eklenebilsin.
     # Bu fonksiyon hata fırlatmaz (gövdesi try/except sarılı).
-    coins_earned, shield_billing = await _persist_game_results(game_id, engine, final)
+    coins_earned, zor_mod_prizes = await _persist_game_results(game_id, engine, final)
 
     # Maçta oynanan soruların özeti (mobil "soruları & doğru cevapları gör").
     # Genel mesaja kullanıcıdan bağımsız özet konur; aşağıda her gerçek
@@ -1276,6 +1309,11 @@ async def _run_game_inner(
     }
     if all_estimates:
         game_finished_msg["all_estimates"] = all_estimates
+    # Zor Mod (turnuva) maçında havuz bilgisi (mobil sonuç ekranında gösterir).
+    if getattr(engine, "is_tournament", False):
+        game_finished_msg["is_tournament"] = True
+        game_finished_msg["prize_pool"] = int(getattr(engine, "prize_pool", 0))
+        game_finished_msg["prize_top3"] = list(getattr(engine, "prize_top3", []))
 
     # Send personalised score to each connected real player.
     # KRİTİK: Her gerçek oyuncuya game_finished YALNIZCA BİR KEZ gitmeli.
@@ -1305,14 +1343,10 @@ async def _run_game_inner(
             personal_msg["bet_on"] = p.champion_bet
             personal_msg["bet_won"] = bet_won
             personal_msg["bet_reward"] = BET_REWARD if bet_won else 0
-        # 🛡️💰 Kalkan bedeli sonucu: kalkanı bu maçta kırıldıysa ya bedel
-        # tahsil edildi (shield_cost) ya da bakiye yetmediği için hediye
-        # sayıldı (shield_gift). Kalkanı kırılmayana bu alanlar hiç gitmez.
-        if p.user_id in shield_billing:
-            if shield_billing[p.user_id]:
-                personal_msg["shield_cost"] = SHIELD_COST
-            else:
-                personal_msg["shield_gift"] = True
+        # 🏆 Zor Mod havuz payı: turnuva maçında ilk 3'e girdiyse kazandığı
+        # havuz altını. Normal maçta ya da ilk 3 dışındaysa 0.
+        if p.user_id in zor_mod_prizes:
+            personal_msg["zor_mod_prize"] = int(zor_mod_prizes[p.user_id])
         # Kişiye özel cevaplar: her soruya your_answer + correct_bool ekle.
         personal_msg["questions"] = _attach_user_answers(
             questions_summary, engine, p.username

@@ -1,6 +1,6 @@
-// İLK LANSMAN: rafa kaldırıldı, Aşama 3'te geri açılacak.
-// Bu ekrana UI'dan hiçbir giriş noktası kalmadı (home'daki turnuva kartı
-// kaldırıldı); /tournament rotası yalnızca geriye dönük uyumluluk için durur.
+// ZOR MOD (v1.2): Rafta duran turnuva "ZOR MOD" olarak geri açıldı ve
+// yeniden markalandı. Ana ekrandaki "🔥 ZOR MOD" kartından girilir.
+// Giriş 100 altın; ödül havuzu (prize_pool + prize_top3) BÜYÜK gösterilir.
 
 import 'dart:math' as math;
 
@@ -12,11 +12,12 @@ import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/tournament/providers/tournament_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 
-/// ARENA — "Kendine güveniyor musun?"
+/// ZOR MOD — "Kendine güveniyor musun?"
 ///
 /// Gaza getiren, sinematik bir cesaret ekranı. Sahne karanlık bir arena;
 /// yükselen kıvılcımlar, nefes alan altın ışıltı, dönen enerji halkası ve
-/// dev bir 3× madalyonu odakta. Alev göstergeli zorluk + nabız atan CTA.
+/// dev bir 3× madalyonu odakta. Ödül havuzu büyük gösterilir; alev göstergeli
+/// zorluk (difficulty 4-5) + nabız atan CTA.
 ///
 /// KORUNAN DAVRANIŞLAR (provider sözleşmesi hiç değişmedi):
 ///   1) entered → bakiye tazele + /lobby (mode:tournament)
@@ -24,6 +25,7 @@ import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 ///   3) secondsLeft canlı geri sayım
 ///   4) CTA yalnızca affordable && !entering iken aktif; bedel option'dan okunur
 ///   5) loading/error iskeletleri
+///   6) yetersiz altın → mağazaya (reklam izleyip altın kazan) yönlendirme
 class TournamentScreen extends ConsumerStatefulWidget {
   const TournamentScreen({super.key});
 
@@ -196,6 +198,13 @@ class _Content extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(22, 4, 22, 40),
       children: [
         _Hero(state: state, breathe: breathe, shimmer: shimmer, embers: embers),
+        const SizedBox(height: 22),
+        // ÖDÜL HAVUZU — sayfanın en cazip vurgusu (payload: prize_pool + top3).
+        _PrizePool(
+          prizePool: state.prizePool,
+          prizeTop3: state.prizeTop3,
+          breathe: breathe,
+        ),
         const SizedBox(height: 26),
         _StatusStrip(
           rank: state.myRank,
@@ -234,9 +243,10 @@ class _TopStrip extends StatelessWidget {
             icon: const Icon(Icons.arrow_back_rounded, color: Colors.white70),
           ),
           const Spacer(),
-          const Icon(Icons.shield_moon_rounded, color: AppTheme.gold, size: 18),
+          const Icon(Icons.local_fire_department_rounded,
+              color: AppTheme.gold, size: 18),
           const SizedBox(width: 7),
-          Text('ARENA',
+          Text('ZOR MOD',
               style: BiladaText.label(color: AppTheme.gold, size: 16)
                   .copyWith(letterSpacing: 3)),
           const Spacer(),
@@ -306,7 +316,7 @@ class _Hero extends StatelessWidget {
       children: [
         const SizedBox(height: 10),
         Text(
-          'TURNUVA MODU',
+          'ZOR MOD',
           style: BiladaText.label(color: Colors.white60, size: 12)
               .copyWith(letterSpacing: 5),
         ),
@@ -460,7 +470,7 @@ class _FlameMeter extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'SORULAR ACIMASIZ',
+            'ZORLUK 4-5 · ACIMASIZ',
             style: BiladaText.label(color: AppTheme.cError, size: 11)
                 .copyWith(letterSpacing: 1.5),
           ),
@@ -507,6 +517,157 @@ class _HeroBadge extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════
+//  2.5) ÖDÜL HAVUZU — büyük, nabız atan altın vitrin
+// ════════════════════════════════════════════════════════════════════════
+
+/// ZOR MOD ödül havuzu kartı. prize_pool BÜYÜK; prize_top3 [şampiyon,2.,3.]
+/// altın payları rozet olarak. Havuz henüz dolmadıysa (0) yumuşak yer tutucu.
+class _PrizePool extends StatelessWidget {
+  const _PrizePool({
+    required this.prizePool,
+    required this.prizeTop3,
+    required this.breathe,
+  });
+  final int prizePool;
+  final List<int> prizeTop3;
+  final Animation<double> breathe;
+
+  static const _podium = ['👑 Şampiyon', '🥈 2.', '🥉 3.'];
+
+  @override
+  Widget build(BuildContext context) {
+    final hasPool = prizePool > 0;
+    return AnimatedBuilder(
+      animation: breathe,
+      builder: (_, child) {
+        final t = breathe.value;
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: AppTheme.gold.withValues(alpha: 0.18 + 0.22 * t),
+                blurRadius: 22 + 20 * t,
+                spreadRadius: 1,
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: AppTheme.goldGradient,
+        ),
+        padding: const EdgeInsets.all(2.5),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(21.5),
+            gradient: const RadialGradient(
+              center: Alignment(-0.5, -0.9),
+              radius: 1.5,
+              colors: [Color(0xFF4A0026), Color(0xFF2A0014)],
+            ),
+          ),
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('💰', style: TextStyle(fontSize: 18)),
+                  const SizedBox(width: 8),
+                  Text(
+                    'ÖDÜL HAVUZU',
+                    style: BiladaText.label(color: AppTheme.gold, size: 13)
+                        .copyWith(letterSpacing: 3),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              if (hasPool) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      _fmt(prizePool),
+                      style: BiladaText.displayXl(color: AppTheme.gold, size: 52)
+                          .copyWith(height: 1.0),
+                    ),
+                    const SizedBox(width: 8),
+                    Text('altın',
+                        style: BiladaText.title(color: Colors.white70, size: 16)),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Row(
+                  children: [
+                    for (int i = 0; i < 3; i++)
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: i == 0 ? 0 : 5, right: i == 2 ? 0 : 5),
+                          child: _podiumChip(
+                            _podium[i],
+                            i < prizeTop3.length ? prizeTop3[i] : null,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ] else
+                Text(
+                  'Havuz doluyor — sen girdikçe büyür.',
+                  textAlign: TextAlign.center,
+                  style: BiladaText.body(color: Colors.white70, size: 13),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _podiumChip(String label, int? gold) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      decoration: BoxDecoration(
+        color: AppTheme.gold.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppTheme.gold.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        children: [
+          Text(label,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              style: BiladaText.label(color: Colors.white70, size: 10)),
+          const SizedBox(height: 4),
+          Text(
+            gold != null ? _fmt(gold) : '—',
+            style: BiladaText.title(color: AppTheme.gold, size: 16),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Binlik ayraçlı altın gösterimi (1234 → 1.234).
+  static String _fmt(int n) {
+    final s = n.toString();
+    final buf = StringBuffer();
+    for (int i = 0; i < s.length; i++) {
+      if (i > 0 && (s.length - i) % 3 == 0) buf.write('.');
+      buf.write(s[i]);
+    }
+    return buf.toString();
   }
 }
 
@@ -876,6 +1037,24 @@ class _EntryCard extends ConsumerWidget {
                 Text('Yetersiz altın · $cost $label gerekiyor',
                     style: BiladaText.label(color: AppTheme.cError, size: 11)),
               ],
+            ),
+            const SizedBox(height: 12),
+            // Altın yoksa mağazaya yönlendir — orada reklam izleyip altın
+            // kazanılabilir (reklam UI'ı başka ekranda; burası yalnız yönlendirir).
+            ChunkyButton(
+              height: 52,
+              color: AppTheme.cSecondaryContainer,
+              foreground: Colors.white,
+              shadowColor: AppTheme.cSecondaryShadow,
+              onPressed: () => context.go('/store'),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.storefront_rounded, size: 18),
+                  SizedBox(width: 8),
+                  Text('MAĞAZADAN ALTIN KAZAN', style: TextStyle(fontSize: 15)),
+                ],
+              ),
             ),
           ] else if (canEnter) ...[
             const SizedBox(height: 10),

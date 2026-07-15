@@ -31,8 +31,8 @@ class TestGetProfile:
         data = response.json()
         assert data["username"] == "profile1"
         assert data["email"] == "profile1@example.com"
-        # Yeni kullanıcı başlangıç altını (model default 1000).
-        assert data["coins"] == 1000
+        # Yeni kullanıcı başlangıç altını (ekonomi kıtlaştırması: model default 300).
+        assert data["coins"] == 300
         assert "gems" not in data
 
     @pytest.mark.asyncio

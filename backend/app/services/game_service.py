@@ -17,10 +17,14 @@ Round structure (eleme rampası — kolaydan zora):
 | 5     | Slider estimation | 10s  | Intuition  | Closest wins       |
 
 Kalkan (🛡️) mekaniği:
-- Her oyuncu (botlar DAHİL — kimse kimin bot olduğunu bilmez) maça 1 Kalkan
-  ile başlar.
+- Kalkan artık BEDAVA DEĞİL. Maç başında (apply_shield_setup) gerçek oyuncuya
+  kalkan yalnızca şu durumda verilir: yeni oyuncu (games_played<5) VEYA maç
+  öncesi kalkan hazırladıysa (100 altın / ödüllü reklam → shield_ready bayrağı).
+  Botlar görsel tutarlılık için hep 1 kalkanla başlar (kimse kimin bot olduğunu
+  bilmez).
 - Tur 1-4'te yanlış cevap veren oyuncunun Kalkanı varsa elenmek yerine Kalkan
   KIRILIR, oyuncu hayatta kalır (o turdan puan ALMAZ, streak sıfırlanır).
+  Kalkan kırılması EK ÜCRET doğurmaz (eski "50 altın bedeli" kaldırıldı).
 - İkinci yanlış = normal eleme. Final (tahmin) turunda Kalkan GEÇERSİZ.
 - "Herkes yanlışsa kimse elenmez" kuralı ÖNCE uygulanır: kimse elenmeyecekse
   kalkan da kırılmaz.
@@ -32,6 +36,8 @@ import uuid as uuid_mod
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any
+
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.services.bot_service import (
     bot_guess_spread,
@@ -121,14 +127,15 @@ class PlayerState:
     name_color: str | None = None
     effect: str | None = None
     is_alive: bool = True
-    # KALKAN (🛡️): Her oyuncu (bot DAHİL — tutarlılık şart, kimse kimin bot
-    # olduğunu bilmiyor) maça 1 kalkanla başlar. Tur 1-4'te ilk yanlışta
-    # elenmek yerine kalkan kırılır; finalde (tahmin) geçersiz.
+    # KALKAN (🛡️): Constructor'da herkese 1 verilir (motor birim testleri buna
+    # dayanır). GERÇEK oyuncularda maç başında apply_shield_setup yeni kurala
+    # göre 0/1'e ayarlar (yeni oyuncu VEYA shield_ready kredisi). Botlar 1'de
+    # kalır. Tur 1-4'te ilk yanlışta elenmek yerine kalkan kırılır; finalde
+    # (tahmin) geçersiz.
     shields: int = 1
-    # KALKAN BEDELİ (💰): Bu maçta kalkanı kırıldı mı? Maç sonunda GERÇEK
-    # oyunculardan match_reward_service.SHIELD_COST altın tahsil edilir
-    # (bakiye yetmezse ücretsiz "hediye"). Botlardan tahsilat yok — işaret
-    # botta da konur ama ödeme akışı yalnızca gerçek oyuncuları işler.
+    # KALKAN KIRILDI İŞARETİ (🛡️): Bu maçta kalkanı kırıldı mı? Artık EK ÜCRET
+    # YOK (eski "50 altın bedeli" kaldırıldı — kalkan zaten peşin alındı/izlendi).
+    # İşaret geriye dönük uyumluluk + reveal bilgisi için tutulur.
     shield_broken: bool = False
     # HAYALET MODU (👻): elenen GERÇEK oyuncu izlerken cevap vermeye devam
     # edebilir. Hayalet cevaplar elemeye/skora/kazanana ETKİSİZDİR; yalnızca
@@ -218,6 +225,108 @@ class GameEngine:
                 name_color=bot_cos["name_color"],
                 effect=bot_cos["effect"],
             )
+
+        # --- Zor Mod ödül havuzu (yalnızca turnuva maçında) ---
+        # Havuz maçtaki GERÇEK oyuncu sayısına göre kurulur (sistem seed'li).
+        # prize_top3 = [şampiyon, 2., 3.] gerçek altın payları. Normal maçta 0.
+        self.prize_pool = 0
+        self.prize_top3: list[int] = []
+        if self.is_tournament:
+            try:
+                from app.services.tournament_service import compute_prize_pool
+
+                real_count = sum(
+                    1 for p in self.players.values() if not p.is_bot
+                )
+                pool = compute_prize_pool(real_count)
+                self.prize_pool = pool["prize_pool"]
+                self.prize_top3 = pool["prize_top3"]
+            except Exception:  # havuz hesabı maç kurulumunu asla bozmasın
+                self.prize_pool = 0
+                self.prize_top3 = []
+
+        # Kalkan kurulumunun iki kez çalışmasını önleyen bayrak.
+        self._shield_setup_done = False
+
+    async def apply_shield_setup(self, db: AsyncSession | None = None) -> None:
+        """Gerçek oyuncuların kalkanını YENİ kurala göre ayarla (maç başında).
+
+        Kural:
+          - Yeni oyuncu (games_played < 5): BEDAVA 1 kalkan.
+          - Diğerleri: `shield_ready:{user_id}` bayrağı varsa 1 kalkan (bayrak
+            SİLİNİR, tek kullanımlık); yoksa 0 kalkan.
+          - Botlara DOKUNULMAZ (kurulumda 1 kalkanla başladılar; görsel tutarlılık).
+
+        Constructor herkese shields=1 verir (motor birim testleri buna dayanır);
+        bu metot GERÇEK oyuncuları yeni kurala göre yeniden ayarlar. Yalnızca bir
+        kez çalışır (idempotent). Hata olursa gerçek oyuncular constructor
+        default'unda (1) kalır — money-safe fail-open (oyuncu cezalanmaz).
+
+        Args:
+            db: Verilirse bu session kullanılır; verilmezse kendi session'ını açar.
+        """
+        if getattr(self, "_shield_setup_done", False):
+            return
+
+        real_players = [
+            p for p in self.players.values() if not p.is_bot and p.user_id
+        ]
+        if not real_players:
+            self._shield_setup_done = True
+            return
+
+        # games_played'i tek sorguda çek (N+1 yok). Hata → boş harita (fail-open).
+        games_map: dict[str, int] = {}
+
+        async def _load(session: AsyncSession) -> None:
+            import uuid as _uuid
+
+            from sqlalchemy import select
+
+            from app.models.user import User
+
+            ids = []
+            for p in real_players:
+                try:
+                    ids.append(_uuid.UUID(str(p.user_id)))
+                except (ValueError, TypeError):
+                    continue
+            if not ids:
+                return
+            rows = (
+                await session.execute(
+                    select(User.id, User.games_played).where(User.id.in_(ids))
+                )
+            ).all()
+            for uid, gp in rows:
+                games_map[str(uid)] = int(gp or 0)
+
+        try:
+            if db is not None:
+                await _load(db)
+            else:
+                from app.database import async_session_factory
+
+                async with async_session_factory() as session:
+                    await _load(session)
+        except Exception:  # DB hatası kalkan kurulumunu bozmasın (fail-open)
+            games_map = {}
+
+        from app.services import shield_service
+
+        for p in real_players:
+            games_played = games_map.get(str(p.user_id), 0)
+            if games_played < 5:
+                # Yeni oyuncu: bedava kalkan.
+                p.shields = 1
+            elif await shield_service.consume_shield_ready(p.user_id):
+                # Hazırlanmış kalkan kredisi (altın/reklam) → tek kullanımlık.
+                p.shields = 1
+            else:
+                # Otomatik kalkan yok.
+                p.shields = 0
+
+        self._shield_setup_done = True
 
     async def apply_real_cosmetics(self) -> None:
         """Gerçek oyuncuların kuşanılmış kozmetiklerini TEK sorguda doldur.

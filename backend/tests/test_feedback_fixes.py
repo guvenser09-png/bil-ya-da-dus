@@ -1,8 +1,9 @@
 """Kullanıcı test geri bildirimi düzeltmelerinin testleri.
 
 Kapsam:
-  1. KALKAN BEDELİ: kalkan kırılınca maç sonunda 50 altın tahsil edilir;
-     bakiye yetmezse ÜCRETSİZ (hediye). Botlardan tahsilat yok, akış idempotent.
+  1. KALKAN İŞARETİ + MAÇ ÖDÜLÜ: kalkan kırılınca artık EK ÜCRET YOK (eski 50
+     altın bedeli kaldırıldı). Maç ödülü kıtlaştırılmış tablodan (30/15/5) verilir,
+     idempotent; bot muaf.
   2. FİNAL TAHMİN ZOR HAVUZ: normal maçta 5. tur (tahmin) sorusu önce
      difficulty>=4, yoksa 3, yoksa mevcut kolay-havuz davranışıyla seçilir.
   3. MİSAFİR FİLTRESİ: is_guest=True kullanıcılar liderlik tablolarında
@@ -18,10 +19,6 @@ from sqlalchemy import select
 from app.models.question import ApprovalStatus, Question, QuestionType
 from app.models.user import User
 from app.services.game_service import GameEngine
-from app.services.match_reward_service import (
-    SHIELD_COST,
-    charge_shield_costs,
-)
 from tests.conftest import test_session_factory as session_factory
 
 
@@ -65,14 +62,14 @@ def _mk_q(qid: str, qtype: QuestionType, difficulty: int) -> Question:
 
 
 # ---------------------------------------------------------------------------
-# 1) Kalkan bedeli
+# 1) Kalkan işareti + kıtlaştırılmış maç ödülü (kalkan bedeli KALDIRILDI)
 # ---------------------------------------------------------------------------
 
-class TestShieldCost:
-    """Kalkan bedeli: tahsil / hediye / bot muafiyeti / idempotency."""
+class TestMatchRewardNoShieldBilling:
+    """Kalkan kırılınca ek ücret YOK; maç ödülü 30/15/5, idempotent, bot muaf."""
 
     def test_engine_marks_shield_broken(self):
-        """Kalkanla kurtulan oyuncuda shield_broken işareti konur."""
+        """Kalkanla kurtulan oyuncuda shield_broken işareti konur (bilgi amaçlı)."""
         players = [
             {"user_id": "u1", "username": "p1", "display_name": "P1", "avatar_id": "a"},
             {"user_id": "u2", "username": "p2", "display_name": "P2", "avatar_id": "a"},
@@ -94,37 +91,13 @@ class TestShieldCost:
         assert engine.players["bot1"].shield_broken is False
 
     @pytest.mark.asyncio
-    async def test_charge_collected_when_balance_enough(self, db_session):
-        """Bakiye >= 50 ise tam 50 altın düşülür (sınır: tam 50 de tahsil edilir)."""
-        rich = await _mk_user(db_session, coins=200)
-        exact = await _mk_user(db_session, coins=SHIELD_COST)
+    async def test_persist_flow_rewards_only_no_shield_charge(self, mock_redis):
+        """Tam akış: sadece kıtlaştırılmış ödül eklenir, kalkan bedeli YOK, idempotent.
 
-        outcome = await charge_shield_costs(
-            db_session, [str(rich.id), str(exact.id)]
-        )
-
-        assert outcome == {str(rich.id): True, str(exact.id): True}
-        assert rich.coins == 200 - SHIELD_COST
-        assert exact.coins == 0
-
-    @pytest.mark.asyncio
-    async def test_gift_when_balance_insufficient(self, db_session):
-        """Bakiye < 50 ise HİÇ düşülmez — kalkan hediye sayılır (kısmi tahsilat yok)."""
-        poor = await _mk_user(db_session, coins=SHIELD_COST - 1)
-
-        outcome = await charge_shield_costs(db_session, [str(poor.id)])
-
-        assert outcome == {str(poor.id): False}
-        assert poor.coins == SHIELD_COST - 1  # max(0, coins-50) DEĞİL: dokunulmadı
-
-    @pytest.mark.asyncio
-    async def test_persist_flow_charges_after_rewards_once_and_skips_bots(self, mock_redis):
-        """Tam akış: ödüller ÖNCE eklenir, bedel SONRA düşülür; bot muaf; idempotent.
-
-        Kurulum: 3 gerçek oyuncu + 1 bot.
-          - w (kazanan, kalkanı sağlam): sadece +50 ödül alır.
-          - s (2., kalkanı kırık, 1000 altın): +25 ödül, sonra -50 bedel → 975.
-          - g (3., kalkanı kırık, 0 altın): +25 ödül → 25 < 50 → HEDİYE, 25 kalır.
+        Kurulum: 3 gerçek oyuncu + 1 bot (normal maç → Zor Mod havuzu yok).
+          - w (kazanan): +30 ödül → 1030.
+          - s (2., kalkanı kırık): +15 ödül, EK BEDEL YOK → 1015.
+          - g (3., kalkanı kırık, 0 altın): +15 ödül → 15 (ek ücret yok).
         İkinci çağrı (aynı game_id) hiçbir bakiyeyi değiştirmez (Redis NX kilidi).
         """
         async with session_factory() as db:
@@ -148,7 +121,7 @@ class TestShieldCost:
         engine.players["pg"].score = 100
         engine.players["pg"].shields = 0
         engine.players["pg"].shield_broken = True
-        # Botun da kalkanı kırılmış olsun → tahsilat listesine GİRMEMELİ.
+        # Botun da kalkanı kırılmış olsun → hiçbir tahsilat/ödül almamalı.
         engine.players["bot1"].shields = 0
         engine.players["bot1"].shield_broken = True
 
@@ -158,23 +131,23 @@ class TestShieldCost:
 
         with patch("app.ws.game.async_session_factory", session_factory), \
              patch("app.ws.game.get_redis", AsyncMock(return_value=mock_redis)):
-            coins1, billing1 = await _persist_game_results("g_persist", engine, final)
-            coins2, billing2 = await _persist_game_results("g_persist", engine, final)
+            coins1, prizes1 = await _persist_game_results("g_persist", engine, final)
+            coins2, prizes2 = await _persist_game_results("g_persist", engine, final)
 
-        # İlk çağrı: ödüller + kalkan tahsilatı (kazanandan tahsilat YOK).
-        assert coins1 == {w_id: 50, s_id: 25, g_id: 25}  # ilk 3 → 50/25/25
-        assert billing1 == {s_id: True, g_id: False}  # bot listede yok
-        # İkinci çağrı: idempotent — ne ödül ne bedel tekrar işlenir.
+        # İlk çağrı: kıtlaştırılmış ödüller (30/15/15), Zor Mod havuzu yok.
+        assert coins1 == {w_id: 30, s_id: 15, g_id: 15}
+        assert prizes1 == {}  # normal maç → havuz payı yok
+        # İkinci çağrı: idempotent — ödül tekrar işlenmez.
         assert coins2 == {}
-        assert billing2 == {}
+        assert prizes2 == {}
 
         async with session_factory() as db:
             w2 = (await db.execute(select(User).where(User.id == uuid.UUID(w_id)))).scalar_one()
             s2 = (await db.execute(select(User).where(User.id == uuid.UUID(s_id)))).scalar_one()
             g2 = (await db.execute(select(User).where(User.id == uuid.UUID(g_id)))).scalar_one()
-        assert w2.coins == 1050            # +50 ödül, bedel yok
-        assert s2.coins == 1000 + 25 - 50  # ödül önce eklendi, bedel sonra düştü
-        assert g2.coins == 25              # 25 < 50 → hediye, dokunulmadı
+        assert w2.coins == 1030   # +30 ödül
+        assert s2.coins == 1015   # +15 ödül, kalkan bedeli YOK (eskiden -50 idi)
+        assert g2.coins == 15     # +15 ödül, ek ücret yok
 
 
 # ---------------------------------------------------------------------------

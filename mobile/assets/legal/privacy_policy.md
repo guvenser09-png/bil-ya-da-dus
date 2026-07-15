@@ -38,9 +38,16 @@ Uygulamayı kullanırken yalnızca aşağıdaki verileri toplarız:
   bildirimi göndermek için kullanılır; **reklam veya izleme amacıyla
   kullanılmaz** (bkz. Bölüm 4).
 
-**Yapmadıklarımız:** Uygulamada **reklam yoktur**, sizi **takip etmeyiz**
-(no tracking), reklam/analiz amaçlı **üçüncü taraf izleyici (SDK) kullanmayız**
-ve reklam tanımlayıcısı (IDFA) toplamayız.
+- **Reklamlar:** Uygulamada **ödüllü (isteğe bağlı) reklamlar** gösterilir —
+  yalnızca siz "reklam izle" derseniz çalışır, karşılığında oyun içi altın/kalkan
+  kazanırsınız. Reklamlar **Google AdMob** ile sunulur ve **KİŞİSELLEŞTİRİLMEZ**
+  (non-personalized): reklam sunumu için sınırlı cihaz bilgisi işlenebilir, ancak
+  sizi uygulamalar arası **izlemeyiz** ve reklam tanımlayıcısını (IDFA) izleme
+  amacıyla kullanmayız (bu nedenle izleme izni de istemeyiz).
+
+**Yapmadıklarımız:** Sizi uygulamalar arası **takip etmeyiz** (no cross-app
+tracking), **kişiselleştirilmiş/hedefli reklam** göstermeyiz ve verinizi
+pazarlama amacıyla üçüncü taraflara **satmayız**.
 
 ## 3. Verileri Kullanım Amaçlarımız
 

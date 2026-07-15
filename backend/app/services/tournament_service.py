@@ -30,11 +30,21 @@ from app.utils.season_util import current_season, season_id_for
 
 logger = logging.getLogger("app.tournament")
 
-# --- Turnuva ekonomisi (pay-to-win YOK; giriş ücreti SINK olarak yanar) ---
-TOURNAMENT_GOLD_COST = 150    # Giriş: altın (~3 galibiyet / kolay kazanılır). Eski 1500 uçurumdu.
-# Turnuva maçında ranked sezon puanı çarpanı (performansa BAĞLI; giriş tek başına
+# --- Zor Mod (eski "turnuva") ekonomisi ---
+# Giriş 150 → 100 altın. ARTIK SINK DEĞİL: girişler bir ÖDÜL HAVUZUNDA toplanır
+# (aşağıdaki ZORMOD_* + compute_prize_pool). Modun eski ölüm sebebi girişin boşa
+# yanmasıydı; artık kazananlar havuzdan altın alır.
+TOURNAMENT_GOLD_COST = 100
+# Zor Mod maçında ranked sezon puanı çarpanı (performansa BAĞLI; giriş tek başına
 # puan vermez). Normal maç 1x.
 TOURNAMENT_POINT_MULTIPLIER = 3
+
+# --- Zor Mod ödül havuzu (config; oranlar SABİT) ---
+# effektif_havuz = max(gerçek_girişler_toplamı, ZORMOD_MIN_POOL). Havuzun
+# %80'i ödül dağıtılır, %20'si yanar (sink). Ödül dağıtılabilir kısım
+# şampiyon/2./3.'ye 800/250/150 oranıyla (normalize) bölünür.
+ZORMOD_PRIZE_SHARE = 0.8            # havuzun ödüle giden oranı (%80)
+ZORMOD_PAYOUT_RATIOS = (800, 250, 150)  # şampiyon / 2. / 3. (normalize edilir)
 
 # Turnuva maçında sorular bu zorluk eşiğinden (dahil) seçilir → GERÇEKTEN ZOR
 # (4-5). Yeterli zor soru yoksa question_service kademeli olarak gevşetir
@@ -98,6 +108,42 @@ def _reward_for_rank(rank: int) -> dict | None:
     return None
 
 
+def compute_prize_pool(real_player_count: int) -> dict:
+    """Zor Mod ödül havuzunu hesapla (sistem seed'li, %80 ödül / %20 sink).
+
+    Adımlar:
+      1. gerçek_girişler = real_player_count * TOURNAMENT_GOLD_COST.
+      2. effektif_havuz = max(gerçek_girişler, ZORMOD_MIN_POOL)  ← sistem seed'i.
+      3. dağıtılabilir = effektif_havuz * ZORMOD_PRIZE_SHARE      (%80; %20 yanar).
+      4. şampiyon/2./3. payları = dağıtılabilir * (800/250/150) / 1200 (int'e yuvarlanır).
+
+    Args:
+        real_player_count: Maçtaki GERÇEK (bot olmayan) oyuncu sayısı.
+
+    Returns:
+        {"prize_pool": effektif_havuz(int),
+         "prize_top3": [şampiyon_pay, ikinci_pay, üçüncü_pay] (int altın),
+         "entries_total": gerçek_girişler_toplamı(int),
+         "distributable": dağıtılabilir(int)}
+    """
+    from app.config import settings
+
+    min_pool = int(getattr(settings, "ZORMOD_MIN_POOL", 1000))
+    entries_total = max(0, int(real_player_count)) * TOURNAMENT_GOLD_COST
+    effective_pool = max(entries_total, min_pool)
+    distributable = effective_pool * ZORMOD_PRIZE_SHARE
+    total_ratio = sum(ZORMOD_PAYOUT_RATIOS)
+    prize_top3 = [
+        int(distributable * r / total_ratio) for r in ZORMOD_PAYOUT_RATIOS
+    ]
+    return {
+        "prize_pool": int(effective_pool),
+        "prize_top3": prize_top3,
+        "entries_total": int(entries_total),
+        "distributable": int(distributable),
+    }
+
+
 class TournamentService:
     """Turnuva girişi, ranked sezon puanı, sezon leaderboard ve settlement."""
 
@@ -135,6 +181,48 @@ class TournamentService:
         else:
             row.points = (row.points or 0) + int(points)
         await db.flush()
+
+    # ------------------------------------------------------------------
+    # Zor Mod maç-sonu ödül havuzu dağıtımı
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    async def grant_prize_pool(
+        db: AsyncSession,
+        ranked_user_ids: list[str],
+        prize_top3: list[int],
+    ) -> dict[str, int]:
+        """Zor Mod ödül havuzunu ilk 3 GERÇEK oyuncuya altın olarak ver.
+
+        ranked_user_ids skora göre AZALAN sıralı gerçek oyuncu id'leridir
+        (şampiyon = 0. indeks). prize_top3 = [şampiyon_pay, 2._pay, 3._pay].
+        Ödül maç ödülü GÜNLÜK CAP'inden BAĞIMSIZDIR (turnuva payoutu; sezon
+        settlement bonus_gold gibi doğrudan bakiyeye eklenir).
+
+        İdempotency ÇAĞIRANIN sorumluluğundadır: maç ödülleriyle aynı Redis
+        (match:rewarded:{game_id}) korumalı blokta çağrılır → çift dağıtım olmaz.
+        Commit ÇAĞIRAN tarafça yapılır.
+
+        Returns:
+            {user_id: verilen_altın} (yalnızca ödül alan ilk 3; 0 alanlar hariç).
+        """
+        awarded: dict[str, int] = {}
+        for idx, prize in enumerate(prize_top3):
+            if idx >= len(ranked_user_ids):
+                break
+            uid = ranked_user_ids[idx]
+            amount = int(prize)
+            if not uid or amount <= 0:
+                continue
+            try:
+                user = await UserService.get_user_by_id(db, uid)
+                if not user:
+                    continue
+                user.coins = (user.coins or 0) + amount
+                awarded[uid] = amount
+            except Exception as exc:  # tek oyuncu hatası diğerlerini engellemesin
+                logger.warning("Zor Mod ödülü verilemedi (user %s): %s", uid, exc)
+        return awarded
 
     # ------------------------------------------------------------------
     # Sezon leaderboard
@@ -320,6 +408,27 @@ class TournamentService:
             for r in SEASON_REWARDS
         ]
 
+        # --- Zor Mod ödül havuzu önizlemesi (mobil lobide gösterir) ---
+        # Havuz maçtaki gerçek oyuncu sayısına göre değişir; burada iki uç verilir:
+        # garanti minimum (sistem seed'i) ve dolu lobi (MAX_PLAYERS) senaryosu.
+        from app.config import settings
+
+        min_pool_info = compute_prize_pool(0)  # 0 gerçek oyuncu → seed tabanı
+        full_pool_info = compute_prize_pool(int(getattr(settings, "MAX_PLAYERS", 12)))
+        prize_pool_info = {
+            "entry_cost": TOURNAMENT_GOLD_COST,
+            "min_pool": int(getattr(settings, "ZORMOD_MIN_POOL", 1000)),
+            "prize_share": ZORMOD_PRIZE_SHARE,          # %80 ödül
+            "sink_share": round(1 - ZORMOD_PRIZE_SHARE, 2),  # %20 yanar
+            "payout_ratios": list(ZORMOD_PAYOUT_RATIOS),     # 800/250/150
+            # Garanti minimum havuz (az oyunculu dönemde bile) + örnek dağıtım.
+            "prize_pool": min_pool_info["prize_pool"],
+            "prize_top3": min_pool_info["prize_top3"],
+            # Dolu lobi senaryosu (mobil "en fazla bu kadar" gösterebilir).
+            "max_prize_pool": full_pool_info["prize_pool"],
+            "max_prize_top3": full_pool_info["prize_top3"],
+        }
+
         return {
             "season_id": season["season_id"],
             "season_end": season["season_end"],
@@ -327,15 +436,24 @@ class TournamentService:
             "point_multiplier": TOURNAMENT_POINT_MULTIPLIER,
             "hard_mode": True,
             "description": (
-                "Turnuva modunda sorular baştan sona zordur ve kazandığın sezon "
-                "puanı 3 katına çıkar. Giriş tek başına puan vermez — iyi oynamak "
-                "şart. Ödüller eksklüzif kozmetik, bonus altın ve şampiyon unvanıdır."
+                "Zor Mod'da sorular baştan sona zordur ve kazandığın sezon puanı "
+                "3 katına çıkar. Girişler bir ÖDÜL HAVUZUNDA toplanır: kazananlar "
+                "havuzdan altın alır (havuzun %80'i ödül). Giriş tek başına puan "
+                "vermez — iyi oynamak şart."
             ),
             "entry_options": [
                 {"currency": "gold", "cost": TOURNAMENT_GOLD_COST,
                  "affordable": (user.coins or 0) >= TOURNAMENT_GOLD_COST},
             ],
             "balances": {"gold": user.coins or 0},
+            # Detaylı havuz bilgisi (oranlar, min/max senaryolar).
+            "prize_pool_info": prize_pool_info,
+            # Mobil sözleşmesi TOP-LEVEL `prize_pool` + `prize_top3` bekliyor
+            # (tournament_provider bunları kökten okur). prize_pool_info
+            # içindeki garanti-minimum değerleri buraya aynalıyoruz — nested
+            # detay da dursun, mobil de bozulmasın.
+            "prize_pool": prize_pool_info["prize_pool"],
+            "prize_top3": prize_pool_info["prize_top3"],
             "my_entry": my_entry,
             "rewards_preview": rewards_preview,
         }

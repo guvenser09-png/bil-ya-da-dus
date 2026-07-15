@@ -7,6 +7,7 @@ import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
 import 'package:quizroyale/features/lobby/providers/lobby_provider.dart';
+import 'package:quizroyale/features/lobby/widgets/shield_prompt_sheet.dart';
 import 'package:quizroyale/shared/characters.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
@@ -23,14 +24,49 @@ class LobbyScreen extends ConsumerStatefulWidget {
 }
 
 class _LobbyScreenState extends ConsumerState<LobbyScreen> {
+  /// Oturum boyunca "kalkan sorma" tercihi — kullanıcı bir kez "bu oturumda
+  /// bir daha sorma" dediyse aynı oturumda (process ömrü) tekrar rahatsız
+  /// edilmez. static: her yeni lobi girişinde korunur.
+  static bool _skipShieldThisSession = false;
+
+  /// Lobide gösterilecek kalkan bilgi rozeti (null = rozet yok).
+  String? _shieldBadge;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final saved = ref.read(authProvider).user?['avatar_id'] as String?;
-      final avatarId = (saved != null && isCatalogCharacter(saved)) ? saved : 'robot';
-      ref.read(lobbyProvider.notifier).connect(avatarId: avatarId, mode: widget.mode);
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _startMatchFlow());
+  }
+
+  /// Maç akışı: (yalnızca Hızlı Maç'ta) önce kalkan seçimi, ardından lobiye
+  /// bağlan. Turnuva vb. modlarda doğrudan bağlanır.
+  Future<void> _startMatchFlow() async {
+    final saved = ref.read(authProvider).user?['avatar_id'] as String?;
+    final avatarId =
+        (saved != null && isCatalogCharacter(saved)) ? saved : 'robot';
+
+    // Kalkan seçimi YALNIZCA normal "Hızlı Maç"ta (mode == null).
+    if (widget.mode == null) {
+      final gamesPlayed =
+          (ref.read(authProvider).user?['games_played'] as num?)?.toInt() ?? 0;
+      if (gamesPlayed < 5) {
+        // Yeni oyuncu: ilk 5 maç kalkanı bedava → seçim SORMA, bilgi rozeti.
+        if (mounted) {
+          setState(() => _shieldBadge = 'Kalkanın hazır — ilk 5 maç bedava');
+        }
+      } else if (!_skipShieldThisSession) {
+        // Deneyimli oyuncu: hızlı, atlanabilir kalkan seçim sayfası.
+        final result = await showShieldPrompt(context);
+        if (!mounted) return;
+        if (result.dontAskAgain) _skipShieldThisSession = true;
+        if (result.prepared) {
+          setState(() => _shieldBadge = 'Kalkan hazır');
+        }
+      }
+    }
+
+    if (!mounted) return;
+    ref.read(lobbyProvider.notifier).connect(avatarId: avatarId, mode: widget.mode);
   }
 
   void _leave() {
@@ -113,6 +149,10 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
                             '${state.players.length.clamp(0, AppConstants.maxPlayers)} yarışmacı kapışmaya hazır',
                             style: BiladaText.label(color: AppTheme.cOnSurfaceVariant, size: 12),
                           ),
+                          if (_shieldBadge != null) ...[
+                            const SizedBox(height: 8),
+                            _ShieldBadge(text: _shieldBadge!),
+                          ],
                           const SizedBox(height: 12),
                           CountdownRing(
                             progress: progress,
@@ -300,6 +340,33 @@ class _PlayerSlotState extends State<_PlayerSlot> with SingleTickerProviderState
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Maç-öncesi kalkan durumu rozeti (🛡️). Yeni oyuncuya "ilk 5 maç bedava",
+/// kalkan hazırlayan oyuncuya "Kalkan hazır" bilgisi verir.
+class _ShieldBadge extends StatelessWidget {
+  const _ShieldBadge({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppTheme.cTertiary.withValues(alpha: 0.16),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: AppTheme.cTertiary.withValues(alpha: 0.5)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('🛡️', style: TextStyle(fontSize: 13)),
+          const SizedBox(width: 6),
+          Text(text, style: BiladaText.label(color: AppTheme.cTertiary, size: 12)),
         ],
       ),
     );

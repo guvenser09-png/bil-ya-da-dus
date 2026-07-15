@@ -33,7 +33,11 @@ SEASON_TIERS = 30
 SEASON_ENDS_IN_DAYS = 30
 
 # Her tier için kümülatif gereken puan: tier i için i * POINTS_PER_TIER.
-POINTS_PER_TIER = 200
+# KITLAŞTIRMA (ekonomi dengesi): eşik 200 → 1000. Ödül miktarları (free 100/
+# 250/500, premium 200/300/600 + kozmetik) AYNI kalır; yalnızca eşik 5 katına
+# çıktığı için PUAN-BAŞI altın kazancı ~%80 düşer ("her 1000 puanda 100 altın").
+# Tier/ödül yapısı korunur, sadece hız yeniden ölçeklenir.
+POINTS_PER_TIER = 1000
 
 
 def _build_tiers() -> list[dict]:

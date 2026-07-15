@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
-import 'package:quizroyale/features/daily/providers/daily_challenge_provider.dart';
 import 'package:quizroyale/features/daily/providers/daily_provider.dart';
-import 'package:quizroyale/features/daily/widgets/daily_challenge_card.dart';
 import 'package:quizroyale/features/daily/widgets/daily_reward_dialog.dart';
+import 'package:quizroyale/features/home/widgets/gift_character_sheet.dart';
 import 'package:quizroyale/features/quests/providers/quests_provider.dart';
 import 'package:quizroyale/features/quests/widgets/quests_card.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
+// GÜNÜN 5 SORUSU (v1.2): ana ekrandan GİZLENDİ (dormant). Kart/provider/route
+// kodu silinmedi; yalnızca buradaki giriş noktası kaldırıldı. Bu yüzden
+// daily_challenge_provider ve daily_challenge_card import'ları kaldırıldı.
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -20,17 +23,55 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  /// Hediye karakter ekranının yalnızca bir kez gösterilmesi için prefs bayrağı.
+  static const String _kGiftShownKey = 'gift_character_shown_v1';
+
   @override
   void initState() {
     super.initState();
-    // Açılışta günlük ödül durumunu çek (otomatik dialog AÇMA — sadece rozet).
-    // Yanına GÜNÜN 5 SORUSU ve GÜNLÜK GÖREVLER durumu da gelir: ana ekran
-    // "yarın neden geri geleyim?" sorusunun cevabını ilk saniyede göstermeli.
+    // Açılışta günlük ödül durumunu ve günlük görevleri çek (otomatik dialog
+    // AÇMA — sadece rozet). GÜNÜN 5 SORUSU çağrısı KALDIRILDI (mod gizlendi).
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(dailyProvider.notifier).load();
-      ref.read(dailyChallengeProvider.notifier).load();
       ref.read(questsProvider.notifier).load();
+      _maybeShowGiftCharacter();
     });
+  }
+
+  /// HEDİYE KARAKTER (v1.2): Başlangıç altını 1000→300'e indi; telafi olarak
+  /// yeni oyuncuya ilk ana ekranda BİR KEZ bedava karakter seçtiriyoruz.
+  /// Yalnız avatar hâlâ varsayılansa (yeni oyuncu) hediye ekranı açılır;
+  /// yerleşik oyuncuda sadece bayrak işaretlenir, ekran gösterilmez.
+  Future<void> _maybeShowGiftCharacter() async {
+    SharedPreferences prefs;
+    try {
+      prefs = await SharedPreferences.getInstance();
+    } catch (_) {
+      return;
+    }
+    if (prefs.getBool(_kGiftShownKey) ?? false) return;
+
+    // Kullanıcı verisi (avatar_id) yüklenene kadar kısa süre bekle: cold-start'ta
+    // authProvider kullanıcıyı async çeker. Erken karar verirsek yerleşik
+    // oyuncunun avatar'ını yanlışlıkla varsayılana çevirebiliriz. Yüklenemezse
+    // bayrağı SET ETMEDEN çık — sonraki ana ekran ziyaretinde tekrar denenir.
+    Map<String, dynamic>? user;
+    for (var i = 0; i < 20; i++) {
+      user = ref.read(authProvider).user;
+      if (user != null) break;
+      await Future.delayed(const Duration(milliseconds: 150));
+      if (!mounted) return;
+    }
+    if (user == null) return;
+
+    await prefs.setBool(_kGiftShownKey, true);
+
+    final avatarId = user['avatar_id'] as String?;
+    final isDefault =
+        avatarId == null || avatarId == 'robot' || avatarId == 'default_01';
+    if (!isDefault) return; // yerleşik oyuncu — hediyeyi tekrar sunma
+    if (!mounted) return;
+    await showGiftCharacterSheet(context, ref);
   }
 
   @override
@@ -79,10 +120,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: const Text('HIZLI MAÇ'),
                     ),
                     const SizedBox(height: 12),
-                    // GÜNLÜK DÖNÜŞ OMURGASI — birincil butonun hemen altında,
-                    // katlamanın üstünde. Bugün oynanmadıysa vurgulu "OYNA",
-                    // oynandıysa 🟩🟥 ızgarası + paylaş.
-                    const DailyChallengeCard(),
+                    // ZOR MOD (v1.2): Rafta duran turnuva "ZOR MOD" olarak geri
+                    // açıldı. HIZLI MAÇ birincil kalır; bu kart belirgin ama onu
+                    // gölgelemez (ateş/kor teması, "gaza getiren").
+                    // NOT: Günün 5 Sorusu kartı (DailyChallengeCard) buradan
+                    // KALDIRILDI — mod gizlendi (dormant).
+                    _hardModeCard(context),
                     const SizedBox(height: 12),
                     ChunkyButton(
                       height: 56,
@@ -99,9 +142,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ],
                       ),
                     ),
-                    // İLK LANSMAN: Turnuva (3x) kartı rafa kaldırıldı — Aşama
-                    // 3'te geri açılacak (tournament_screen.dart durur, UI'dan
-                    // giriş yok).
                     const SizedBox(height: 12),
                     // İkinci geri dönüş kancası: 3 küçük görev, ödül hazırsa
                     // altın rozet çeker. Dokununca detay sheet açılır.
@@ -176,9 +216,68 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // İLK LANSMAN: _tournamentCard (turnuva giriş kartı) rafa kaldırıldı —
-  // Aşama 3'te git geçmişinden geri alınacak. /tournament rotası duruyor
-  // ama UI'dan hiçbir giriş noktası kalmadı.
+  /// ZOR MOD giriş kartı — rafta duran turnuva "ZOR MOD" olarak dirildi.
+  /// Ateş/kor temalı, gaza getiren ama HIZLI MAÇ'ı gölgelemeyen ikincil aksiyon.
+  /// Dokununca /tournament (yeniden markalı ZOR MOD) ekranına gider.
+  Widget _hardModeCard(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.push('/tournament'),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [AppTheme.accentOrange, Color(0xFFC01048)], // kor → ateş
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: AppTheme.accentOrange.withValues(alpha: 0.42),
+              blurRadius: 18,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            const Text('🔥', style: TextStyle(fontSize: 26)),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text('ZOR MOD',
+                          style: BiladaText.headline(color: Colors.white, size: 18)),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.22),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text('3x PUAN',
+                            style: BiladaText.label(color: Colors.white, size: 10)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    'Zor sorular · Ödül havuzu · 3x puan',
+                    style: BiladaText.label(
+                        color: Colors.white.withValues(alpha: 0.9), size: 12),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right_rounded, color: Colors.white),
+          ],
+        ),
+      ),
+    );
+  }
 
   /// Sezon girişi — gold şerit, dokununca sezon ödülleri ekranını açar.
   Widget _seasonStrip(BuildContext context) {

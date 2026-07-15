@@ -19,7 +19,7 @@ App Store sekmesi → sol menü **1.0 Prepare for Submission** → **App Preview
 
 **Promotional Text (170):**
 ```
-12 kişilik canlı bilgi yarışması! Yanlış cevap verirsen düşersin — kalkanın seni bir kez kurtarır. Tamamen ücretsiz, reklamsız!
+12 kişilik canlı bilgi yarışması! Yanlış cevap verirsen düşersin. Ücretsiz oyna, zor moda gir, sıralamada yüksel!
 ```
 
 **Description:**
@@ -38,7 +38,7 @@ BİL YA DA DÜŞ — Türkiye'nin bilgi yarışması battle royale'i!
 
 ⚡ 90 SANİYEDE BİR MAÇ — Beklemek yok: bas, oyna, kazan (ya da düş), bir daha dene!
 
-• Tamamen ücretsiz — satın alma yok, reklam yok
+• Ücretsiz oyna — uygulama içi satın alma yok. İstersen ödüllü reklam izleyip altın kazan (isteğe bağlı)
 • Misafir olarak anında oyna, istersen sonra hesabını kaydet
 • Doğru/yanlış, çoktan seçmeli, görsel, karşılaştırma ve tahmin turları
 • Arkadaşınla özel oda kur, davet kodunu paylaş, birebir kapış
@@ -79,9 +79,17 @@ Yer: App Store Connect → uygulaman → sol menüde **App Privacy** → **Get S
 Başka HİÇBİR kutu işaretlenmeyecek (Location yok, Contacts yok, Purchases yok, Diagnostics yok, Browsing yok...).
 
 **Soru 3 — Her veri türü için 3 soru sorulur. Cevaplar HEPSİNDE AYNI:**
-1. "How is this data used?" → yalnız **App Functionality** işaretle (Analytics / Advertising / Product Personalization / Other → HAYIR, boş).
-2. "Is this data linked to the user's identity?" → **Yes, linked to the user's identity** (hesaba bağlı tutuluyor).
-3. "Is this data used for tracking purposes?" → **No** (izleme/reklam takibi YOK).
+1. "How is this data used?" → yalnız **App Functionality** işaretle.
+2. "Is this data linked to the user's identity?" → **Yes, linked to the user's identity**.
+3. "Is this data used for tracking purposes?" → **No**.
+
+**⚠️ REKLAM EKLENDİ — ek olarak "Device ID"yi reklam için de beyan et:**
+Ödüllü reklamları **Google AdMob** ile gösteriyoruz (izlemesiz/non-personalized). AdMob üçüncü taraf olarak reklam sunumu için cihaz bilgisi işler. Bu yüzden **Identifiers → Device ID** için ayrıca:
+- Kullanım (How is this data used?) → **App Functionality** + **Third-Party Advertising** (ikisi de işaretli).
+- Linked to identity → **No** (reklam kimliği hesaba bağlı değil).
+- Tracking → **No** (izlemesiz reklam; IDFA/izleme kullanmıyoruz, ATT izni istemiyoruz).
+
+(Reklamlar **kişiselleştirilmemiş** olduğu için "Tracking: No" doğru ve ATT izni gerekmez. Kişiselleştirmeyi açarsan Tracking: Yes + ATT gerekir — biz AÇMIYORUZ.)
 
 **Neden bunlar (Apple sorarsa / kendin bilesin):**
 - Email → kayıtlı hesap girişi (misafirde toplanmaz ama kayıt seçeneği var).

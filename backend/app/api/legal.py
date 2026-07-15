@@ -120,12 +120,17 @@ _PRIVACY_BODY = f"""
       (bkz. Bölüm 5).</li>
     </ul>
 
-    <h2>3. İzleme ve Reklam Yok</h2>
-    <p>Uygulama sizi diğer şirketlerin uygulama ve web sitelerinde
-    <strong>izlemez (no tracking)</strong> ve üçüncü taraf reklam ağları için
-    veri toplamaz. Uygulamada <strong>reklam gösterilmez</strong>. Verilerinizi
-    pazarlama amacıyla üçüncü taraflara <strong>satmayız</strong>. Bildirim
-    token'ı da <strong>reklam/izleme amacıyla kullanılmaz</strong>.</p>
+    <h2>3. Reklamlar ve İzleme</h2>
+    <p>Uygulamada <strong>ödüllü (isteğe bağlı) reklamlar</strong> gösterilir:
+    yalnızca siz "reklam izle" seçeneğine dokunursanız çalışır ve karşılığında
+    oyun içi altın/kalkan kazanırsınız. Reklamlar <strong>Google AdMob</strong>
+    ile sunulur ve <strong>kişiselleştirilmez (non-personalized)</strong>; reklam
+    sunumu için sınırlı cihaz bilgisi işlenebilir. Sizi diğer şirketlerin uygulama
+    ve web sitelerinde <strong>izlemeyiz (no cross-app tracking)</strong>, reklam
+    tanımlayıcısını (IDFA) izleme amacıyla kullanmayız ve bu nedenle izleme izni
+    istemeyiz. Verilerinizi pazarlama amacıyla üçüncü taraflara
+    <strong>satmayız</strong>. Bildirim token'ı reklam/izleme amacıyla
+    kullanılmaz.</p>
 
     <h2>4. Verileri Kullanım Amaçlarımız</h2>
     <ul>

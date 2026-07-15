@@ -105,9 +105,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/cosmetics', builder: (_, __) => const CosmeticsScreen()),
       GoRoute(path: '/room', builder: (_, __) => const RoomEntryScreen()),
       GoRoute(path: '/room/lobby', builder: (_, __) => const RoomScreen()),
-      // Günün 5 Sorusu — shell DIŞINDA tam ekran (soruya odak, alt nav yok).
+      // Günün 5 Sorusu — v1.2'de ana ekrandan GİZLENDİ (dormant). Rota geriye
+      // dönük uyumluluk + push deep-link için duruyor; ekran/kod silinmedi.
       GoRoute(path: '/daily', builder: (_, __) => const DailyChallengeScreen()),
       GoRoute(path: '/season', builder: (_, __) => const SeasonScreen()),
+      // ZOR MOD (v1.2): Rafta duran turnuva "ZOR MOD" olarak geri açıldı;
+      // ana ekrandaki "🔥 ZOR MOD" kartından bu rotaya girilir.
       GoRoute(path: '/tournament', builder: (_, __) => const TournamentScreen()),
       GoRoute(path: '/inventory', builder: (_, __) => const InventoryScreen()),
       GoRoute(

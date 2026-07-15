@@ -76,6 +76,13 @@ class Settings(BaseSettings):
     MAX_PLAYERS: int = 12
     ROUND_COUNT: int = 5
 
+    # Zor Mod (eski turnuva) ödül havuzu — sistem seed'i (taban havuz).
+    # Az oyunculu dönemde havuz bu değerin altına düşmez: effektif_havuz =
+    # max(gerçek_girişler_toplamı, ZORMOD_MIN_POOL). Prod'da env ile ayarlanır.
+    # Oran (ödül %80 / sink %20) ve pay dağılımı (800/250/150) kod sabitidir
+    # (tournament_service.ZORMOD_*).
+    ZORMOD_MIN_POOL: int = 1000
+
     # AAS (Adaptive Threshold System) settings
     AAS_LEVEL_0_MAX_CAP: int = 4      # CAP 0-4: min_real=1
     AAS_LEVEL_1_MAX_CAP: int = 19     # CAP 5-19: min_real=2

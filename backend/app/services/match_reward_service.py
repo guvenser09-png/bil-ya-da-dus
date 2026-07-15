@@ -4,10 +4,10 @@ Maç bitişinde GERÇEK oyunculara yalnızca COIN ödülü verir. Coin pay-to-wi
 değildir — oyun içi bilgi/avantaj (kolay soru, ekstra süre, joker, kalıcı puan)
 ASLA satılmaz veya ödüllendirilmez. Coin sadece kozmetik almak için kullanılır.
 
-Ödül tablosu (sıralamaya göre):
-  - Kazanan (1.):           +50 coin
-  - İlk 3 (2.-3.):          +25 coin
-  - Oynayan herkes (taban): +10 coin
+Ödül tablosu (sıralamaya göre) — KITLAŞTIRILDI (ekonomi dengesi):
+  - Kazanan (1.):           +30 coin
+  - İlk 3 (2.-3.):          +15 coin
+  - Oynayan herkes (taban): +5 coin
 
 Anti-farm: kullanıcı başına maç ödülünden GÜNLÜK en fazla MATCH_REWARD_DAILY_CAP
 coin verilir. Cap takibi User.match_reward_date / match_reward_coins_today
@@ -31,10 +31,10 @@ from app.services.user_service import UserService
 
 logger = logging.getLogger("app.match_reward")
 
-# Ödül miktarları.
-REWARD_WINNER = 50
-REWARD_TOP3 = 25
-REWARD_PARTICIPATION = 10
+# Ödül miktarları (ekonomi kıtlaştırması: 50/25/10 → 30/15/5).
+REWARD_WINNER = 30
+REWARD_TOP3 = 15
+REWARD_PARTICIPATION = 5
 
 # Günlük maç-ödülü cap'i (anti-farm).
 MATCH_REWARD_DAILY_CAP = 500
@@ -50,11 +50,10 @@ GHOST_GOLD_MAX = 20
 # tutturursa maç sonunda bu altını alır (günlük cap'e DAHİL).
 BET_REWARD = 25
 
-# --- Kalkan bedeli (🛡️💰) ---
-# Maç içinde kalkanı kırılan GERÇEK oyuncudan maç sonunda tahsil edilen altın.
-# Bakiye SHIELD_COST'tan azsa HİÇ düşülmez — kalkan "hediye" sayılır. Bu bir
-# GİDERdir: günlük ödül cap'inden (MATCH_REWARD_DAILY_CAP) tamamen bağımsız.
-SHIELD_COST = 50
+# NOT: Eski "kalkan bedeli" (SHIELD_COST / charge_shield_costs) KALDIRILDI.
+# Yeni kalkan modelinde oyuncu kalkanı maç ÖNCESİ satın alır (100 altın) veya
+# ödüllü reklamla kredi kazanır (shield_service.prepare_shield). Kalkan kırılması
+# artık maç sonunda ek ücret DOĞURMAZ — "bir hakkın daha yok" demektir, o kadar.
 
 
 def ghost_reward_for(correct_count: int) -> int:
@@ -158,53 +157,6 @@ async def grant_match_rewards(
         await anti_tilt_service.record_game_result(uid, won=(rank == 1))
 
     return earned
-
-
-async def charge_shield_costs(
-    db: AsyncSession,
-    user_ids: list[str],
-) -> dict[str, bool]:
-    """Kalkanı kırılan GERÇEK oyunculardan kalkan bedelini (SHIELD_COST) tahsil et.
-
-    Kurallar:
-      - Bakiye >= SHIELD_COST ise tam SHIELD_COST düşülür (tahsil edildi).
-      - Bakiye yetmiyorsa HİÇ düşülmez — kalkan ücretsiz "hediye" sayılır
-        (max(0, coins-50) DEĞİL; kısmi tahsilat yok).
-      - Botlar bu listeye hiç girmemeli (çağıran taraf yalnızca user_id'li
-        gerçek oyuncuları geçirir).
-      - Günlük ödül cap'iyle İLİŞKİSİZDİR: bu bir gider, ödül havuzundan
-        bağımsız düşülür (match_reward_coins_today'e dokunulmaz).
-
-    İdempotency ÇAĞIRANIN sorumluluğundadır: maç ödülleriyle aynı Redis
-    (match:rewarded:{game_id}) korumalı akışta, ödüller EKLENDİKTEN SONRA
-    çağrılır — böylece oyuncu bedeli o maçın kazancıyla ödeyebilir.
-
-    Args:
-        db: Aktif async session (commit ÇAĞIRAN tarafça yapılır).
-        user_ids: Kalkanı kırılan gerçek oyuncu id'leri.
-
-    Returns:
-        {user_id: True (tahsil edildi) | False (hediye)} haritası.
-        Kullanıcı bulunamazsa/hata olursa haritaya girmez.
-    """
-    outcome: dict[str, bool] = {}
-    for uid in user_ids:
-        if not uid:
-            continue
-        try:
-            user = await UserService.get_user_by_id(db, uid)
-            if not user:
-                continue
-            balance = user.coins or 0
-            if balance >= SHIELD_COST:
-                user.coins = balance - SHIELD_COST
-                outcome[uid] = True
-            else:
-                # Yetersiz bakiye: hiç düşme, kalkan hediye.
-                outcome[uid] = False
-        except Exception as exc:  # tek oyuncu hatası diğerlerini engellemesin
-            logger.warning("Kalkan bedeli tahsil edilemedi (user %s): %s", uid, exc)
-    return outcome
 
 
 async def grant_match_xp(

@@ -1,6 +1,7 @@
 """User profile endpoints — view, update, search, stats."""
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -12,11 +13,19 @@ from app.schemas.user import (
     UserStatsResponse,
     UserUpdateRequest,
 )
-from app.services import push_service
+from app.services import push_service, shield_service
 from app.services.user_service import UserService
 from app.utils.security import get_current_user_id
 
 router = APIRouter()
+
+
+class PrepareShieldRequest(BaseModel):
+    """Maç öncesi kalkan hazırlama isteği."""
+
+    source: str  # "gold" (100 altın) | "ad" (ödüllü reklam kredisi)
+    # source="ad" için ödüllü reklam idempotency nonce'u (opsiyonel).
+    nonce: str | None = None
 
 
 @router.get("/me", response_model=UserMeResponse)
@@ -133,6 +142,29 @@ async def delete_push_token(
     """
     await push_service.remove_token(db=db, token=request.token)
     return MessageResponse(message="Bildirim token'ı silindi.")
+
+
+@router.post("/me/prepare-shield")
+async def prepare_shield(
+    body: PrepareShieldRequest,
+    user_id: str = Depends(get_current_user_id),
+    db: AsyncSession = Depends(get_db),
+):
+    """Maç ÖNCESİ kalkan hazırla (yeni ekonomi: kalkan bedava değil).
+
+    source="gold": 100 altınla satın al (bakiye yetmezse {ok:false,
+    reason:"insufficient"}). source="ad": ödüllü reklam kredisiyle bedava kalkan.
+    Başarılıysa Redis'e shield_ready bayrağı konur; maç başında game_service o
+    maç için 1 kalkan verir ve bayrağı tüketir.
+    """
+    try:
+        return await shield_service.prepare_shield(
+            db, user_id=user_id, source=body.source, nonce=body.nonce
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)
+        ) from exc
 
 
 @router.get("/me/stats", response_model=UserStatsResponse)

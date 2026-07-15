@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:quizroyale/core/network/api_client.dart';
 import 'package:quizroyale/core/router/app_router.dart';
+import 'package:quizroyale/core/services/ad_service.dart';
 import 'package:quizroyale/core/services/push_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/shared/widgets/adaptive_stage.dart';
@@ -40,7 +43,23 @@ void main() async {
   // istenir (bkz. core/services/push_service.dart).
   unawaited(PushService.instance.init());
 
+  // AdMob (ödüllü reklam). SADECE mobilde — web'de google_mobile_ads no-op.
+  // AWAIT EDİLMEZ → açılışı yavaşlatmaz; hata yutulur. SDK başlayınca ilk
+  // ödüllü reklam önden yüklenir (bkz. core/services/ad_service.dart).
+  if (!kIsWeb) {
+    unawaited(_initAds());
+  }
+
   runApp(const ProviderScope(child: BiladaApp()));
+}
+
+/// AdMob SDK'sını başlatır ve ilk ödüllü reklamı önden yükler. Hata yutulur
+/// (reklam yoksa uygulama sorunsuz çalışır). Yalnızca mobilde çağrılır.
+Future<void> _initAds() async {
+  try {
+    await MobileAds.instance.initialize();
+    AdService.instance.init();
+  } catch (_) {}
 }
 
 class BiladaApp extends ConsumerWidget {

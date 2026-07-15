@@ -71,9 +71,10 @@ class User(Base):
     season_claimed_premium: Mapped[list | None] = mapped_column(JSON, nullable=True)
 
     # Currency (tek oyun-içi para birimi: altın = coins)
-    # Yeni oyuncuya başlangıç altını: ekonomiyi (turnuva girişi + karakter
-    # satın alma) hemen oynanabilir kılar. Eski satırlar etkilenmez (migration yok).
-    coins: Mapped[int] = mapped_column(Integer, default=1000)
+    # Yeni oyuncuya başlangıç altını: KITLAŞTIRILDI (1000 → 300). Amaç oyuncuyu
+    # kalkan/karakter için ödüllü reklam izlemeye + oynayarak kazanmaya yöneltmek.
+    # Eski satırlar etkilenmez (migration yok).
+    coins: Mapped[int] = mapped_column(Integer, default=300)
     # Vestigial: artık hiçbir kod okumaz/yazmaz; kolon geriye dönük uyumluluk
     # için tutulur (migration yazılmadı).
     gems: Mapped[int] = mapped_column(Integer, default=0)
