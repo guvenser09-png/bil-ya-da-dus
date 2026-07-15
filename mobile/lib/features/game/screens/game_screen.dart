@@ -484,6 +484,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         if (gameResult['shield_cost'] is num)
           'shield_cost': asInt(gameResult['shield_cost']),
         if (gameResult['shield_gift'] == true) 'shield_gift': true,
+        // 🏆 Zor Mod: turnuva bayrağı + ilk 3'e girdiyse SABİT ödül (700/300/200).
+        // Sonuç ekranı Zor Mod'da SADECE bu ödülü gösterir (normal ödül yok).
+        'is_tournament': gameResult['is_tournament'] == true,
+        if (gameResult['zor_mod_prize'] is num)
+          'zor_mod_prize': asInt(gameResult['zor_mod_prize']),
         'is_winner': myIsWinner,
         // Hayatta kalma bayrağı + ham eleme turu → result ekranı "elendin" vs
         // "hayatta kaldın" ayrımını doğru yapar (yanlış "elendin" bug fix).

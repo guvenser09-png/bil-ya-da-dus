@@ -39,12 +39,14 @@ TOURNAMENT_GOLD_COST = 100
 # puan vermez). Normal maç 1x.
 TOURNAMENT_POINT_MULTIPLIER = 3
 
-# --- Zor Mod ödül havuzu (config; oranlar SABİT) ---
-# effektif_havuz = max(gerçek_girişler_toplamı, ZORMOD_MIN_POOL). Havuzun
-# %80'i ödül dağıtılır, %20'si yanar (sink). Ödül dağıtılabilir kısım
-# şampiyon/2./3.'ye 800/250/150 oranıyla (normalize) bölünür.
-ZORMOD_PRIZE_SHARE = 0.8            # havuzun ödüle giden oranı (%80)
-ZORMOD_PAYOUT_RATIOS = (800, 250, 150)  # şampiyon / 2. / 3. (normalize edilir)
+# --- Zor Mod ödülleri (SABİT) ---
+# Kazananlar SABİT altın alır: 1. → 700, 2. → 300, 3. → 200. İlk 3 DIŞINA ödül
+# YOKTUR. Eski dinamik havuz (%80 pay + 800/250/150 oranı + sistem seed'i)
+# kaldırıldı — mobil "ödül havuzu" olarak bu üç payın toplamını (1200) gösterir.
+# AYRICA: Zor Mod'da NORMAL maç ödülü (30/15/5 + katılım/hayalet/bahis) VERİLMEZ;
+# tek ödül budur (bkz. ws/game.py `is_tournament` dalı). Böylece "iki ödül"
+# karışıklığı biter.
+ZORMOD_FIXED_PRIZES = (700, 300, 200)  # 1. / 2. / 3. — sabit altın payları
 
 # Turnuva maçında sorular bu zorluk eşiğinden (dahil) seçilir → GERÇEKTEN ZOR
 # (4-5). Yeterli zor soru yoksa question_service kademeli olarak gevşetir
@@ -109,38 +111,30 @@ def _reward_for_rank(rank: int) -> dict | None:
 
 
 def compute_prize_pool(real_player_count: int) -> dict:
-    """Zor Mod ödül havuzunu hesapla (sistem seed'li, %80 ödül / %20 sink).
+    """Zor Mod SABİT ödüllerini döndür: 1. → 700, 2. → 300, 3. → 200.
 
-    Adımlar:
-      1. gerçek_girişler = real_player_count * TOURNAMENT_GOLD_COST.
-      2. effektif_havuz = max(gerçek_girişler, ZORMOD_MIN_POOL)  ← sistem seed'i.
-      3. dağıtılabilir = effektif_havuz * ZORMOD_PRIZE_SHARE      (%80; %20 yanar).
-      4. şampiyon/2./3. payları = dağıtılabilir * (800/250/150) / 1200 (int'e yuvarlanır).
+    Ödüller artık oyuncu sayısına/girişlere BAĞLI DEĞİL (sabit). `prize_pool`
+    üç payın toplamıdır (1200) ve mobilde "ödül havuzu" olarak gösterilir.
+    `entries_total` yalnızca bilgi amaçlı (girişlerin ne kadar topladığı).
 
     Args:
-        real_player_count: Maçtaki GERÇEK (bot olmayan) oyuncu sayısı.
+        real_player_count: Maçtaki GERÇEK (bot olmayan) oyuncu sayısı — yalnızca
+            entries_total için; ödül tutarını ETKİLEMEZ.
 
     Returns:
-        {"prize_pool": effektif_havuz(int),
-         "prize_top3": [şampiyon_pay, ikinci_pay, üçüncü_pay] (int altın),
+        {"prize_pool": 1200,
+         "prize_top3": [700, 300, 200],
          "entries_total": gerçek_girişler_toplamı(int),
-         "distributable": dağıtılabilir(int)}
+         "distributable": 1200}
     """
-    from app.config import settings
-
-    min_pool = int(getattr(settings, "ZORMOD_MIN_POOL", 1000))
+    prize_top3 = list(ZORMOD_FIXED_PRIZES)
+    total_prize = sum(prize_top3)
     entries_total = max(0, int(real_player_count)) * TOURNAMENT_GOLD_COST
-    effective_pool = max(entries_total, min_pool)
-    distributable = effective_pool * ZORMOD_PRIZE_SHARE
-    total_ratio = sum(ZORMOD_PAYOUT_RATIOS)
-    prize_top3 = [
-        int(distributable * r / total_ratio) for r in ZORMOD_PAYOUT_RATIOS
-    ]
     return {
-        "prize_pool": int(effective_pool),
+        "prize_pool": total_prize,
         "prize_top3": prize_top3,
         "entries_total": int(entries_total),
-        "distributable": int(distributable),
+        "distributable": total_prize,
     }
 
 
@@ -408,25 +402,16 @@ class TournamentService:
             for r in SEASON_REWARDS
         ]
 
-        # --- Zor Mod ödül havuzu önizlemesi (mobil lobide gösterir) ---
-        # Havuz maçtaki gerçek oyuncu sayısına göre değişir; burada iki uç verilir:
-        # garanti minimum (sistem seed'i) ve dolu lobi (MAX_PLAYERS) senaryosu.
-        from app.config import settings
-
-        min_pool_info = compute_prize_pool(0)  # 0 gerçek oyuncu → seed tabanı
-        full_pool_info = compute_prize_pool(int(getattr(settings, "MAX_PLAYERS", 12)))
+        # --- Zor Mod SABİT ödül önizlemesi (mobil lobide gösterir) ---
+        # Ödüller sabit (1. 700 / 2. 300 / 3. 200); oyuncu sayısına göre
+        # değişmez. Tek havuz değeri = payların toplamı (1200). Eski min/max
+        # ikili gösterim (kafa karıştıran "iki havuz") kaldırıldı.
+        pool_info = compute_prize_pool(0)
         prize_pool_info = {
             "entry_cost": TOURNAMENT_GOLD_COST,
-            "min_pool": int(getattr(settings, "ZORMOD_MIN_POOL", 1000)),
-            "prize_share": ZORMOD_PRIZE_SHARE,          # %80 ödül
-            "sink_share": round(1 - ZORMOD_PRIZE_SHARE, 2),  # %20 yanar
-            "payout_ratios": list(ZORMOD_PAYOUT_RATIOS),     # 800/250/150
-            # Garanti minimum havuz (az oyunculu dönemde bile) + örnek dağıtım.
-            "prize_pool": min_pool_info["prize_pool"],
-            "prize_top3": min_pool_info["prize_top3"],
-            # Dolu lobi senaryosu (mobil "en fazla bu kadar" gösterebilir).
-            "max_prize_pool": full_pool_info["prize_pool"],
-            "max_prize_top3": full_pool_info["prize_top3"],
+            "fixed": True,
+            "prize_pool": pool_info["prize_pool"],       # 1200 (payların toplamı)
+            "prize_top3": pool_info["prize_top3"],        # [700, 300, 200]
         }
 
         return {
@@ -437,9 +422,9 @@ class TournamentService:
             "hard_mode": True,
             "description": (
                 "Zor Mod'da sorular baştan sona zordur ve kazandığın sezon puanı "
-                "3 katına çıkar. Girişler bir ÖDÜL HAVUZUNDA toplanır: kazananlar "
-                "havuzdan altın alır (havuzun %80'i ödül). Giriş tek başına puan "
-                "vermez — iyi oynamak şart."
+                "3 katına çıkar. İlk 3'e girenler SABİT altın ödülü kazanır: "
+                "1. → 700, 2. → 300, 3. → 200. İlk 3 dışına ödül yoktur — iyi "
+                "oynamak şart."
             ),
             "entry_options": [
                 {"currency": "gold", "cost": TOURNAMENT_GOLD_COST,

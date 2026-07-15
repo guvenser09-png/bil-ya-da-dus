@@ -232,6 +232,11 @@ class _ResultBody extends ConsumerWidget {
     final finalRound = my['final_round'] as int? ?? 0;
     final rank = my['rank'] as int? ?? 0;
     final coinsEarned = my['coins_earned'] as int? ?? 0;
+    // 🏆 Zor Mod (turnuva): tek ödül SABİT havuz payıdır (700/300/200). Zor
+    // Mod'da normal maç ödülü/hayalet/bahis VERİLMEZ → aşağıda bu şeritler
+    // gizlenir, yalnızca 🏆 ödül gösterilir.
+    final isTournament = my['is_tournament'] == true;
+    final zorModPrize = my['zor_mod_prize'] as int? ?? 0;
     // 👻 Hayalet modu: elendikten sonra bilinen doğrular + altın karşılığı.
     final ghostCorrect = my['ghost_correct'] as int? ?? 0;
     final ghostReward = my['ghost_reward'] as int? ?? 0;
@@ -309,28 +314,38 @@ class _ResultBody extends ConsumerWidget {
                           const Spacer(),
                           const SizedBox(height: 12),
                           // ── Ödül/bedel şeritleri ─────────────────────────
-                          // Coin — yalnızca pozitifse (0 ise günlük limit dolmuş olabilir).
-                          if (coinsEarned > 0) ...[
-                            _MiniStrip(emoji: '🪙', text: '+$coinsEarned Altın kazandın!', color: AppTheme.gold),
-                            const SizedBox(height: 8),
-                          ],
-                          // 👻 Hayalet modu — elenmişken bilinen doğrular altın oldu.
-                          if (ghostCorrect > 0) ...[
-                            _MiniStrip(
-                                emoji: '👻',
-                                text: 'Hayalet modunda $ghostCorrect doğru — +$ghostReward altın!',
-                                color: AppTheme.cSecondary),
-                            const SizedBox(height: 8),
-                          ],
-                          // 🎯 Şampiyon bahsi sonucu.
-                          if (betOn != null) ...[
-                            _MiniStrip(
-                                emoji: '🎯',
-                                text: betWon
-                                    ? 'Bahsin tuttu: $betOn — +$betReward altın!'
-                                    : 'Bahsin tutmadı ($betOn) — bir dahaki sefere!',
-                                color: betWon ? AppTheme.gold : AppTheme.cOnSurfaceVariant),
-                            const SizedBox(height: 8),
+                          if (isTournament) ...[
+                            // 🏆 ZOR MOD — tek ödül SABİT havuz payı (700/300/200).
+                            // İlk 3 dışına ödül yok → prize 0 ise şerit gösterilmez.
+                            if (zorModPrize > 0) ...[
+                              _MiniStrip(emoji: '🏆', text: '+$zorModPrize Altın — Zor Mod ödülü!', color: AppTheme.gold),
+                              const SizedBox(height: 8),
+                            ],
+                          ] else ...[
+                            // Normal maç ödülleri (Zor Mod'da bunlar VERİLMEZ).
+                            // Coin — yalnızca pozitifse (0 ise günlük limit dolmuş olabilir).
+                            if (coinsEarned > 0) ...[
+                              _MiniStrip(emoji: '🪙', text: '+$coinsEarned Altın kazandın!', color: AppTheme.gold),
+                              const SizedBox(height: 8),
+                            ],
+                            // 👻 Hayalet modu — elenmişken bilinen doğrular altın oldu.
+                            if (ghostCorrect > 0) ...[
+                              _MiniStrip(
+                                  emoji: '👻',
+                                  text: 'Hayalet modunda $ghostCorrect doğru — +$ghostReward altın!',
+                                  color: AppTheme.cSecondary),
+                              const SizedBox(height: 8),
+                            ],
+                            // 🎯 Şampiyon bahsi sonucu.
+                            if (betOn != null) ...[
+                              _MiniStrip(
+                                  emoji: '🎯',
+                                  text: betWon
+                                      ? 'Bahsin tuttu: $betOn — +$betReward altın!'
+                                      : 'Bahsin tutmadı ($betOn) — bir dahaki sefere!',
+                                  color: betWon ? AppTheme.gold : AppTheme.cOnSurfaceVariant),
+                              const SizedBox(height: 8),
+                            ],
                           ],
                           // 🛡️ Kalkan bedeli — tahsil edildi ya da hediye sayıldı.
                           if (shieldCost > 0 || shieldGift) ...[

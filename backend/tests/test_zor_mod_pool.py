@@ -1,13 +1,14 @@
-"""Zor Mod (eski turnuva) ödül havuzu testleri.
+"""Zor Mod (eski turnuva) SABİT ödül testleri.
 
 Kapsam:
-  1. compute_prize_pool: sistem seed'i (min havuz), %80 ödül / %20 sink,
-     800/250/150 dağıtımı, oyuncu sayısına göre büyüme.
-  2. GameEngine turnuva maçında prize_pool/prize_top3 hesaplar; normal maçta 0.
-  3. grant_prize_pool ilk 3 gerçek oyuncuya havuz payını verir.
-  4. Tam maç-sonu akışı: turnuva maçı havuz payını dağıtır (base ödülün üstüne),
-     idempotent (aynı game_id iki kez → çift ödül yok).
-  5. GET /api/tournament payload'ı prize_pool_info içerir.
+  1. compute_prize_pool: SABİT ödüller (1. 700 / 2. 300 / 3. 200); oyuncu
+     sayısına/girişlere BAĞLI DEĞİL. prize_pool = payların toplamı (1200).
+  2. GameEngine turnuva maçında prize_pool/prize_top3 SABİT hesaplar; normal
+     maçta 0.
+  3. grant_prize_pool ilk 3 gerçek oyuncuya sabit payı verir; 4. almaz.
+  4. Tam maç-sonu akışı: Zor Mod maçı YALNIZCA havuz payını dağıtır (normal
+     30/15/5 maç ödülü VERİLMEZ — "tek ödül"); idempotent.
+  5. GET /api/tournament payload'ı sabit prize_pool_info içerir.
 """
 
 import uuid
@@ -16,13 +17,11 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from sqlalchemy import select
 
-from app.config import settings
 from app.models.user import User
 from app.services.game_service import GameEngine
 from app.services.tournament_service import (
     TOURNAMENT_GOLD_COST,
-    ZORMOD_PAYOUT_RATIOS,
-    ZORMOD_PRIZE_SHARE,
+    ZORMOD_FIXED_PRIZES,
     TournamentService,
     compute_prize_pool,
 )
@@ -45,78 +44,48 @@ async def _mk_user(db, *, coins=1000) -> User:
 
 
 # ---------------------------------------------------------------------------
-# 1) compute_prize_pool
+# 1) compute_prize_pool — SABİT
 # ---------------------------------------------------------------------------
 
-def test_pool_seed_floor_when_few_players():
-    """Az oyuncu: havuz sistem seed'iyle ZORMOD_MIN_POOL'un altına düşmez."""
-    min_pool = settings.ZORMOD_MIN_POOL
+def test_prizes_are_fixed_700_300_200():
+    """Ödüller sabit: 1. 700 / 2. 300 / 3. 200; havuz = toplam (1200)."""
+    assert ZORMOD_FIXED_PRIZES == (700, 300, 200)
+    p = compute_prize_pool(0)
+    assert p["prize_top3"] == [700, 300, 200]
+    assert p["prize_pool"] == 1200
+    assert p["distributable"] == 1200
 
-    # 0 oyuncu → tamamen seed.
+
+def test_prizes_independent_of_player_count():
+    """Oyuncu sayısı ödülü DEĞİŞTİRMEZ (sadece entries_total bilgi amaçlı)."""
     p0 = compute_prize_pool(0)
-    assert p0["prize_pool"] == min_pool
-    assert p0["entries_total"] == 0
-
-    # 5 oyuncu × 100 = 500 < 1000 → seed devreye girer.
     p5 = compute_prize_pool(5)
-    assert p5["entries_total"] == 500
-    assert p5["prize_pool"] == min_pool  # seed floor
-
-
-def test_pool_grows_with_players_above_floor():
-    """Girişler seed'i aşınca havuz gerçek girişler toplamına eşit olur."""
-    # 12 oyuncu × 100 = 1200 > 1000 → havuz 1200.
     p12 = compute_prize_pool(12)
+
+    # Ödüller her senaryoda aynı (sabit).
+    for p in (p0, p5, p12):
+        assert p["prize_pool"] == 1200
+        assert p["prize_top3"] == [700, 300, 200]
+
+    # entries_total yalnızca girişlerin topladığı (bilgi amaçlı) — ödülü etkilemez.
+    assert p0["entries_total"] == 0
+    assert p5["entries_total"] == 5 * TOURNAMENT_GOLD_COST == 500
     assert p12["entries_total"] == 12 * TOURNAMENT_GOLD_COST == 1200
-    assert p12["prize_pool"] == 1200
-
-
-def test_pool_80_20_split_and_distribution():
-    """Havuzun %80'i ödül, %20'si yanar; dağıtım 800/250/150 oranıyla."""
-    p12 = compute_prize_pool(12)  # havuz 1200
-    pool = p12["prize_pool"]
-    top3 = p12["prize_top3"]
-
-    # %80 dağıtılabilir = 960; %20 = 240 sink.
-    distributable = pool * ZORMOD_PRIZE_SHARE
-    assert distributable == 960
-    assert p12["distributable"] == 960
-
-    # 800/250/150 → 1200 normalize.
-    total_ratio = sum(ZORMOD_PAYOUT_RATIOS)
-    assert top3 == [
-        int(distributable * 800 / total_ratio),
-        int(distributable * 250 / total_ratio),
-        int(distributable * 150 / total_ratio),
-    ]
-    assert top3 == [640, 200, 120]
-
-    # Ödül toplamı dağıtılabilirin (%80) İÇİNDE kalır (yuvarlama sink lehine).
-    assert sum(top3) <= distributable
-    # Sink en az havuzun %20'si kadar (kalan yanar).
-    assert pool - sum(top3) >= pool * (1 - ZORMOD_PRIZE_SHARE)
-
-
-def test_pool_min_distribution_values():
-    """Seed tabanlı (1000) havuzda dağıtım: 533/166/100 (yuvarlama)."""
-    p = compute_prize_pool(0)  # havuz 1000, dağıtılabilir 800
-    assert p["prize_top3"] == [533, 166, 100]
 
 
 # ---------------------------------------------------------------------------
 # 2) GameEngine havuz hesabı
 # ---------------------------------------------------------------------------
 
-def test_engine_tournament_computes_pool():
-    """Turnuva maçında engine.prize_pool/prize_top3 dolar (3 gerçek oyuncu)."""
+def test_engine_tournament_computes_fixed_pool():
+    """Turnuva maçında engine.prize_pool/prize_top3 SABİT dolar."""
     players = [
         {"user_id": f"u{i}", "username": f"p{i}", "display_name": f"P{i}", "avatar_id": "a"}
         for i in range(3)
     ]
     engine = GameEngine("gt", players, [], is_tournament=True)
-    # 3 × 100 = 300 < 1000 → seed → havuz 1000, dağıtım 533/166/100.
-    assert engine.prize_pool == 1000
-    assert engine.prize_top3 == [533, 166, 100]
+    assert engine.prize_pool == 1200
+    assert engine.prize_top3 == [700, 300, 200]
 
 
 def test_engine_normal_match_no_pool():
@@ -133,29 +102,29 @@ def test_engine_normal_match_no_pool():
 
 @pytest.mark.asyncio
 async def test_grant_prize_pool_awards_top3(db_session):
-    """İlk 3 gerçek oyuncuya havuz payı altın olarak eklenir; 4. almaz."""
+    """İlk 3 gerçek oyuncuya sabit pay altın olarak eklenir; 4. almaz."""
     a = await _mk_user(db_session, coins=0)
     b = await _mk_user(db_session, coins=0)
     c = await _mk_user(db_session, coins=0)
     d = await _mk_user(db_session, coins=0)
 
     ranked = [str(a.id), str(b.id), str(c.id), str(d.id)]
-    awarded = await TournamentService.grant_prize_pool(db_session, ranked, [640, 200, 120])
+    awarded = await TournamentService.grant_prize_pool(db_session, ranked, [700, 300, 200])
 
-    assert awarded == {str(a.id): 640, str(b.id): 200, str(c.id): 120}
-    assert a.coins == 640
-    assert b.coins == 200
-    assert c.coins == 120
+    assert awarded == {str(a.id): 700, str(b.id): 300, str(c.id): 200}
+    assert a.coins == 700
+    assert b.coins == 300
+    assert c.coins == 200
     assert d.coins == 0  # ilk 3 dışında ödül yok
 
 
 # ---------------------------------------------------------------------------
-# 4) Tam maç-sonu akışı — turnuva havuz dağıtımı + idempotency
+# 4) Tam maç-sonu akışı — Zor Mod SADECE havuz payı (tek ödül) + idempotency
 # ---------------------------------------------------------------------------
 
 @pytest.mark.asyncio
-async def test_persist_tournament_distributes_pool_idempotent(mock_redis):
-    """Turnuva maç sonu: base ödül + havuz payı; ikinci çağrı çift ödül vermez."""
+async def test_persist_tournament_only_pool_no_base_reward(mock_redis):
+    """Zor Mod maç sonu: SADECE havuz payı (normal 30/15/5 YOK); idempotent."""
     async with session_factory() as db:
         w = await _mk_user(db, coins=1000)
         s = await _mk_user(db, coins=1000)
@@ -169,8 +138,8 @@ async def test_persist_tournament_distributes_pool_idempotent(mock_redis):
         {"user_id": g_id, "username": "pg", "display_name": "G", "avatar_id": "a"},
     ]
     engine = GameEngine("g_tour", players, [], is_tournament=True)
-    # Havuz: 3 gerçek → seed 1000 → paylar 533/166/100.
-    assert engine.prize_top3 == [533, 166, 100]
+    # Sabit ödül: 700/300/200.
+    assert engine.prize_top3 == [700, 300, 200]
     engine.players["pw"].score = 300
     engine.players["ps"].score = 200
     engine.players["pg"].score = 100
@@ -184,9 +153,9 @@ async def test_persist_tournament_distributes_pool_idempotent(mock_redis):
         coins1, prizes1 = await _persist_game_results("g_tour", engine, final)
         coins2, prizes2 = await _persist_game_results("g_tour", engine, final)
 
-    # Base maç ödülü (30/15/15) + havuz payı (533/166/100).
-    assert coins1 == {w_id: 30, s_id: 15, g_id: 15}
-    assert prizes1 == {w_id: 533, s_id: 166, g_id: 100}
+    # Zor Mod'da NORMAL maç ödülü verilmez → coins boş; tek ödül havuz payı.
+    assert coins1 == {}
+    assert prizes1 == {w_id: 700, s_id: 300, g_id: 200}
     # İkinci çağrı: idempotent.
     assert coins2 == {}
     assert prizes2 == {}
@@ -195,9 +164,10 @@ async def test_persist_tournament_distributes_pool_idempotent(mock_redis):
         w2 = (await db.execute(select(User).where(User.id == uuid.UUID(w_id)))).scalar_one()
         s2 = (await db.execute(select(User).where(User.id == uuid.UUID(s_id)))).scalar_one()
         g2 = (await db.execute(select(User).where(User.id == uuid.UUID(g_id)))).scalar_one()
-    assert w2.coins == 1000 + 30 + 533   # base + havuz
-    assert s2.coins == 1000 + 15 + 166
-    assert g2.coins == 0 + 15 + 100
+    # Yalnızca sabit havuz payı eklenir (base 30/15/5 YOK).
+    assert w2.coins == 1000 + 700
+    assert s2.coins == 1000 + 300
+    assert g2.coins == 0 + 200
 
 
 # ---------------------------------------------------------------------------
@@ -205,20 +175,18 @@ async def test_persist_tournament_distributes_pool_idempotent(mock_redis):
 # ---------------------------------------------------------------------------
 
 @pytest.mark.asyncio
-async def test_tournament_info_has_prize_pool_info(db_session):
-    """GET tournament info prize_pool_info (min/max havuz + oranlar) içerir."""
+async def test_tournament_info_has_fixed_prize_pool_info(db_session):
+    """GET tournament info sabit prize_pool_info (1200 + [700,300,200]) içerir."""
     u = await _mk_user(db_session, coins=500)
     info = await TournamentService.info(db_session, str(u.id))
 
     assert "prize_pool_info" in info
     ppi = info["prize_pool_info"]
     assert ppi["entry_cost"] == TOURNAMENT_GOLD_COST
-    assert ppi["min_pool"] == settings.ZORMOD_MIN_POOL
-    assert ppi["prize_share"] == ZORMOD_PRIZE_SHARE
-    assert ppi["sink_share"] == round(1 - ZORMOD_PRIZE_SHARE, 2)
-    assert ppi["payout_ratios"] == list(ZORMOD_PAYOUT_RATIOS)
-    # Garanti minimum havuz dağıtımı.
-    assert ppi["prize_pool"] == settings.ZORMOD_MIN_POOL
-    assert ppi["prize_top3"] == [533, 166, 100]
-    # Dolu lobi (MAX_PLAYERS) senaryosu.
-    assert ppi["max_prize_pool"] == settings.MAX_PLAYERS * TOURNAMENT_GOLD_COST
+    assert ppi["fixed"] is True
+    assert ppi["prize_pool"] == 1200
+    assert ppi["prize_top3"] == [700, 300, 200]
+
+    # Mobil top-level sözleşmesi de sabit değerleri yansıtır.
+    assert info["prize_pool"] == 1200
+    assert info["prize_top3"] == [700, 300, 200]

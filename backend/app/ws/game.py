@@ -532,24 +532,31 @@ async def _persist_game_results(
                 from app.services import analytics_service
                 await analytics_service.increment_match_count()
 
-                try:
-                    ranked = sorted(
-                        real_players, key=lambda pl: pl.score, reverse=True
-                    )
-                    ranked_user_ids = [pl.user_id for pl in ranked]
-                    # Hayalet (👻) + şampiyon bahsi (🎯) bonusları — sıralama
-                    # ödülüyle aynı idempotent akış ve günlük cap havuzunda.
-                    bonuses = {
-                        pl.user_id: _bonus_coins_for(pl, winner_username)
-                        for pl in real_players
-                    }
-                    coins_earned = await grant_match_rewards(
-                        db, ranked_user_ids, bonuses=bonuses
-                    )
-                except Exception as exc:
-                    logger.warning(
-                        "Game %s: maç coin ödülü verilemedi: %s", game_id, exc
-                    )
+                # Zor Mod'da (is_tournament) NORMAL maç ödülü VERİLMEZ: 30/15/5,
+                # katılım, hayalet (👻) ve şampiyon bahsi (🎯) altınları atlanır.
+                # Tek ödül SABİT havuz payıdır (1./2./3. = 700/300/200, aşağıda).
+                # Böylece eski "iki ödül" (normal + havuz) karışıklığı biter ve
+                # "ilk 3 dışına ödül yok" kuralı sağlanır.
+                is_tournament = getattr(engine, "is_tournament", False)
+                if not is_tournament:
+                    try:
+                        ranked = sorted(
+                            real_players, key=lambda pl: pl.score, reverse=True
+                        )
+                        ranked_user_ids = [pl.user_id for pl in ranked]
+                        # Hayalet (👻) + şampiyon bahsi (🎯) bonusları — sıralama
+                        # ödülüyle aynı idempotent akış ve günlük cap havuzunda.
+                        bonuses = {
+                            pl.user_id: _bonus_coins_for(pl, winner_username)
+                            for pl in real_players
+                        }
+                        coins_earned = await grant_match_rewards(
+                            db, ranked_user_ids, bonuses=bonuses
+                        )
+                    except Exception as exc:
+                        logger.warning(
+                            "Game %s: maç coin ödülü verilemedi: %s", game_id, exc
+                        )
 
                 # --- Maç sonu XP (seviye sistemi; coin ile aynı idempotent blok) ---
                 try:
@@ -1344,7 +1351,12 @@ async def _run_game_inner(
             personal_msg["bet_won"] = bet_won
             personal_msg["bet_reward"] = BET_REWARD if bet_won else 0
         # 🏆 Zor Mod havuz payı: turnuva maçında ilk 3'e girdiyse kazandığı
-        # havuz altını. Normal maçta ya da ilk 3 dışındaysa 0.
+        # SABİT altın (700/300/200). Normal maçta ya da ilk 3 dışındaysa 0.
+        # is_tournament: mobil sonuç ekranı Zor Mod'da SADECE bu ödülü gösterir
+        # (normal maç ödülü/hayalet/bahis şeritlerini gizler — çünkü verilmiyor).
+        personal_msg["is_tournament"] = bool(
+            getattr(engine, "is_tournament", False)
+        )
         if p.user_id in zor_mod_prizes:
             personal_msg["zor_mod_prize"] = int(zor_mod_prizes[p.user_id])
         # Kişiye özel cevaplar: her soruya your_answer + correct_bool ekle.
