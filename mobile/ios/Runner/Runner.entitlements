@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- APNs / Firebase Cloud Messaging push izni. Dağıtım (App Store/TestFlight)
+	     imzası için 'production'. App ID'de Push Notifications AÇIK olmalı ki
+	     Codemagic'in ürettiği profil bu izni içersin. -->
+	<key>aps-environment</key>
+	<string>production</string>
+</dict>
+</plist>
