@@ -33,17 +33,17 @@ class AdService {
   static final AdService instance = AdService._();
 
   // ───────────────────────────────────────────────────────────────────────
-  // TODO(admob): gerçek AdMob kimlikleriyle değiştir.
-  // Aşağıdaki değer GOOGLE'IN RESMİ TEST ödüllü reklam birim kimliğidir.
-  // App Store'a çıkmadan önce AdMob hesabından alınan GERÇEK ödüllü reklam
-  // birim kimliğiyle değiştirilmeli. Ayrıca App ID de değiştirilmeli:
+  // GERÇEK AdMob kimlikleri (üretim). AdMob hesabından alındı.
   //   - iOS App ID (Info.plist → GADApplicationIdentifier):
-  //       test:   ca-app-pub-3940256099942544~1458002511
+  //       ca-app-pub-1508388843514752~2964435608
   //   - iOS ödüllü birim kimliği (aşağıda):
-  //       test:   ca-app-pub-3940256099942544/1712485313
+  //       ca-app-pub-1508388843514752/4497009123
+  // (Referans için Google test kimlikleri:
+  //   App ID  test: ca-app-pub-3940256099942544~1458002511
+  //   Rewarded test: ca-app-pub-3940256099942544/1712485313)
   // ───────────────────────────────────────────────────────────────────────
   static const String _rewardedAdUnitId =
-      'ca-app-pub-3940256099942544/1712485313';
+      'ca-app-pub-1508388843514752/4497009123';
 
   RewardedAd? _rewardedAd;
   bool _isLoading = false;

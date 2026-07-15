@@ -76,13 +76,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<!-- AdMob (Google Mobile Ads) — ödüllü reklam.
-	     TODO(admob): GADApplicationIdentifier şu an GOOGLE'IN RESMİ TEST App
-	     ID'sidir. App Store'a çıkmadan önce AdMob hesabından alınan GERÇEK
-	     App ID ile değiştirilmeli (ödüllü birim kimliği de ad_service.dart'ta).
-	     Test App ID: ca-app-pub-3940256099942544~1458002511 -->
+	<!-- AdMob (Google Mobile Ads) — ödüllü reklam. GERÇEK üretim App ID'si
+	     (AdMob hesabından). Ödüllü birim kimliği ad_service.dart'tadır.
+	     (Google test App ID referans: ca-app-pub-3940256099942544~1458002511) -->
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<string>ca-app-pub-1508388843514752~2964435608</string>
 	<!-- SKAdNetwork: reklam ilişkilendirmesi için Google'ın dokümante ettiği
 	     standart ağ kimlikleri (opsiyonel ama önerilir). -->
 	<key>SKAdNetworkItems</key>
