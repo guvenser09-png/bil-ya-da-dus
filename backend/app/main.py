@@ -171,6 +171,21 @@ app.include_router(ws_game_router, prefix="/ws")
 app.include_router(ws_room_router, prefix="/ws")
 
 
+@app.get("/app-ads.txt", include_in_schema=False)
+async def app_ads_txt():
+    """AdMob app-ads.txt doğrulama dosyası (kökten sunulur).
+
+    AdMob, App Store'daki "Marketing URL" alan adının kökünde bu dosyayı arar.
+    Marketing URL = https://bil-ya-da-dus-production.up.railway.app olarak
+    ayarlanınca AdMob buradaki satırı bulup uygulamayı doğrular. İçerik AdMob
+    panelinin verdiği satırdır (yayıncı kimliği herkese açık, gizli değildir).
+    """
+    from fastapi.responses import PlainTextResponse
+    return PlainTextResponse(
+        "google.com, pub-1508388843514752, DIRECT, f08c47fec0942fa0\n"
+    )
+
+
 @app.get("/health", tags=["Health"])
 async def health_check():
     """Health check endpoint for monitoring."""
