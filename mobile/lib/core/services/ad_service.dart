@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -153,12 +154,39 @@ class AdService {
     // verify_shield_ad ile doğrulanır (PLACEMENTS'te 'shield' yok → burada
     // 400 döner). Çağıran (shield_prompt_sheet) prepare-shield'ı zaten yapıyor.
     // Sadece coin veren yerleşimleri (gold vb.) bu uçtan bildiriyoruz.
+    //
+    // ÇİFT-GRANT KORUMASI (idempotency): her izleme için TEK bir nonce üret ve
+    // gönder. Backend aynı nonce'u bir daha ödüllendirmez (Redis SET NX). Bu
+    // nonce, POST tekrar gönderilse bile (Dio auth-interceptor'ı 401→token
+    // yenileme sonrası aynı isteği YENİDEN atar; ağ tekrarları) aynı kaldığı
+    // için ödül İKİ KEZ verilmez. Nonce OLMADAN backend'in idempotency guard'ı
+    // atlanıyordu → özellikle oturumun İLK reklamında (bayat token → 401 →
+    // retry) çift-grant oluyordu ("ilk sefer 2 katı" bug'ının kök nedeni).
     if (status == AdRewardStatus.earned && placement != 'shield') {
       try {
-        await ApiClient.instance
-            .post('/api/ads/reward', body: {'placement': placement});
+        await ApiClient.instance.post(
+          '/api/ads/reward',
+          body: {'placement': placement, 'nonce': _newNonce()},
+        );
       } catch (_) {}
     }
     return status;
+  }
+
+  /// Ödüllü reklam ödülü için tek seferlik idempotency anahtarı (UUID v4).
+  /// Kriptografik rastgelelikle üretilir; ek paket gerektirmez. Backend bu
+  /// nonce'u Redis SET NX ile bir kez işler → aynı istek tekrar gelse bile
+  /// altın İKİ KEZ eklenmez.
+  static String _newNonce() {
+    final rng = Random.secure();
+    final bytes = List<int>.generate(16, (_) => rng.nextInt(256));
+    // RFC 4122: sürüm 4 + variant bitleri.
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    String hex(int start, int end) => bytes
+        .sublist(start, end)
+        .map((b) => b.toRadixString(16).padLeft(2, '0'))
+        .join();
+    return '${hex(0, 4)}-${hex(4, 6)}-${hex(6, 8)}-${hex(8, 10)}-${hex(10, 16)}';
   }
 }

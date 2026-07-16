@@ -14,7 +14,7 @@ Round structure (eleme rampası — kolaydan zora):
 | 2     | True/False        | 7s   | Easy       | Wrong answers      |
 | 3     | Visual            | 9s   | Medium     | Wrong answers      |
 | 4     | Comparison        | 9s   | Med-hard   | Wrong answers      |
-| 5     | Slider estimation | 10s  | Intuition  | Closest wins       |
+| 5     | Slider estimation | 12s  | Intuition  | Closest wins       |
 
 Kalkan (🛡️) mekaniği:
 - Kalkan artık BEDAVA DEĞİL. Maç başında (apply_shield_setup) gerçek oyuncuya
@@ -28,6 +28,9 @@ Kalkan (🛡️) mekaniği:
 - İkinci yanlış = normal eleme. Final (tahmin) turunda Kalkan GEÇERSİZ.
 - "Herkes yanlışsa kimse elenmez" kuralı ÖNCE uygulanır: kimse elenmeyecekse
   kalkan da kırılmaz.
+- ZOR MOD (turnuva): KALKAN YOK. Turnuva maçında hiçbir oyuncu (gerçek/bot)
+  kalkan almaz (apply_shield_setup herkese shields=0 verir) → tamamen kalkansız,
+  yüksek riskli mod.
 """
 
 import asyncio
@@ -59,7 +62,9 @@ ROUND_CONFIG = [
     {"round": 2, "type": "dogru_yanlis",    "time": 7,  "difficulty": 2},
     {"round": 3, "type": "gorsel",          "time": 9,  "difficulty": 3},
     {"round": 4, "type": "karsilastirma",   "time": 9,  "difficulty": 4},
-    {"round": 5, "type": "tahmin",          "time": 10, "difficulty": 5},
+    # Son tahmin turu TÜM modlarda 12 sn (slider'ı okuyup sürükleyip kilitlemek
+    # 10 sn'de dar kalıyordu — normal ve Zor Mod için ortak süre).
+    {"round": 5, "type": "tahmin",          "time": 12, "difficulty": 5},
 ]
 
 # TURNUVA tur süreleri (KÖK NEDEN DÜZELTMESİ).
@@ -74,12 +79,16 @@ ROUND_CONFIG = [
 # Tek kaynak: get_round_config() turnuvada bu süreleri döndürür; start_round'un
 # istemciye yolladığı time_seconds DA, run_game'deki sunucu tur-zamanlayıcısı DA
 # aynı config["time"]'tan beslenir → istemci sayacı ile sunucu penceresi eşleşir.
+# ZOR MOD tur süreleri: 1-4. turlar 10 sn (yüksek risk — zor soruyu hızlı
+# okuyup cevaplama baskısı Zor Mod'un ayırt edici zorluğudur). Son tahmin turu
+# ise TÜM modlarla ORTAK 12 sn (slider için ekstra pay). Önceki cömert süreler
+# (16/12/16/16/18) Zor Mod'u yeterince zorlaştırmıyordu.
 TOURNAMENT_ROUND_CONFIG = [
-    {"round": 1, "type": "coktan_secmeli",  "time": 16, "difficulty": 1},
-    {"round": 2, "type": "dogru_yanlis",    "time": 12, "difficulty": 2},
-    {"round": 3, "type": "gorsel",          "time": 16, "difficulty": 3},
-    {"round": 4, "type": "karsilastirma",   "time": 16, "difficulty": 4},
-    {"round": 5, "type": "tahmin",          "time": 18, "difficulty": 5},
+    {"round": 1, "type": "coktan_secmeli",  "time": 10, "difficulty": 1},
+    {"round": 2, "type": "dogru_yanlis",    "time": 10, "difficulty": 2},
+    {"round": 3, "type": "gorsel",          "time": 10, "difficulty": 3},
+    {"round": 4, "type": "karsilastirma",   "time": 10, "difficulty": 4},
+    {"round": 5, "type": "tahmin",          "time": 12, "difficulty": 5},
 ]
 
 # Geçerli soru tipleri (küçük harf, kanonik biçim). Slider/tahmin tek başına;
@@ -87,6 +96,12 @@ TOURNAMENT_ROUND_CONFIG = [
 VALID_QUESTION_TYPES = {
     "dogru_yanlis", "gorsel", "karsilastirma", "coktan_secmeli", "tahmin",
 }
+
+# %50 JOKER (fifty-fifty) bedeli (altın). BACKEND OTORİTEDİR — tek kaynak burası;
+# mobil sadece gösterir. Joker tüm maçta SADECE BİR KEZ kullanılabilir (PlayerState.
+# joker_used bayrağı çift-tahsilatı önler) ve yalnızca 4 şıklı çoktan-seçmeli
+# soruda 2 YANLIŞ şıkkı eler. Zor Mod dahil tüm maç tiplerinde geçerlidir.
+JOKER_COST = 50
 
 
 def normalize_question_type(question: dict | None) -> str | None:
@@ -146,6 +161,10 @@ class PlayerState:
     # Tek seferlik, değiştirilemez. None = bahis yok. Tutarsa maç sonunda
     # +BET_REWARD altın (aynı idempotent ödül akışında, günlük cap dahil).
     champion_bet: str | None = None
+    # %50 JOKER (fifty-fifty): bu oyuncunun jokerini bu MAÇTA kullanıp kullanmadığı.
+    # Her yeni maç yeni engine → default False (ekstra reset gerekmez). True olunca
+    # bir daha kullanılamaz (JOKER_COST çift-tahsilatını da bu bayrak engeller).
+    joker_used: bool = False
     eliminated_at_round: int | None = None
     score: int = 0
     round_scores: list[int] = field(default_factory=list)
@@ -268,6 +287,16 @@ class GameEngine:
         if getattr(self, "_shield_setup_done", False):
             return
 
+        # ZOR MOD (turnuva): KALKAN YOK. Turnuva maçında HİÇBİR oyuncu — ne gerçek
+        # ne bot — kalkan almaz (constructor'ın verdiği shields=1 dahil sıfırlanır).
+        # Böylece Zor Mod tamamen kalkansız/yüksek-risk olur: ilk yanlışta eleme.
+        # Normal maçta bu blok atlanır → aşağıdaki mevcut kural aynen işler.
+        if self.is_tournament:
+            for p in self.players.values():
+                p.shields = 0
+            self._shield_setup_done = True
+            return
+
         real_players = [
             p for p in self.players.values() if not p.is_bot and p.user_id
         ]
@@ -376,7 +405,7 @@ class GameEngine:
     def get_round_config(self) -> dict:
         """Get configuration for the current round.
 
-        Turnuva maçında (is_tournament=True) zor soru havuzu için CÖMERT süreli
+        Turnuva maçında (is_tournament=True) Zor Mod tempolu (10/10/10/10/12)
         TOURNAMENT_ROUND_CONFIG döner; normal maçta süreler DEĞİŞMEZ. Bu, hem
         start_round'un istemciye yolladığı time_seconds'ı hem run_game'deki
         sunucu tur-zamanlayıcısını TEK kaynaktan besler → istemci sayacı ile
@@ -408,6 +437,11 @@ class GameEngine:
         # end_round'un regular/estimation kararı ile tutarlı kalsın diye bu turun
         # efektif tipini engine'de sakla (end_round aynı değeri kullanır).
         self._round_effective_type = effective_type  # type: ignore[attr-defined]
+
+        # %50 JOKER için bu turun HAM sorusunu sakla: joker handler'ı
+        # options uzunluğunu ve doğru şık indeksini (correct_answer) buradan
+        # okur (doğru şık ASLA gizlenmez). Her turda güncellenir.
+        self._round_question = question  # type: ignore[attr-defined]
 
         # Reset answers for this round
         for p in self.alive_players:
@@ -476,6 +510,103 @@ class GameEngine:
         player.current_answer = answer
         player.answer_time = time_remaining
         return True
+
+    def _joker_eligible_question(self) -> bool:
+        """MEVCUT sorunun %50 JOKER'e uygun olup olmadığını döndür.
+
+        Uygun = 4 ŞIKLI çoktan-seçmeli (options uzunluğu == 4) ve doğru şık
+        indeksi (correct_answer) geçerli bir 0-3 tamsayısı. tahmin (sayısal) ve
+        dogru_yanlis (2 şık) UYGUN DEĞİLDİR — ilki tip, ikincisi uzunlukla elenir.
+        coktan_secmeli/gorsel/karsilastirma 4 şık taşıyorsa uygundur.
+        """
+        q = getattr(self, "_round_question", None) or {}
+        if normalize_question_type(q) == "tahmin":
+            return False
+        options = q.get("options")
+        if not isinstance(options, list) or len(options) != 4:
+            return False
+        correct_idx = q.get("correct_answer")
+        if not isinstance(correct_idx, int) or isinstance(correct_idx, bool):
+            return False
+        return 0 <= correct_idx < 4
+
+    def joker_precheck(
+        self,
+        username: str,
+        round_number: object = None,
+        *,
+        skip_used_check: bool = False,
+    ) -> tuple[bool, str]:
+        """%50 JOKER için COIN DIŞI tüm doğrulamaları yap (senkron).
+
+        Sözleşme gereği HEPSİ sağlanmalı; aksi halde ilgili joker_error reason'ı
+        döner. Coin (``insufficient``) kontrolü DB gerektirir → WS handler'ında
+        yapılır; buradaki reason'lar: ``too_late`` | ``already_used`` |
+        ``not_eligible``.
+
+        Args:
+            skip_used_check: WS handler'ının DEFANSİF yeniden doğrulaması için.
+                Handler yarış penceresini kapatmak adına joker_used bayrağını
+                tahsilattan ÖNCE rezerve eder; recheck'te bu bayrak isteğin
+                KENDİSİNE ait olduğundan used-kontrolü atlanmalıdır.
+
+        Returns:
+            (ok, reason) — ok True ise reason boş string.
+        """
+        player = self.players.get(username)
+        if not player or player.is_bot:
+            return False, "not_eligible"
+        # Tur şu an açık/cevaplanabilir durumda olmalı.
+        if self.status != "round_active":
+            return False, "too_late"
+        # İstemcinin bildirdiği round_number güncel turla eşleşmeli (bayat istek).
+        # NOT: bool, int'in alt sınıfıdır (True == 1) — bayatlık kontrolünü
+        # yanlışlıkla geçmesin diye açıkça dışlanır.
+        if (
+            isinstance(round_number, int)
+            and not isinstance(round_number, bool)
+            and round_number != self.current_round
+        ):
+            return False, "too_late"
+        # Elenmiş oyuncu (izleyici) joker kullanamaz — cevap penceresi yok.
+        if not player.is_alive:
+            return False, "too_late"
+        # Bu oyuncu bu turu HENÜZ cevaplamamış olmalı.
+        if player.current_answer is not None:
+            return False, "too_late"
+        # Joker tüm maçta SADECE BİR KEZ.
+        if not skip_used_check and player.joker_used:
+            return False, "already_used"
+        # MEVCUT soru 4 şıklı çoktan-seçmeli mi?
+        if not self._joker_eligible_question():
+            return False, "not_eligible"
+        return True, ""
+
+    def compute_joker_hidden_options(self) -> list[int] | None:
+        """Gizlenecek 2 YANLIŞ şık indeksini seç (DOĞRU şık ASLA gizlenmez).
+
+        DOĞRU şık + rastgele BİR yanlış şık GÖRÜNÜR kalır; diğer iki yanlış şık
+        gizlenir. Soru uygun değilse None döner (çağıran taraf zaten
+        joker_precheck ile doğrulamış olmalı).
+
+        Returns:
+            Artan sıralı iki gizli indeks (ör. [0, 3]) ya da None.
+        """
+        q = getattr(self, "_round_question", None) or {}
+        options = q.get("options")
+        correct_idx = q.get("correct_answer")
+        if not isinstance(options, list) or len(options) != 4:
+            return None
+        if not isinstance(correct_idx, int) or isinstance(correct_idx, bool):
+            return None
+        if not (0 <= correct_idx < 4):
+            return None
+        # Doğru şık dışındaki üç yanlış şıktan ikisini rastgele gizle.
+        wrong_indices = [i for i in range(4) if i != correct_idx]
+        if len(wrong_indices) < 2:
+            return None
+        hidden = random.sample(wrong_indices, 2)
+        return sorted(hidden)
 
     def submit_ghost_answer(
         self, username: str, answer: Any, time_remaining: float

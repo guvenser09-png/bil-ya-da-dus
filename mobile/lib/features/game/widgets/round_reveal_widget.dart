@@ -882,11 +882,10 @@ class _ShieldBrokenBanner extends StatelessWidget {
             ),
           ],
         ),
-        // Bedel bilgisi reveal anında NETLEŞMEZ (tahsil mi hediye mi maç
-        // sonunda belli olur) — burada nominal bedel (50 altın) duyurulur,
-        // kesin sonuç sonuç ekranındaki kalkan bedeli satırında gösterilir.
+        // Kalkan maç ÖNCESİ alınır (altın/reklam); kırılınca EK BEDEL YOKTUR —
+        // eski "kırılınca 50 altın" modeli kaldırıldı, metin bedelsiz.
         child: const Text(
-          '🛡️ Kalkanın kırıldı — bir hakkın daha yok! (50 altın)',
+          '🛡️ Kalkanın kırıldı — bir hakkın daha yok!',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: AppTheme.accent,

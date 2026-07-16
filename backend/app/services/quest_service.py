@@ -2,8 +2,9 @@
 
 Her gün TRT gece yarısında sıfırlanır. Sabit havuzdan kullanıcıya özel 3 görev
 seçilir (seed = kullanıcı + gün → aynı gün aynı 3 görev, Redis silinse bile
-yeniden aynısı üretilir). İlerleme maç sonu akışında ve Günün 5 Sorusu
-gönderiminde güncellenir; ödül oyuncu "AL" deyince verilir (idempotent).
+yeniden aynısı üretilir). İlerleme maç sonu akışında güncellenir; ödül oyuncu
+"AL" deyince verilir (idempotent). (Not: "Günün 5 Sorusu" gizlendiği için ona
+bağlı görev kaldırıldı; artık tüm görevler maç sinyalleriyle izlenir.)
 
 Neden Redis (Postgres değil)? İlerleme günlük çöp veridir, 48 saat sonra
 değersizleşir; DailyChallenge ile aynı deseni izler ve migration gerektirmez.
@@ -66,11 +67,13 @@ QUEST_POOL: list[dict] = [
         "emoji": "🏁",
     },
     {
-        "id": "play_daily_five",
-        "title": "Günün 5 Sorusu'nu oyna",
-        "target": 1,
+        # "Günün 5 Sorusu" özelliği gizlendiği için eski play_daily_five görevi
+        # kaldırıldı; yerine maç akışıyla izlenebilen gün içi kümülatif hedef.
+        "id": "answer_correct_10",
+        "title": "10 soru doğru bil",
+        "target": 10,
         "reward": 50,
-        "emoji": "🗓️",
+        "emoji": "✅",
     },
     {
         "id": "win_match",
@@ -198,9 +201,11 @@ async def record_match_end(
     Hataları YUTAR — görev ilerlemesi maç akışını/ödülünü asla bozmamalı.
     """
     try:
+        correct = int(correct_answers or 0)
         await _advance(user_id, {
             "play_3_matches": 1,
-            "three_correct": 1 if int(correct_answers or 0) >= 3 else 0,
+            "three_correct": 1 if correct >= 3 else 0,
+            "answer_correct_10": correct,  # gün içi doğru cevaplar toplanır → 10'da tamam
             "reach_final": 1 if reached_final else 0,
             "win_match": 1 if won else 0,
         })
@@ -209,11 +214,12 @@ async def record_match_end(
 
 
 async def record_daily_challenge(user_id: str) -> None:
-    """Günün 5 Sorusu oynanınca ilgili görevi tamamla (skor gönderiminden çağrılır)."""
-    try:
-        await _advance(user_id, {"play_daily_five": 1})
-    except Exception as exc:
-        logger.warning("quest record_daily_challenge failed for %s: %s", user_id, exc)
+    """No-op — daily challenge gizlendi, play_daily_five görevi kaldırıldı.
+
+    İmza korunuyor ki eski çağıranlar (skor gönderimi) import/çağrı hatası
+    vermesin; artık ilerletecek bir görev yok, bu yüzden gövde bilinçli boş.
+    """
+    return None
 
 
 # ---------------------------------------------------------------------------

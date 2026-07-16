@@ -211,11 +211,10 @@ class _Content extends StatelessWidget {
           score: state.myScore,
           pointsToNext: state.pointsToNext,
         ),
-        const SizedBox(height: 34),
-        const _RewardsHeader(),
-        const SizedBox(height: 16),
-        _Rewards(rewards: state.rewards),
-        const SizedBox(height: 30),
+        const SizedBox(height: 18),
+        // Sezon puanı çarpanını hatırlatan ince not — Sıralama'ya yönlendirir.
+        const _SeasonHint(),
+        const SizedBox(height: 26),
         _EntryCard(state: state, breathe: breathe, shimmer: shimmer),
       ],
     );
@@ -731,207 +730,30 @@ class _StatusStrip extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════
-//  4) ÖDÜLLER
+//  4) SEZON İPUCU — kullanıcıyı Sıralama'ya yönlendiren ince not
 // ════════════════════════════════════════════════════════════════════════
 
-class _RewardsHeader extends StatelessWidget {
-  const _RewardsHeader();
+/// Aylık lig ödülleri artık yalnızca "Sıralama → SEZON" sekmesinde yaşıyor.
+/// Burada sadece çarpanı hatırlatan tek satırlık ince bir yönlendirme var.
+class _SeasonHint extends StatelessWidget {
+  const _SeasonHint();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          children: [
-            const Icon(Icons.workspace_premium_rounded,
-                color: AppTheme.gold, size: 20),
-            const SizedBox(width: 8),
-            Text('ÖDÜLLER',
-                style: BiladaText.headline(color: AppTheme.gold, size: 20)),
-          ],
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Sadece arenada kazanılır.',
-          style: BiladaText.label(color: Colors.white60, size: 12),
+        const Icon(Icons.trending_up_rounded, color: AppTheme.gold, size: 15),
+        const SizedBox(width: 7),
+        Flexible(
+          child: Text(
+            "Zor Mod'da sezon puanın 3× işler — Sıralama'da yüksel.",
+            textAlign: TextAlign.center,
+            style: BiladaText.label(color: Colors.white54, size: 11),
+          ),
         ),
       ],
     );
-  }
-}
-
-class _Rewards extends StatelessWidget {
-  const _Rewards({required this.rewards});
-  final List<TournamentRewardPreview> rewards;
-
-  @override
-  Widget build(BuildContext context) {
-    if (rewards.isEmpty) {
-      return GlassCard(
-        padding: const EdgeInsets.all(18),
-        child: Text(
-          'Ödül vitrini hazırlanıyor.',
-          style: BiladaText.body(color: Colors.white70, size: 13),
-        ),
-      );
-    }
-    final champion = rewards.first;
-    final rest = rewards.skip(1).toList();
-    return Column(
-      children: [
-        _ChampionReward(reward: champion),
-        for (final r in rest) ...[
-          const SizedBox(height: 10),
-          _RewardRow(reward: r),
-        ],
-      ],
-    );
-  }
-}
-
-/// Şampiyon ödülü — altın çerçeveli aspirasyonel vurgu kartı.
-class _ChampionReward extends StatelessWidget {
-  const _ChampionReward({required this.reward});
-  final TournamentRewardPreview reward;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(22),
-        gradient: AppTheme.goldGradient,
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.gold.withValues(alpha: 0.3),
-            blurRadius: 24,
-            spreadRadius: 1,
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.all(2.5),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: const RadialGradient(
-            center: Alignment(-0.6, -0.8),
-            radius: 1.4,
-            colors: [Color(0xFF4A0026), Color(0xFF2A0014)],
-          ),
-        ),
-        padding: const EdgeInsets.all(18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(_badgeEmoji(reward.badge),
-                    style: const TextStyle(fontSize: 40)),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '#${reward.rankRange.isNotEmpty ? reward.rankRange : '1'}',
-                        style:
-                            BiladaText.headline(color: AppTheme.gold, size: 22),
-                      ),
-                      if (reward.title.isNotEmpty) ...[
-                        const SizedBox(height: 2),
-                        Text(reward.title,
-                            style:
-                                BiladaText.title(color: Colors.white, size: 15)),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            if (reward.bonusGold > 0 || reward.cosmetics.isNotEmpty) ...[
-              const SizedBox(height: 14),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  if (reward.bonusGold > 0)
-                    _spoil('🪙 +${reward.bonusGold} altın'),
-                  if (reward.cosmetics.isNotEmpty)
-                    _spoil('🎨 ${reward.cosmetics.length} kozmetik'),
-                ],
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _spoil(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: AppTheme.gold.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: AppTheme.gold.withValues(alpha: 0.35)),
-      ),
-      child: Text(text, style: BiladaText.label(color: AppTheme.gold, size: 12)),
-    );
-  }
-}
-
-/// Şampiyon altındaki kompakt sıra-aralığı satırı.
-class _RewardRow extends StatelessWidget {
-  const _RewardRow({required this.reward});
-  final TournamentRewardPreview reward;
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-      child: Row(
-        children: [
-          Text(_badgeEmoji(reward.badge), style: const TextStyle(fontSize: 24)),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('#${reward.rankRange}',
-                    style: BiladaText.title(color: AppTheme.gold, size: 15)),
-                if (reward.title.isNotEmpty) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    reward.cosmetics.isNotEmpty
-                        ? '${reward.title} · ${reward.cosmetics.length} kozmetik'
-                        : reward.title,
-                    style: BiladaText.label(color: Colors.white60, size: 11),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          if (reward.bonusGold > 0)
-            Text('🪙 +${reward.bonusGold}',
-                style: BiladaText.title(color: AppTheme.gold, size: 14)),
-        ],
-      ),
-    );
-  }
-}
-
-/// Backend bazen badge alanında anahtar kelime ('champion') gönderir; bilinen
-/// anahtarları emojiye çevir, zaten emoji ise olduğu gibi kullan.
-String _badgeEmoji(String badge) {
-  switch (badge) {
-    case 'champion':
-      return '👑';
-    case 'finalist':
-      return '🥈';
-    case 'master':
-      return '🎖️';
-    default:
-      return badge.isEmpty ? '🏆' : badge;
   }
 }
 

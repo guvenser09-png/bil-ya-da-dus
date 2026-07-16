@@ -440,8 +440,8 @@ class TestGhostAndBetRewards:
         p.ghost_correct = 3
         p.champion_bet = "player2"
 
-        # Bahis tuttu: 3×5 hayalet + 25 bahis = 40.
-        assert _bonus_coins_for(p, "player2") == 40
+        # Bahis tuttu: 3×5 hayalet + 15 bahis = 30.
+        assert _bonus_coins_for(p, "player2") == 30
         # Bahis tutmadı: sadece hayalet altını.
         assert _bonus_coins_for(p, "player3") == 15
         # Kazanan belirsizse bahis ödenmez.

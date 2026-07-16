@@ -170,6 +170,55 @@ async def test_persist_tournament_only_pool_no_base_reward(mock_redis):
     assert g2.coins == 0 + 200
 
 
+@pytest.mark.asyncio
+async def test_persist_tournament_bot_podium_share_burns(mock_redis):
+    """Havuz payı GENEL (botlar dahil) sıralamaya göre dağıtılır.
+
+    Kürsüye giren BOTUN payı YANAR (sıradaki gerçek oyuncuya kaymaz) ve genel
+    sıralamada ilk 3 dışında kalan gerçek oyuncu ödül ALAMAZ — "botlarla dolu
+    lobiye tek girip 1. turda elensen bile 700 al" istismarı kapalı.
+    """
+    async with session_factory() as db:
+        a = await _mk_user(db, coins=0)
+        b = await _mk_user(db, coins=0)
+        await db.commit()
+        a_id, b_id = str(a.id), str(b.id)
+
+    players = [
+        {"user_id": a_id, "username": "pa", "display_name": "A", "avatar_id": "x"},
+        {"user_id": b_id, "username": "pb", "display_name": "B", "avatar_id": "x"},
+    ]
+    bots = [
+        {"bot_name": "bot1", "difficulty": "hard", "avatar_id": "x"},
+        {"bot_name": "bot2", "difficulty": "hard", "avatar_id": "x"},
+    ]
+    engine = GameEngine("g_bot_podium", players, bots, is_tournament=True)
+    # GENEL sıralama: bot1 (400) > pa (300) > bot2 (200) > pb (100).
+    engine.players["bot1"].score = 400
+    engine.players["pa"].score = 300
+    engine.players["bot2"].score = 200
+    engine.players["pb"].score = 100
+
+    final = {"winner": {"username": "bot1"}, "leaderboard": [], "total_rounds": 5}
+
+    from app.ws.game import _persist_game_results
+
+    with patch("app.ws.game.async_session_factory", session_factory), \
+         patch("app.ws.game.get_redis", AsyncMock(return_value=mock_redis)):
+        coins1, prizes1 = await _persist_game_results("g_bot_podium", engine, final)
+
+    # Zor Mod'da normal maç ödülü yok; kürsü: bot1(700 yanar) / pa(300) /
+    # bot2(200 yanar); pb genel 4. → gerçek oyuncular arasında 2. olsa bile 0.
+    assert coins1 == {}
+    assert prizes1 == {a_id: 300}
+
+    async with session_factory() as db:
+        a2 = (await db.execute(select(User).where(User.id == uuid.UUID(a_id)))).scalar_one()
+        b2 = (await db.execute(select(User).where(User.id == uuid.UUID(b_id)))).scalar_one()
+    assert a2.coins == 300
+    assert b2.coins == 0
+
+
 # ---------------------------------------------------------------------------
 # 5) info payload
 # ---------------------------------------------------------------------------

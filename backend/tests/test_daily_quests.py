@@ -268,8 +268,8 @@ async def test_quests_today_deterministic_and_progress(client: AsyncClient, fake
     for qid, q in by_id.items():
         if qid == "play_3_matches":
             assert q["progress"] == 1 and not q["completed"]
-        elif qid == "play_daily_five":
-            assert q["progress"] == 0  # maç kancası bu görevi İLERLETMEZ
+        elif qid == "answer_correct_10":
+            assert q["progress"] == 4 and not q["completed"]  # 4 doğru, hedef 10
         else:
             assert q["completed"] is True and q["claimable"] is True
 
@@ -285,34 +285,52 @@ async def test_quests_today_deterministic_and_progress(client: AsyncClient, fake
 
 
 @pytest.mark.asyncio
-async def test_daily_five_quest_completed_by_challenge(client: AsyncClient, fake_redis):
-    """Günün 5 Sorusu oynanınca 'play_daily_five' görevi tamamlanır."""
+async def test_answer_correct_quest_progress_by_matches(client: AsyncClient, fake_redis):
+    """Gün içi doğru cevaplar toplanır; 10'a ulaşınca 'answer_correct_10' tamamlanır."""
     from app.services import quest_service
 
-    token = await _register(client, "questdaily")
+    token = await _register(client, "questcorrect")
     headers = {"Authorization": f"Bearer {token}"}
     me = (await client.get("/api/users/me", headers=headers)).json()
+    user_id = me["id"]
 
-    # Bu görevin bugün aktif olduğu bir gün seçilmeyebilir → doğrudan servisi
-    # zorlamak yerine, aktif değilse testi anlamlı tutmak için durumu kontrol et.
+    # Bu görevin bugün aktif olduğu bir gün seçilmeyebilir → aktif değilse
+    # yabancı görev sızmadığını doğrula.
     date_key = quest_service.today_key()
-    active_ids = {q["id"] for q in quest_service.pick_quests(me["id"], date_key)}
+    active_ids = {q["id"] for q in quest_service.pick_quests(user_id, date_key)}
 
-    await client.post(
-        "/api/games/daily-challenge/score",
-        headers=headers,
-        json={"score": 10, "answers": ALL_CORRECT},
+    # İki maçta 6 + 4 = 10 doğru → kümülatif hedef (10) tamamlanır.
+    await quest_service.record_match_end(
+        user_id, won=False, correct_answers=6, reached_final=False
+    )
+    await quest_service.record_match_end(
+        user_id, won=False, correct_answers=4, reached_final=False
     )
 
     quests = (await client.get("/api/quests/today", headers=headers)).json()["quests"]
-    if "play_daily_five" in active_ids:
-        q = next(q for q in quests if q["id"] == "play_daily_five")
-        assert q["completed"] is True and q["claimable"] is True
+    if "answer_correct_10" in active_ids:
+        q = next(q for q in quests if q["id"] == "answer_correct_10")
+        assert q["progress"] == 10 and q["completed"] is True and q["claimable"] is True
     else:
-        # Görev bugün aktif değilse ilerleme yazılmamalı (yabancı görev sızmasın).
-        raw = fake_redis.store.get(f"quests:{me['id']}:{date_key}")
+        raw = fake_redis.store.get(f"quests:{user_id}:{date_key}")
         progress = json.loads(raw)["progress"] if raw else {}
-        assert "play_daily_five" not in progress
+        assert "answer_correct_10" not in progress
+
+
+@pytest.mark.asyncio
+async def test_record_daily_challenge_is_noop(client: AsyncClient, fake_redis):
+    """record_daily_challenge artık no-op: çağrı patlamaz, hiçbir görevi ilerletmez."""
+    from app.services import quest_service
+
+    token = await _register(client, "questnoop")
+    headers = {"Authorization": f"Bearer {token}"}
+    user_id = (await client.get("/api/users/me", headers=headers)).json()["id"]
+
+    # Çağrı hata vermez ve Redis'e hiçbir görev durumu yazmaz.
+    await quest_service.record_daily_challenge(user_id)
+
+    date_key = quest_service.today_key()
+    assert fake_redis.store.get(f"quests:{user_id}:{date_key}") is None
 
 
 # ---------------------------------------------------------------------------

@@ -4,10 +4,11 @@ Maç bitişinde GERÇEK oyunculara yalnızca COIN ödülü verir. Coin pay-to-wi
 değildir — oyun içi bilgi/avantaj (kolay soru, ekstra süre, joker, kalıcı puan)
 ASLA satılmaz veya ödüllendirilmez. Coin sadece kozmetik almak için kullanılır.
 
-Ödül tablosu (sıralamaya göre) — KITLAŞTIRILDI (ekonomi dengesi):
-  - Kazanan (1.):           +30 coin
-  - İlk 3 (2.-3.):          +15 coin
-  - Oynayan herkes (taban): +5 coin
+Ödül tablosu (sıralamaya göre) — YENİDEN KITLAŞTIRILDI (altın kıtlaşsın →
+reklam talebi artsın):
+  - Kazanan (1.):           +15 coin
+  - İlk 3 (2.-3.):          +8 coin
+  - Oynayan herkes (taban): +2 coin
 
 Anti-farm: kullanıcı başına maç ödülünden GÜNLÜK en fazla MATCH_REWARD_DAILY_CAP
 coin verilir. Cap takibi User.match_reward_date / match_reward_coins_today
@@ -31,24 +32,32 @@ from app.services.user_service import UserService
 
 logger = logging.getLogger("app.match_reward")
 
-# Ödül miktarları (ekonomi kıtlaştırması: 50/25/10 → 30/15/5).
-REWARD_WINNER = 30
-REWARD_TOP3 = 15
-REWARD_PARTICIPATION = 5
+# Ödül miktarları (ikinci kıtlaştırma turu: 30/15/5 → 15/8/2).
+# Amaç: maç başına altın kazancını yaklaşık yarıya indirip altını kıtlaştırmak,
+# böylece oyuncular kalkan/karakter için ödüllü reklama (mağazada +100 altın)
+# daha çok yönelsin. Günlük cap DEĞİŞMEDİ (aşağı bakınız).
+REWARD_WINNER = 15
+REWARD_TOP3 = 8
+REWARD_PARTICIPATION = 2
 
-# Günlük maç-ödülü cap'i (anti-farm).
+# Günlük maç-ödülü cap'i (anti-farm) — DEĞİŞMEDİ.
 MATCH_REWARD_DAILY_CAP = 500
 
 # --- Hayalet modu (👻) altını ---
 # Elenen oyuncu izlerken cevap vermeye devam eder; doğru başına küçük altın.
 # Üst sınır: en erken (1. turda) elenen oyuncu en fazla 4 tur daha cevaplar.
+# NOT: Bu "elenen oyuncu tesellisi" ödülleri BİLEREK düşürülmedi — küçük tutar
+# oldukları ve elenmiş oyuncuyu maçta tutmaya (retention) hizmet ettikleri için
+# olduğu gibi bırakıldı (ana faucet = sıralama ödülü zaten yarıya indirildi).
 GHOST_GOLD_PER_CORRECT = 5
 GHOST_GOLD_MAX = 20
 
 # --- Şampiyon bahsi (🎯) ödülü ---
 # Elenen oyuncu hayatta kalanlardan birine tek seferlik bahis koyar; şampiyonu
 # tutturursa maç sonunda bu altını alır (günlük cap'e DAHİL).
-BET_REWARD = 25
+# Kıtlaştırıldı 25 → 15: yeni kazanan ödülüyle (15) hizalandı, böylece "bahsi
+# tutturmak" maçı KAZANMAKTAN daha çok altın vermez.
+BET_REWARD = 15
 
 # NOT: Eski "kalkan bedeli" (SHIELD_COST / charge_shield_costs) KALDIRILDI.
 # Yeni kalkan modelinde oyuncu kalkanı maç ÖNCESİ satın alır (100 altın) veya

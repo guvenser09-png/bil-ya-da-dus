@@ -10,6 +10,7 @@ Connection: ws://host/ws/game/{game_id}?token=<JWT_ACCESS_TOKEN>
 
 Client -> Server messages:
     {"action": "submit_answer", "answer": X, "time_remaining": float}
+    {"type": "use_joker", "round_number": int}    — %50 joker (fifty-fifty)
     {"action": "place_bet", "username": "..."}   — şampiyon bahsi (elenmişken)
     {"action": "emoji", "emoji": "🔥"}
     {"action": "quick_msg", "msg_id": "qm_gl"}  — hazır mesaj (sabit izin listesi)
@@ -22,6 +23,8 @@ Server -> Client messages:
     {"type": "round_transition"}   — Brief pause before next round
     {"type": "spectator_mode"}     — You were eliminated
     {"type": "bet_placed"}         — Şampiyon bahsi kabul edildi (kişisel)
+    {"type": "joker_result"}       — %50 joker sonucu (kişisel: hidden_options + coins)
+    {"type": "joker_error"}        — %50 joker reddedildi (reason ile)
     {"type": "game_finished"}      — Game over with final standings
     {"type": "emoji"}              — Emoji from another player
     {"type": "quick_msg"}          — Hazır mesaj (username + sunucuda çözülen text)
@@ -46,6 +49,7 @@ from app.services.bot_service import (
     should_bot_skip_answer,
 )
 from app.services.game_service import (
+    JOKER_COST,
     GameEngine,
     active_games,
     create_game,
@@ -431,11 +435,12 @@ async def _persist_game_results(
 
     - User tablosu: games_played, games_won, total_score (BİRİKİMLİ), win_rate,
       doğru cevap sayaçları → "çok oynayan çok puan toplar" sistemi.
-    - Maç sonu COIN ödülü (pay-to-win YOK): kazanan +30, ilk 3 +15, herkes +5;
+    - Maç sonu COIN ödülü (pay-to-win YOK): kazanan +15, ilk 3 +8, herkes +2;
       günlük 500 coin cap'i ile. Sadece gerçek oyunculara, idempotent.
-    - ZOR MOD ÖDÜL HAVUZU: turnuva maçında ilk 3 gerçek oyuncuya havuz payı
-      (engine.prize_top3) altın olarak verilir — günlük cap'ten BAĞIMSIZ,
-      ödüllerden sonra aynı idempotent blokta.
+      Zor Mod'da (is_tournament) bu ödül VERİLMEZ — tek ödül havuz payıdır.
+    - ZOR MOD ÖDÜL HAVUZU: GENEL (botlar dahil) sıralamada ilk 3'e giren
+      GERÇEK oyunculara sabit pay (700/300/200); bot slotunun payı yanar —
+      günlük cap'ten BAĞIMSIZ, ödüllerden sonra aynı idempotent blokta.
     - Redis günlük/haftalık sıralama: o oyunda kazanılan puan kadar artırılır.
 
     NOT: Eski "kalkan bedeli" tahsilatı KALDIRILDI (kalkan artık peşin alınır).
@@ -594,10 +599,15 @@ async def _persist_game_results(
                     )
 
                 # --- Zor Mod ödül havuzu: ödüllerden SONRA dağıt ---
-                # Turnuva maçında ilk 3 gerçek oyuncuya havuz payı (prize_top3)
-                # altın olarak verilir. Günlük maç-ödülü cap'inden BAĞIMSIZ
-                # (turnuva payoutu). Aynı idempotent blokta (match:rewarded
-                # anahtarı) olduğundan çift dağıtım olmaz.
+                # Turnuva maçında havuz payı (prize_top3) MAÇIN GENEL (botlar
+                # DAHİL) sıralamasında ilk 3'e giren GERÇEK oyunculara verilir.
+                # Bot bir kürsü basamağını işgal ediyorsa o pay YANAR — sıradaki
+                # gerçek oyuncuya KAYMAZ. Aksi halde botlarla dolu lobiye tek
+                # başına giren oyuncu 1. turda elense bile "en iyi gerçek oyuncu"
+                # sayılıp koşulsuz 700 alırdı (100 girişle net +600/maç →
+                # sınırsız altın basma istismarı). Günlük maç-ödülü cap'inden
+                # BAĞIMSIZ (turnuva payoutu). Aynı idempotent blokta
+                # (match:rewarded anahtarı) olduğundan çift dağıtım olmaz.
                 try:
                     if (
                         getattr(engine, "is_tournament", False)
@@ -607,13 +617,17 @@ async def _persist_game_results(
                             TournamentService,
                         )
 
-                        # Havuz payları skora göre azalan sıralı gerçek oyunculara
-                        # gider (şampiyon = en yüksek skor = 0. indeks). grant_match_
-                        # rewards ile AYNI sıralama ölçütü (tutarlılık).
+                        # GENEL sıralama (bot + gerçek, skora göre azalan).
+                        # grant_prize_pool falsy uid'yi (bot/eşleşmeyen) atlar →
+                        # bot slotunun payı dağıtılmadan yanar.
+                        overall_top = sorted(
+                            engine.players.values(),
+                            key=lambda x: x.score,
+                            reverse=True,
+                        )[: len(engine.prize_top3)]
                         prize_rank = [
-                            pl.user_id for pl in sorted(
-                                real_players, key=lambda x: x.score, reverse=True
-                            )
+                            (pl.user_id if (not pl.is_bot and pl.user_id) else "")
+                            for pl in overall_top
                         ]
                         zor_mod_prizes = await TournamentService.grant_prize_pool(
                             db, prize_rank, engine.prize_top3
@@ -1069,7 +1083,7 @@ async def _run_game_inner(
 
         # KÖK NEDEN DÜZELTMESİ: Sunucu tur-zamanlayıcısı TEK kaynaktan —
         # engine.get_round_config()["time"] — beslenmeli. start_round istemciye
-        # bu config süresini (turnuvada uzatılmış: 10/14/14/16/16) gönderiyor;
+        # bu config süresini (turnuvada: 10/10/10/10/12) gönderiyor;
         # eski kod ise sunucu timer'ını DB sorusunun question["time_seconds"]
         # değerine bağlıyordu. İkisi farklı olunca (özellikle turnuvada) istemci
         # 14sn sayarken sunucu 7sn'de turu kapatıyor, oyuncu ekrandaki süre
@@ -1462,6 +1476,11 @@ async def game_websocket(websocket: WebSocket, game_id: str):
             if action == "submit_answer":
                 _handle_submit_answer(engine, user_id, message)
 
+            elif action == "use_joker":
+                # %50 JOKER (fifty-fifty): 4 şıklı çoktan-seçmeli soruda 2 yanlış
+                # şıkkı eler. Doğrulama + kalıcı coin tahsilatı handler'da.
+                await _handle_use_joker(engine, user_id, message, websocket)
+
             elif action == "lock_answer":
                 # Slider kilitleme istemci tarafında yönetilir; sunucu için
                 # ek işlem gerekmez. Mevcut cevabı kesinleştirme amaçlı no-op.
@@ -1473,6 +1492,15 @@ async def game_websocket(websocket: WebSocket, game_id: str):
             elif action == "place_bet":
                 # 🎯 ŞAMPİYON BAHSİ — sadece elenmiş gerçek oyuncudan, sadece
                 # hayatta kalan bir oyuncuya, tek seferlik (engine doğrular).
+                # Zor Mod'da (turnuva) bahis KAPALI: tek ödül sabit havuz payı
+                # olduğundan bahis ödülü ödenmez — vaat edip ödememek yerine
+                # baştan reddedilir (mobil de kartı Zor Mod'da göstermez).
+                if getattr(engine, "is_tournament", False):
+                    await websocket.send_text(json.dumps({
+                        "type": "error",
+                        "message": "Zor Mod'da şampiyon bahsi yok.",
+                    }))
+                    continue
                 target = str(message.get("username") or "")
                 bettor = next(
                     (
@@ -1582,3 +1610,130 @@ def _handle_submit_answer(engine: GameEngine, user_id: str, message: dict) -> No
 
     if event and awaiting and awaiting.issubset(received):
         event.set()  # All human players have answered — end round early
+
+
+async def _handle_use_joker(
+    engine: GameEngine, user_id: str, message: dict, websocket: WebSocket
+) -> None:
+    """%50 JOKER (fifty-fifty) isteğini işle.
+
+    Sözleşme:
+        İstemci → {"type": "use_joker", "round_number": <int>}
+        Başarı  → {"type": "joker_result", "round_number": <int>,
+                   "hidden_options": [i, j], "coins": <yeni bakiye int>}
+        Hata    → {"type": "joker_error",
+                   "reason": already_used|insufficient|not_eligible|too_late}
+
+    Akış:
+      1) COIN dışı tüm doğrulamalar engine.joker_precheck ile (tur açık, oyuncu
+         henüz cevaplamadı, joker_used==False, MEVCUT soru 4 şıklı çoktan-seçmeli).
+      2) Kendi async session'ında coins >= JOKER_COST kontrolü; yetersizse
+         ``insufficient``.
+      3) DB beklerken tur ilerlemiş olabilir → tahsilattan hemen önce defansif
+         yeniden doğrulama (aynı tur hâlâ açık mı). Geçersizse tahsilat YAPILMAZ.
+      4) JOKER_COST kalıcı düşülür (commit) → joker_used=True (çift-tahsilat
+         imkânsız) → gizlenecek 2 YANLIŞ şık SADECE bu oyuncuya gönderilir.
+
+    Joker Zor Mod dahil TÜM maç tiplerinde kullanılabilir.
+    """
+    async def _fail(reason: str) -> None:
+        try:
+            await websocket.send_text(json.dumps({
+                "type": "joker_error",
+                "reason": reason,
+            }))
+        except Exception:
+            pass
+
+    player = next(
+        (
+            p for p in engine.players.values()
+            if p.user_id == user_id and not p.is_bot
+        ),
+        None,
+    )
+    if not player:
+        await _fail("not_eligible")
+        return
+
+    round_number = message.get("round_number")
+
+    # 1) COIN dışı tüm doğrulamalar (senkron, tek kaynak engine).
+    ok, reason = engine.joker_precheck(player.username, round_number)
+    if not ok:
+        await _fail(reason)
+        return
+
+    # REZERVASYON (yarış penceresini kapat): bayrak tahsilattan ÖNCE ve
+    # precheck'in HEMEN ardından (arada await YOK) set edilir. Aynı kullanıcı
+    # ikinci bir WS bağlantısından eşzamanlı use_joker gönderirse o istek
+    # precheck'te already_used'a düşer → çift tahsilat da, iki FARKLI
+    # hidden_options setiyle doğru cevabın dolaylı ifşası da imkânsızlaşır.
+    # Başarısız her yolda bayrak geri alınır; tahsilat commit'lendiyse kalır.
+    player.joker_used = True
+
+    # Tahsilat sırasında tur ilerlerse yakalamak için hedef turu sabitle.
+    target_round = engine.current_round
+
+    # 2-4) Coin kontrolü + kalıcı tahsilat (kendi session'ı) + hidden seçimi.
+    new_balance: int | None = None
+    hidden: list[int] = []
+    charged = False  # commit gerçekleşti mi (exception yolunda ayrım için)
+    try:
+        async with async_session_factory() as db:
+            user = await UserService.get_user_by_id(db, user_id)
+            if user is None:
+                player.joker_used = False
+                await _fail("not_eligible")
+                return
+            if int(user.coins or 0) < JOKER_COST:
+                player.joker_used = False
+                await _fail("insufficient")
+                return
+            # 3) Defansif yeniden doğrulama: DB beklerken tur ilerlemiş/oyuncu
+            #    cevaplamış olabilir → tahsilat YAPMADAN reddet. (Rezervasyon
+            #    bayrağı bu isteğe ait olduğundan used-kontrolü atlanır.)
+            ok2, reason2 = engine.joker_precheck(
+                player.username, target_round, skip_used_check=True
+            )
+            if not ok2:
+                player.joker_used = False
+                await _fail(reason2)
+                return
+            # Gizlenecek şıkları commit'ten ÖNCE (soru hâlâ bu tura ait iken) seç.
+            hidden = engine.compute_joker_hidden_options() or []
+            if not hidden:
+                # Beklenmez (precheck uygunluğu doğruladı) — güvenli reddet.
+                player.joker_used = False
+                await _fail("not_eligible")
+                return
+            user.coins = int(user.coins or 0) - JOKER_COST
+            new_balance = int(user.coins)
+            await db.commit()
+            charged = True
+    except Exception as exc:
+        logger.warning(
+            "Game %s: joker coin tahsilatı başarısız (user %s): %s",
+            engine.game_id, user_id, exc,
+        )
+        if not charged:
+            # Tahsilat kalıcı OLMADI → rezervasyonu geri al (oyuncu yeniden
+            # deneyebilir). Eski akışta bayrak commit SONRASI set edildiğinden
+            # commit-sonrası hatada ikinci tahsilat mümkündü — artık değil.
+            player.joker_used = False
+            await _fail("not_eligible")
+            return
+        # commit BAŞARILI, sonrası (session kapanışı) hata verdi: tahsilat
+        # kalıcı → hidden + bakiye elimizde, jokeri işletmeye devam et.
+
+    # Tahsilat başarılı — SADECE bu oyuncuya sonucu gönder (joker_used bayrağı
+    # rezervasyon anında set edildi, tekrar set gerekmez).
+    try:
+        await websocket.send_text(json.dumps({
+            "type": "joker_result",
+            "round_number": target_round,
+            "hidden_options": hidden,
+            "coins": new_balance if new_balance is not None else 0,
+        }))
+    except Exception:
+        pass

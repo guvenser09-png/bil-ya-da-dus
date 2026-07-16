@@ -4,6 +4,12 @@ import 'package:quizroyale/core/constants/app_constants.dart';
 import 'package:quizroyale/core/network/api_client.dart';
 import 'package:quizroyale/core/network/ws_client.dart';
 
+/// %50 JOKER bedeli — backend ws/game.py ile BİREBİR aynı tutulmalı (50 altın).
+/// Tüm maçta bir kez kullanılabilir; 4 şıklı çoktan-seçmeli soruda 2 yanlış
+/// şıkkı eler. (app_constants çekirdek dosyası bu ajanın kapsamı dışında
+/// olduğundan sabit burada, oyun katmanında tanımlıdır.)
+const int kJokerCost = 50;
+
 // ---------------------------------------------------------------------------
 // State
 // ---------------------------------------------------------------------------
@@ -29,6 +35,13 @@ class GameState {
     this.emojiOverlay,
     this.quickMsg,
     this.betOn,
+    this.jokerUsed = false,
+    this.jokerPending = false,
+    this.hiddenOptions = const [],
+    this.coins,
+    this.jokerError,
+    this.jokerErrorTick = 0,
+    this.isTournament = false,
   });
 
   final String gameId;
@@ -81,6 +94,36 @@ class GameState {
   /// null = henüz bahis yok. Bir kez set edilince değiştirilemez (kilitli).
   final String? betOn;
 
+  // ── %50 JOKER (½) ──────────────────────────────────────────────────────
+  /// Bu MAÇTA joker kullanıldı mı? Tek seferlik — yeni maçta (yeni notifier)
+  /// otomatik false'a döner.
+  final bool jokerUsed;
+
+  /// Joker gönderildi, sunucu yanıtı (joker_result/joker_error) bekleniyor.
+  /// Butonu anında pasifleştirmek için kullanılır.
+  final bool jokerPending;
+
+  /// Joker'in ELEDİĞİ şık indeksleri (2 yanlış şık). Sadece kullanıldığı turda
+  /// doludur; her yeni turda temizlenir. Şıklar görsel olarak soluk+tıklanamaz.
+  final List<int> hiddenOptions;
+
+  /// joker_result ile gelen GÜNCEL altın bakiyesi. null = henüz güncellenmedi
+  /// (o zaman authProvider bakiyesi kullanılır).
+  final int? coins;
+
+  /// joker_error ile gelen kısa sebep (toast metni). Tetik: [jokerErrorTick].
+  final String? jokerError;
+
+  /// Her joker_error'da artan sayaç — ekran aynı hatayı tekrar gösterebilsin
+  /// diye (aynı metin arka arkaya gelse bile listener yeni olayı yakalar).
+  final int jokerErrorTick;
+
+  /// Zor Mod (turnuva) maçı mı? game_started'daki is_tournament bayrağından
+  /// (reconnect'te game_state snapshot'ının prize_pool>0 değerinden) beslenir.
+  /// Zor Mod'da şampiyon bahsi ve hayalet altını VERİLMEZ → bahis kartı gibi
+  /// ödül vaat eden UI bu bayrakla gizlenir.
+  final bool isTournament;
+
   GameState copyWith({
     String? gameId,
     String? status,
@@ -105,6 +148,13 @@ class GameState {
     Map<String, String>? quickMsg,
     bool clearQuickMsg = false,
     String? betOn,
+    bool? jokerUsed,
+    bool? jokerPending,
+    List<int>? hiddenOptions,
+    int? coins,
+    String? jokerError,
+    int? jokerErrorTick,
+    bool? isTournament,
   }) {
     return GameState(
       gameId: gameId ?? this.gameId,
@@ -126,6 +176,13 @@ class GameState {
       emojiOverlay: clearEmoji ? null : (emojiOverlay ?? this.emojiOverlay),
       quickMsg: clearQuickMsg ? null : (quickMsg ?? this.quickMsg),
       betOn: betOn ?? this.betOn,
+      jokerUsed: jokerUsed ?? this.jokerUsed,
+      jokerPending: jokerPending ?? this.jokerPending,
+      hiddenOptions: hiddenOptions ?? this.hiddenOptions,
+      coins: coins ?? this.coins,
+      jokerError: jokerError ?? this.jokerError,
+      jokerErrorTick: jokerErrorTick ?? this.jokerErrorTick,
+      isTournament: isTournament ?? this.isTournament,
     );
   }
 }
@@ -244,6 +301,20 @@ class GameNotifier extends StateNotifier<GameState> {
     state = state.copyWith(betOn: username);
   }
 
+  /// %50 JOKER (½): tüm maçta bir kez, 4 şıklı çoktan-seçmeli soruda 2 yanlış
+  /// şıkkı eler (50 altın). submit_answer ile AYNI oyun soketinden gönderilir.
+  /// Sunucu `joker_result` (başarı) ya da `joker_error` (yetersiz altın / zaten
+  /// kullanıldı / uygun olmayan soru) döner. Buton beklemeye alınır (jokerPending).
+  void useJoker() {
+    // Zaten kullanıldıysa veya yanıt bekleniyorsa çift gönderme.
+    if (state.jokerUsed || state.jokerPending) return;
+    _wsClient.send({
+      'type': 'use_joker',
+      'round_number': state.currentRound,
+    });
+    state = state.copyWith(jokerPending: true);
+  }
+
   // ------------------------------------------------------------------
   // Internal – message dispatch
   // ------------------------------------------------------------------
@@ -277,6 +348,13 @@ class GameNotifier extends StateNotifier<GameState> {
     }
 
     switch (type) {
+      case 'game_started':
+        // Zor Mod bayrağı maç başında gelir (is_tournament). Zor Mod'da bahis/
+        // hayalet altını verilmediği için bahis kartı bu bayrakla gizlenir.
+        state = state.copyWith(
+          isTournament: msg['is_tournament'] == true ||
+              ((msg['prize_pool'] as num?)?.toInt() ?? 0) > 0,
+        );
       case 'game_state':
         _onGameState(msg);
       case 'round_start':
@@ -289,6 +367,10 @@ class GameNotifier extends StateNotifier<GameState> {
         _onSpectatorMode(msg);
       case 'bet_placed':
         _onBetPlaced(msg);
+      case 'joker_result':
+        _onJokerResult(msg);
+      case 'joker_error':
+        _onJokerError(msg);
       case 'game_finished':
         _onGameFinished(msg);
       case 'emoji':
@@ -306,7 +388,13 @@ class GameNotifier extends StateNotifier<GameState> {
   // game_state – full player list sync (can arrive any time)
   void _onGameState(Map<String, dynamic> msg) {
     final players = _parsePlayers(msg['players']);
-    state = state.copyWith(allPlayers: players);
+    // Reconnect yolu: game_started kaçırıldıysa Zor Mod bayrağını snapshot'ın
+    // prize_pool'undan türet (yalnızca turnuvada > 0). Bir kez true olunca kalır.
+    final snapshotPool = (msg['prize_pool'] as num?)?.toInt() ?? 0;
+    state = state.copyWith(
+      allPlayers: players,
+      isTournament: state.isTournament || snapshotPool > 0,
+    );
   }
 
   // round_start – new question arrives, start countdown
@@ -330,6 +418,11 @@ class GameNotifier extends StateNotifier<GameState> {
       answerLocked: false,
       eliminatedThisRound: [],
       allPlayers: players,
+      // Joker'in eledi̇ği şıklar yalnızca kullanıldığı tura aittir; yeni turda
+      // temizlenir (jokerUsed ise buton zaten görünmez — tek seferlik). Bekleme
+      // bayrağı da güvenlik için sıfırlanır.
+      hiddenOptions: const [],
+      jokerPending: false,
     );
 
     _startTimer();
@@ -383,6 +476,39 @@ class GameNotifier extends StateNotifier<GameState> {
     if (betOn != null && betOn.isNotEmpty) {
       state = state.copyWith(betOn: betOn);
     }
+  }
+
+  // joker_result – 2 yanlış şık elendi: hidden_options'ı görsel devre dışı
+  // bırak, jokerUsed=true yap, altın bakiyesini güncelle.
+  void _onJokerResult(Map<String, dynamic> msg) {
+    final hidden = (msg['hidden_options'] as List? ?? const [])
+        .map((e) => (e as num).toInt())
+        .toList();
+    final newCoins = (msg['coins'] as num?)?.toInt();
+    // Bayatlık koruması: sonuç HANGİ tura aitse yalnız o turda şık soldurulur.
+    // Geç gelen (tur atlamış) bir joker_result YENİ sorunun şıklarını yanlışlıkla
+    // gizlememeli. Tahsilat sunucuda yapıldı → jokerUsed/coins her durumda işlenir.
+    final resultRound = (msg['round_number'] as num?)?.toInt();
+    final isCurrentRound =
+        resultRound == null || resultRound == state.currentRound;
+    state = state.copyWith(
+      jokerUsed: true,
+      jokerPending: false,
+      hiddenOptions: isCurrentRound ? hidden : state.hiddenOptions,
+      coins: newCoins,
+    );
+  }
+
+  // joker_error – joker kullanılamadı: butonu tekrar aktif et (jokerPending
+  // false) ve ekranın toast göstermesi için sebep + tetik sayacını ilerlet.
+  void _onJokerError(Map<String, dynamic> msg) {
+    final reason = msg['reason']?.toString();
+    state = state.copyWith(
+      jokerPending: false,
+      jokerError:
+          (reason != null && reason.isNotEmpty) ? reason : 'Joker kullanılamadı',
+      jokerErrorTick: state.jokerErrorTick + 1,
+    );
   }
 
   // game_finished – terminal durum. status='finished' + gameResult set edilir;

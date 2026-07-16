@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,6 +38,13 @@ class GameScreen extends ConsumerStatefulWidget {
 class _GameScreenState extends ConsumerState<GameScreen> {
   bool _navigated = false;
   Timer? _finishFallbackTimer;
+
+  // ✗ YANLIŞ! geri bildirimi: yerel oyuncu bu turu yanlış cevapladığında
+  // reveal anında kısa, belirgin bir kırmızı flaş + sarsıntı gösterilir.
+  bool _showWrongFlash = false;
+
+  // İşlenmiş son joker_error tetik sayacı — aynı hatayı tekrar tekrar toast'lama.
+  int _lastJokerErrorTick = 0;
 
   // İlk-maç tutorial: aktif ipucu balonu (tur tipi + metin). null → gösterme.
   String? _hintType;
@@ -131,6 +139,54 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
   }
 
+  /// Reveal anında yerel oyuncu YANLIŞ cevap verdiyse belirgin "YANLIŞ!" flaşı
+  /// tetikle. İzleyici/hayalet (results'ta yok) ve kalkanla kurtulan (kendi
+  /// banner'ı var) hariç tutulur — onlar için ayrı geri bildirim mevcut.
+  void _maybeShowWrongFlash(GameState? prev, GameState next) {
+    if (next.status != 'round_revealing' ||
+        prev?.status == 'round_revealing') {
+      return;
+    }
+    final me = ref.read(authProvider).user?['username'] as String?;
+    if (me == null) return;
+    final results =
+        (next.roundResult?['results'] as Map?)?.cast<String, dynamic>();
+    final dynamic mine = results?[me];
+    if (mine is! Map) return; // izleyici/hayalet → flaş yok
+    final shieldSaved = (next.roundResult?['shield_saved'] as List?)
+            ?.map((e) => e.toString())
+            .toList() ??
+        const <String>[];
+    if (shieldSaved.contains(me)) return; // kalkan banner'ı devrede
+    if (mine['correct'] == true) return; // doğru → flaş yok
+    if (mounted) setState(() => _showWrongFlash = true);
+  }
+
+  /// joker_error geldiğinde kısa bir toast göster (tetik sayacı ile tekilleştir).
+  /// Sebep (reason) kullanıcı diline çevrilir — "yetersiz altın" ile "geç
+  /// kaldın" aynı mesajla geçiştirilmez.
+  void _maybeShowJokerError(GameState next) {
+    if (next.jokerErrorTick == _lastJokerErrorTick) return;
+    _lastJokerErrorTick = next.jokerErrorTick;
+    if (!mounted) return;
+    final text = switch (next.jokerError) {
+      'insufficient' => 'Yetersiz altın — joker $kJokerCost altın.',
+      'already_used' => 'Jokerini bu maçta zaten kullandın.',
+      'too_late' => 'Geç kaldın — süre/tur joker için uygun değil.',
+      'not_eligible' => 'Joker bu soru tipinde kullanılamaz.',
+      _ => 'Joker kullanılamadı.',
+    };
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(text),
+          backgroundColor: AppTheme.danger,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+  }
+
   /// Sonuç ekranına geçişi GARANTİLE. Parse hatası, eksik veri, geç gelen
   /// mesaj veya overlay durumundan bağımsız olarak HER ZAMAN
   /// `/result/<gameId>`'e gider. Tek-sefer (idempotent).
@@ -155,6 +211,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     ref.listen<GameState>(gameProvider(widget.gameId), (prev, next) {
       // ── Ses + haptik tetikleri ────────────────────────────────────────
       _handleAudioCues(prev, next);
+
+      // ── ✗ YANLIŞ! flaşı: yerel oyuncu bu turu yanlış cevapladıysa ──────
+      _maybeShowWrongFlash(prev, next);
+
+      // ── Joker hatası: kısa toast + buton zaten sunucuda tekrar aktif ───
+      _maybeShowJokerError(next);
 
       // ── İlk-maç tutorial ipucu ────────────────────────────────────────
       // Yeni bir tur aktifleştiğinde (round_active) ve bu tur tipi için ilk
@@ -252,6 +314,28 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             const <String>[])
         : const <String>[];
 
+    // ── %50 JOKER (½) görünürlüğü ───────────────────────────────────────
+    // Yalnızca 4 ŞIKLI çoktan-seçmeli/görsel soruda, tur aktifken, joker bu
+    // maçta henüz kullanılmadıysa, oyuncu HENÜZ cevaplamadıysa ve en az 50
+    // altını varsa buton görünür. Joker TÜM modlarda (Zor Mod dahil) çalışır.
+    final jokerQuestion = state.currentQuestion;
+    final jokerQType = jokerQuestion?['tip'] as String? ?? '';
+    final jokerOptionCount = (jokerQuestion?['options'] as List?)?.length ?? 0;
+    final isFourOptionMC =
+        (jokerQType == 'coktan_secmeli' || jokerQType == 'gorsel') &&
+            jokerOptionCount == 4;
+    // Güncel bakiye: joker_result geldiyse state.coins otoriter, yoksa profil.
+    final currentCoins = state.coins ??
+        ((ref.watch(authProvider).user?['coins'] as num?)?.toInt() ?? 0);
+    final showJoker = state.status == 'round_active' &&
+        isFourOptionMC &&
+        // İzleyici/hayalet cevap penceresine sahip değil — backend zaten
+        // too_late ile reddeder; hep başarısız olacak butonu hiç gösterme.
+        !state.isSpectator &&
+        !state.jokerUsed &&
+        state.selectedAnswer == null &&
+        currentCoins >= kJokerCost;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -294,6 +378,16 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   ),
                 ),
 
+                // ── ½ %50 Joker butonu (4 şıklı çoktan-seçmeli, cevaptan önce) ──
+                if (showJoker)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+                    child: _JokerButton(
+                      pending: state.jokerPending,
+                      onTap: () => notifier.useJoker(),
+                    ),
+                  ),
+
                 // Player platform bar at bottom
                 _PlayerPlatformBar(
                   players: state.allPlayers,
@@ -320,6 +414,16 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               onDismiss: () {},
             ),
 
+          // ── ✗ YANLIŞ! flaşı — yerel oyuncu yanlış cevapladıysa (reveal) ──
+          // Reveal scrim'inin ÜSTÜNDE, ~1.1sn kırmızı flaş + sarsıntı + ✗.
+          if (_showWrongFlash)
+            _WrongAnswerFlash(
+              key: ValueKey('wrong_${state.currentRound}'),
+              onDone: () {
+                if (mounted) setState(() => _showWrongFlash = false);
+              },
+            ),
+
           if (state.status == 'between_rounds')
             _RoundTransitionOverlay(
               nextRound: state.currentRound + 1,
@@ -334,7 +438,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               // Bahis kartı: bahis yoksa, tur arasında/reveal'da (soru
               // cevaplamayı engellemesin) ve FİNAL başlamadıysa göster.
               // Final başladıysa kart kaybolur — bahis şansı kaçtı, sorun yok.
-              showBetCard: state.betOn == null &&
+              // Zor Mod'da bahis ödülü VERİLMEZ (tek ödül: sabit havuz) →
+              // kart hiç gösterilmez (backend de place_bet'i reddeder).
+              showBetCard: !state.isTournament &&
+                  state.betOn == null &&
                   state.status != 'round_active' &&
                   state.currentRound < state.totalRounds,
               alivePlayers: state.allPlayers
@@ -565,6 +672,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           correctAnswer: correctIndex,
           onAnswer: (idx) => notifier.submitChoice(idx),
           hasImage: true,
+          // Joker'in eledi̇ği şıklar (reveal'da uygulanmaz — o an doğru/yanlış
+          // vurgusu geçerli).
+          hiddenOptions: revealing ? const <int>[] : state.hiddenOptions,
         );
 
       case 'karsilastirma':
@@ -584,6 +694,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           correctAnswer: correctIndex,
           onAnswer: (idx) => notifier.submitChoice(idx),
           hasImage: false,
+          // Joker'in eledi̇ği şıklar (reveal'da uygulanmaz).
+          hiddenOptions: revealing ? const <int>[] : state.hiddenOptions,
         );
 
       case 'tahmin':
@@ -1082,7 +1194,9 @@ class _ChampionBetCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
-            '🎯 Şampiyonu bil, +25 altın kazan!',
+            // Ödül tutarı backend BET_REWARD (15) ile eşleşmeli — bkz.
+            // match_reward_service.py (25→15 kıtlaştırıldı).
+            '🎯 Şampiyonu bil, +15 altın kazan!',
             style: TextStyle(
                 color: AppTheme.gold,
                 fontWeight: FontWeight.w800,
@@ -1604,6 +1718,187 @@ class _EmojiFloatOverlayState extends State<_EmojiFloatOverlay>
           ),
         ),
       ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// _JokerButton — ½ %50 Joker (50 altın) — 2 yanlış şıkkı eler
+// ---------------------------------------------------------------------------
+
+class _JokerButton extends StatelessWidget {
+  const _JokerButton({required this.pending, required this.onTap});
+
+  /// use_joker gönderildi, sunucu yanıtı bekleniyor → buton pasif + spinner.
+  final bool pending;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChunkyButton(
+      height: 50,
+      depth: 5,
+      color: AppTheme.cSecondaryContainer, // mor — şık/oyun paletinden ayrışır
+      foreground: Colors.white,
+      shadowColor: AppTheme.cSecondaryShadow,
+      // pending → onPressed:null (ChunkyButton kendini pasifleştirir).
+      onPressed: pending ? null : onTap,
+      child: pending
+          ? const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                  strokeWidth: 2.5, color: Colors.white),
+            )
+          : const Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('½',
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+                SizedBox(width: 10),
+                Text('%50 Joker',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                SizedBox(width: 8),
+                Text('(50 🪙)', style: TextStyle(fontSize: 14)),
+              ],
+            ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// _WrongAnswerFlash — ✗ YANLIŞ! (kırmızı flaş + sarsıntı, ~1.1sn, kendiliğinden
+// kapanır). Yerel oyuncu bu turu yanlış cevapladığında reveal anında gösterilir.
+// ---------------------------------------------------------------------------
+
+class _WrongAnswerFlash extends StatefulWidget {
+  const _WrongAnswerFlash({super.key, required this.onDone});
+  final VoidCallback onDone;
+
+  @override
+  State<_WrongAnswerFlash> createState() => _WrongAnswerFlashState();
+}
+
+class _WrongAnswerFlashState extends State<_WrongAnswerFlash>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _fade;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1100),
+    );
+    // Hızlı belir → kısa kal → yumuşak kaybol.
+    _fade = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0.0, end: 1.0), weight: 15),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.0), weight: 55),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 30),
+    ]).animate(_ctrl);
+    _ctrl.forward();
+    _ctrl.addStatusListener((s) {
+      if (s == AnimationStatus.completed) widget.onDone();
+    });
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _ctrl,
+      builder: (_, __) {
+        final t = _ctrl.value;
+        // Sarsıntı sadece giriş anında (ilk ~%35), sonra durulur.
+        final shakeAmp = t < 0.35 ? (1 - t / 0.35) * 10.0 : 0.0;
+        final dx = math.sin(t * 60) * shakeAmp;
+        return IgnorePointer(
+          child: Opacity(
+            opacity: _fade.value.clamp(0.0, 1.0),
+            child: Transform.translate(
+              offset: Offset(dx, 0),
+              child: Stack(
+                children: [
+                  // Kırmızı radyal vinyet — ekran kenarları kızarır.
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: RadialGradient(
+                          radius: 1.1,
+                          colors: [
+                            AppTheme.cError.withValues(alpha: 0.10),
+                            AppTheme.cErrorContainer.withValues(alpha: 0.42),
+                          ],
+                          stops: const [0.55, 1.0],
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Merkez: büyük ✗ + "YANLIŞ!"
+                  Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 96,
+                          height: 96,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.45),
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: AppTheme.cError, width: 4),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppTheme.cError.withValues(alpha: 0.6),
+                                blurRadius: 26,
+                                spreadRadius: 2,
+                              ),
+                            ],
+                          ),
+                          child: const Icon(Icons.close_rounded,
+                              color: Colors.white, size: 60),
+                        ),
+                        const SizedBox(height: 14),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 22, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(16),
+                            border:
+                                Border.all(color: AppTheme.cError, width: 3),
+                          ),
+                          child: const Text(
+                            'YANLIŞ!',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 2,
+                              shadows: [
+                                Shadow(color: AppTheme.cError, blurRadius: 16),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

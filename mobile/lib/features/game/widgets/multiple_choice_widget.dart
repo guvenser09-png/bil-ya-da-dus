@@ -13,6 +13,7 @@ class MultipleChoiceWidget extends StatelessWidget {
     required this.onAnswer,
     this.hasImage = false,
     this.correctAnswer,
+    this.hiddenOptions = const [],
   });
 
   final Map<String, dynamic> question;
@@ -23,6 +24,10 @@ class MultipleChoiceWidget extends StatelessWidget {
   /// Reveal sırasında dolu gelir (doğru şıkkın index'i). Dolu olduğunda
   /// doğru şık yeşile, oyuncunun seçtiği yanlış şık kırmızıya boyanır.
   final int? correctAnswer;
+
+  /// %50 JOKER ile ELENEN şık indeksleri. Bu şıklar soluklaştırılır ve
+  /// tıklanamaz olur (görsel olarak devre dışı).
+  final List<int> hiddenOptions;
 
   static const _labels = ['A', 'B', 'C', 'D'];
   // pembe / mor / mint / nötr — Stitch çoktan seçmeli paleti
@@ -107,6 +112,10 @@ class MultipleChoiceWidget extends StatelessWidget {
             itemCount: options.length,
             itemBuilder: (_, i) {
               final selected = selectedAnswer == i;
+              // Joker ile elenmiş şık: reveal fazında görsel karar reveal'a
+              // bırakılır (doğru/yanlış vurgusu bozulmasın); sadece cevap
+              // verilmeden önce soluk+tıklanamaz gösterilir.
+              final jokerHidden = hiddenOptions.contains(i) && !revealing;
               Color color = _colors[i % 4];
               Color fg = _fg[i % 4];
               Color shadow = _shadows[i % 4];
@@ -137,6 +146,12 @@ class MultipleChoiceWidget extends StatelessWidget {
                 opacity = (revealCorrect || revealWrong) ? 1 : 0.5;
               } else if (answered && !selected) {
                 opacity = 0.85;
+              }
+              // Joker ile elenen şık belirgin şekilde soluk (devre dışı hissi)
+              // ve harf rozeti yerine "engel" (½ eleme) ikonu gösterilir.
+              if (jokerHidden) {
+                opacity = 0.28;
+                badgeIcon = Icons.block;
               }
 
               // "Kilitlendi" hissi / reveal pop'u.
@@ -173,8 +188,9 @@ class MultipleChoiceWidget extends StatelessWidget {
                       shadowColor: shadow,
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                       // Cevaptan sonra null yerine no-op: ChunkyButton griye boğmasın.
+                      // Joker ile elenmiş şık da no-op (tıklanamaz).
                       // Şık kilitleme: yumuşak tık sesi + hafif haptik (ayara saygılı).
-                      onPressed: answered
+                      onPressed: (answered || jokerHidden)
                           ? () {}
                           : () {
                               SoundService().playSound(GameSound.click);

@@ -110,8 +110,8 @@ class StoreScreen extends ConsumerWidget {
 //  ÖDÜLLÜ REKLAM → ALTIN
 // ─────────────────────────────────────────────────────────────────────────
 
-/// "Altının mı az? 📺 Reklam izle → +200 altın" kartı. Ödüllü reklam izlenip
-/// ödül hak edilince backend +200 altın ekler; bakiye tazelenir. Web'de hiç
+/// "Altının mı az? 📺 Reklam izle → +100 altın" kartı. Ödüllü reklam izlenip
+/// ödül hak edilince backend +100 altın ekler; bakiye tazelenir. Web'de hiç
 /// gösterilmez (bkz. StoreScreen._body → kIsWeb guard).
 class _WatchAdForGoldButton extends ConsumerStatefulWidget {
   const _WatchAdForGoldButton();
@@ -132,13 +132,13 @@ class _WatchAdForGoldButtonState extends ConsumerState<_WatchAdForGoldButton> {
       final status = await AdService.instance.showRewarded(placement: 'gold');
       if (!mounted) return;
       if (status == AdRewardStatus.earned) {
-        // Backend +200 altın ekledi → hem global kullanıcıyı hem mağaza
+        // Backend +100 altın ekledi → hem global kullanıcıyı hem mağaza
         // bakiyesini (üst bar) tazele.
         await ref.read(authProvider.notifier).refreshUser();
         await ref.read(storeProvider.notifier).load();
         if (!mounted) return;
         messenger.showSnackBar(const SnackBar(
-            content: Text('+200 altın hesabına eklendi! 🪙')));
+            content: Text('+100 altın hesabına eklendi! 🪙')));
       } else if (status == AdRewardStatus.unavailable) {
         messenger.showSnackBar(const SnackBar(
             content: Text('Reklam şu an yok, birazdan tekrar dene.')));
@@ -168,7 +168,7 @@ class _WatchAdForGoldButtonState extends ConsumerState<_WatchAdForGoldButton> {
                     Text('Altının mı az?', style: BiladaText.title(size: 16)),
                     const SizedBox(height: 2),
                     Text(
-                      'Kısa bir reklam izle, anında +200 altın kazan.',
+                      'Kısa bir reklam izle, anında +100 altın kazan.',
                       style: BiladaText.body(
                           color: AppTheme.cOnSurfaceVariant, size: 12),
                     ),
@@ -193,7 +193,7 @@ class _WatchAdForGoldButtonState extends ConsumerState<_WatchAdForGoldButton> {
                       child: CircularProgressIndicator(
                           strokeWidth: 2.5, color: Colors.white),
                     )
-                  : const Text('📺 Reklam izle → +200 altın',
+                  : const Text('📺 Reklam izle → +100 altın',
                       style: TextStyle(fontSize: 15)),
             ),
           ),

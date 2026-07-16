@@ -95,9 +95,9 @@ class TestMatchRewardNoShieldBilling:
         """Tam akış: sadece kıtlaştırılmış ödül eklenir, kalkan bedeli YOK, idempotent.
 
         Kurulum: 3 gerçek oyuncu + 1 bot (normal maç → Zor Mod havuzu yok).
-          - w (kazanan): +30 ödül → 1030.
-          - s (2., kalkanı kırık): +15 ödül, EK BEDEL YOK → 1015.
-          - g (3., kalkanı kırık, 0 altın): +15 ödül → 15 (ek ücret yok).
+          - w (kazanan): +15 ödül → 1015.
+          - s (2., kalkanı kırık): +8 ödül, EK BEDEL YOK → 1008.
+          - g (3., kalkanı kırık, 0 altın): +8 ödül → 8 (ek ücret yok).
         İkinci çağrı (aynı game_id) hiçbir bakiyeyi değiştirmez (Redis NX kilidi).
         """
         async with session_factory() as db:
@@ -134,8 +134,8 @@ class TestMatchRewardNoShieldBilling:
             coins1, prizes1 = await _persist_game_results("g_persist", engine, final)
             coins2, prizes2 = await _persist_game_results("g_persist", engine, final)
 
-        # İlk çağrı: kıtlaştırılmış ödüller (30/15/15), Zor Mod havuzu yok.
-        assert coins1 == {w_id: 30, s_id: 15, g_id: 15}
+        # İlk çağrı: kıtlaştırılmış ödüller (15/8/8), Zor Mod havuzu yok.
+        assert coins1 == {w_id: 15, s_id: 8, g_id: 8}
         assert prizes1 == {}  # normal maç → havuz payı yok
         # İkinci çağrı: idempotent — ödül tekrar işlenmez.
         assert coins2 == {}
@@ -145,9 +145,9 @@ class TestMatchRewardNoShieldBilling:
             w2 = (await db.execute(select(User).where(User.id == uuid.UUID(w_id)))).scalar_one()
             s2 = (await db.execute(select(User).where(User.id == uuid.UUID(s_id)))).scalar_one()
             g2 = (await db.execute(select(User).where(User.id == uuid.UUID(g_id)))).scalar_one()
-        assert w2.coins == 1030   # +30 ödül
-        assert s2.coins == 1015   # +15 ödül, kalkan bedeli YOK (eskiden -50 idi)
-        assert g2.coins == 15     # +15 ödül, ek ücret yok
+        assert w2.coins == 1015   # +15 ödül
+        assert s2.coins == 1008   # +8 ödül, kalkan bedeli YOK (eskiden -50 idi)
+        assert g2.coins == 8      # +8 ödül, ek ücret yok
 
 
 # ---------------------------------------------------------------------------

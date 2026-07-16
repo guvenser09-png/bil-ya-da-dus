@@ -32,14 +32,19 @@ ADS_DAILY_LIMIT = 5
 
 # Yerleşim (placement) tanımları: ödül + placement başına günlük cap.
 # reward: {"coins": int}. SADECE coin (pay-to-win YOK).
-# "gold": ekonomi kıtlaştırmasının telafisi — oyuncu reklam izleyerek +200 altın
+# "gold": ekonomi kıtlaştırmasının telafisi — oyuncu reklam izleyerek +100 altın
 # alır (kalkan/karakter için ana kazanç yolu). Günlük cap ile kötüye kullanım
 # engellenir (mevcut cap deseni korunur).
+#
+# ⚠️ TUTARLILIK SÖZLEŞMESİ: buradaki "gold" coin miktarı, mağazada GÖSTERİLEN
+# miktarla (store_screen.dart "+100 altın") BİREBİR aynı olmak ZORUNDA. Bir
+# tarafı değiştirirsen diğerini de değiştir; aksi halde kullanıcı gösterilenden
+# farklı altın alır (eski 200↔100 tutarsızlığı buradan doğmuştu).
 PLACEMENTS: dict[str, dict] = {
     "daily_coins": {"reward": {"coins": 50}, "daily_cap": 3},
     "double_match": {"reward": {"coins": 30}, "daily_cap": 3},
     "shop_bonus": {"reward": {"coins": 40}, "daily_cap": 2},
-    "gold": {"reward": {"coins": 200}, "daily_cap": 3},
+    "gold": {"reward": {"coins": 100}, "daily_cap": 3},
 }
 
 # --- Kalkan reklamı (ödüllü reklamla "bedava kalkan kredisi") ---
@@ -83,20 +88,6 @@ class AdsService:
         if not user:
             raise ValueError("Kullanıcı bulunamadı.")
 
-        # --- Idempotency (nonce) ---
-        if nonce:
-            try:
-                redis = await get_redis()
-                first = await redis.set(
-                    f"ad:nonce:{user_id}:{nonce}", "1", nx=True, ex=_NONCE_TTL
-                )
-                if first is None:
-                    raise ValueError("Bu reklam ödülü zaten alındı.")
-            except ValueError:
-                raise
-            except Exception as exc:
-                logger.warning("Ad nonce kontrolü atlandı: %s", exc)
-
         # --- Günlük toplam limit (UTC gün bazlı) ---
         today = _utc_day(now)
         if user.ad_reward_date != today:
@@ -123,6 +114,24 @@ class AdsService:
             raise
         except Exception as exc:
             logger.warning("Ad placement sayaç kontrolü atlandı: %s", exc)
+
+        # --- Idempotency (nonce) ---
+        # BİLEREK limit kontrollerinden SONRA, ödülün hemen ÖNCESİNDE yakılır:
+        # limit/doğrulama hatası nonce'u boşa harcamaz — aynı izlemenin meşru
+        # tekrarı (geçici hata sonrası) "zaten alındı"ya düşüp ödülü yutmaz.
+        # Aynı nonce'la eşzamanlı iki istek yine SET NX ile serileşir.
+        if nonce:
+            try:
+                redis = await get_redis()
+                first = await redis.set(
+                    f"ad:nonce:{user_id}:{nonce}", "1", nx=True, ex=_NONCE_TTL
+                )
+                if first is None:
+                    raise ValueError("Bu reklam ödülü zaten alındı.")
+            except ValueError:
+                raise
+            except Exception as exc:
+                logger.warning("Ad nonce kontrolü atlandı: %s", exc)
 
         # --- Ödülü uygula (SADECE coin) ---
         reward = pl["reward"]

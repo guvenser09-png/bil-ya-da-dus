@@ -45,8 +45,13 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
     final avatarId =
         (saved != null && isCatalogCharacter(saved)) ? saved : 'robot';
 
-    // Kalkan seçimi YALNIZCA normal "Hızlı Maç"ta (mode == null).
-    if (widget.mode == null) {
+    // ── Kalkan seçimi: SADECE normal "Hızlı Maç"ta ──────────────────────
+    // Zor Mod (TURNUVA) girişinde kalkan sheet'i HİÇ gösterilmez; maç doğrudan
+    // (kalkansız) başlar. Turnuva /tournament → /lobby geçişinde mode:'tournament'
+    // ile gelinir; bu durumu net ayırt edip kalkan akışını TAMAMEN atlarız.
+    // Normal maçta (mode == null) kalkan sheet'i aynen korunur.
+    final isTournament = widget.mode == 'tournament';
+    if (!isTournament) {
       final gamesPlayed =
           (ref.read(authProvider).user?['games_played'] as num?)?.toInt() ?? 0;
       if (gamesPlayed < 5) {
