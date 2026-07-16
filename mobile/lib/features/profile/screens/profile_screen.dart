@@ -7,6 +7,7 @@ import 'package:quizroyale/features/auth/widgets/claim_account_sheet.dart';
 import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
 import 'package:quizroyale/features/profile/providers/profile_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -173,7 +174,9 @@ class _ProfileBody extends ConsumerWidget {
                           children: [
                             PillBadge('SEVİYE $level', color: AppTheme.cPrimaryContainer, fg: AppTheme.cOnPrimaryContainer),
                             const SizedBox(width: 8),
-                            Text('🪙 $coins', style: BiladaText.label(color: AppTheme.gold, size: 12)),
+                            const GoldCoin(size: 14),
+                            const SizedBox(width: 4),
+                            Text('$coins', style: BiladaText.label(color: AppTheme.gold, size: 12)),
                           ],
                         ),
                       ],

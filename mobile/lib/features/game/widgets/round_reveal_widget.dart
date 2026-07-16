@@ -292,6 +292,9 @@ class _RoundRevealWidgetState extends State<RoundRevealWidget>
                         score: score,
                         // Kalkanıyla kurtuldu → satırda kırık-kalkan rozeti.
                         shieldBroke: data['shield_saved'] == true,
+                        // KENDİ satırın BÜYÜK + KALIN + altın çerçeveli ("SEN"
+                        // rozeti) — oyuncu listede kendini/puanını anında bulur.
+                        isMe: e.key == widget.myUsername,
                       );
                     }).toList(),
                   ),
@@ -796,6 +799,7 @@ class _PlayerResultRow extends StatelessWidget {
     required this.correct,
     required this.score,
     this.shieldBroke = false,
+    this.isMe = false,
   });
   final String username;
   final String avatarId;
@@ -805,38 +809,93 @@ class _PlayerResultRow extends StatelessWidget {
   /// Bu tur kalkanıyla kurtuldu → satırda küçük kırık-kalkan rozeti.
   final bool shieldBroke;
 
+  /// Yerel oyuncunun KENDİ satırı mı? Kullanıcı geri bildirimi: "kaç puan
+  /// aldığımızı zor seçiyoruz" → kendi satırı BÜYÜK + KALIN + altın çerçeve
+  /// + "SEN" rozeti ile listede anında ayırt edilir.
+  final bool isMe;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: EdgeInsets.symmetric(
+          horizontal: 12, vertical: isMe ? 13 : 10),
       decoration: BoxDecoration(
         color: correct
-            ? AppTheme.success.withOpacity(0.08)
-            : AppTheme.danger.withOpacity(0.06),
-        borderRadius: BorderRadius.circular(10),
+            ? AppTheme.success.withOpacity(isMe ? 0.14 : 0.08)
+            : AppTheme.danger.withOpacity(isMe ? 0.10 : 0.06),
+        borderRadius: BorderRadius.circular(isMe ? 13 : 10),
         border: Border.all(
-            color: correct
-                ? AppTheme.success.withOpacity(0.2)
-                : AppTheme.danger.withOpacity(0.15)),
+          // Kendi satırın: belirgin ALTIN çerçeve (doğru/yanlıştan bağımsız).
+          color: isMe
+              ? AppTheme.gold.withOpacity(0.85)
+              : (correct
+                  ? AppTheme.success.withOpacity(0.2)
+                  : AppTheme.danger.withOpacity(0.15)),
+          width: isMe ? 2 : 1,
+        ),
+        boxShadow: isMe
+            ? [
+                BoxShadow(
+                  color: AppTheme.gold.withOpacity(0.25),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                ),
+              ]
+            : null,
       ),
       child: Row(
         children: [
-          PlayerAvatar(avatarId: avatarId, username: username, size: 32),
+          PlayerAvatar(
+              avatarId: avatarId, username: username, size: isMe ? 40 : 32),
           const SizedBox(width: 10),
           Expanded(
-              child: Text(username,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 13))),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    username,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: isMe ? FontWeight.w900 : FontWeight.w600,
+                      fontSize: isMe ? 16 : 13,
+                      color: isMe ? AppTheme.gold : null,
+                    ),
+                  ),
+                ),
+                if (isMe) ...[
+                  const SizedBox(width: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: AppTheme.gold,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Text(
+                      'SEN',
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
           // Kalkanıyla kurtuldu: yanlış ama elenmedi — kırık-kalkan rozeti.
           if (shieldBroke) ...[
             const Text('🛡️💥', style: TextStyle(fontSize: 13)),
             const SizedBox(width: 6),
           ],
           Icon(correct ? Icons.check_circle : Icons.cancel,
-              color: correct ? AppTheme.success : AppTheme.danger, size: 18),
+              color: correct ? AppTheme.success : AppTheme.danger,
+              size: isMe ? 22 : 18),
           const SizedBox(width: 8),
-          if (correct) _ScoreBadge(score: score),
+          if (correct) _ScoreBadge(score: score, big: isMe),
         ],
       ),
     );
@@ -935,8 +994,12 @@ class _GhostResultChip extends StatelessWidget {
 }
 
 class _ScoreBadge extends StatelessWidget {
-  const _ScoreBadge({required this.score});
+  const _ScoreBadge({required this.score, this.big = false});
   final int score;
+
+  /// Yerel oyuncunun kendi puanı — BÜYÜK ve altın renkte (listede kendi
+  /// puanını zor seçme geri bildirimi üzerine).
+  final bool big;
 
   @override
   Widget build(BuildContext context) {
@@ -944,16 +1007,20 @@ class _ScoreBadge extends StatelessWidget {
       tween: IntTween(begin: 0, end: score),
       duration: const Duration(milliseconds: 600),
       builder: (_, v, __) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        padding: EdgeInsets.symmetric(
+            horizontal: big ? 11 : 8, vertical: big ? 5 : 3),
         decoration: BoxDecoration(
-          color: AppTheme.accent.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(8),
+          color: (big ? AppTheme.gold : AppTheme.accent).withOpacity(0.22),
+          borderRadius: BorderRadius.circular(big ? 10 : 8),
+          border: big
+              ? Border.all(color: AppTheme.gold.withOpacity(0.6))
+              : null,
         ),
         child: Text('+$v',
-            style: const TextStyle(
-                color: AppTheme.accent,
-                fontWeight: FontWeight.w700,
-                fontSize: 12)),
+            style: TextStyle(
+                color: big ? AppTheme.gold : AppTheme.accent,
+                fontWeight: big ? FontWeight.w900 : FontWeight.w700,
+                fontSize: big ? 17 : 12)),
       ),
     );
   }

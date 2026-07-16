@@ -6,6 +6,7 @@ import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart'
 import 'package:quizroyale/features/inventory/providers/inventory_provider.dart';
 import 'package:quizroyale/shared/characters.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
 /// "Envanterim" — sahip olunan HER ŞEY tek ekranda:
@@ -105,19 +106,19 @@ class InventoryScreen extends ConsumerWidget {
       children: [
         Text('BAKİYE', style: BiladaText.label(color: AppTheme.cOnSurfaceVariant)),
         const SizedBox(height: 12),
-        _balanceTile('🪙', _fmt(state.coins), 'Altın', AppTheme.gold),
+        _balanceTile(const GoldCoin(size: 26), _fmt(state.coins), 'Altın', AppTheme.gold),
         // İLK LANSMAN: premium üyelik kutusu gizlendi (satış yok) — Aşama 3'te
         // git geçmişindeki _premiumTile ile geri açılacak.
       ],
     );
   }
 
-  Widget _balanceTile(String emoji, String value, String label, Color accent) {
+  Widget _balanceTile(Widget icon, String value, String label, Color accent) {
     return GlassCard(
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 26)),
+          icon,
           const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -7,6 +7,7 @@ import 'package:quizroyale/features/profile/providers/profile_provider.dart';
 import 'package:quizroyale/features/store/providers/store_provider.dart';
 import 'package:quizroyale/shared/characters.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
@@ -213,7 +214,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             const SizedBox(width: 8),
             Text('KARAKTERİN', style: BiladaText.label(color: AppTheme.cPrimary)),
             const Spacer(),
-            Text('🪙 ${store.coins}', style: BiladaText.label(color: AppTheme.gold, size: 12)),
+            const GoldCoin(size: 14),
+            const SizedBox(width: 4),
+            Text('${store.coins}', style: BiladaText.label(color: AppTheme.gold, size: 12)),
           ],
         ),
         const SizedBox(height: 6),
@@ -246,7 +249,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('${c.name} kilitli — mağazadan ${c.priceCoins} 🪙 ile alabilirsin.'),
+              content: Text('${c.name} kilitli — mağazadan ${c.priceCoins} altın ile alabilirsin.'),
               backgroundColor: AppTheme.cSurfaceContainerHigh,
               action: SnackBarAction(
                 label: 'MAĞAZA',
@@ -295,8 +298,16 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               ),
             ),
             if (!c.owned)
-              Text('${c.priceCoins} 🪙',
-                  style: BiladaText.label(color: AppTheme.gold, size: 9)),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('${c.priceCoins}',
+                      style: BiladaText.label(color: AppTheme.gold, size: 9)),
+                  const SizedBox(width: 2),
+                  const GoldCoin(size: 10),
+                ],
+              ),
           ],
         ),
       ),

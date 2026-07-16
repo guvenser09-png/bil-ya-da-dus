@@ -2,18 +2,22 @@
 
 Kapsam:
   - GÖREV 7/8: Zor Mod 1-4. tur = 10 sn, tüm modlarda son tahmin turu = 12 sn.
-  - GÖREV 5: turnuva (Zor Mod) maçında HİÇBİR oyuncu (gerçek/bot) kalkan almaz.
+  - GÖREV 5 (REVİZE): turnuva (Zor Mod) maçında kalkan kuralı NORMAL maçla
+    AYNIDIR — yeni oyuncu / shield_ready kredisi 1 kalkan alır (kredi turnuvada
+    da tüketilir), kredisiz deneyimli 0, botlar 1'de kalır. (Eski "turnuvada
+    herkes 0 kalkan" davranışı kullanıcı isteğiyle geri alındı.)
   - GÖREV 6: %50 JOKER — 4 şıklı çoktan-seçmeli soruda 2 YANLIŞ şıkkı eler;
     doğrulama (joker_precheck), gizli şık seçimi (doğru şık asla gizlenmez) ve
     WS handler'ın (_handle_use_joker) tam sözleşmesi (joker_result/joker_error,
     JOKER_COST kalıcı tahsilat, çift-tahsilat koruması).
 
-NOT: Bu testler yalnızca YAZILDI; ortak test.db yarışını önlemek için burada
-ÇALIŞTIRILMAZ (orkestratör merge sonrası tüm suite'i çalıştırır). Joker WS
-handler testleri DB'yi monkeypatch ile taklit eder — gerçek DB'ye dokunmaz.
+NOT: Tüm testler DB'siz çalışır — DB gereken yerler (joker WS handler, kalkan
+kurulumundaki games_played sorgusu ve shield_ready tüketimi) monkeypatch/sahte
+session ile taklit edilir; gerçek DB'ye dokunulmaz.
 """
 
 import json
+import uuid
 
 from app.services.game_service import (
     JOKER_COST,
@@ -143,27 +147,131 @@ class TestRoundTimes:
 
 
 # ---------------------------------------------------------------------------
-# GÖREV 5 — Zor Mod'da kalkan YOK
+# GÖREV 5 (REVİZE) — Zor Mod'da kalkan kuralı NORMAL maçla AYNI
 # ---------------------------------------------------------------------------
 
-class TestTournamentNoShields:
-    async def test_tournament_zeroes_all_shields(self):
-        eng = _mk_engine(is_tournament=True)
-        # Constructor herkese 1 kalkan verir; setup turnuvada hepsini sıfırlar.
-        for p in eng.players.values():
-            assert p.shields == 1
-        await eng.apply_shield_setup()  # turnuva dalı DB'ye dokunmaz
-        for p in eng.players.values():
-            assert p.shields == 0, f"{p.username} kalkanı sıfırlanmadı"
-        assert eng._shield_setup_done is True
+class _FakeShieldResult:
+    """session.execute(...) sonucu taklidi — .all() hazır satırları döndürür."""
 
-    async def test_tournament_setup_idempotent(self):
-        eng = _mk_engine(is_tournament=True)
-        await eng.apply_shield_setup()
-        # İkinci çağrı sessizce geri döner (bayrak set).
-        await eng.apply_shield_setup()
-        for p in eng.players.values():
-            assert p.shields == 0
+    def __init__(self, rows):
+        self._rows = rows
+
+    def all(self):
+        return self._rows
+
+
+class _FakeShieldDB:
+    """apply_shield_setup(db=...) için sahte session.
+
+    games_played sorgusuna önceden hazırlanan (UUID, games_played) satırlarını
+    döndürür — gerçek DB'ye dokunmaz.
+    """
+
+    def __init__(self, rows):
+        self._rows = rows
+
+    async def execute(self, stmt):
+        return _FakeShieldResult(self._rows)
+
+
+def _mk_shield_engine(is_tournament: bool):
+    """Kalkan kurulum testleri için 3 gerçek oyuncu + 1 bot kuran motor.
+
+    user_id'ler GEÇERLİ UUID olmalı (apply_shield_setup games_played sorgusu
+    için UUID'e çevirir; geçersizler sorgu dışı kalıp "yeni oyuncu" sayılırdı).
+    """
+    uid_new = str(uuid.uuid4())    # games_played < 5 → bedava kalkan
+    uid_ready = str(uuid.uuid4())  # deneyimli + shield_ready kredisi → 1
+    uid_none = str(uuid.uuid4())   # deneyimli, kredisiz → 0
+    players = [
+        {"user_id": uid_new, "username": "acemi",
+         "display_name": "Acemi", "avatar_id": "a"},
+        {"user_id": uid_ready, "username": "hazirlikli",
+         "display_name": "Hazırlıklı", "avatar_id": "a"},
+        {"user_id": uid_none, "username": "kredisiz",
+         "display_name": "Kredisiz", "avatar_id": "a"},
+    ]
+    bots = [{"bot_name": "bot1", "difficulty": "easy", "avatar_id": "a"}]
+    eng = GameEngine("g_shield", players, bots, is_tournament=is_tournament)
+    return eng, uid_new, uid_ready, uid_none
+
+
+def _shield_rows(uid_new: str, uid_ready: str, uid_none: str):
+    """games_played sorgu sonucu: acemi 2 maç, deneyimliler 20'şer maç."""
+    return [
+        (uuid.UUID(uid_new), 2),
+        (uuid.UUID(uid_ready), 20),
+        (uuid.UUID(uid_none), 20),
+    ]
+
+
+def _patch_shield_ready(monkeypatch, ready_uid: str) -> list:
+    """consume_shield_ready'yi taklit et: yalnızca ready_uid'de kredi var.
+
+    Dönen liste, hangi user_id'ler için çağrıldığını toplar (tüketim kanıtı).
+    """
+    consumed: list[str] = []
+
+    async def _consume(user_id):
+        consumed.append(str(user_id))
+        return str(user_id) == ready_uid
+
+    monkeypatch.setattr(
+        "app.services.shield_service.consume_shield_ready", _consume
+    )
+    return consumed
+
+
+class TestTournamentShields:
+    """Turnuvada (Zor Mod) kalkan artık NORMAL kurala tabi (kullanıcı isteği:
+    maç öncesi kalkan sorusu turnuvada da sorulur/uygulanır)."""
+
+    async def test_tournament_applies_normal_rule(self, monkeypatch):
+        eng, uid_new, uid_ready, uid_none = _mk_shield_engine(is_tournament=True)
+        calls = _patch_shield_ready(monkeypatch, uid_ready)
+
+        await eng.apply_shield_setup(
+            db=_FakeShieldDB(_shield_rows(uid_new, uid_ready, uid_none))
+        )
+
+        assert eng.players["acemi"].shields == 1       # yeni oyuncu → bedava 1
+        assert eng.players["hazirlikli"].shields == 1  # shield_ready kredisi → 1
+        assert eng.players["kredisiz"].shields == 0    # kredisiz deneyimli → 0
+        assert eng.players["bot1"].shields == 1        # bota dokunulmaz → 1
+        assert eng._shield_setup_done is True
+        # Kredi turnuvada da TÜKETİLİR: consume yalnız deneyimliler için çağrılır
+        # (yeni oyuncu bedava aldığı için kredisine dokunulmaz).
+        assert sorted(calls) == sorted([uid_ready, uid_none])
+
+    async def test_tournament_matches_normal_behavior(self, monkeypatch):
+        # Aynı girdiyle normal ve turnuva maçı AYNI kalkan dağılımını üretir
+        # (turnuvaya özel dal kalmadı).
+        results = {}
+        for is_t in (False, True):
+            eng, uid_new, uid_ready, uid_none = _mk_shield_engine(
+                is_tournament=is_t
+            )
+            _patch_shield_ready(monkeypatch, uid_ready)
+            await eng.apply_shield_setup(
+                db=_FakeShieldDB(_shield_rows(uid_new, uid_ready, uid_none))
+            )
+            # Kullanıcı adı → kalkan haritası (iki modda birebir aynı olmalı).
+            results[is_t] = {u: p.shields for u, p in eng.players.items()}
+        assert results[False] == results[True]
+
+    async def test_tournament_setup_idempotent(self, monkeypatch):
+        # İkinci çağrı sessizce döner: kalkanlar değişmez, kredi YENİDEN tüketilmez.
+        eng, uid_new, uid_ready, uid_none = _mk_shield_engine(is_tournament=True)
+        calls = _patch_shield_ready(monkeypatch, uid_ready)
+        db = _FakeShieldDB(_shield_rows(uid_new, uid_ready, uid_none))
+
+        await eng.apply_shield_setup(db=db)
+        first_calls = list(calls)
+        await eng.apply_shield_setup(db=db)
+
+        assert calls == first_calls  # ek consume çağrısı YOK (çift tüketim yok)
+        assert eng.players["hazirlikli"].shields == 1
+        assert eng.players["kredisiz"].shields == 0
 
     def test_normal_match_bots_keep_shield(self):
         # Normal maçta davranış değişmez: botlar constructor kalkanında (1) kalır.

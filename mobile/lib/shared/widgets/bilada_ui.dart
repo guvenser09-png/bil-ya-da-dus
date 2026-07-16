@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 
 /// Stitch tasarımının ortak metin stilleri.
 class BiladaText {
@@ -191,7 +192,7 @@ class CoinPill extends StatelessWidget {
         children: [
           Text(_fmt(coins), style: BiladaText.label(color: AppTheme.cPrimary, size: 13)),
           const SizedBox(width: 4),
-          const Text('🪙', style: TextStyle(fontSize: 14)),
+          const GoldCoin(size: 15),
         ],
       ),
     );

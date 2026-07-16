@@ -28,9 +28,9 @@ Kalkan (🛡️) mekaniği:
 - İkinci yanlış = normal eleme. Final (tahmin) turunda Kalkan GEÇERSİZ.
 - "Herkes yanlışsa kimse elenmez" kuralı ÖNCE uygulanır: kimse elenmeyecekse
   kalkan da kırılmaz.
-- ZOR MOD (turnuva): KALKAN YOK. Turnuva maçında hiçbir oyuncu (gerçek/bot)
-  kalkan almaz (apply_shield_setup herkese shields=0 verir) → tamamen kalkansız,
-  yüksek riskli mod.
+- ZOR MOD (turnuva): kalkan kuralı NORMAL maçla AYNI. Turnuvada da maç öncesi
+  kalkan sorulur; yeni oyuncu / shield_ready kredisi 1 kalkan verir (kredi
+  turnuvada da tüketilir), botlar 1'de kalır.
 """
 
 import asyncio
@@ -144,9 +144,9 @@ class PlayerState:
     is_alive: bool = True
     # KALKAN (🛡️): Constructor'da herkese 1 verilir (motor birim testleri buna
     # dayanır). GERÇEK oyuncularda maç başında apply_shield_setup yeni kurala
-    # göre 0/1'e ayarlar (yeni oyuncu VEYA shield_ready kredisi). Botlar 1'de
-    # kalır. Tur 1-4'te ilk yanlışta elenmek yerine kalkan kırılır; finalde
-    # (tahmin) geçersiz.
+    # göre 0/1'e ayarlar (yeni oyuncu VEYA shield_ready kredisi) — kural turnuva
+    # (Zor Mod) dahil TÜM modlarda aynıdır. Botlar 1'de kalır. Tur 1-4'te ilk
+    # yanlışta elenmek yerine kalkan kırılır; finalde (tahmin) geçersiz.
     shields: int = 1
     # KALKAN KIRILDI İŞARETİ (🛡️): Bu maçta kalkanı kırıldı mı? Artık EK ÜCRET
     # YOK (eski "50 altın bedeli" kaldırıldı — kalkan zaten peşin alındı/izlendi).
@@ -270,10 +270,10 @@ class GameEngine:
     async def apply_shield_setup(self, db: AsyncSession | None = None) -> None:
         """Gerçek oyuncuların kalkanını YENİ kurala göre ayarla (maç başında).
 
-        Kural:
+        Kural (turnuva/Zor Mod dahil TÜM maç tiplerinde aynı):
           - Yeni oyuncu (games_played < 5): BEDAVA 1 kalkan.
           - Diğerleri: `shield_ready:{user_id}` bayrağı varsa 1 kalkan (bayrak
-            SİLİNİR, tek kullanımlık); yoksa 0 kalkan.
+            SİLİNİR, tek kullanımlık — turnuvada da tüketilir); yoksa 0 kalkan.
           - Botlara DOKUNULMAZ (kurulumda 1 kalkanla başladılar; görsel tutarlılık).
 
         Constructor herkese shields=1 verir (motor birim testleri buna dayanır);
@@ -285,16 +285,6 @@ class GameEngine:
             db: Verilirse bu session kullanılır; verilmezse kendi session'ını açar.
         """
         if getattr(self, "_shield_setup_done", False):
-            return
-
-        # ZOR MOD (turnuva): KALKAN YOK. Turnuva maçında HİÇBİR oyuncu — ne gerçek
-        # ne bot — kalkan almaz (constructor'ın verdiği shields=1 dahil sıfırlanır).
-        # Böylece Zor Mod tamamen kalkansız/yüksek-risk olur: ilk yanlışta eleme.
-        # Normal maçta bu blok atlanır → aşağıdaki mevcut kural aynen işler.
-        if self.is_tournament:
-            for p in self.players.values():
-                p.shields = 0
-            self._shield_setup_done = True
             return
 
         real_players = [

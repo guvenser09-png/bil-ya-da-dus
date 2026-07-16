@@ -4,6 +4,7 @@ import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/daily/providers/daily_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 
 /// Günlük ödül diyaloğunu açar. home_screen rozeti dokununca çağırır.
 Future<void> showDailyRewardDialog(BuildContext context) {
@@ -119,7 +120,7 @@ class _DailyRewardDialogState extends ConsumerState<_DailyRewardDialog>
               if (state.nextReward > 0) ...[
                 const SizedBox(height: 6),
                 Text(
-                  'Yarın: ${state.nextReward} 🪙',
+                  'Yarın: ${state.nextReward} altın',
                   style: BiladaText.label(color: AppTheme.cOutline, size: 12),
                 ),
               ],
@@ -169,7 +170,7 @@ class _DailyRewardDialogState extends ConsumerState<_DailyRewardDialog>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('🪙', style: TextStyle(fontSize: 32)),
+            const GoldCoin(size: 38),
             const SizedBox(height: 2),
             Text('+$reward', style: BiladaText.displayXl(color: const Color(0xFF58002F), size: 26)),
           ],

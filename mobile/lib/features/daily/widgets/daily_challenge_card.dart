@@ -5,6 +5,7 @@ import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/daily/providers/daily_challenge_provider.dart';
 import 'package:quizroyale/features/daily/widgets/daily_share_sheet.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 
 /// Ana ekrandaki "🗓️ GÜNÜN 5 SORUSU" kartı — günlük dönüşün omurgası.
 ///
@@ -113,9 +114,11 @@ class DailyChallengeCard extends ConsumerWidget {
                 ),
                 const Spacer(),
                 Text(
-                  '+${result.coinsEarned} 🪙',
+                  '+${result.coinsEarned}',
                   style: BiladaText.label(color: AppTheme.gold, size: 13),
                 ),
+                const SizedBox(width: 3),
+                const GoldCoin(size: 14),
               ],
             ),
             const SizedBox(height: 10),

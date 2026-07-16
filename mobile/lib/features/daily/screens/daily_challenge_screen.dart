@@ -14,6 +14,7 @@ import 'package:quizroyale/features/game/widgets/slider_widget.dart';
 import 'package:quizroyale/features/game/widgets/true_false_widget.dart';
 import 'package:quizroyale/features/quests/providers/quests_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 
 /// Günün 5 Sorusu — herkese AYNI 5 soru, ELEME YOK (hepsi cevaplanır).
 ///
@@ -374,7 +375,7 @@ class _DailyResultView extends StatelessWidget {
             children: [
               Expanded(
                 child: _tile(
-                  emoji: '🪙',
+                  icon: const GoldCoin(size: 22),
                   label: 'Kazanılan',
                   value: '+${result.coinsEarned}',
                   color: AppTheme.gold,
@@ -439,17 +440,19 @@ class _DailyResultView extends StatelessWidget {
   }
 
   Widget _tile({
-    required String emoji,
+    String? emoji,
+    Widget? icon, // emoji yerine widget (örn. GoldCoin) gösterilebilir
     required String label,
     required String value,
     required Color color,
     String? sub,
   }) {
+    assert(emoji != null || icon != null, 'emoji veya icon verilmeli');
     return GlassCard(
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
       child: Column(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 20)),
+          icon ?? Text(emoji!, style: const TextStyle(fontSize: 20)),
           const SizedBox(height: 4),
           Text(label, style: BiladaText.label(size: 11), textAlign: TextAlign.center),
           const SizedBox(height: 2),

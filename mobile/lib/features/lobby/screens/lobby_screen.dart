@@ -38,35 +38,32 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _startMatchFlow());
   }
 
-  /// Maç akışı: (yalnızca Hızlı Maç'ta) önce kalkan seçimi, ardından lobiye
-  /// bağlan. Turnuva vb. modlarda doğrudan bağlanır.
+  /// Maç akışı: önce kalkan seçimi (TÜM modlarda — Zor Mod/turnuva dahil),
+  /// ardından lobiye bağlan.
   Future<void> _startMatchFlow() async {
     final saved = ref.read(authProvider).user?['avatar_id'] as String?;
     final avatarId =
         (saved != null && isCatalogCharacter(saved)) ? saved : 'robot';
 
-    // ── Kalkan seçimi: SADECE normal "Hızlı Maç"ta ──────────────────────
-    // Zor Mod (TURNUVA) girişinde kalkan sheet'i HİÇ gösterilmez; maç doğrudan
-    // (kalkansız) başlar. Turnuva /tournament → /lobby geçişinde mode:'tournament'
-    // ile gelinir; bu durumu net ayırt edip kalkan akışını TAMAMEN atlarız.
-    // Normal maçta (mode == null) kalkan sheet'i aynen korunur.
-    final isTournament = widget.mode == 'tournament';
-    if (!isTournament) {
-      final gamesPlayed =
-          (ref.read(authProvider).user?['games_played'] as num?)?.toInt() ?? 0;
-      if (gamesPlayed < 5) {
-        // Yeni oyuncu: ilk 5 maç kalkanı bedava → seçim SORMA, bilgi rozeti.
-        if (mounted) {
-          setState(() => _shieldBadge = 'Kalkanın hazır — ilk 5 maç bedava');
-        }
-      } else if (!_skipShieldThisSession) {
-        // Deneyimli oyuncu: hızlı, atlanabilir kalkan seçim sayfası.
-        final result = await showShieldPrompt(context);
-        if (!mounted) return;
-        if (result.dontAskAgain) _skipShieldThisSession = true;
-        if (result.prepared) {
-          setState(() => _shieldBadge = 'Kalkan hazır');
-        }
+    // ── Kalkan seçimi: TÜM modlarda (Hızlı Maç + Zor Mod/turnuva) ───────
+    // Zor Mod'da da kalkan kuralı normal maçla aynı: yeni oyuncuya bilgi
+    // rozeti, deneyimli oyuncuya atlanabilir kalkan seçim sayfası gösterilir.
+    // mode parametresi yalnızca lobiye bağlanırken (WS mode paramı) kullanılır;
+    // kalkan akışını etkilemez.
+    final gamesPlayed =
+        (ref.read(authProvider).user?['games_played'] as num?)?.toInt() ?? 0;
+    if (gamesPlayed < 5) {
+      // Yeni oyuncu: ilk 5 maç kalkanı bedava → seçim SORMA, bilgi rozeti.
+      if (mounted) {
+        setState(() => _shieldBadge = 'Kalkanın hazır — ilk 5 maç bedava');
+      }
+    } else if (!_skipShieldThisSession) {
+      // Deneyimli oyuncu: hızlı, atlanabilir kalkan seçim sayfası.
+      final result = await showShieldPrompt(context);
+      if (!mounted) return;
+      if (result.dontAskAgain) _skipShieldThisSession = true;
+      if (result.prepared) {
+        setState(() => _shieldBadge = 'Kalkan hazır');
       }
     }
 

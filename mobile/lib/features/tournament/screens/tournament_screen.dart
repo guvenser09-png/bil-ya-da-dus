@@ -11,13 +11,18 @@ import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/tournament/providers/tournament_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 
 /// ZOR MOD — "Kendine güveniyor musun?"
 ///
 /// Gaza getiren, sinematik bir cesaret ekranı. Sahne karanlık bir arena;
 /// yükselen kıvılcımlar, nefes alan altın ışıltı, dönen enerji halkası ve
-/// dev bir 3× madalyonu odakta. Ödül havuzu büyük gösterilir; alev göstergeli
-/// zorluk (difficulty 4-5) + nabız atan CTA.
+/// 3× madalyonu odakta. Ödül havuzu büyük gösterilir; alev göstergeli
+/// zorluk + ateş/altın gradyanlı, nabız atan "CESARETİN VAR MI?" giriş kartı.
+///
+/// TEK SAYFA KURALI: içerik hedef cihazda (~390×844) KAYDIRMADAN sığar.
+/// Bloklar kompakt, aradaki nefes payı Spacer'larla dağıtılır; yalnızca
+/// çok küçük ekranlarda güvenlik ağı olarak kaydırma devreye girer.
 ///
 /// KORUNAN DAVRANIŞLAR (provider sözleşmesi hiç değişmedi):
 ///   1) entered → bakiye tazele + /lobby (mode:tournament)
@@ -192,31 +197,53 @@ class _Content extends StatelessWidget {
   final Animation<double> shimmer;
   final Animation<double> embers;
 
+  /// Kaydırmasız düzenin rahat sığdığı en küçük içerik yüksekliği.
+  /// Hedef cihazda (~390×844) içerik alanı ~709px; bunun ALTINDAKİ istisnai
+  /// ekranlarda (küçük telefon, split-screen) güvenlik ağı olarak kaydırma açılır.
+  static const double _minFitHeight = 660;
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(22, 4, 22, 40),
-      children: [
-        _Hero(state: state, breathe: breathe, shimmer: shimmer, embers: embers),
-        const SizedBox(height: 22),
-        // ÖDÜL HAVUZU — sayfanın en cazip vurgusu (payload: prize_pool + top3).
-        _PrizePool(
-          prizePool: state.prizePool,
-          prizeTop3: state.prizeTop3,
-          breathe: breathe,
-        ),
-        const SizedBox(height: 26),
-        _StatusStrip(
-          rank: state.myRank,
-          score: state.myScore,
-          pointsToNext: state.pointsToNext,
-        ),
-        const SizedBox(height: 18),
-        // Sezon puanı çarpanını hatırlatan ince not — Sıralama'ya yönlendirir.
-        const _SeasonHint(),
-        const SizedBox(height: 26),
-        _EntryCard(state: state, breathe: breathe, shimmer: shimmer),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // TEK SAYFA: sabit kompakt bloklar + Spacer'larla dağıtılan nefes payı.
+        // SizedBox yüksekliği sabitler; Spacer'lar artan alanı orantılı paylaşır.
+        final content = SizedBox(
+          height: math.max(constraints.maxHeight, _minFitHeight),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
+            child: Column(
+              children: [
+                const Spacer(flex: 2),
+                _Hero(
+                    state: state,
+                    breathe: breathe,
+                    shimmer: shimmer,
+                    embers: embers),
+                const SizedBox(height: 8),
+                const Spacer(flex: 3),
+                // ÖDÜL HAVUZU — sayfanın en cazip vurgusu (payload: prize_pool + top3).
+                _PrizePool(
+                  prizePool: state.prizePool,
+                  prizeTop3: state.prizeTop3,
+                  breathe: breathe,
+                ),
+                const SizedBox(height: 6),
+                const Spacer(flex: 2),
+                // Sezon puanı çarpanını hatırlatan ince not — Sıralama'ya yönlendirir.
+                const _SeasonHint(),
+                const SizedBox(height: 6),
+                const Spacer(flex: 2),
+                _EntryCard(state: state, breathe: breathe, shimmer: shimmer),
+              ],
+            ),
+          ),
+        );
+        // Hedef cihazlarda kaydırma YOK; çok küçük ekranda içeriği kırpmak
+        // yerine kaydırılabilir yap (güvenlik ağı).
+        if (constraints.maxHeight >= _minFitHeight) return content;
+        return SingleChildScrollView(child: content);
+      },
     );
   }
 }
@@ -311,18 +338,14 @@ class _Hero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Kompakt kahraman: tek sayfa bütçesine sığması için madalyon 132px,
+    // başlık 20px; zorluk + çarpan rozetleri TEK satırda (Wrap güvenceli).
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(height: 10),
-        Text(
-          'ZOR MOD',
-          style: BiladaText.label(color: Colors.white60, size: 12)
-              .copyWith(letterSpacing: 5),
-        ),
-        const SizedBox(height: 18),
         SizedBox(
-          width: 230,
-          height: 230,
+          width: 132,
+          height: 132,
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -332,21 +355,21 @@ class _Hero extends StatelessWidget {
                 builder: (_, __) {
                   final t = breathe.value;
                   return Container(
-                    width: 188,
-                    height: 188,
+                    width: 106,
+                    height: 106,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
                           color: AppTheme.gold.withValues(alpha: 0.30 + 0.30 * t),
-                          blurRadius: 50 + 40 * t,
-                          spreadRadius: 2 + 8 * t,
+                          blurRadius: 30 + 24 * t,
+                          spreadRadius: 2 + 5 * t,
                         ),
                         BoxShadow(
                           color: AppTheme.accentOrange
                               .withValues(alpha: 0.18 + 0.18 * t),
-                          blurRadius: 70 + 30 * t,
-                          spreadRadius: 4,
+                          blurRadius: 42 + 18 * t,
+                          spreadRadius: 3,
                         ),
                       ],
                     ),
@@ -359,8 +382,8 @@ class _Hero extends StatelessWidget {
                 builder: (_, __) => Transform.rotate(
                   angle: embers.value * 2 * math.pi,
                   child: Container(
-                    width: 212,
-                    height: 212,
+                    width: 124,
+                    height: 124,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: SweepGradient(
@@ -379,8 +402,8 @@ class _Hero extends StatelessWidget {
               ),
               // (c) Madalyon altın çerçeve.
               Container(
-                width: 190,
-                height: 190,
+                width: 110,
+                height: 110,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: AppTheme.goldGradient,
@@ -388,8 +411,8 @@ class _Hero extends StatelessWidget {
               ),
               // (d) Madalyon yüzü (koyu) + 3× + PUAN.
               Container(
-                width: 176,
-                height: 176,
+                width: 100,
+                height: 100,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
@@ -400,52 +423,56 @@ class _Hero extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const SizedBox(height: 6),
                     _ShimmerSweep(
                       animation: shimmer,
                       child: Text(
                         '${state.pointMultiplier}×',
                         style: BiladaText.displayXl(
-                                color: AppTheme.gold, size: 88)
+                                color: AppTheme.gold, size: 44)
                             .copyWith(height: 1.0),
                       ),
                     ),
                     Text(
                       'PUAN',
-                      style: BiladaText.label(color: AppTheme.gold, size: 14)
-                          .copyWith(letterSpacing: 6),
+                      style: BiladaText.label(color: AppTheme.gold, size: 9)
+                          .copyWith(letterSpacing: 3.5),
                     ),
-                    const SizedBox(height: 8),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 22),
+        const SizedBox(height: 8),
         _ShimmerSweep(
           animation: shimmer,
           child: Text(
             'KENDİNE\nGÜVENİYOR MUSUN?',
             textAlign: TextAlign.center,
-            style: BiladaText.displayXl(color: AppTheme.gold, size: 32)
+            style: BiladaText.displayXl(color: AppTheme.gold, size: 20)
                 .copyWith(height: 1.05, letterSpacing: 0.5),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 4),
         Text(
           'Zayıflar elenir. Cesurlar zirveye yazılır.',
           textAlign: TextAlign.center,
-          style: BiladaText.body(color: Colors.white, size: 15),
+          style: BiladaText.body(color: Colors.white, size: 11),
         ),
-        const SizedBox(height: 20),
-        // Alev göstergeli zorluk + 3× puan rozeti.
-        const _FlameMeter(),
-        const SizedBox(height: 12),
-        _HeroBadge(
-          icon: Icons.bolt_rounded,
-          text: '${state.pointMultiplier}× SEZON PUANI',
-          color: AppTheme.gold,
+        const SizedBox(height: 8),
+        // Alev göstergeli zorluk + 3× puan rozeti — yan yana, sığmazsa alt alta.
+        Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 8,
+          runSpacing: 6,
+          children: [
+            const _FlameMeter(),
+            _HeroBadge(
+              icon: Icons.bolt_rounded,
+              text: '${state.pointMultiplier}× SEZON PUANI',
+              color: AppTheme.gold,
+            ),
+          ],
         ),
       ],
     );
@@ -459,7 +486,7 @@ class _FlameMeter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: AppTheme.cError.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(999),
@@ -469,17 +496,17 @@ class _FlameMeter extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'ZORLUK 4-5 · ACIMASIZ',
-            style: BiladaText.label(color: AppTheme.cError, size: 11)
-                .copyWith(letterSpacing: 1.5),
+            'ZORLUK: ACIMASIZ',
+            style: BiladaText.label(color: AppTheme.cError, size: 9)
+                .copyWith(letterSpacing: 1.2),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 7),
           for (int i = 0; i < 5; i++)
             Padding(
               padding: const EdgeInsets.only(left: 1),
               child: Icon(
                 Icons.local_fire_department_rounded,
-                size: 17,
+                size: 13,
                 color: Color.lerp(
                     AppTheme.accentOrange, AppTheme.cError, i / 4)!,
               ),
@@ -501,7 +528,7 @@ class _HeroBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
@@ -510,9 +537,13 @@ class _HeroBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: color, size: 15),
-          const SizedBox(width: 6),
-          Text(text, style: BiladaText.label(color: color, size: 11)),
+          Icon(icon, color: color, size: 12),
+          const SizedBox(width: 5),
+          Text(
+            text,
+            style: BiladaText.label(color: color, size: 9)
+                .copyWith(letterSpacing: 1.2),
+          ),
         ],
       ),
     );
@@ -560,35 +591,35 @@ class _PrizePool extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(20),
           gradient: AppTheme.goldGradient,
         ),
         padding: const EdgeInsets.all(2.5),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(21.5),
+            borderRadius: BorderRadius.circular(17.5),
             gradient: const RadialGradient(
               center: Alignment(-0.5, -0.9),
               radius: 1.5,
               colors: [Color(0xFF4A0026), Color(0xFF2A0014)],
             ),
           ),
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 18),
+          padding: const EdgeInsets.fromLTRB(16, 11, 16, 11),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('💰', style: TextStyle(fontSize: 18)),
-                  const SizedBox(width: 8),
+                  const Text('💰', style: TextStyle(fontSize: 14)),
+                  const SizedBox(width: 6),
                   Text(
                     'ÖDÜL HAVUZU',
-                    style: BiladaText.label(color: AppTheme.gold, size: 13)
-                        .copyWith(letterSpacing: 3),
+                    style: BiladaText.label(color: AppTheme.gold, size: 11)
+                        .copyWith(letterSpacing: 2.5),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 4),
               if (hasPool) ...[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -597,22 +628,22 @@ class _PrizePool extends StatelessWidget {
                   children: [
                     Text(
                       _fmt(prizePool),
-                      style: BiladaText.displayXl(color: AppTheme.gold, size: 52)
+                      style: BiladaText.displayXl(color: AppTheme.gold, size: 36)
                           .copyWith(height: 1.0),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Text('altın',
-                        style: BiladaText.title(color: Colors.white70, size: 16)),
+                        style: BiladaText.title(color: Colors.white70, size: 13)),
                   ],
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     for (int i = 0; i < 3; i++)
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(
-                              left: i == 0 ? 0 : 5, right: i == 2 ? 0 : 5),
+                              left: i == 0 ? 0 : 4, right: i == 2 ? 0 : 4),
                           child: _podiumChip(
                             _podium[i],
                             i < prizeTop3.length ? prizeTop3[i] : null,
@@ -625,7 +656,7 @@ class _PrizePool extends StatelessWidget {
                 Text(
                   'Havuz doluyor — sen girdikçe büyür.',
                   textAlign: TextAlign.center,
-                  style: BiladaText.body(color: Colors.white70, size: 13),
+                  style: BiladaText.body(color: Colors.white70, size: 12),
                 ),
             ],
           ),
@@ -636,10 +667,10 @@ class _PrizePool extends StatelessWidget {
 
   Widget _podiumChip(String label, int? gold) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
       decoration: BoxDecoration(
         color: AppTheme.gold.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppTheme.gold.withValues(alpha: 0.3)),
       ),
       child: Column(
@@ -647,11 +678,11 @@ class _PrizePool extends StatelessWidget {
           Text(label,
               textAlign: TextAlign.center,
               maxLines: 1,
-              style: BiladaText.label(color: Colors.white70, size: 10)),
-          const SizedBox(height: 4),
+              style: BiladaText.label(color: Colors.white70, size: 9)),
+          const SizedBox(height: 2),
           Text(
             gold != null ? _fmt(gold) : '—',
-            style: BiladaText.title(color: AppTheme.gold, size: 16),
+            style: BiladaText.title(color: AppTheme.gold, size: 14),
           ),
         ],
       ),
@@ -671,66 +702,7 @@ class _PrizePool extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════
-//  3) SENİN DURUMUN
-// ════════════════════════════════════════════════════════════════════════
-
-class _StatusStrip extends StatelessWidget {
-  const _StatusStrip({this.rank, this.score, this.pointsToNext});
-  final int? rank;
-  final int? score;
-  final int? pointsToNext;
-
-  @override
-  Widget build(BuildContext context) {
-    final hasEntry = rank != null;
-    return GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppTheme.gold.withValues(alpha: 0.14),
-              border: Border.all(color: AppTheme.gold.withValues(alpha: 0.4)),
-            ),
-            alignment: Alignment.center,
-            child: hasEntry
-                ? Text('#$rank',
-                    style: BiladaText.title(color: AppTheme.gold, size: 15))
-                : const Icon(Icons.emoji_events_rounded,
-                    color: AppTheme.gold, size: 24),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  hasEntry ? '${score ?? 0} sezon puanı' : 'Henüz katılmadın',
-                  style: BiladaText.title(size: 16),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  hasEntry
-                      ? (pointsToNext != null && pointsToNext! > 0
-                          ? 'Bir üst sıraya $pointsToNext puan'
-                          : 'Zirvedesin — şimdi savun.')
-                      : 'Yerini al, tablodaki adını gör.',
-                  style: BiladaText.label(color: AppTheme.gold, size: 11),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ════════════════════════════════════════════════════════════════════════
-//  4) SEZON İPUCU — kullanıcıyı Sıralama'ya yönlendiren ince not
+//  3) SEZON İPUCU — kullanıcıyı Sıralama'ya yönlendiren ince not
 // ════════════════════════════════════════════════════════════════════════
 
 /// Aylık lig ödülleri artık yalnızca "Sıralama → SEZON" sekmesinde yaşıyor.
@@ -740,16 +712,17 @@ class _SeasonHint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Tek sayfa bütçesi için kompakt: ikon 13, metin 10.
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Icon(Icons.trending_up_rounded, color: AppTheme.gold, size: 15),
-        const SizedBox(width: 7),
+        const Icon(Icons.trending_up_rounded, color: AppTheme.gold, size: 13),
+        const SizedBox(width: 6),
         Flexible(
           child: Text(
             "Zor Mod'da sezon puanın 3× işler — Sıralama'da yüksel.",
             textAlign: TextAlign.center,
-            style: BiladaText.label(color: Colors.white54, size: 11),
+            style: BiladaText.label(color: Colors.white54, size: 10),
           ),
         ),
       ],
@@ -758,9 +731,13 @@ class _SeasonHint extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════
-//  5) GİRİŞ KARTI — nabız atan baskın CTA
+//  4) GİRİŞ KARTI — "CESARETİN VAR MI?" meydan okuması
 // ════════════════════════════════════════════════════════════════════════
 
+/// Ateş/altın gradyan çerçeveli, nefes alan meydan okuma kartı.
+/// Başlıkta parıltı taraması, çerçevede nabız; odakta dev GİR butonu.
+/// KORUNAN 4 & 6: buton yalnız affordable && !entering iken aktif; bedel
+/// option'dan okunur; yetersiz altında pasif buton + mağaza yönlendirmesi.
 class _EntryCard extends ConsumerWidget {
   const _EntryCard({
     required this.state,
@@ -779,110 +756,190 @@ class _EntryCard extends ConsumerWidget {
     final label = option?.currencyLabel ?? 'Altın';
     final insufficient = option != null && !option.affordable;
 
-    return GlassCard(
-      padding: const EdgeInsets.all(18),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text('BAKİYEN',
-                  style: BiladaText.label(color: Colors.white60, size: 11)),
-              const SizedBox(width: 6),
-              const Text('🪙', style: TextStyle(fontSize: 14)),
-              const SizedBox(width: 4),
-              Text('${state.gold}',
-                  style: BiladaText.title(color: AppTheme.gold, size: 15)),
-              const Spacer(),
-              Text('GİRİŞ',
-                  style: BiladaText.label(color: Colors.white60, size: 11)),
-              const SizedBox(width: 6),
-              Text('$cost $label',
-                  style: BiladaText.title(
-                      color: insufficient ? AppTheme.cError : Colors.white,
-                      size: 15)),
+    // Dış katman: ateş/altın gradyan çerçeve + nefes alan turuncu ışıltı.
+    return AnimatedBuilder(
+      animation: breathe,
+      builder: (_, child) {
+        final t = breathe.value;
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.lerp(AppTheme.gold, AppTheme.accentOrange, 0.15 + 0.5 * t)!,
+                Color.lerp(AppTheme.accentOrange, AppTheme.gold, 0.2 + 0.5 * t)!,
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppTheme.accentOrange.withValues(alpha: 0.22 + 0.22 * t),
+                blurRadius: 18 + 16 * t,
+                spreadRadius: 1 + t,
+              ),
             ],
           ),
-          const SizedBox(height: 16),
-          // Nabız atan altın CTA — sayfanın en güçlü görsel ağırlığı.
-          AnimatedBuilder(
-            animation: breathe,
-            builder: (_, child) {
-              final t = canEnter ? breathe.value : 0.0;
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppTheme.gold.withValues(alpha: 0.25 + 0.35 * t),
-                      blurRadius: 16 + 22 * t,
-                      spreadRadius: 1 + 2 * t,
-                    ),
-                  ],
-                ),
-                child: child,
-              );
-            },
-            child: ChunkyButton(
-              height: 64,
-              color: AppTheme.gold,
-              foreground: const Color(0xFF3A0020),
-              shadowColor: const Color(0xFFB8860B),
-              onPressed: canEnter
-                  ? () => ref.read(tournamentProvider.notifier).enter()
-                  : null,
-              child: state.entering
-                  ? const SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2.5, color: Color(0xFF3A0020)),
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('CESARETİM VAR — GİR!',
-                            style: BiladaText.title(
-                                color: const Color(0xFF3A0020), size: 17)),
-                        const SizedBox(width: 8),
-                        const Text('🔥', style: TextStyle(fontSize: 18)),
-                      ],
-                    ),
-            ),
+          padding: const EdgeInsets.all(2.5),
+          child: child,
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(21.5),
+          gradient: const RadialGradient(
+            center: Alignment(0, -1.2),
+            radius: 1.8,
+            colors: [Color(0xFF52102A), Color(0xFF2A0714)],
           ),
-          if (insufficient) ...[
-            const SizedBox(height: 10),
+        ),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Meydan okuma başlığı — parıltı taramalı.
+            _ShimmerSweep(
+              animation: shimmer,
+              child: Text(
+                'CESARETİN VAR MI?',
+                textAlign: TextAlign.center,
+                style: BiladaText.displayXl(color: AppTheme.gold, size: 19)
+                    .copyWith(height: 1.0, letterSpacing: 1),
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '$cost ${label.toLowerCase()} yatır, zirveye oyna.',
+              textAlign: TextAlign.center,
+              style: BiladaText.body(color: Colors.white70, size: 11),
+            ),
+            const SizedBox(height: 8),
+            // Bedel + bakiye hapları: giriş bedeli her durumda net görünür.
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.lock_rounded, color: AppTheme.cError, size: 14),
-                const SizedBox(width: 6),
-                Text('Yetersiz altın · $cost $label gerekiyor',
-                    style: BiladaText.label(color: AppTheme.cError, size: 11)),
+                _statPill(
+                  caption: 'GİRİŞ',
+                  value: '$cost',
+                  valueColor: insufficient ? AppTheme.cError : AppTheme.gold,
+                ),
+                const SizedBox(width: 10),
+                _statPill(caption: 'BAKİYEN', value: '${state.gold}'),
               ],
             ),
-            const SizedBox(height: 12),
-            // Altın yoksa mağazaya yönlendir — orada reklam izleyip altın
-            // kazanılabilir (reklam UI'ı başka ekranda; burası yalnız yönlendirir).
-            ChunkyButton(
-              height: 52,
-              color: AppTheme.cSecondaryContainer,
-              foreground: Colors.white,
-              shadowColor: AppTheme.cSecondaryShadow,
-              onPressed: () => context.go('/store'),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.storefront_rounded, size: 18),
-                  SizedBox(width: 8),
-                  Text('MAĞAZADAN ALTIN KAZAN', style: TextStyle(fontSize: 15)),
-                ],
+            const SizedBox(height: 10),
+            // DEV CTA — nabız atan altın buton (aktifken ışıltı büyüyüp küçülür).
+            AnimatedBuilder(
+              animation: breathe,
+              builder: (_, child) {
+                final t = canEnter ? breathe.value : 0.0;
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.gold.withValues(alpha: 0.30 + 0.35 * t),
+                        blurRadius: 14 + 20 * t,
+                        spreadRadius: 1 + 2 * t,
+                      ),
+                    ],
+                  ),
+                  child: child,
+                );
+              },
+              child: ChunkyButton(
+                height: 56,
+                color: AppTheme.gold,
+                foreground: const Color(0xFF3A0020),
+                shadowColor: const Color(0xFFB8860B),
+                onPressed: canEnter
+                    ? () => ref.read(tournamentProvider.notifier).enter()
+                    : null,
+                child: state.entering
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2.5, color: Color(0xFF3A0020)),
+                      )
+                    : insufficient
+                        // Yetersiz altın durumu butonun kendisinde okunur.
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(Icons.lock_rounded, size: 16),
+                              const SizedBox(width: 7),
+                              Text('YETERSİZ ALTIN — $cost GEREK',
+                                  style: BiladaText.title(
+                                      color: AppTheme.cOutline, size: 14)),
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('CESARETİM VAR — GİR!',
+                                  style: BiladaText.title(
+                                      color: const Color(0xFF3A0020),
+                                      size: 17)),
+                              const SizedBox(width: 8),
+                              const Text('🔥', style: TextStyle(fontSize: 18)),
+                            ],
+                          ),
               ),
             ),
-          ] else if (canEnter) ...[
-            const SizedBox(height: 10),
-            Text('Geri dönüş yok. Hazırsan bas.',
-                style: BiladaText.label(color: Colors.white54, size: 11)),
+            if (insufficient) ...[
+              const SizedBox(height: 6),
+              // Altın yoksa mağazaya yönlendir — orada reklam izleyip altın
+              // kazanılabilir (reklam UI'ı başka ekranda; burası yalnız yönlendirir).
+              ChunkyButton(
+                height: 44,
+                color: AppTheme.cSecondaryContainer,
+                foreground: Colors.white,
+                shadowColor: AppTheme.cSecondaryShadow,
+                onPressed: () => context.go('/store'),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.storefront_rounded, size: 16),
+                    SizedBox(width: 8),
+                    Text('MAĞAZADAN ALTIN KAZAN',
+                        style: TextStyle(fontSize: 13)),
+                  ],
+                ),
+              ),
+            ] else if (canEnter) ...[
+              const SizedBox(height: 4),
+              Text('Geri dönüş yok. Hazırsan bas.',
+                  style: BiladaText.label(color: Colors.white54, size: 10)),
+            ],
           ],
+        ),
+      ),
+    );
+  }
+
+  /// Kompakt bilgi hapı — GİRİŞ bedeli / BAKİYE gösterimi.
+  Widget _statPill({
+    required String caption,
+    required String value,
+    Color valueColor = Colors.white,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(caption,
+              style: BiladaText.label(color: Colors.white54, size: 9)),
+          const SizedBox(width: 5),
+          const GoldCoin(size: 12),
+          const SizedBox(width: 3),
+          Text(value, style: BiladaText.title(color: valueColor, size: 13)),
         ],
       ),
     );

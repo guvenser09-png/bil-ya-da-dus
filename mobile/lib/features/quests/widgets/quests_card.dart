@@ -5,6 +5,7 @@ import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/quests/providers/quests_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 
 /// Ana ekrandaki kompakt "GÜNLÜK GÖREVLER" kartı.
 ///
@@ -184,10 +185,13 @@ class QuestRow extends StatelessWidget {
       );
     }
     // Henüz tamamlanmadı → ödülü hatırlat (motivasyon).
-    return Text(
-      '+${quest.reward} 🪙',
-      textAlign: TextAlign.right,
-      style: BiladaText.label(size: 11),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text('+${quest.reward}', style: BiladaText.label(size: 11)),
+        const SizedBox(width: 3),
+        const GoldCoin(size: 12),
+      ],
     );
   }
 }
@@ -202,7 +206,7 @@ Future<void> claimQuest(BuildContext context, WidgetRef ref, Quest quest) async 
     await ref.read(authProvider.notifier).refreshUser();
     if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${quest.title} tamam! +$reward altın 🪙')),
+      SnackBar(content: Text('${quest.title} tamam! +$reward altın')),
     );
   }
 }

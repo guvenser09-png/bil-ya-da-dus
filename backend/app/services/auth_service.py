@@ -210,6 +210,15 @@ class AuthService:
         user.is_guest = False
         user.auth_provider = "email"
 
+        # GÖRÜNEN AD DÜZELTMESİ: misafir hesapların display_name'i varsayılan
+        # "Oyuncu"dur. Kalıcılaştırmada bu güncellenmiyordu → kayıtlı kullanıcı
+        # lobide/sıralamada "Oyuncu" görünüyor, kendi puanını bulamıyordu
+        # (prod'da 10 kullanıcı etkilendi). Kullanıcı özel bir görünen ad
+        # SEÇMİŞSE (varsayılan değilse) ona dokunma; varsayılansa seçilen
+        # kullanıcı adını görünen ad yap.
+        if not user.display_name or user.display_name == "Oyuncu":
+            user.display_name = username or user.username
+
         await db.flush()
         await db.refresh(user)
         return user

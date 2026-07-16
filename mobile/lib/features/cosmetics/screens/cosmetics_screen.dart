@@ -5,6 +5,7 @@ import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
 /// Kozmetik mağazası: çerçeveler / isim rengi / efektler. Coin ile alınır.
@@ -291,7 +292,7 @@ class _CosmeticCard extends ConsumerWidget {
         onPressed: () async {
           if (!canAfford) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Yeterli altın yok. 🪙')),
+              const SnackBar(content: Text('Yeterli altın yok.')),
             );
             return;
           }
@@ -302,7 +303,7 @@ class _CosmeticCard extends ConsumerWidget {
           children: [
             Text('${cosmetic.priceCoins}', style: const TextStyle(fontSize: 14)),
             const SizedBox(width: 4),
-            const Text('🪙', style: TextStyle(fontSize: 13)),
+            const GoldCoin(size: 13),
           ],
         ),
       );

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:quizroyale/core/network/api_client.dart';
@@ -50,6 +51,26 @@ class AdService {
   bool _isLoading = false;
   bool _isShowing = false;
 
+  // ── GRANT SONUCU SÖZLEŞMESİ ────────────────────────────────────────────
+  // showRewarded [AdRewardStatus.earned] dönse bile backend ödülü REDDETMİŞ
+  // olabilir (ör. günlük cap → 400 "Bu reklam türü için günlük limite
+  // ulaştınız"). Eskiden bu hata sessizce yutuluyor, UI "eklendi!" diyordu ama
+  // bakiye değişmiyordu. Artık her showRewarded çağrısının POST sonucu bu iki
+  // alanda yayınlanır; çağıran taraf earned SONRASI bunlara bakarak GERÇEĞİ
+  // gösterir:
+  //   - [lastGrantError] != null → backend reddetti; mesajı kullanıcıya göster,
+  //     "+eklendi" DEME. (Backend'in Türkçe `detail` mesajı, yoksa genel hata.)
+  //   - [lastGrantError] == null → grant başarılı; [lastGrantedCoins] backend'in
+  //     verdiği coin miktarı (response.reward.coins). POST atlanan yerleşimlerde
+  //     (shield) veya parse edilemezse null kalabilir.
+  // Her showRewarded BAŞINDA ikisi de sıfırlanır (bayat değer taşınmaz).
+
+  /// Son showRewarded çağrısında backend grant'i reddettiyse hata mesajı.
+  String? lastGrantError;
+
+  /// Son başarılı grant'te backend'in verdiği coin miktarı.
+  int? lastGrantedCoins;
+
   /// Reklam gösterime hazır mı? (UI önceden buton durumu/etiketi ayarlayabilir.)
   bool get isReady => _rewardedAd != null;
 
@@ -90,13 +111,21 @@ class AdService {
   ///
   /// Kullanıcı ödülü hak ederse (onUserEarnedReward) backend'e
   /// `POST /api/ads/reward {placement}` ile bildirir ve [AdRewardStatus.earned]
-  /// döner. Reklam yoksa/başarısızsa [AdRewardStatus.unavailable] döner
+  /// döner. POST'un sonucu [lastGrantError]/[lastGrantedCoins] alanlarında
+  /// yayınlanır (bkz. GRANT SONUCU SÖZLEŞMESİ) — earned dönmesi grant'in
+  /// başarılı olduğu anlamına GELMEZ; çağıran bu alanları kontrol etmeli.
+  /// Reklam yoksa/başarısızsa [AdRewardStatus.unavailable] döner
   /// (çağıran taraf kullanıcıyı bilgilendirebilir). Her durumda bir sonraki
   /// reklam yeniden yüklenir.
   ///
   /// [placement]: backend ödül türü — "gold" (+altın) veya "shield" (kalkan
   /// kredisi). Bakınız BACKEND SÖZLEŞMESİ.
   Future<AdRewardStatus> showRewarded({required String placement}) async {
+    // Grant sonucu alanlarını sıfırla — önceki çağrının değeri taşınmasın
+    // (bkz. GRANT SONUCU SÖZLEŞMESİ).
+    lastGrantError = null;
+    lastGrantedCoins = null;
+
     if (kIsWeb) return AdRewardStatus.unavailable;
 
     final ad = _rewardedAd;
@@ -146,8 +175,11 @@ class AdService {
 
     final status = await completer.future;
 
-    // Ödül hak edildiyse backend'e bildir. Ağ hatası olursa yut — kullanıcı
-    // reklamı izledi; çağıran taraf bakiyeyi/prepare-shield'ı zaten tazeleyecek.
+    // Ödül hak edildiyse backend'e bildir. POST sonucu ARTIK YUTULMAZ:
+    // başarı/başarısızlık [lastGrantedCoins]/[lastGrantError] üzerinden yayınlanır
+    // (bkz. GRANT SONUCU SÖZLEŞMESİ) — çağıran taraf kullanıcıya gerçeği gösterir.
+    // Eskiden `catch (_) {}` hatayı yutuyordu; kullanıcı reklamı izliyor, backend
+    // (ör. günlük cap → 400) reddediyor, UI yine de "+altın eklendi!" diyordu.
     //
     // ⚠️ "shield" yerleşimini BURADAN bildirme: backend'de kalkan reklamı
     // /api/ads/reward'da DEĞİL, prepare-shield(source:"ad") içinden
@@ -164,11 +196,23 @@ class AdService {
     // retry) çift-grant oluyordu ("ilk sefer 2 katı" bug'ının kök nedeni).
     if (status == AdRewardStatus.earned && placement != 'shield') {
       try {
-        await ApiClient.instance.post(
+        final res = await ApiClient.instance.post(
           '/api/ads/reward',
           body: {'placement': placement, 'nonce': _newNonce()},
         );
-      } catch (_) {}
+        // Başarılı grant: backend'in verdiği miktarı yayınla
+        // (response: {"granted": true, "reward": {"coins": N}, ...}).
+        final reward = res['reward'];
+        if (reward is Map && reward['coins'] is int) {
+          lastGrantedCoins = reward['coins'] as int;
+        }
+      } on DioException catch (e) {
+        // Backend reddetti (günlük cap, geçersiz placement, ağ hatası...).
+        // Türkçe `detail` mesajını (varsa) çağırana taşı — UI gerçeği göstersin.
+        lastGrantError = ApiClient.friendlyError(e);
+      } catch (_) {
+        lastGrantError = 'Ödül eklenemedi. Lütfen tekrar deneyin.';
+      }
     }
     return status;
   }

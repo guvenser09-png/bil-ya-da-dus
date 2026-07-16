@@ -5,7 +5,7 @@ Bu dosya, kararların BİREBİR uygulandığını sabitleyen "guard" testlerdir:
   - Maç ödülü 15/8/2 (2. kıtlaştırma turu); günlük cap 500 KALIR.
   - Şampiyon bahsi ödülü 15 (kazanan ödülüyle hizalı).
   - Sezon tier eşiği 1000 (puan-başı altın ~%80 düşer).
-  - Ödüllü reklam "gold" yerleşimi +100 (mağaza gösterimiyle BİREBİR aynı).
+  - Ödüllü reklam "gold" yerleşimi +200 (mağaza gösterimiyle BİREBİR aynı).
   - Zor Mod (turnuva) girişi 100.
 """
 
@@ -86,19 +86,19 @@ def test_season_points_per_tier_is_1000():
     assert SeasonService.calculate_tier(5000) == 5
 
 
-def test_ads_gold_placement_gives_100():
-    """Ödüllü reklam 'gold' yerleşimi +100 altın; günlük cap deseni korunur.
+def test_ads_gold_placement_gives_200():
+    """Ödüllü reklam 'gold' yerleşimi +200 altın; günlük cap 5 (5×200=1000/gün).
 
     TUTARLILIK: bu değer, mağazada GÖSTERİLEN miktarla (store_screen.dart
-    "+100 altın") BİREBİR aynı olmak zorunda — eski 200↔100 tutarsızlığı ve
+    "+200 altın") BİREBİR aynı olmak zorunda — eski 200↔100 tutarsızlığı ve
     "ilk sefer 2 katı" bug'ı bu birebirlik + nonce idempotency ile kapandı.
     """
     from app.services.ads_service import ADS_DAILY_LIMIT, PLACEMENTS
 
     assert "gold" in PLACEMENTS
-    assert PLACEMENTS["gold"]["reward"] == {"coins": 100}
-    # Kötüye kullanım sınırı (placement başına günlük cap) tanımlı.
-    assert PLACEMENTS["gold"]["daily_cap"] >= 1
+    assert PLACEMENTS["gold"]["reward"] == {"coins": 200}
+    # Kötüye kullanım sınırı: placement cap 5 → günde en fazla 5×200=1000 altın.
+    assert PLACEMENTS["gold"]["daily_cap"] == 5
     # Genel günlük toplam limit hâlâ mevcut (mevcut cap deseni korundu).
     assert ADS_DAILY_LIMIT == 5
 
@@ -147,21 +147,21 @@ async def test_daily_cap_still_500_on_match_reward(db_session):
 
 @pytest.mark.asyncio
 async def test_ad_gold_reward_consistent_and_idempotent(db_session):
-    """GÖREV 1 regresyonu — ödüllü reklam 'gold' TUTARLI +100 verir, çift-grant YOK.
+    """GÖREV 1 regresyonu — ödüllü reklam 'gold' TUTARLI +200 verir, çift-grant YOK.
 
     "İlk seferinde 200 verdi sonra 100'e düştü" bug'ının kök nedeni: gold POST'u
     nonce GÖNDERMİYORDU → backend idempotency guard'ı (Redis SET NX) atlanıyor,
     tekrar giden istek (auth-interceptor 401→retry / ağ tekrarı) ödülü İKİNCİ kez
     veriyordu. Artık istemci her izleme için nonce üretir. Bu test doğrular:
-      - Her başarılı grant TAM +100 (ilk-sefer 2x YOK).
+      - Her başarılı grant TAM +200 (ilk-sefer 2x YOK).
       - Aynı nonce ikinci kez → ValueError, altın ARTMAZ (idempotency).
-      - Farklı nonce → normal +100 daha.
+      - Farklı nonce → normal +200 daha.
     """
     import uuid
 
     from app.services.ads_service import PLACEMENTS, AdsService
 
-    assert PLACEMENTS["gold"]["reward"]["coins"] == 100  # gösterimle birebir
+    assert PLACEMENTS["gold"]["reward"]["coins"] == 200  # gösterimle birebir
 
     u = User(
         id=uuid.uuid4(),
@@ -174,17 +174,17 @@ async def test_ad_gold_reward_consistent_and_idempotent(db_session):
     await db_session.flush()
     uid = str(u.id)
 
-    # 1) İlk izleme → tam +100 (2 KATI DEĞİL).
+    # 1) İlk izleme → tam +200 (2 KATI DEĞİL).
     res1 = await AdsService.grant_reward(db_session, uid, "gold", nonce="nonce-1")
-    assert res1["reward"]["coins"] == 100
-    assert u.coins == 100
+    assert res1["reward"]["coins"] == 200
+    assert u.coins == 200
 
     # 2) AYNI nonce tekrar → idempotency: reddedilir, altın ARTMAZ.
     with pytest.raises(ValueError):
         await AdsService.grant_reward(db_session, uid, "gold", nonce="nonce-1")
-    assert u.coins == 100
-
-    # 3) FARKLI nonce → normal +100 daha (yine tam 100, ilk-sefer bonusu yok).
-    res3 = await AdsService.grant_reward(db_session, uid, "gold", nonce="nonce-2")
-    assert res3["reward"]["coins"] == 100
     assert u.coins == 200
+
+    # 3) FARKLI nonce → normal +200 daha (yine tam 200, ilk-sefer bonusu yok).
+    res3 = await AdsService.grant_reward(db_session, uid, "gold", nonce="nonce-2")
+    assert res3["reward"]["coins"] == 200
+    assert u.coins == 400

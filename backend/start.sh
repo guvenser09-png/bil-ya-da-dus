@@ -10,4 +10,10 @@ echo "→ Alembic migration uygulanıyor..."
 uv run alembic upgrade head
 
 echo "→ Uvicorn başlatılıyor (port $PORT)..."
-exec uv run uvicorn app.main:app --host 0.0.0.0 --port "$PORT" --no-access-log
+# --proxy-headers + --forwarded-allow-ips: Railway edge proxy'sinin arkasındayız;
+# bunlar OLMADAN request.client.host TÜM kullanıcılar için proxy'nin IP'si olur
+# → rate-limit middleware'i bütün oyuncuları TEK dakikalık kovada sayar ve
+# trafik arttıkça herkese rastgele 429 dağıtır ("turnuvaya girilemedi",
+# reklam ödülü kaybı vb. aralıklı hatalar). X-Forwarded-For ile gerçek IP okunur.
+exec uv run uvicorn app.main:app --host 0.0.0.0 --port "$PORT" --no-access-log \
+  --proxy-headers --forwarded-allow-ips "*"

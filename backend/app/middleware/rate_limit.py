@@ -38,8 +38,17 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if path in self.EXCLUDED_PATHS or path.startswith("/ws"):
             return await call_next(request)
 
-        # Get client IP
-        client_ip = request.client.host if request.client else "unknown"
+        # Get client IP — proxy arkasında (Railway) GERÇEK istemci IP'si
+        # X-Forwarded-For'un İLK girdisidir. request.client.host'a tek başına
+        # güvenilmez: uvicorn --proxy-headers olmadan (ya da hatalı yapılandırmada)
+        # o değer HERKES için proxy IP'si olur → tüm oyuncular tek dakikalık
+        # kovayı paylaşır ve rastgele 429'lar dağılır. Header yoksa (yerel
+        # geliştirme) request.client.host'a düşülür.
+        forwarded = request.headers.get("x-forwarded-for")
+        if forwarded:
+            client_ip = forwarded.split(",")[0].strip() or "unknown"
+        else:
+            client_ip = request.client.host if request.client else "unknown"
 
         # Determine rate limit
         if path in self.AUTH_PATHS:

@@ -14,6 +14,7 @@ import 'package:quizroyale/features/result/widgets/fireworks_overlay.dart';
 import 'package:quizroyale/features/store/providers/store_provider.dart';
 import 'package:quizroyale/shared/widgets/adaptive_stage.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
 class ResultScreen extends ConsumerStatefulWidget {
@@ -228,7 +229,8 @@ class _ResultBody extends ConsumerWidget {
     final score = my['score'] as int? ?? 0;
     final correct = my['correct_answers'] as int? ?? 0;
     final total = my['total_rounds'] as int? ?? 5;
-    final xp = my['xp_gained'] as int? ?? 0;
+    // NOT: XP oyunculara GÖSTERİLMEZ (kullanıcıya görünen bir seviye sistemi
+    // yok) — şeritte kafa karıştırıyordu, kaldırıldı. Backend XP'si durur.
     final finalRound = my['final_round'] as int? ?? 0;
     final rank = my['rank'] as int? ?? 0;
     final coinsEarned = my['coins_earned'] as int? ?? 0;
@@ -296,7 +298,6 @@ class _ResultBody extends ConsumerWidget {
                             ),
                             ('PUAN', '+$score', AppTheme.cTertiary),
                             ('DOĞRU', '$correct/$total', AppTheme.gold),
-                            ('XP', '+$xp', AppTheme.cSecondary),
                           ]),
                           // 🏅 MİSAFİR DAVETİ — bilinçli olarak PUAN şeridinin
                           // hemen ALTINDA: oyuncu skorunu yeni okudu, kaybı tam
@@ -325,7 +326,7 @@ class _ResultBody extends ConsumerWidget {
                             // Normal maç ödülleri (Zor Mod'da bunlar VERİLMEZ).
                             // Coin — yalnızca pozitifse (0 ise günlük limit dolmuş olabilir).
                             if (coinsEarned > 0) ...[
-                              _MiniStrip(emoji: '🪙', text: '+$coinsEarned Altın kazandın!', color: AppTheme.gold),
+                              _MiniStrip(icon: const GoldCoin(size: 15), text: '+$coinsEarned Altın kazandın!', color: AppTheme.gold),
                               const SizedBox(height: 8),
                             ],
                             // 👻 Hayalet modu — elenmişken bilinen doğrular altın oldu.
@@ -867,8 +868,10 @@ class _GuestClaimInvite extends ConsumerWidget {
 
 /// Tek satırlık kompakt bilgi şeridi (coin/hayalet/bahis/kalkan).
 class _MiniStrip extends StatelessWidget {
-  const _MiniStrip({required this.emoji, required this.text, required this.color});
-  final String emoji;
+  const _MiniStrip({this.emoji, this.icon, required this.text, required this.color})
+      : assert(emoji != null || icon != null, 'emoji veya icon verilmeli');
+  final String? emoji;
+  final Widget? icon; // emoji yerine widget (örn. GoldCoin) gösterilebilir
   final String text;
   final Color color;
 
@@ -879,7 +882,7 @@ class _MiniStrip extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 15)),
+          icon ?? Text(emoji!, style: const TextStyle(fontSize: 15)),
           const SizedBox(width: 8),
           Flexible(
             child: Text(

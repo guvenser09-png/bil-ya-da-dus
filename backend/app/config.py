@@ -44,8 +44,10 @@ class Settings(BaseSettings):
     JWT_ACCESS_EXPIRATION_MINUTES: int = 30  # 30 minutes
     JWT_REFRESH_EXPIRATION_DAYS: int = 30  # 30 days
 
-    # Rate Limiting
-    RATE_LIMIT_PER_MINUTE: int = 60  # general API
+    # Rate Limiting — limit GERÇEK istemci IP'si başınadır (X-Forwarded-For;
+    # bkz. middleware/rate_limit.py + start.sh --proxy-headers). 120/dk tek bir
+    # oyuncunun normal kullanımı için ferah, kötüye kullanım için hâlâ dardır.
+    RATE_LIMIT_PER_MINUTE: int = 120  # general API (gerçek IP başına)
     RATE_LIMIT_AUTH_PER_MINUTE: int = 10  # auth endpoints (login/register)
 
     # Anthropic AI

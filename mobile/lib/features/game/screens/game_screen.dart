@@ -21,6 +21,7 @@ import 'package:quizroyale/features/cosmetics/providers/cosmetics_provider.dart'
 import 'package:quizroyale/features/result/providers/result_provider.dart';
 import 'package:quizroyale/shared/widgets/adaptive_stage.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 import 'package:quizroyale/shared/widgets/player_avatar.dart';
 
 // ---------------------------------------------------------------------------
@@ -1762,7 +1763,10 @@ class _JokerButton extends StatelessWidget {
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
                 SizedBox(width: 8),
-                Text('(50 🪙)', style: TextStyle(fontSize: 14)),
+                Text('(50', style: TextStyle(fontSize: 14)),
+                SizedBox(width: 3),
+                GoldCoin(size: 13),
+                Text(')', style: TextStyle(fontSize: 14)),
               ],
             ),
     );

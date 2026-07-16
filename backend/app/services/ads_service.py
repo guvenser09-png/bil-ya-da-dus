@@ -32,19 +32,20 @@ ADS_DAILY_LIMIT = 5
 
 # Yerleşim (placement) tanımları: ödül + placement başına günlük cap.
 # reward: {"coins": int}. SADECE coin (pay-to-win YOK).
-# "gold": ekonomi kıtlaştırmasının telafisi — oyuncu reklam izleyerek +100 altın
+# "gold": ekonomi kıtlaştırmasının telafisi — oyuncu reklam izleyerek +200 altın
 # alır (kalkan/karakter için ana kazanç yolu). Günlük cap ile kötüye kullanım
-# engellenir (mevcut cap deseni korunur).
+# engellenir: cap 5 × 200 = günde en fazla 1000 altın reklamdan gelir.
 #
 # ⚠️ TUTARLILIK SÖZLEŞMESİ: buradaki "gold" coin miktarı, mağazada GÖSTERİLEN
-# miktarla (store_screen.dart "+100 altın") BİREBİR aynı olmak ZORUNDA. Bir
+# miktarla (store_screen.dart "+200 altın") BİREBİR aynı olmak ZORUNDA. Bir
 # tarafı değiştirirsen diğerini de değiştir; aksi halde kullanıcı gösterilenden
 # farklı altın alır (eski 200↔100 tutarsızlığı buradan doğmuştu).
 PLACEMENTS: dict[str, dict] = {
     "daily_coins": {"reward": {"coins": 50}, "daily_cap": 3},
     "double_match": {"reward": {"coins": 30}, "daily_cap": 3},
     "shop_bonus": {"reward": {"coins": 40}, "daily_cap": 2},
-    "gold": {"reward": {"coins": 100}, "daily_cap": 3},
+    # 200 altın × cap 5 = 1000 altın/gün üst sınır (ADS_DAILY_LIMIT ile hizalı).
+    "gold": {"reward": {"coins": 200}, "daily_cap": 5},
 }
 
 # --- Kalkan reklamı (ödüllü reklamla "bedava kalkan kredisi") ---

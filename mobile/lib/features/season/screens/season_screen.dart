@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/season/providers/season_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 
 /// Sezon Ödülleri ekranı — TEK ücretsiz ödül hattı.
 ///
@@ -253,7 +254,11 @@ class _TierRow extends ConsumerWidget {
             Expanded(
               child: Row(
                 children: [
-                  Text(reward.icon, style: const TextStyle(fontSize: 28)),
+                  // Altın ödülde emoji yerine vektörel GoldCoin (iOS'ta 🪙 gümüş görünür).
+                  if (reward.type == 'cosmetic')
+                    Text(reward.icon, style: const TextStyle(fontSize: 28))
+                  else
+                    const GoldCoin(size: 26),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Column(

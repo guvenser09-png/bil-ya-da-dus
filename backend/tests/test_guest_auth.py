@@ -120,6 +120,28 @@ class TestClaimAccount:
         )
         assert response.status_code == 200
         assert response.json()["username"] == "yeniisim"
+        # GÖRÜNEN AD DÜZELTMESİ (regresyon): misafirin varsayılan display_name'i
+        # "Oyuncu"dur; claim'de seçilen kullanıcı adı görünen ada da yansımalı.
+        # Aksi halde kayıtlı kullanıcı lobide/sıralamada "Oyuncu" görünüyordu
+        # (prod'da 10 kullanıcı etkilendi).
+        assert response.json()["display_name"] == "yeniisim"
+
+    @pytest.mark.asyncio
+    async def test_claim_without_username_fixes_display_name(
+        self, client: AsyncClient
+    ):
+        """Username verilmeden claim'de bile display_name 'Oyuncu' KALMAMALI —
+        mevcut (otomatik) kullanıcı adına düşer."""
+        data = await guest_login(client)
+        response = await client.post(
+            "/api/auth/claim",
+            headers={"Authorization": f"Bearer {data['access_token']}"},
+            json={"email": "noname@example.com", "password": "test123abc"},
+        )
+        assert response.status_code == 200
+        body = response.json()
+        assert body["display_name"] != "Oyuncu"
+        assert body["display_name"] == body["username"]
 
     @pytest.mark.asyncio
     async def test_claim_email_conflict(self, client: AsyncClient):

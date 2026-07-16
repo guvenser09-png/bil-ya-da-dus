@@ -6,6 +6,7 @@ import 'package:quizroyale/core/services/haptic_service.dart';
 import 'package:quizroyale/core/theme/app_theme.dart';
 import 'package:quizroyale/features/auth/providers/auth_provider.dart';
 import 'package:quizroyale/shared/widgets/bilada_ui.dart';
+import 'package:quizroyale/shared/widgets/gold_coin.dart';
 
 /// Maç-öncesi kalkan seçim sonucu — lobi bunu okuyup üst rozeti (kalkan
 /// hazır mı?) ve oturum-içi "bir daha sorma" tercihini günceller.
@@ -175,7 +176,9 @@ class _ShieldPromptSheetState extends ConsumerState<_ShieldPromptSheet> {
                 : const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('🪙 100 Altın', style: TextStyle(fontSize: 17)),
+                      GoldCoin(size: 18),
+                      SizedBox(width: 8),
+                      Text('100 Altın', style: TextStyle(fontSize: 17)),
                     ],
                   ),
           ),
