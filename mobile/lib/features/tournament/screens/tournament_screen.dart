@@ -229,11 +229,9 @@ class _Content extends StatelessWidget {
                   breathe: breathe,
                 ),
                 const SizedBox(height: 6),
-                const Spacer(flex: 2),
-                // Sezon puanı çarpanını hatırlatan ince not — Sıralama'ya yönlendirir.
-                const _SeasonHint(),
-                const SizedBox(height: 6),
-                const Spacer(flex: 2),
+                // (Kullanıcı isteği: ödül havuzu ile giriş kartı arasındaki
+                // "sezon puanı" notu kaldırıldı — bu ekranda o alana gerek yok.)
+                const Spacer(flex: 3),
                 _EntryCard(state: state, breathe: breathe, shimmer: shimmer),
               ],
             ),
@@ -702,36 +700,7 @@ class _PrizePool extends StatelessWidget {
 }
 
 // ════════════════════════════════════════════════════════════════════════
-//  3) SEZON İPUCU — kullanıcıyı Sıralama'ya yönlendiren ince not
-// ════════════════════════════════════════════════════════════════════════
-
-/// Aylık lig ödülleri artık yalnızca "Sıralama → SEZON" sekmesinde yaşıyor.
-/// Burada sadece çarpanı hatırlatan tek satırlık ince bir yönlendirme var.
-class _SeasonHint extends StatelessWidget {
-  const _SeasonHint();
-
-  @override
-  Widget build(BuildContext context) {
-    // Tek sayfa bütçesi için kompakt: ikon 13, metin 10.
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(Icons.trending_up_rounded, color: AppTheme.gold, size: 13),
-        const SizedBox(width: 6),
-        Flexible(
-          child: Text(
-            "Zor Mod'da sezon puanın 3× işler — Sıralama'da yüksel.",
-            textAlign: TextAlign.center,
-            style: BiladaText.label(color: Colors.white54, size: 10),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ════════════════════════════════════════════════════════════════════════
-//  4) GİRİŞ KARTI — "CESARETİN VAR MI?" meydan okuması
+//  3) GİRİŞ KARTI — "CESARETİN VAR MI?" meydan okuması
 // ════════════════════════════════════════════════════════════════════════
 
 /// Ateş/altın gradyan çerçeveli, nefes alan meydan okuma kartı.
