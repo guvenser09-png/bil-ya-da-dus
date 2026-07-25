@@ -1,21 +1,29 @@
 plugins {
     id "com.android.application"
-    id "kotlin-android"
+    id "org.jetbrains.kotlin.android"
     id "dev.flutter.flutter-gradle-plugin"
-    id "com.google.gms.google-services"
+}
+
+// Yukleme anahtari (Play upload keystore): android/key.properties varsa
+// release imzasi ondan okunur; yoksa DEBUG imzasina duser (yerel/emulator
+// derlemeleri calissin diye). key.properties + keystore REPODA TUTULMAZ.
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
 }
 
 android {
-    namespace "com.quizroyale.app"
-    compileSdk 34
+    namespace "com.bilyadadus.app"
+    compileSdk 36
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 
     sourceSets {
@@ -23,17 +31,32 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.quizroyale.app"
-        minSdk 21
-        targetSdk 34
+        // Google Play kalıcı kimliği — İLK yüklemeden sonra ASLA değişemez.
+        applicationId "com.bilyadadus.app"
+        minSdkVersion flutter.minSdkVersion
+        targetSdk 35
         versionCode flutter.versionCode
         versionName flutter.versionName
         multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            if (keystorePropertiesFile.exists()) {
+                keyAlias keystoreProperties["keyAlias"]
+                keyPassword keystoreProperties["keyPassword"]
+                storeFile file(keystoreProperties["storeFile"])
+                storePassword keystoreProperties["storePassword"]
+            }
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            // key.properties varsa gercek yukleme imzasi; yoksa debug (yerel).
+            signingConfig keystorePropertiesFile.exists()
+                ? signingConfigs.release
+                : signingConfigs.debug
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
@@ -50,9 +73,16 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation platform("com.google.firebase:firebase-bom:32.7.0")
     implementation "com.google.firebase:firebase-messaging"
     implementation "com.google.android.gms:play-services-ads:22.6.0"
     implementation "androidx.multidex:multidex:2.0.1"
+}
+
+// google-services.json varsa Firebase (FCM) plugin'ini uygula. Dosya yokken
+// build KIRILMASIN: push init Dart tarafinda zaten korumali (Firebase yoksa
+// sessizce atlanir). Firebase konsolundan Android uygulamasi eklenince
+// app/google-services.json koy — plugin otomatik devreye girer.
+if (file("google-services.json").exists()) {
+    apply plugin: "com.google.gms.google-services"
 }
