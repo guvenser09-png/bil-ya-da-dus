@@ -13,7 +13,7 @@ reklamı kaç tıklama getirdi" sorusu tahmine değil sayıya dayanır.
 
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from app.redis_client import get_redis
@@ -31,6 +31,22 @@ def _today() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 
+def _platform(request: Request) -> str:
+    """Ziyaretçinin cihazı (ios/android/other) — user-agent'tan kabaca.
+
+    NEDEN: Reklam cihaz ayrımı yapmadığında gelen trafiğin büyük kısmı Android
+    olabiliyor; sayfada yalnızca App Store butonu olduğu için o kullanıcılar
+    dönüşmeden çıkıyor. Bu sayaç "bütçenin ne kadarı indiremeyecek kişilere
+    gidiyor" sorusunu ölçülebilir kılar.
+    """
+    ua = (request.headers.get("user-agent") or "").lower()
+    if "android" in ua:
+        return "android"
+    if "iphone" in ua or "ipad" in ua or "ipod" in ua:
+        return "ios"
+    return "other"
+
+
 async def _count(kind: str, src: str) -> None:
     """Ziyaret/tıklama sayacı (best-effort; Redis yoksa sayfa yine çalışır)."""
     try:
@@ -44,13 +60,15 @@ async def _count(kind: str, src: str) -> None:
 
 @router.get("/indir", response_class=HTMLResponse, include_in_schema=False)
 @router.get("/download", response_class=HTMLResponse, include_in_schema=False)
-async def landing(src: str = Query(default="direct")) -> HTMLResponse:
+async def landing(request: Request, src: str = Query(default="direct")) -> HTMLResponse:
     """Reklam/bio hedefi: markalı indirme sayfası.
 
     Otomatik yönlendirme YAPMAZ — reklam incelemelerinde "gösterilen sayfa ile
     gidilen yer farklı" şüphesi doğurmasın diye kullanıcı butona basar.
     """
     await _count("view", src)
+    plat = _platform(request)
+    await _count(f"view_{plat}", src)
     play_block = (
         f'<a class="btn btn-ghost" href="/indir/go?store=play&src={src}">Google Play</a>'
         if PLAY_STORE_URL
