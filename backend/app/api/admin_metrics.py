@@ -74,8 +74,10 @@ async def get_landing_stats(
         for i in range(days):
             d = (today - timedelta(days=i)).strftime("%Y-%m-%d")
             # Kaynaklar bilinmediğinden desenle tara (kayıt sayısı düşük).
-            views: dict[str, int] = {}
-            clicks: dict[str, int] = {}
+            # HATA DÜZELTMESİ: eskiden "view" dışındaki HER tür (view_ios,
+            # view_android dahil) tıklama sayılıyordu → tıklama sayısı şişiyordu.
+            # Artık tür adı NE İSE o anahtarla raporlanır.
+            buckets: dict[str, dict[str, int]] = {}
             async for k in redis.scan_iter(match=f"landing:*:{d}:*", count=200):
                 key_str = k.decode() if isinstance(k, bytes) else str(k)
                 parts = key_str.split(":")
@@ -83,11 +85,10 @@ async def get_landing_stats(
                     continue
                 kind, src = parts[1], parts[3]
                 val = int(await redis.get(key_str) or 0)
-                (views if kind == "view" else clicks)[src] = (
-                    (views if kind == "view" else clicks).get(src, 0) + val
-                )
-            if views or clicks:
-                out.append({"date": d, "views": views, "clicks": clicks})
+                buckets.setdefault(kind, {})
+                buckets[kind][src] = buckets[kind].get(src, 0) + val
+            if buckets:
+                out.append({"date": d, **buckets})
     except Exception as exc:  # Redis yoksa boş dön — panel çökmesin
         return {"error": str(exc), "days": []}
     return {"days": out}
