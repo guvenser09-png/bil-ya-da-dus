@@ -14,6 +14,7 @@ reklamı kaç tıklama getirdi" sorusu tahmine değil sayıya dayanır.
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Query, Request
+from fastapi import Response
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from app.redis_client import get_redis
@@ -115,7 +116,8 @@ h1 span{{color:#ffc107}}
   <div class="feat">🏆 Zor Mod'da ödül havuzu: 1.'ye 700 altın</div>
   <div class="feat">🆓 Ücretsiz — uygulama içi satın alma yok</div>
  </div>
- <a class="btn btn-main" href="/indir/go?store=ios&src={src}">App Store'dan İndir</a>
+ <a class="btn btn-main" id="ios" href="{APP_STORE_URL}"
+    onclick="try{{navigator.sendBeacon('/indir/track?store=ios&src={src}')}}catch(e){{}}">App Store'dan İndir</a>
  {play_block}
  <div class="free">Ücretsiz • Misafir olarak anında oyna</div>
 </div></body></html>"""
@@ -130,3 +132,19 @@ async def landing_go(
     await _count(f"click_{'play' if store == 'play' else 'ios'}", src)
     target = PLAY_STORE_URL if (store == "play" and PLAY_STORE_URL) else APP_STORE_URL
     return RedirectResponse(url=target, status_code=302)
+
+
+@router.get("/indir/track", include_in_schema=False)
+@router.post("/indir/track", include_in_schema=False)
+async def landing_track(
+    store: str = Query(default="ios"), src: str = Query(default="direct")
+) -> Response:
+    """Mağaza butonuna basıldığını say (yönlendirme YOK, 204 döner).
+
+    NEDEN: Buton artık doğrudan apps.apple.com'a gidiyor — Instagram/Facebook
+    IN-APP TARAYICISI kendi alan adımızdaki 302 zincirini bazen engelliyor ve
+    kullanıcı mağazaya hiç ulaşamıyordu (137 ziyaret / 0 tıklama tablosu).
+    Sayım artık sendBeacon ile ayrı yapılır, kullanıcının yolunu kesmez.
+    """
+    await _count(f"click_{'play' if store == 'play' else 'ios'}", src)
+    return Response(status_code=204)
