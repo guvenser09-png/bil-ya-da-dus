@@ -120,7 +120,23 @@ h1 span{{color:#ffc107}}
     onclick="try{{navigator.sendBeacon('/indir/track?store=ios&src={src}')}}catch(e){{}}">App Store'dan İndir</a>
  {play_block}
  <div class="free">Ücretsiz • Misafir olarak anında oyna</div>
-</div></body></html>"""
+</div>
+<script>
+// GERÇEK ziyaretçi ölçümü: sayfa görünür durumda 1.5 sn kalırsa say.
+// Instagram reklam ön-yüklemesi (prefetch) sayfayı arka planda çeker; bu koşul
+// onu saymaz → "kaç kişi GERÇEKTEN geldi" sorusunun dürüst cevabı.
+(function(){{
+  var sent=false;
+  function ping(){{
+    if(sent||document.visibilityState!=='visible')return;
+    sent=true;
+    try{{navigator.sendBeacon('/indir/track?kind=real_view&src={src}')}}catch(e){{}}
+  }}
+  setTimeout(ping,1500);
+  document.addEventListener('visibilitychange',function(){{setTimeout(ping,1500)}});
+}})();
+</script>
+</body></html>"""
     return HTMLResponse(content=html)
 
 
@@ -137,7 +153,9 @@ async def landing_go(
 @router.get("/indir/track", include_in_schema=False)
 @router.post("/indir/track", include_in_schema=False)
 async def landing_track(
-    store: str = Query(default="ios"), src: str = Query(default="direct")
+    store: str = Query(default="ios"),
+    src: str = Query(default="direct"),
+    kind: str = Query(default=""),
 ) -> Response:
     """Mağaza butonuna basıldığını say (yönlendirme YOK, 204 döner).
 
@@ -146,5 +164,8 @@ async def landing_track(
     kullanıcı mağazaya hiç ulaşamıyordu (137 ziyaret / 0 tıklama tablosu).
     Sayım artık sendBeacon ile ayrı yapılır, kullanıcının yolunu kesmez.
     """
-    await _count(f"click_{'play' if store == 'play' else 'ios'}", src)
+    if kind == "real_view":
+        await _count("real_view", src)
+    else:
+        await _count(f"click_{'play' if store == 'play' else 'ios'}", src)
     return Response(status_code=204)
