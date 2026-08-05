@@ -169,3 +169,65 @@ async def landing_track(
     else:
         await _count(f"click_{'play' if store == 'play' else 'ios'}", src)
     return Response(status_code=204)
+
+
+# --- Reklam için ANINDA yönlendirme ------------------------------------------
+# /indir markalı bir sayfa gösterir (bio linki için iyi). Reklamda ise araya
+# sayfa girmesi dönüşümü öldürüyordu (65 iOS ziyaret → 1 tıklama). Bu uç,
+# kullanıcıyı hiç oyalamadan mağazaya atar — diğer oyun reklamlarındaki davranış.
+#
+# NEDEN 302 DEĞİL DE JS/meta-refresh: Instagram/Facebook IN-APP tarayıcısı kendi
+# alan adımızdan apps.apple.com'a giden sunucu yönlendirmesini engelleyebiliyor.
+# Tarayıcı içinde çalışan window.location.replace + <meta refresh> ikilisi bu
+# ortamlarda güvenilir; üstüne görünür bir yedek buton bırakılır ki hiçbir
+# senaryoda kullanıcı boş ekranda kalmasın.
+_REDIRECT_HTML = """<!doctype html><html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bil ya da Düş</title>
+<meta http-equiv="refresh" content="0;url={target}">
+<style>
+*{{margin:0;padding:0;box-sizing:border-box}}
+body{{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+ background:radial-gradient(120% 80% at 50% 0%,#1c2450 0%,#0e1230 55%,#090b20 100%);
+ color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}}
+.box{{text-align:center}}
+.sp{{width:44px;height:44px;margin:0 auto 20px;border:4px solid rgba(255,193,7,.25);
+ border-top-color:#ffc107;border-radius:50%;animation:r .8s linear infinite}}
+@keyframes r{{to{{transform:rotate(360deg)}}}}
+h1{{font-size:22px;font-weight:900;letter-spacing:.3px}} h1 span{{color:#ffc107}}
+p{{margin-top:10px;font-size:15px;color:rgba(255,255,255,.6)}}
+a{{display:inline-block;margin-top:22px;padding:14px 26px;border-radius:14px;
+ background:linear-gradient(135deg,#ffd54f,#ff8f00);color:#12132b;font-weight:900;
+ font-size:16px;text-decoration:none}}
+</style></head><body><div class="box">
+<div class="sp"></div>
+<h1>BİL YA DA <span>DÜŞ</span></h1>
+<p>App Store'a yönlendiriliyorsun…</p>
+<a href="{target}">Açılmadıysa buraya bas</a>
+</div>
+<script>location.replace("{target}");</script>
+</body></html>"""
+
+
+@router.get("/app", response_class=HTMLResponse, include_in_schema=False)
+async def app_redirect(
+    request: Request, src: str = Query(default="direct")
+) -> HTMLResponse:
+    """Reklam hedefi: kullanıcıyı ANINDA mağazaya gönderir.
+
+    Android ziyaretçi (Play sürümü henüz yokken) mağazada bulamayacağı için
+    markalı /indir sayfasına düşer — orada "Android çok yakında" mesajı var.
+    """
+    plat = _platform(request)
+    await _count("view", src)
+    await _count(f"view_{plat}", src)
+
+    if plat == "android" and not PLAY_STORE_URL:
+        return HTMLResponse(
+            content=f'<meta http-equiv="refresh" content="0;url=/indir?src={src}">',
+            status_code=200,
+        )
+
+    target = PLAY_STORE_URL if (plat == "android" and PLAY_STORE_URL) else APP_STORE_URL
+    await _count(f"click_{'play' if (plat == 'android' and PLAY_STORE_URL) else 'ios'}", src)
+    return HTMLResponse(content=_REDIRECT_HTML.format(target=target))
