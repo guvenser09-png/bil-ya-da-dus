@@ -92,9 +92,9 @@ body{{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',Segoe UI,Rob
 .icon{{width:104px;height:104px;border-radius:26px;box-shadow:0 18px 50px rgba(255,150,20,.35);margin:0 auto 22px;display:block}}
 h1{{font-size:34px;font-weight:900;letter-spacing:-.5px;line-height:1.15}}
 h1 span{{color:#ffc107}}
-.tag{{margin-top:10px;font-size:17px;font-weight:700;color:rgba(255,255,255,.75)}}
+.tag{{margin:12px 0 26px;font-size:17px;font-weight:700;line-height:1.5;color:rgba(255,255,255,.8)}}
 .tag b{{color:#ff5252}}
-.feats{{margin:26px 0 30px;display:flex;flex-direction:column;gap:10px;text-align:left}}
+.feats{{margin:30px 0 0;display:flex;flex-direction:column;gap:10px;text-align:left}}
 .feat{{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);border-radius:16px;
  padding:14px 16px;font-size:15px;font-weight:600;color:rgba(255,255,255,.9)}}
 .btn{{display:block;padding:18px 20px;border-radius:18px;font-size:19px;font-weight:900;text-decoration:none;
@@ -104,22 +104,22 @@ h1 span{{color:#ffc107}}
 .btn-ghost{{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff}}
 .soon{{padding:15px;border-radius:16px;background:rgba(255,255,255,.05);
  border:1px dashed rgba(255,255,255,.2);color:rgba(255,255,255,.6);font-size:14px;font-weight:600}}
-.free{{margin-top:16px;font-size:13px;color:rgba(255,255,255,.45)}}
+.free{{margin-top:14px;font-size:13px;color:rgba(255,255,255,.45)}}
 </style></head>
 <body><div class="wrap">
  <img class="icon" alt="Bil ya da Düş" src="data:image/png;base64,{_ICON_B64}">
  <h1>BİL YA DA <span>DÜŞ</span></h1>
- <div class="tag">Yanlış bilen <b>KAPAKTAN DÜŞER</b> 🔥</div>
- <div class="feats">
-  <div class="feat">🎮 12 kişilik CANLI bilgi yarışması</div>
-  <div class="feat">⚡ 90 saniyede bir maç — beklemek yok</div>
-  <div class="feat">🏆 Zor Mod'da ödül havuzu: 1.'ye 700 altın</div>
-  <div class="feat">🆓 Ücretsiz — uygulama içi satın alma yok</div>
- </div>
+ <div class="tag">12 kişi · 5 soru · tek şampiyon<br>Yanlış bilen <b>KAPAKTAN DÜŞER</b> 🔥</div>
  <a class="btn btn-main" id="ios" href="{APP_STORE_URL}"
-    onclick="try{{navigator.sendBeacon('/indir/track?store=ios&src={src}')}}catch(e){{}}">App Store'dan İndir</a>
+    onclick="try{{navigator.sendBeacon('/indir/track?store=ios&src={src}')}}catch(e){{}}">App Store'dan Ücretsiz İndir</a>
  {play_block}
  <div class="free">Ücretsiz • Misafir olarak anında oyna</div>
+ <div class="feats">
+  <div class="feat">🎮 Gerçek rakiplerle CANLI yarış</div>
+  <div class="feat">⚡ 90 saniyede bir maç — beklemek yok</div>
+  <div class="feat">🏆 Zor Mod'da ödül havuzu: 1.'ye 700 altın</div>
+  <div class="feat">🧠 Genel kültür, tarih, bilim, müzik, sinema</div>
+ </div>
 </div>
 <script>
 // GERÇEK ziyaretçi ölçümü: sayfa görünür durumda 1.5 sn kalırsa say.
